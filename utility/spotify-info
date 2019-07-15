@@ -1,0 +1,49 @@
+#!/bin/bash
+
+process_count=$(ps aux | grep  "spotify" | grep -v grep | wc -l)
+
+if [[ $process_count -eq 2 ]]; then
+    echo "Not Playing@@Spotify@"
+else
+    new_artist=`dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.freedesktop.DBus.Properties.Get string:'org.mpris.MediaPlayer2.Player' string:'Metadata'|egrep -A 2 "artist"|egrep -v "artist"|egrep -v "array"|cut -b 27-|cut -d '"' -f 1|egrep -v ^$`
+
+    # echo "$new_artist" > /tmp/spotify/artist.txt
+
+    new_title=`dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.freedesktop.DBus.Properties.Get string:'org.mpris.MediaPlayer2.Player' string:'Metadata'|egrep -A 1 "title"|egrep -v "title"|cut -b 44-|cut -d '"' -f 1|egrep -v ^$`
+    # echo "$new_title" > /tmp/spotify/title.txt
+
+    TMP_DIR=/tmp/spotify
+    mkdir -p $TMP_DIR
+    COVER=${TMP_DIR}/cover.jpeg
+    COVER_URL=${TMP_DIR}/url
+
+    if [ ! -f $COVER_URL ]; then
+        touch $COVER_URL
+    fi
+
+    if [ ! -f $COVER ]; then
+        touch $COVER
+    fi
+
+    OLD_COVER_URL=$(cat $COVER_URL)
+    NEW_COVER_URL=$(dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.freedesktop.DBus.Properties.Get string:'org.mpris.MediaPlayer2.Player' string:'Metadata'|egrep -A 1 "artUrl"|cut -b 44-|cut -d '"' -f 1|egrep -v ^$)
+    if [ "$NEW_COVER_URL" != "$OLD_COVER_URL" ]
+    then
+        # rm -rf /tmp/spotify/*.png
+        echo $NEW_COVER_URL > $COVER_URL
+        wget -q -O $COVER $NEW_COVER_URL &> /dev/null
+        rm wget-log
+        # rm -rf /tmp/spotify/cover.png
+        # uuid=$(uuidgen)
+        # CONVERT_TARGET=${TMP_DIR}/cover-${uuid}.png
+        convert /tmp/spotify/cover.jpeg /tmp/spotify/cover.png
+        # convert /tmp/spotify/cover.jpeg ${CONVERT_TARGET}
+    fi
+
+    # PNG_COVER=$(find /tmp/spotify/ -iname "cover-*.png" -exec echo {} \;)
+
+    echo "$new_artist@@@$new_title@@/tmp/spotify/cover.png"
+
+fi
+    # sleep 5
+# done

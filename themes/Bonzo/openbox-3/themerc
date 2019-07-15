@@ -1,0 +1,115 @@
+!! Bonzo by Addy
+!! Inspired by Onyx by Dana Jansens
+
+!! Menu background
+menu.items.bg: flat
+menu.items.bg.color: #4c566a
+menu.overlap.x: -4
+
+!! Menu text
+menu.items.text.color: #bc435d
+menu.items.justify: left
+menu.items.disabled.text.color: #8a8a8a
+
+!! Menu separator
+menu.separator.padding.height: 6
+menu.separator.color: #bc435d
+
+!! Menu border
+menu.border.width: 4
+menu.border.color: #4c566a
+
+!! Menu headers
+menu.title.bg: flat
+menu.title.bg.color: #4c566a
+menu.title.text.color: #bc435d
+menu.title.text.justify: center
+
+!! Selected menu item
+menu.items.active.bg: flat
+menu.items.active.bg.color: #bc435d
+menu.items.active.text.color: #fafafa
+
+!! Titlebar
+window.active.title.bg: flat
+window.active.title.bg.color: #bc435d
+window.inactive.title.bg: flat
+window.inactive.title.bg.color: #bc435d
+
+!! Titlebar text
+window.label.text.justify: center
+window.active.label.bg: parentrelative
+window.active.label.text.color: #2f343f
+window.inactive.label.bg: parentrelative
+window.inactive.label.text.color: #606060
+
+!! Borders
+window.active.border.color: #2f343f
+window.inactive.border.color: #ffffff
+border.width: 0
+padding.width: 4
+padding.height: 8
+window.handle.width: 0
+window.active.client.color:  #2f343f
+window.inactive.client.color:  #ffffff
+window.client.padding.width: 0
+window.client.padding.height: 0
+
+!! On-screen displays
+osd.bg: flat
+osd.border.width: 1
+osd.bg.color: #4c566a
+osd.border.color: #2f343f
+osd.label.text.color: #e5e9f0
+
+## BUTTONS
+
+# Close - Nord - Polar Night 4 - #4c566a
+# Max - Nord - Aurora 2 - #a3be8c
+# Iconify - Nord - #e5e9f0
+
+window.active.button.unpressed.bg: parentrelative
+window.active.button.pressed.bg: parentrelative
+window.active.button.hover.bg: parentrelative
+window.active.button.disabled.bg: parentrelative
+window.active.button.toggled.unpressed.bg: parentrelative
+window.active.button.toggled.pressed.bg: parentrelative
+window.active.button.toggled.hover.bg: parentrelative
+window.inactive.button.unpressed.bg: parentrelative
+window.inactive.button.pressed.bg: parentrelative
+window.inactive.button.hover.bg: parentrelative
+window.inactive.button.disabled.bg: parentrelative
+window.inactive.button.toggled.unpressed.bg: parentrelative
+window.inactive.button.toggled.pressed.bg: parentrelative
+window.inactive.button.toggled.hover.bg: parentrelative
+
+window.active.button.disabled.image.color: #e0d8d6
+window.active.button.hover.image.color: #2e3440
+window.active.button.toggled.image.color: #ebcb8b
+window.inactive.button.disabled.image.color: #e0d8d6
+window.inactive.button.hover.image.color: #4c566a
+window.inactive.button.toggled.image.color: #ebcb8b
+
+window.active.button.close.unpressed.image.color: #d08770
+window.active.button.max.unpressed.image.color: #ebcb8b
+window.active.button.iconify.unpressed.image.color: #a3be8c
+window.active.button.shade.unpressed.image.color: #81a1c1
+window.active.button.desk.unpressed.image.color: #b48ead
+
+window.active.button.close.pressed.image.color: #d08770
+window.active.button.max.pressed.image.color: #ebcb8b
+window.active.button.iconify.pressed.image.color: #a3be8c
+window.active.button.shade.pressed.image.color: #81a1c1
+window.active.button.desk.pressed.image.color: #b48ead
+
+window.inactive.button.close.unpressed.image.color: #d08770
+window.inactive.button.max.unpressed.image.color: #ebcb8b
+window.inactive.button.iconify.unpressed.image.color: #a3be8c
+window.inactive.button.shade.unpressed.image.color: #81a1c1
+window.inactive.button.desk.unpressed.image.color: #b48ead
+
+window.inactive.button.close.pressed.image.color: #d08770
+window.inactive.button.max.pressed.image.color: #ebcb8b
+window.inactive.button.iconify.pressed.image.color: #a3be8c
+window.inactive.button.shade.pressed.image.color: #81a1c1
+window.inactive.button.desk.pressed.image.color: #b48ead

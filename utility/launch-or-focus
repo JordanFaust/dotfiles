@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# Attempt to focus the specified window
+app=$1
+
+# Get the window ID
+window=$(get-window $app)
+
+if [ $? -ne 0 ]; then
+    # If the command did not find an existing window, launch the application
+    $($app)
+else
+    # Focus the existing window
+    xdotool windowactivate $window
+fi

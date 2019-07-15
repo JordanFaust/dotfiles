@@ -1,0 +1,5 @@
+#!/bin/bash
+
+alias=$1
+if [ -z "${alias}" ]; then echo "Error: requires alias"; return; fi
+curl -s 169.254.169.254:80/roles/${alias} | python -m json.tool

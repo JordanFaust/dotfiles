@@ -1,0 +1,11 @@
+vim/bundle/*
+vim/.netrwhist
+atom/storage/*
+atom/.node-gyp/*
+
+config/obmenu-generator/icons/*
+config/obmenu-generator/cache.db
+config/openbox/menu.xml.bak
+config/gtk-3.0/bookmarks
+
+*/.spacemacs.env

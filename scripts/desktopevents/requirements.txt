@@ -1,0 +1,4 @@
+pyperclip>=1.6.0
+requests>=2.18.4
+adal>=0.4.7
+keyring>=18.0.0

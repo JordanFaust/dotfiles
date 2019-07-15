@@ -1,0 +1,21 @@
+#!/usr/bin/expect -f
+
+set timeout 30
+
+set username [exec credentials-lookup "dss" "ldap" "email"]
+set password [exec credentials-lookup "dss" "ldap" "password"]
+
+spawn nmcli --ask connection up VPN
+expect "Username:"
+send $username
+send "\r"
+expect "Password:"
+send $password
+send "\r"
+
+expect "Connection successfully"
+wait
+
+# spawn notify-send "<b>VPN</b>" "Connected to VPN"
+puts "connected"
+wait

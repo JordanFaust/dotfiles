@@ -1,0 +1,108 @@
+#!/usr/bin/env python
+
+import os
+import sys
+import getopt
+import json
+import datetime
+import time
+import secretstorage
+import logging
+
+import desktopevents
+
+# Retrieves data used for various desktop data displays and notifications
+def main(argv):
+    format = '%(asctime)-15s %(message)s'
+    logging.basicConfig(level=logging.INFO, filename='/tmp/desktopevents/data.log', format=format)
+    log = logging.getLogger()
+
+    tmpfile = ''
+    try:
+      opts, args = getopt.getopt(argv,"hf",["file="])
+    except getopt.GetoptError:
+      print('desktopevents-data -f {{file}}')
+      log.warning("failed to parse arguments")
+      sys.exit(2)
+    for opt, arg in opts:
+      if opt == '-h':
+          print('desktopevents-data -f {{file}}')
+          sys.exit()
+      elif opt in ("-f", "--file"):
+          tmpfile = arg
+
+    if tmpfile == '':
+        print('missing required flag: file')
+        log.warning("missing required flag: file")
+        sys.exit(2)
+
+    path, filename = os.path.split(tmpfile)
+    if not os.path.exists(path):
+        os.makedirs(path)
+
+    # wait for system log in
+    time.sleep(10)
+
+    app_id = ''
+    email = ''
+    password = ''
+
+    connection = secretstorage.dbus_init()
+    collection = secretstorage.get_default_collection(connection)
+
+    locked = False
+    while locked == False:
+        log.info("attempting to unlock collection")
+        locked = collection.unlock()
+        time.sleep(5)
+
+    outlook_items = collection.search_items({
+        "system": "conky",
+        "service": "outlook",
+        "type": "app-id"
+    })
+    for item in outlook_items:
+        item.unlock()
+        app_id = item.get_secret().decode("utf-8")
+
+    ldap_items = collection.search_items({
+        "system": "dss",
+        "service": "ldap"
+    })
+    for item in ldap_items:
+        item.unlock()
+        attributes = item.get_attributes()
+        if attributes["type"] == "email":
+            email = item.get_secret().decode("utf-8")
+
+        if attributes["type"] == "password":
+            password = item.get_secret().decode("utf-8")
+
+    if app_id == '':
+        log.warning("failed to retrieve app-id secret")
+        sys.exit(2)
+
+    if email == '':
+        log.warning("failed to retrieve email secret")
+        sys.exit(2)
+
+    if password == '':
+        log.warning("failed to retrieve password secret")
+        sys.exit(2)
+
+    while True:
+        meetings = desktopevents.meetings(app_id, email, password, log)
+        emails = desktopevents.unread_emails(app_id, email, password, log)
+
+        data = {
+            "unread_emails": emails,
+            "meetings": meetings,
+        }
+
+        with open(tmpfile, 'w+') as writer:
+            json.dump(data, writer, indent=2)
+
+        time.sleep(60)
+
+if __name__ == "__main__":
+    main(sys.argv[1:])

@@ -1,0 +1,116 @@
+! ██╗░░██╗██████╗░███████╗███████╗░██████╗░██╗░░░██╗██████╗░░██████╗███████╗███████╗
+! ╚██╗██╔╝██╔══██╗██╔════╝██╔════╝██╔═══██╗██║░░░██║██╔══██╗██╔════╝██╔════╝██╔════╝
+! ░╚███╔╝░██████╔╝█████╗░░███████╗██║░░░██║██║░░░██║██████╔╝██║░░░░░█████╗░░███████╗
+! ░██╔██╗░██╔══██╗██╔══╝░░╚════██║██║░░░██║██║░░░██║██╔══██╗██║░░░░░██╔══╝░░╚════██║
+! ██╔╝░██╗██║░░██║███████╗███████║╚██████╔╝╚██████╔╝██║░░██║╚██████╗███████╗███████║
+! ╚═╝░░╚═╝╚═╝░░╚═╝╚══════╝╚══════╝░╚═════╝░░╚═════╝░╚═╝░░╚═╝░╚═════╝╚══════╝╚══════╝
+!
+! -----------------------------------
+Xft.dpi: 102
+!Xft.dpi: 96
+Xft.rgba:      rgb
+Xft.autohint:  0
+Xft.lcdfilter: lcddefault
+Xft.hintstyle: hintfull
+Xft.hinting:   1
+Xft.antialias: 1
+
+xcursor.theme:       Vanilla-DMZ
+xscreensaver.fade:   false
+xscreensaver.unfade: false
+
+#define nord0 #2E3440
+#define nord1 #3B4252
+#define nord2 #434C5E
+#define nord3 #4C566A
+#define nord4 #D8DEE9
+#define nord5 #E5E9F0
+#define nord6 #ECEFF4
+#define nord7 #8FBCBB
+#define nord8 #88C0D0
+#define nord9 #81A1C1
+#define nord10 #5E81AC
+#define nord11 #BF616A
+#define nord12 #D08770
+#define nord13 #EBCB8B
+#define nord14 #A3BE8C
+#define nord15 #B48EAD
+
+*.foreground:   nord4
+*.background:   nord0
+*.cursorColor:  nord4
+*fading: 35
+*fadeColor: nord3
+
+*.color0: nord1
+*.color1: nord11
+*.color2: nord14
+*.color3: nord13
+*.color4: nord9
+*.color5: nord15
+*.color6: nord8
+*.color7: nord5
+*.color8: nord3
+*.color9: nord11
+*.color10: nord14
+*.color11: nord13
+*.color12: nord9
+*.color13: nord15
+*.color14: nord7
+*.color15: nord6
+
+! ===== urxvt =====
+
+!! Fonts
+! URxvt.font: xft:Fira Mono Medium:size=16,xft:Source Code Pro Medium:size=16
+! URxvt.font: xft:Source Code Pro Medium:size=18:antialias=true:hinting=full
+! URxvt.font: xft:Inconsolata for Powerline:size=18
+URxvt.font: xft:FuraCode Nerd Font:size=18:style=Retina
+
+!! scroll
+!! do not scroll with output
+URxvt*scrollTtyOutput:      false
+!! scroll in relation to buffer (with mouse scroll or Shift+Page Up)
+URxvt*scrollWithBuffer:     true
+!! scroll back to the bottom on keypress
+URxvt*scrollTtyKeypress: true
+
+!! scrollback buffer
+URxvt.secondaryScreen:  1
+URxvt.secondaryScroll:  0
+URxvt.secondaryWheel:   1
+
+!! scrollbar
+URxvt.scrollBar: off
+
+!! clickable urls
+URxvt.perl-lib:             /home/jfaust/.urxvt/ext/
+URxvt.perl-ext-common:      default,matcher,selection-to-clipboard,clipboard,font-size
+URxvt.url-launcher:         /usr/bin/firefox --new-tab
+URxvt.matcher.button:       1
+URxvt.url-select.underline: true
+
+!! copy paste
+URxvt.clipboard.autocopy: true
+URxvt.clipboard.copycmd:  xclip -i -selection clipboard
+URxvt.clipboard.pastecmd: xclip -o -selection clipboard
+
+! disable default bindings for Control-Shift
+URxvt.iso14755:    false
+URxvt.iso14755_52: false
+
+!! Control-Shift-C for copy
+URxvt.keysym.Shift-Control-C: perl:clipboard:copy
+URxvt.keysym.Shift-Control-V: perl:clipboard:paste
+URxvt.keysym.Control-v:       perl:clipboard:paste
+
+!! Font Sizing
+URxvt.keysym.Control-Up:     font-size:increase
+URxvt.keysym.Control-Down:   font-size:decrease
+URxvt.keysym.Control-S-Up:   font-size:incglobal
+URxvt.keysym.Control-S-Down: font-size:decglobal
+URxvt.keysym.Control-equal:  font-size:reset
+URxvt.keysym.Control-slash:  font-size:show
+
+!! Padding
+URxvt.internalBorder: 32
