@@ -6,7 +6,7 @@ INSIDE_EMACS=${INSIDE_EMACS:-false}
 ###### TERMINAL #######
 #######################
 # If not starting a shell in emacs and not currently in TMUX, create or attach to a TMUX session
-if [[ -z "$INSIDE_EMACS" && -z "$TMUX" ]]; then
+if [[ "$INSIDE_EMACS" = "false" && -z "$TMUX" ]]; then
     tmux attach -t TMUX || tmuxinator start TMUX -n TMUX -p ~/.dotfiles/config/tmuxinator/session.yaml
 fi
 

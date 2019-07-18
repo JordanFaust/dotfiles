@@ -12,7 +12,7 @@ local registry = require("widgets.registry")
 -- @module package-updater
 local packageupdater = {}
 
-local count_command = [[apt-get upgrade -s |grep -P '^\d+ upgraded'|cut -d" " -f1]]
+local count_command = [[pacman -Qu | wc -l]]
 
 local function icon_widget(config)
     local icon = libwidget.icon({

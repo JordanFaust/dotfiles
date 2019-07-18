@@ -43,6 +43,11 @@ local apps = {
             command = "spotify",
             tag = 3,
             properties = {}
+        },
+        monitoring = {
+            name = "Monitoring",
+            command = "urxvt -name monitoring -e tmuxinator start monitoring -n monitoring -p /home/jfaust/.dotfiles/config/tmuxinator/monitoring.yaml",
+            tag = 4,
         }
     },
     rofi = {
@@ -57,15 +62,15 @@ local apps = {
         compton =  {
             name = "compton",
             command = "compton -b --config ~/.config/compton.conf"
-        },
+        }
         -- xsettingsd = {
         --     name = "xsettingsd",
         --     command = "xsettingsd &"
         -- },
-        desktopevents = {
-            name = "desktopevents-data",
-            command = "nohup /usr/local/bin/desktopevents-data --file=/tmp/desktopevents/data.json >/dev/null &"
-        },
+        -- desktopevents = {
+        --     name = "desktopevents-data",
+        --     command = "nohup /usr/local/bin/desktopevents-data --file=/tmp/desktopevents/data.json >/dev/null &"
+        -- },
     }
 }
 

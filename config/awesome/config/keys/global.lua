@@ -64,9 +64,9 @@ local keys = gears.table.join(
             local c = client.focus
             c:geometry({
                 x = dpi(1860),
-                y = dpi(80),
-                width = dpi(1728),
-                height = dpi(1400)
+                y = dpi(96),
+                width = dpi(1712),
+                height = dpi(1366)
             })
             c.floating = true
             -- awful.placement.centered(c,{honor_workarea=true})
@@ -80,10 +80,10 @@ local keys = gears.table.join(
         function()
             local c = client.focus
             c:geometry({
-                x = dpi(80),
-                y = dpi(80),
-                width = dpi(1728),
-                height = dpi(1400)
+                x = dpi(96),
+                y = dpi(96),
+                width = dpi(1712),
+                height = dpi(1366)
             })
             c.floating = true
             c:raise()

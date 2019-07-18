@@ -6,6 +6,7 @@
 configuration {
 	display-drun:    "Activate";
 	display-run:     "Execute";
+  display-window:  "Window";
 	show-icons:      true;
 	sidebar-mode:    true;
 }
@@ -40,7 +41,7 @@ configuration {
 	hide-scrollbar:              "true";
 	margin:                      0px;
 	padding:                     0px;
-	font:                        "FuraCode Nerd Font medium 10";
+	font:                        "Source Code Pro for Powerline medium 10";
 }
 
 window {
@@ -58,7 +59,7 @@ mainbox {
 	spacing:  0em;
 	padding: 0px;
 	width:200px;
-	children: [ inputbar, listview, sidebar ];
+	children: [ inputbar, listview, mode-switcher ];
 	expand: true;
 }
 
@@ -96,7 +97,7 @@ entry {
 	background-color: rgb(25, 41, 51);
 	vertical-align: 1;
 	padding:        12px;
-	font:            "Roboto medium 13";
+	font:            "Source Code Pro for Powerline medium 13";
 }
 
 element normal.normal {

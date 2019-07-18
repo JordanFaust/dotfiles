@@ -65,7 +65,7 @@ xscreensaver.unfade: false
 ! URxvt.font: xft:Fira Mono Medium:size=16,xft:Source Code Pro Medium:size=16
 ! URxvt.font: xft:Source Code Pro Medium:size=18:antialias=true:hinting=full
 ! URxvt.font: xft:Inconsolata for Powerline:size=18
-URxvt.font: xft:FuraCode Nerd Font:size=18:style=Retina
+URxvt.font: xft:Source Code Pro for Powerline:size=18:style=Regular
 
 !! scroll
 !! do not scroll with output

@@ -1,4 +1,4 @@
-# ~/.tmuxinator/development.yml
+# ~/.tmuxinator/monitoring.yml
 
 name: development
 root: <%= @settings["workspace"] %>
@@ -43,12 +43,13 @@ root: <%= @settings["workspace"] %>
 # post: tmux -CC attach -t development
 
 windows:
-  - terminal:
-      layout: main-vertical
+  - monitoring:
+      layout: even-horizontal
       # Synchronize all panes of this window, can be enabled before or after the pane commands run.
       # 'before' represents legacy functionality and will be deprecated in a future release, in favour of 'after'
       # synchronize: after
       panes:
-  - build:
-      layout: 294f,159x62,0,0[159x23,0,0,36,159x38,0,24,37]
-      panes:
+        - usage:
+            - vtop
+        - docker:
+            - dockly

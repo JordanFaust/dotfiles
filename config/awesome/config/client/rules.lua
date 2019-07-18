@@ -233,7 +233,8 @@ awful.rules.rules = {
         -- Exclude the package updater terminal
         except_any = {
             instance = {
-                "package-updater"
+                "package-updater",
+                "monitoring"
             }
         },
         properties = {
@@ -243,6 +244,9 @@ awful.rules.rules = {
             c.name = "Terminal"
             local icon = gears.surface(beautiful.terminal_icon)
             c.icon = icon._native
+            c:connect_signal("property::name", function(_)
+                c.name = "Terminal"
+            end)
             c:geometry({
                 x = dpi(1860),
                 y = dpi(96),
@@ -403,6 +407,30 @@ awful.rules.rules = {
             local icon = gears.surface(beautiful.terminal_icon)
             c.icon = icon._native
             c.name = "Package Updater"
+        end
+    },
+
+    -- Monitoring UI
+    {
+        rule = {
+            instance = "monitoring"
+        },
+        properties = {
+            tag = "4"
+        },
+        callback = function(c)
+            c.name = "Monitoring"
+            local icon = gears.surface(beautiful.terminal_icon)
+            c.icon = icon._native
+            c:connect_signal("property::name", function(_)
+                c.name = "Monitoring"
+            end)
+            c:geometry({
+                    x = dpi(96),
+                    y = dpi(96),
+                    width = dpi(3454),
+                    height = dpi(1386)
+            })
         end
     }
 

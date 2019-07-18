@@ -98,6 +98,7 @@ install/dotfiles() {
     dotfiles/link "${DOTFILES_DIRECTORY}/spacemacs.d" "${HOME}/.spacemacs.d"
     dotfiles/link "${DOTFILES_DIRECTORY}/xsessionrc" "${HOME}/.xsessionrc"
     dotfiles/link "${DOTFILES_DIRECTORY}/xsettingsd" "${HOME}/.xsettingsd"
+    dotfiles/link "${DOTFILES_DIRECTORY}/Xresources" "${HOME}/.Xresources"
     dotfiles/link "${DOTFILES_DIRECTORY}/gtkrc-2.0" "${HOME}/.gtkrc-2.0"
     dotfiles/link "${DOTFILES_DIRECTORY}/utility" "${HOME}/.utility"
     dotfiles/link "${DOTFILES_DIRECTORY}/config/awesome" "${HOME}/.config/awesome"
@@ -160,7 +161,7 @@ install/dependencies() {
 
 install/dependencies/manjaro() {
     e_header "Syncing Packages"
-    pacman -Ssy > /dev/null 2>&1
+    sudo pacman -Ssy > /dev/null 2>&1
     e_success "packages synced"
 
     e_header "Installing Manjaro dependencies..."
@@ -450,7 +451,7 @@ install/software() {
         e_success "vim vundle already installed"
     fi
 
-    if ! [ -x "$(command -v rbenv)" ]; then
+    if [ ! -d "${HOME}/.rbenv" ]; then
         git clone https://github.com/rbenv/rbenv.git ~/.rbenv
         pushd ~/.rbenv
         src/configure && make -C src
@@ -462,8 +463,8 @@ install/software() {
     fi
 
     if ! [ -d "/${HOME}/.rbenv/plugins/ruby-build" ]; then
-        mkdir -p "$(rbenv root)"/plugins
-        git clone https://github.com/rbenv/ruby-build.git "$(rbenv root)"/plugins/ruby-build
+        mkdir -p "${HOME}/.rbenv/plugins"
+        git clone https://github.com/rbenv/ruby-build.git "${HOME}"/.rbenv/plugins/ruby-build
         e_success "ruby-build installed"
     else
         e_success "ruby-build already installed"
