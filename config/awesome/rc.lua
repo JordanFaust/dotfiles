@@ -34,25 +34,41 @@ local helpers = require("helpers")
 
 -- theme
 local theme_dir = os.getenv("HOME") .. "/.config/awesome/themes/"
+gears.debug.dump(os.date("%Y-%m-%d %T ") .."loading theme")
 beautiful.init( theme_dir .. "skyfall" .. "/theme.lua" )
 
 -- Layout
+gears.debug.dump(os.date("%Y-%m-%d %T ") .."creating layout")
 require("layout")
 
 -- Init all modules
+
+gears.debug.dump(os.date("%Y-%m-%d %T ") .."loading modules")
 require("module.notifications")
+gears.debug.dump(os.date("%Y-%m-%d %T ") .."module.notifications loaded")
 require("module.autostart")
+gears.debug.dump(os.date("%Y-%m-%d %T ") .."module.autostart loaded")
 require("module.titlebars")
+gears.debug.dump(os.date("%Y-%m-%d %T ") .."module.titlbars loaded")
 require("module.exitscreen")
+gears.debug.dump(os.date("%Y-%m-%d %T ") .."module.exitscreen loaded")
 require("module.splashscreen")
+gears.debug.dump(os.date("%Y-%m-%d %T ") .."module.splashscreen loaded")
 require("module.hotkeys")
+gears.debug.dump(os.date("%Y-%m-%d %T ") .."module.hotkeys loaded")
 require("module.menu")
+gears.debug.dump(os.date("%Y-%m-%d %T ") .."module.menu loaded")
 
 -- Setup all configuration
+gears.debug.dump(os.date("%Y-%m-%d %T ") .."loading configuration")
 require("config.client")
+gears.debug.dump(os.date("%Y-%m-%d %T ") .."config.client loaded")
 require("config.tags")
+gears.debug.dump(os.date("%Y-%m-%d %T ") .."config.tags loaded")
 root.keys(require("config.keys.global"))
+gears.debug.dump(os.date("%Y-%m-%d %T ") .."config.keys.global loaded")
 root.buttons(require("config.buttons.global"))
+gears.debug.dump(os.date("%Y-%m-%d %T ") .."config.buttons.global loaded")
 
 -- {{{ Signals
 -- Signal function to execute when a new client appears.

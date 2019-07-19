@@ -170,7 +170,7 @@ awful.rules.rules = {
                 x = dpi(96),
                 y = dpi(96),
                 width = dpi(1712),
-                height = dpi(1366)
+                height = dpi(1367)
             })
         end
     },
@@ -194,7 +194,7 @@ awful.rules.rules = {
                 x = dpi(96),
                 y = dpi(96),
                 width = dpi(1712),
-                height = dpi(1366)
+                height = dpi(1365)
             })
         end
     },
@@ -216,7 +216,7 @@ awful.rules.rules = {
                 x = dpi(1860),
                 y = dpi(96),
                 width = dpi(1712),
-                height = dpi(1366)
+                height = dpi(1368)
             })
         end
     },
@@ -251,7 +251,7 @@ awful.rules.rules = {
                 x = dpi(1860),
                 y = dpi(96),
                 width = dpi(1712),
-                height = dpi(1366)
+                height = dpi(1368)
             })
         end
     },

@@ -208,6 +208,8 @@ install/dependencies/manjaro() {
     pacman/install vim
     pacman/install zsh
     pacman/install perl
+    pacman/install aspell
+    pacman/install aspell-en
 
     e_header "* Installing Development Languages"
     pacman/install go

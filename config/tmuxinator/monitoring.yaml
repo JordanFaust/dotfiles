@@ -53,3 +53,10 @@ windows:
             - vtop
         - docker:
             - dockly
+  - awesome:
+      layout: even-horizontal
+      panes:
+        - stdout:
+            - tail -f -n 100 "${HOME}/.cache/awesome/stdout"
+        - stderr:
+            - tail -f -n 100 "${HOME}/.cache/awesome/stderr"

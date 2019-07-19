@@ -124,6 +124,11 @@ local function properties_changed(...)
         helpers.debug("something went wrong")
     end
 
+    if metadata == nil then
+        helpers.debug("failed to get spotify metadata")
+        return
+    end
+
     local url = metadata["mpris:artUrl"]
     local artist = metadata["xesam:artist"][1]
     local title = metadata["xesam:title"]

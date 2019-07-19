@@ -48,6 +48,7 @@ local apps = {
             name = "Monitoring",
             command = "urxvt -name monitoring -e tmuxinator start monitoring -n monitoring -p /home/jfaust/.dotfiles/config/tmuxinator/monitoring.yaml",
             tag = 4,
+            properties = {}
         }
     },
     rofi = {
