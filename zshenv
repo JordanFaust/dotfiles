@@ -4,8 +4,16 @@
 ######## THEME ########
 #######################
 
-ZSH_THEME="robbyrussell"
-export ZSH="$HOME/.oh-my-zsh"
+# ZSH_THEME="robbyrussell"
+ZSH_THEME="bullet-train"
+BULLETTRAIN_PROMPT_ADD_NEWLINE=false
+BULLETTRAIN_TIME_BG=blue
+BULLETTRAIN_DIR_EXTENDED=0
+BULLETTRAIN_DIR_BG=cyan
+BULLETTRAIN_DIR_FG=black
+BULLETTRAIN_GIT_BG=black
+BULLETTRAIN_GIT_FG=white
+ZSH="$HOME/.oh-my-zsh"
 
 #######################
 ####### EXPORTS #######
@@ -219,3 +227,5 @@ alias ssm-session='docker run -it --rm --detach-keys "ctrl-e,e" -v $HOME/.aws:/r
 if [ -x "$(command -v rbenv)" ]; then
     eval "$(rbenv init -)"
 fi
+
+export PATH="$(perl -e 'print join(":", grep { not $seen{$_}++ } split(/:/, $ENV{PATH}))')"

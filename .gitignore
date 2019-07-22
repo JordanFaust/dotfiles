@@ -9,3 +9,5 @@ config/openbox/menu.xml.bak
 config/gtk-3.0/bookmarks
 
 */.spacemacs.env
+
+install.log

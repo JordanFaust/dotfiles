@@ -182,7 +182,7 @@ values."
    ;; Installation: https://gist.github.com/muammar/a5ffb635eb7f532346a8e777b847f8a7
    dotspacemacs-default-font '("Source Code Pro for Powerline"
                                :size 20
-                               :weight normal
+                               :weight semibold
                                :width normal
                                :powerline-scale 1.0)
    ;; The leader key

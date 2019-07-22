@@ -20,7 +20,7 @@ local config = {
 }
 
 local function weather_credentials()
-    return "credentials-lookup conky openweathermap api-key"
+    return "credentials-lookup widget openweathermap api-key"
 end
 
 local function command()

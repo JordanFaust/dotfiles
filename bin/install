@@ -106,7 +106,7 @@ install/dotfiles() {
     dotfiles/link "${DOTFILES_DIRECTORY}/config/compton.conf" "${HOME}/.config/compton.conf"
     dotfiles/link "${DOTFILES_DIRECTORY}/themes" "${HOME}/.themes"
     dotfiles/link "${DOTFILES_DIRECTORY}/lightdm/lightdm-webkit.conf" "/etc/lightdm/lightdm-webkit.conf"
-    dotfiles/link "${DOTFILES_DIRECTORY}/lightdm/lightdm-webkit.conf" "/etc/lightdm/lightdm-webkit2-greeter.conf"
+    dotfiles/link "${DOTFILES_DIRECTORY}/lightdm/lightdm-webkit2-greeter.conf" "/etc/lightdm/lightdm-webkit2-greeter.conf"
     # dotfiles/link "${DOTFILES_DIRECTORY}/lightdm/lightdm.conf" "/etc/lightdm/lightdm.conf"
     # dotfiles/link "${DOTFILES_DIRECTORY}/lightdm/pantheon-greeter.conf" "/etc/lightdm/pantheon-greeter.conf"
 
@@ -149,6 +149,21 @@ pacman/install() {
     fi
 }
 
+yay/exiss() {
+    local package=$1
+    yay -Qi "$package" > /dev/null 2>&1
+}
+
+yay/install() {
+    local package=$1
+    if yay/exists "$package" ; then
+        e_succes "$package already installed"
+    else
+        yay -S --clean --noconfirm "$package"
+        e_success "$package installed"
+    fi
+}
+
 install/dependencies() {
     if type_exists "pacman"; then
         install/dependencies/manjaro
@@ -186,6 +201,7 @@ install/dependencies/manjaro() {
     pacman/install networkmanager
     pacman/install networkmanager-openconnect
     pacman/install networkmanager-openvpn
+    pacman/install net-tools
 
     e_header "* Installing CLI tools"
     pacman/install expect
@@ -218,22 +234,32 @@ install/dependencies/manjaro() {
     pacman/install lua
     pacman/install luarocks
 
-    e_header "* Installing Greeter"
-    pacman/install lightdm-webkit-theme-litarvan
-
     e_header "* Installing Custom Window Manager tools"
     pacman/install papirus-icon-theme
     pacman/install rofi
     pacman/install powerline-fonts
     pacman/install libnotify
+    pacman/install gobject-introspection
+
+    e_header "* Installing package management tools"
+    pacman/install yay
+
+    e_header "* Installing Greeter"
+    yay/install lightdm-webkit-theme-aether
 
     e_header "* Installing Lua tooling for AwesomeWM"
     if ! [ -x "$(command -v dbus_proxy)" ]; then
         sudo luarocks install dbus_proxy --tree=system && e_success "dbus_proxy installed"
-        sudo luarocks install dkjson --tree=system && e_success "dkjson installed"
     else
         e_success "dbus_proxy already isntalled"
     fi
+
+    if ! [ -x "$(luarocks show dkjson)" ]; then
+        sudo luarocks install dkjson --tree=system && e_success "dkjson installed"
+    else
+        e_success "dkjson already isntalled"
+    fi
+
     if ! [ -x "$(command -v luacheck)" ]; then
         sudo luarocks install luacheck --tree=system && e_success "luacheck installed"
     else
@@ -587,7 +613,6 @@ install/credentials() {
 
 todo() {
     e_header "Remaining items to configure and install"
-    echo "* Install go: https://golang.org/dl/"
 }
 
 run_help() {
