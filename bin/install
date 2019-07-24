@@ -104,6 +104,7 @@ install/dotfiles() {
     dotfiles/link "${DOTFILES_DIRECTORY}/config/awesome" "${HOME}/.config/awesome"
     dotfiles/link "${DOTFILES_DIRECTORY}/config/gtk-3.0" "${HOME}/.config/gtk-3.0"
     dotfiles/link "${DOTFILES_DIRECTORY}/config/compton.conf" "${HOME}/.config/compton.conf"
+    dotfiles/link "${DOTFILES_DIRECTORY}/config/cava/config" "${HOME}/.config/cava/config"
     dotfiles/link "${DOTFILES_DIRECTORY}/themes" "${HOME}/.themes"
     dotfiles/link "${DOTFILES_DIRECTORY}/lightdm/lightdm-webkit.conf" "/etc/lightdm/lightdm-webkit.conf"
     dotfiles/link "${DOTFILES_DIRECTORY}/lightdm/lightdm-webkit2-greeter.conf" "/etc/lightdm/lightdm-webkit2-greeter.conf"
@@ -234,15 +235,17 @@ install/dependencies/manjaro() {
     pacman/install lua
     pacman/install luarocks
 
+    e_header "* Installing package management tools"
+    pacman/install yay
+
     e_header "* Installing Custom Window Manager tools"
     pacman/install papirus-icon-theme
     pacman/install rofi
     pacman/install powerline-fonts
     pacman/install libnotify
     pacman/install gobject-introspection
-
-    e_header "* Installing package management tools"
-    pacman/install yay
+    pacman/install paper-icon-theme-git
+    yay/install cava
 
     e_header "* Installing Greeter"
     yay/install lightdm-webkit-theme-aether

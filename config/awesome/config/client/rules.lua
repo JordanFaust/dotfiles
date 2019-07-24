@@ -234,7 +234,8 @@ awful.rules.rules = {
         except_any = {
             instance = {
                 "package-updater",
-                "monitoring"
+                "monitoring",
+                "cava"
             }
         },
         properties = {
@@ -378,7 +379,7 @@ awful.rules.rules = {
     -- Media
     {
         rule_any = {
-            name = {
+            class = {
                 "Spotify"
             }
         },
@@ -387,9 +388,58 @@ awful.rules.rules = {
             tag = "3"
         },
         callback = function (c)
-            awful.placement.centered(c,{honor_workarea=true})
+            c.name = "Spotify"
+            c:connect_signal("property::name", function(_)
+                c.name = "Spotify"
+            end)
+
+            -- c:geometry({
+            --     x = dpi(930),
+            --     y = dpi(96),
+            --     width = dpi(1704),
+            --     height = dpi(900)
+            -- })
+
+            c:geometry({
+                    x = dpi(930),
+                    y = dpi(560),
+                    width = dpi(1704),
+                    height = dpi(900)
+            })
+
             gears.timer.delayed_call(function()
-                    c.urgent = false
+                c.urgent = false
+            end)
+        end
+    },
+    {
+        rule = {
+            instance = "cava"
+        },
+        properties = {
+            screen = 1,
+            tag = "3"
+        },
+        callback = function (c)
+            local icon = gears.surface(beautiful.terminal_icon)
+            c.icon = icon._native
+
+            c.name = "Cava"
+            c:connect_signal("property::name", function(_)
+                c.name = "Cava"
+            end)
+
+            awful.titlebar.hide(c)
+
+            c:geometry({
+                x = dpi(930),
+                y = dpi(96),
+                width = dpi(1712),
+                height = dpi(400)
+            })
+
+            gears.timer.delayed_call(function()
+                c.urgent = false
             end)
         end
     },
@@ -426,10 +476,10 @@ awful.rules.rules = {
                 c.name = "Monitoring"
             end)
             c:geometry({
-                    x = dpi(96),
-                    y = dpi(96),
-                    width = dpi(3454),
-                    height = dpi(1386)
+                x = dpi(96),
+                y = dpi(96),
+                width = dpi(3454),
+                height = dpi(1386)
             })
         end
     }

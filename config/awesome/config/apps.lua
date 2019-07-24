@@ -44,6 +44,12 @@ local apps = {
             tag = 3,
             properties = {}
         },
+        cava = {
+            name = "Cava",
+            command = "urxvt -name cava -e cava",
+            tag = 3,
+            properties = {}
+        },
         monitoring = {
             name = "Monitoring",
             command = "urxvt -name monitoring -e tmuxinator start monitoring -n monitoring -p /home/jfaust/.dotfiles/config/tmuxinator/monitoring.yaml",
