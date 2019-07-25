@@ -7,6 +7,7 @@ import json
 import datetime
 import time
 import secretstorage
+import subprocess
 import logging
 
 import desktopevents
@@ -41,7 +42,7 @@ def main(argv):
         os.makedirs(path)
 
     # wait for system log in
-    time.sleep(10)
+    # time.sleep(10)
 
     app_id = ''
     email = ''
@@ -50,33 +51,44 @@ def main(argv):
     connection = secretstorage.dbus_init()
     collection = secretstorage.get_default_collection(connection)
 
-    locked = False
-    while locked == False:
-        log.info("attempting to unlock collection")
-        locked = collection.unlock()
-        time.sleep(5)
+    # locked = False
+    # while locked == False:
+    #     log.info("attempting to unlock collection")
+    #     locked = collection.unlock()
+    #     time.sleep(5)
 
-    outlook_items = collection.search_items({
-        "system": "conky",
-        "service": "outlook",
-        "type": "app-id"
-    })
-    for item in outlook_items:
-        item.unlock()
-        app_id = item.get_secret().decode("utf-8")
+    # outlook_items = collection.search_items({
+    #     "system": "widget",
+    #     "service": "outlook",
+    #     "type": "app-id"
+    # })
+    # for item in outlook_items:
+    #     log.info("unlocking item")
+    #     item.unlock()
+    #     app_id = item.get_secret().decode("utf-8")
 
-    ldap_items = collection.search_items({
-        "system": "dss",
-        "service": "ldap"
-    })
-    for item in ldap_items:
-        item.unlock()
-        attributes = item.get_attributes()
-        if attributes["type"] == "email":
-            email = item.get_secret().decode("utf-8")
+    # ldap_items = collection.search_items({
+    #     "system": "dss",
+    #     "service": "ldap"
+    # })
+    # for item in ldap_items:
+    #     item.unlock()
+    #     attributes = item.get_attributes()
+    #     if attributes["type"] == "email":
+    #         email = item.get_secret().decode("utf-8")
 
-        if attributes["type"] == "password":
-            password = item.get_secret().decode("utf-8")
+    #     if attributes["type"] == "password":
+    #         password = item.get_secret().decode("utf-8")
+
+    app_id = subprocess.run(
+        ['/usr/bin/secret-tool', 'lookup', 'system', 'widget', 'service', 'outlook', 'type', 'app-id'], stdout=subprocess.PIPE
+    ).stdout.decode('utf-8')
+    email = subprocess.run(
+        ['/usr/bin/secret-tool', 'lookup', 'system', 'dss', 'service', 'ldap', 'type', 'email'], stdout=subprocess.PIPE
+    ).stdout.decode('utf-8')
+    password = subprocess.run(
+        ['/usr/bin/secret-tool', 'lookup', 'system', 'dss', 'service', 'ldap', 'type', 'password'], stdout=subprocess.PIPE
+    ).stdout.decode('utf-8')
 
     if app_id == '':
         log.warning("failed to retrieve app-id secret")

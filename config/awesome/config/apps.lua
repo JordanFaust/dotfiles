@@ -69,15 +69,15 @@ local apps = {
         compton =  {
             name = "compton",
             command = "compton -b --config ~/.config/compton.conf"
-        }
+        },
         -- xsettingsd = {
         --     name = "xsettingsd",
         --     command = "xsettingsd &"
         -- },
-        -- desktopevents = {
-        --     name = "desktopevents-data",
-        --     command = "nohup /usr/local/bin/desktopevents-data --file=/tmp/desktopevents/data.json >/dev/null &"
-        -- },
+        desktopevents = {
+            name = "desktopevents-data",
+            command = "nohup /usr/bin/desktopevents-data --file=/tmp/desktopevents/data.json >/dev/null &"
+        },
     }
 }
 

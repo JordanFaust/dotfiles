@@ -124,28 +124,28 @@ awful.rules.rules = {
 
     -- Titlebars ON (explicitly)
     -- Titlebars of these clients will be shown regardless of the theme setting
-    {
-        rule_any = {
-            class = {
-              "Firefox",
-              "Emacs",
-              "Gnome-terminal",
-              "URxvt",
-              "Slack"
-            },
-            type = {
-                "dialog",
-            },
-            role = {
-                "conversation",
-            }
-        },
-        properties = {
-        },
-        callback = function (c)
-            awful.titlebar.show(c)
-        end
-    },
+    -- {
+    --     rule_any = {
+    --         class = {
+    --           "Firefox",
+    --           "Emacs",
+    --           "Gnome-terminal",
+    --           "URxvt",
+    --           "Slack"
+    --         },
+    --         type = {
+    --             "dialog",
+    --         },
+    --         role = {
+    --             "conversation",
+    --         }
+    --     },
+    --     properties = {
+    --     },
+    --     callback = function (c)
+    --         awful.titlebar.show(c)
+    --     end
+    -- },
 
     -- {{{ Fixed Workflow Window Placement
 
@@ -170,7 +170,7 @@ awful.rules.rules = {
                 x = dpi(96),
                 y = dpi(96),
                 width = dpi(1712),
-                height = dpi(1367)
+                height = dpi(1357)
             })
         end
     },
@@ -194,7 +194,7 @@ awful.rules.rules = {
                 x = dpi(96),
                 y = dpi(96),
                 width = dpi(1712),
-                height = dpi(1365)
+                height = dpi(1357)
             })
         end
     },
@@ -479,7 +479,7 @@ awful.rules.rules = {
                 x = dpi(96),
                 y = dpi(96),
                 width = dpi(3454),
-                height = dpi(1386)
+                height = dpi(1376)
             })
         end
     }

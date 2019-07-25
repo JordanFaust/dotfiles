@@ -316,10 +316,10 @@ function sidebar.dashboard()
     local _ram = ram_widget()
     local _vpn = vpn_widget()
     local _disk = disk_widget()
-    local _search = search_widget()
-    local _exit = exit_widget()
+    -- local _search = search_widget()
+    -- local _exit = exit_widget()
     local _weather = weather.sidebar()
-    -- local _meetings = meetings.widget()
+    local _meetings = meetings.widget()
 
     -- Item placement
     local widget = wibox.widget {
@@ -355,7 +355,7 @@ function sidebar.dashboard()
             _disk,
             pad(1),
             pad(1),
-            -- _meetings,
+            _meetings,
             layout = wibox.layout.fixed.vertical
         },
         { ----------- BOTTOM GROUP -----------
