@@ -8,20 +8,21 @@ local xresources = require("beautiful.xresources")
 local dpi = xresources.apply_dpi
 
 -- custom modules
-local helpers = require("helpers")
+local globals = require("globals")
+local shape = require("nordic.shape")
 
--- @module widgets.sidebar.meetings.event
+-- @submodule nordic.widget.event
 local event = { mt = {} }
 
 local function buttons(location)
-    local command = "/usr/bin/firefox --new-tab " .. location
+    local command = globals.browser .. " " .. location
     return gears.table.join(
         awful.button({ }, 1, function()
             awful.spawn.easy_async_with_shell(command, function()
                 naughty.notify({
-                        preset = naughty.config.presets.normal,
-                        title = "Meeting",
-                        text = location
+                    preset = naughty.config.presets.normal,
+                    title = "Meeting",
+                    text = location
                 })
             end)
         end)
@@ -75,7 +76,7 @@ function event.new(args)
             {
                 id = "event",
                 widget = wibox.container.background,
-                shape = helpers.rrect(4),
+                shape = shape.rrect(4),
                 -- bg = cpaint.darken(task_bg, 80),
                 bg = background,
                 {
@@ -83,7 +84,7 @@ function event.new(args)
                     bottom = 3,
                     {
                         widget = wibox.container.background,
-                        shape = helpers.rrect(4),
+                        shape = shape.rrect(4),
                         bg = background,
                         {
                             layout = wibox.layout.align.horizontal,
@@ -114,10 +115,6 @@ function event.new(args)
                                     },
                                 },
                             }
-                            -- { -- an empty textbox just so the layout will stretch it out
-                            --     widget = wibox.widget.textbox,
-                            --     text = '',
-                            -- },
                         },
                     },
                 },
@@ -125,7 +122,7 @@ function event.new(args)
         },
     }
 
-    if string.find(location, "http?") then
+    if string.find(location, "http?") or string.find(location, "disney.bluejeans?") then
         widget:buttons(buttons(location))
     end
 

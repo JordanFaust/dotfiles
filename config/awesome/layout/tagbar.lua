@@ -10,6 +10,7 @@ local mod = require("config.keys.mod")
 local apps = require("config.apps")
 local clickable_container = require("widgets.material.clickable-container")
 local packageupdater = require("widgets.packageupdater")
+local vpn = require("widgets.vpn")
 
 local button = _G.button
 
@@ -172,6 +173,7 @@ local function actionbar(screen, panel, action_bar_width)
 
   local clock_widget = wibox.container.margin(textclock, dpi(13), dpi(13), dpi(8), dpi(8))
   local _packageupdater = packageupdater.create()
+  local _vpn = vpn.create()
   local systray = wibox.widget.systray()
   systray:set_horizontal(false)
 
@@ -182,8 +184,7 @@ local function actionbar(screen, panel, action_bar_width)
     widget = mat_icon
   }
 
-  local home_button =
-    wibox.widget {
+  local home_button = wibox.widget {
     wibox.widget {
       menu_icon,
       widget = clickable_container
@@ -232,6 +233,7 @@ local function actionbar(screen, panel, action_bar_width)
         layout = wibox.layout.fixed.vertical,
         -- wibox.container.margin(systray, dpi(10), dpi(10)),
         -- require('widget.package-updater'),
+        _vpn,
         _packageupdater,
         -- require('widget.wifi'),
         -- require('widget.battery'),

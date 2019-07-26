@@ -8,7 +8,8 @@ local helpers = require("helpers")
 local pad = helpers.pad
 local registry = require("widgets.registry")
 local libwidget = require("lib.widget")
-local event = require("widgets.sidebar.meetings.event")
+-- local event = require("widgets.sidebar.meetings.event")
+local nordic = require("nordic")
 -- luarocks modules
 local dkjson = require("dkjson")
 
@@ -48,14 +49,14 @@ local function set_children(widget, output)
             muted = true
         end
 
-        table.insert(events, #events + 1, event.new({
+        table.insert(events, #events + 1, nordic.widget.event {
             description = subject,
             start_time = start_time,
             end_time = end_time,
             location = location,
             muted = muted,
             count = #events
-        }))
+        })
 
         if (start_hour == now.hour) and (start_minute == now.min) then
             naughty.notify({

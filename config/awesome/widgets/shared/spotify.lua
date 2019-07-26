@@ -101,9 +101,7 @@ local function update(artist, title, url)
     end
 
     registry.emit("splashscreen::spotify::title", "update::value", { markup = title })
-    registry.emit("sidebar::spotify::title", "update::value", { markup = title })
     registry.emit("splashscreen::spotify::artist", "update::value", { markup = artist })
-    registry.emit("sidebar::spotify::artist", "update::value", { markup = artist })
     registry.emit("splashscreen::spotify::cover", "update::value", { url = url })
 
     spotify.current_title = title

@@ -190,6 +190,8 @@ theme.lab_icon = icon_path .. "taglist/flask.svg"
 theme.magnify_icon = icon_path .. "taglist/magnify.svg"
 theme.package_icon = icon_path .. "tagbar/package.svg"
 theme.package_up_icon = icon_path .. "tagbar/package-up.svg"
+theme.delete_lock_icon = icon_path .. "tagbar/delete-lock.png"
+theme.checked_lock_icon = icon_path .. "tagbar/checked-lock.png"
 
 -- Sidebar
 -- (Sidebar items can be customized in sidebar.lua)
