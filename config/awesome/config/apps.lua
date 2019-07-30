@@ -74,10 +74,10 @@ local apps = {
         --     name = "xsettingsd",
         --     command = "xsettingsd &"
         -- },
-        desktopevents = {
-            name = "desktopevents-data",
-            command = "nohup /usr/bin/desktopevents-data --file=/tmp/desktopevents/data.json >/dev/null &"
-        },
+        -- desktopevents = {
+        --     name = "desktopevents-data",
+        --     command = "nohup /usr/bin/desktopevents-data --file=/tmp/desktopevents/data.json >/dev/null &"
+        -- },
     }
 }
 

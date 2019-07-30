@@ -37,11 +37,13 @@ end
 -- @tparam string args.location The event location
 -- @tparam string args.time_font The font for the event time
 -- @tparam string args.description_font The font for the description
+-- @tparam[opt=320] int args.width The width of the event
+-- @tparam[opt=90] int args.height The height of the event
 -- @tparam boolean args.muted Indicates if the event should be muted in color
 -- @return The event
 function event.new(args)
-    local task_width = dpi(340)
-    local task_height = dpi(90)
+    local task_width = args.width or dpi(320)
+    local task_height = args.width or dpi(90)
 
     local description = args.description
     local task_starts = args.start_time

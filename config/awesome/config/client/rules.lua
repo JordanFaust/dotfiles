@@ -162,14 +162,17 @@ awful.rules.rules = {
         },
         callback = function (c)
             c.name = "Firefox"
+            -- change the icon
+            local icon = gears.surface(beautiful.browser_icon)
+            c.icon = icon._native
             -- Prevent changing tabs from changing the tasklist name
             c:connect_signal("property::name", function(_)
                 c.name = "Firefox"
             end)
             c:geometry({
-                x = dpi(96),
+                x = dpi(64),
                 y = dpi(96),
-                width = dpi(1712),
+                width = dpi(1704),
                 height = dpi(1357)
             })
         end
@@ -188,10 +191,12 @@ awful.rules.rules = {
         },
         callback = function (c)
             c.name = "Slack"
-            local icon = gears.surface("/usr/share/pixmaps/slack.png")
+            -- change the icon
+            local icon = gears.surface(beautiful.slack_icon)
             c.icon = icon._native
+
             c:geometry({
-                x = dpi(96),
+                x = dpi(64),
                 y = dpi(96),
                 width = dpi(1712),
                 height = dpi(1357)
@@ -212,10 +217,29 @@ awful.rules.rules = {
         },
         callback = function (c)
             c.name = "Spacemacs"
+            -- change the icon
+            local icon = gears.surface(beautiful.tasklist_editor_icon)
+            c.icon = icon._native
+
+            -- TODO: Figure out a desktop config to prevent this from happening
+            -- This does not appear to only be tied to desktop files. It appears
+            -- projectile is doing something to change this
+            local timer = gears.timer.start_new(2, function()
+                  c.icon = icon._native
+                  return true
+            end)
+            c:connect_signal("focus", function()
+                  timer:again()
+            end)
+
+            c:connect_signal("unfocus", function()
+                  timer:stop()
+            end)
+
             c:geometry({
-                x = dpi(1860),
+                x = dpi(1836),
                 y = dpi(96),
-                width = dpi(1712),
+                width = dpi(1720),
                 height = dpi(1368)
             })
         end
@@ -243,15 +267,17 @@ awful.rules.rules = {
         },
         callback = function (c)
             c.name = "Terminal"
-            local icon = gears.surface(beautiful.terminal_icon)
+            -- change the icon
+            local icon = gears.surface(beautiful.tasklist_terminal_icon)
             c.icon = icon._native
+
             c:connect_signal("property::name", function(_)
                 c.name = "Terminal"
             end)
             c:geometry({
-                x = dpi(1860),
+                x = dpi(1836),
                 y = dpi(96),
-                width = dpi(1712),
+                width = dpi(1720),
                 height = dpi(1368)
             })
         end
@@ -353,7 +379,7 @@ awful.rules.rules = {
         },
         properties = {
             screen = 1,
-            tag = "1"
+            tag = "code"
         }
     },
 
@@ -372,7 +398,7 @@ awful.rules.rules = {
         },
         properties = {
             screen = 1,
-            tag = "2"
+            tag = "social"
         },
     },
 
@@ -385,20 +411,17 @@ awful.rules.rules = {
         },
         properties = {
             screen = 1,
-            tag = "3"
+            tag = "music"
         },
         callback = function (c)
             c.name = "Spotify"
+            -- change the icon
+            local icon = gears.surface(beautiful.spotify_icon)
+            c.icon = icon._native
+
             c:connect_signal("property::name", function(_)
                 c.name = "Spotify"
             end)
-
-            -- c:geometry({
-            --     x = dpi(930),
-            --     y = dpi(96),
-            --     width = dpi(1704),
-            --     height = dpi(900)
-            -- })
 
             c:geometry({
                     x = dpi(930),
@@ -418,13 +441,14 @@ awful.rules.rules = {
         },
         properties = {
             screen = 1,
-            tag = "3"
+            tag = "music"
         },
         callback = function (c)
-            local icon = gears.surface(beautiful.terminal_icon)
+            c.name = "Cava"
+            -- change the icon
+            local icon = gears.surface(beautiful.tasklist_terminal_icon)
             c.icon = icon._native
 
-            c.name = "Cava"
             c:connect_signal("property::name", function(_)
                 c.name = "Cava"
             end)
@@ -466,19 +490,22 @@ awful.rules.rules = {
             instance = "monitoring"
         },
         properties = {
-            tag = "4"
+            tag = "misc"
         },
         callback = function(c)
             c.name = "Monitoring"
-            local icon = gears.surface(beautiful.terminal_icon)
+            -- change the icon
+            local icon = gears.surface(beautiful.tasklist_terminal_icon)
             c.icon = icon._native
+
             c:connect_signal("property::name", function(_)
                 c.name = "Monitoring"
             end)
+
             c:geometry({
-                x = dpi(96),
+                x = dpi(64),
                 y = dpi(96),
-                width = dpi(3454),
+                width = dpi(3486),
                 height = dpi(1376)
             })
         end

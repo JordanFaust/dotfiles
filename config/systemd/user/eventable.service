@@ -1,0 +1,13 @@
+[Unit]
+Description=Desktop Event Source
+After=eventable-config.service
+
+[Service]
+Type=dbus
+BusName=com.jfaust.widget.eventable
+EnvironmentFile=/tmp/eventable/credentials
+ExecStart=/usr/bin/sh -c 'echo $(secret-tool lookup system widget service outlook type app-id)'
+# ExecStartPost=/usr/bin/sh -c 'rm -rf /tmp/eventable'
+
+[Install]
+WantedBy=multi-user.target

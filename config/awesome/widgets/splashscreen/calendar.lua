@@ -11,30 +11,23 @@ local dpi = xresources.apply_dpi
 local calendar = {}
 
 local function set_buttons(widget)
-    local month = os.date('*t').month
-
     widget:buttons(
         gears.table.join(
             -- Left Click - Reset date to current date
             awful.button({ }, 1, function ()
                 widget.date = os.date('*t')
+                -- widget:emit_signal("button:press", {})
             end),
             -- Scroll - Move to previous or next month
             awful.button({ }, 4, function ()
-                local previous_month = widget.date.month - 1
-                if previous_month == month then
-                    widget.date = os.date('*t')
-                else
-                    widget.date = {month = previous_month, year = widget.date.year}
-                end
+                local time = os.time(widget.date)
+                local yesterday = time - (60 * 60 * 24)
+                widget.date = os.date("*t", yesterday)
             end),
             awful.button({ }, 5, function ()
-                local next_month = widget.date.month + 1
-                if next_month == month then
-                    widget.date = os.date('*t')
-                else
-                    widget.date = {month = next_month, year = widget.date.year}
-                end
+                local time = os.time(widget.date)
+                local yesterday = time + (60 * 60 * 24)
+                widget.date = os.date("*t", yesterday)
             end)
         )
     )
@@ -48,6 +41,7 @@ function calendar.widget(config)
             flag = 'header'
         end
 
+        -- nordic.util.log(widget)
         local props = config.styles[flag] or {}
         if props.markup and widget.get_text and widget.set_markup then
             widget:set_markup(props.markup(widget:get_text()))

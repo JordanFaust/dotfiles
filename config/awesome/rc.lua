@@ -15,13 +15,7 @@ local gears = require("gears")
 local awful = require("awful")
 require("awful.autofocus")
 
--- ~~ Noodle Cleanup Script ~~
--- Some of my widgets (mpd, volume) rely on scripts that have to be
--- run persistently in the background.
--- They sleep until mpd/volume state changes, in an infinite loop.
--- As a result when awesome restarts, they keep running in background, along with the new ones that
--- are created after the restart.
--- This script cleans up the old processes.
+-- Clean up spawned processes from previous awesome session
 awful.spawn.with_shell("~/.config/awesome/awesome-cleanup.sh")
 
 local awesome = _G.awesome
@@ -30,45 +24,45 @@ local mouse = _G.mouse
 local tag = _G.tag
 local root = _G.root
 
-local helpers = require("helpers")
+local nordic = require("nordic")
 
 -- theme
 local theme_dir = os.getenv("HOME") .. "/.config/awesome/themes/"
-gears.debug.dump(os.date("%Y-%m-%d %T ") .."loading theme")
+nordic.util.log("loading theme")
 beautiful.init( theme_dir .. "skyfall" .. "/theme.lua" )
 
+-- Setup all configuration
+nordic.util.log("loading configuration")
+require("config.client")
+nordic.util.log("config.client loaded")
+require("config.tags")
+nordic.util.log("config.tags loaded")
+root.keys(require("config.keys.global"))
+nordic.util.log("config.keys.global loaded")
+root.buttons(require("config.buttons.global"))
+nordic.util.log("config.buttons.global loaded")
+
 -- Layout
-gears.debug.dump(os.date("%Y-%m-%d %T ") .."creating layout")
+nordic.util.log("creating layout")
 require("layout")
 
 -- Init all modules
 
-gears.debug.dump(os.date("%Y-%m-%d %T ") .."loading modules")
+nordic.util.log("loading modules")
 require("module.notifications")
-gears.debug.dump(os.date("%Y-%m-%d %T ") .."module.notifications loaded")
+nordic.util.log("module.notifications loaded")
 require("module.autostart")
-gears.debug.dump(os.date("%Y-%m-%d %T ") .."module.autostart loaded")
+nordic.util.log("module.autostart loaded")
 require("module.titlebars")
-gears.debug.dump(os.date("%Y-%m-%d %T ") .."module.titlbars loaded")
+nordic.util.log("module.titlbars loaded")
 require("module.exitscreen")
-gears.debug.dump(os.date("%Y-%m-%d %T ") .."module.exitscreen loaded")
-require("module.splashscreen")
-gears.debug.dump(os.date("%Y-%m-%d %T ") .."module.splashscreen loaded")
+nordic.util.log("module.exitscreen loaded")
+-- require("module.splashscreen")
+nordic.util.log("module.splashscreen loaded")
 require("module.hotkeys")
-gears.debug.dump(os.date("%Y-%m-%d %T ") .."module.hotkeys loaded")
+nordic.util.log("module.hotkeys loaded")
 require("module.menu")
-gears.debug.dump(os.date("%Y-%m-%d %T ") .."module.menu loaded")
-
--- Setup all configuration
-gears.debug.dump(os.date("%Y-%m-%d %T ") .."loading configuration")
-require("config.client")
-gears.debug.dump(os.date("%Y-%m-%d %T ") .."config.client loaded")
-require("config.tags")
-gears.debug.dump(os.date("%Y-%m-%d %T ") .."config.tags loaded")
-root.keys(require("config.keys.global"))
-gears.debug.dump(os.date("%Y-%m-%d %T ") .."config.keys.global loaded")
-root.buttons(require("config.buttons.global"))
-gears.debug.dump(os.date("%Y-%m-%d %T ") .."config.buttons.global loaded")
+nordic.util.log("module.menu loaded")
 
 -- {{{ Signals
 -- Signal function to execute when a new client appears.
@@ -98,16 +92,16 @@ end)
 if beautiful.border_radius ~= 0 then
     client.connect_signal("manage", function (c, _)
         if not c.fullscreen then
-            c.shape = helpers.rrect(beautiful.border_radius)
+            c.shape = nordic.shape.rrect(beautiful.border_radius)
         end
     end)
 
     -- Fullscreen clients should not have rounded corners
     client.connect_signal("property::fullscreen", function (c)
         if c.fullscreen then
-            c.shape = helpers.rect()
+            c.shape = nordic.shape.rect()
         else
-            c.shape = helpers.rrect(beautiful.border_radius)
+            c.shape = nordic.shape.rrect(beautiful.border_radius)
         end
     end)
 end
@@ -126,9 +120,8 @@ client.connect_signal("manage", function(c)
 end)
 
 -- Apply shapes
--- beautiful.notification_shape = helpers.infobubble(beautiful.notification_border_radius)
-beautiful.notification_shape = helpers.rrect(beautiful.notification_border_radius)
-beautiful.snap_shape = helpers.rrect(beautiful.border_radius * 2)
+beautiful.notification_shape = nordic.shape.rrect(beautiful.notification_border_radius)
+beautiful.snap_shape = nordic.shape.rrect(beautiful.border_radius * 2)
 
 client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)

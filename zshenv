@@ -98,6 +98,9 @@ for opener in browser-exec xdg-open cmd.exe cygstart "start" open; do
 	fi
 done
 
+# Code Search
+alias search="grep -iRl "
+
 # Linux specific aliases
 alias pbcopy='xclip -selection clipboard'
 alias pbpaste='xclip -selection clipboard -o'
