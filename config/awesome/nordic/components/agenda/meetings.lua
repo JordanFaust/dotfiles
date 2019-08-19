@@ -16,6 +16,9 @@ local nordic = {
 local meetings = {
     -- Indicates the DBus service is connected
     connected = false,
+    -- The cached client watching for signals. This prevents orphaned connections
+    -- from handling connections if the dbus service disconnects and reconnects.
+    client = nil,
     mt = {}
 }
 
@@ -82,8 +85,10 @@ local function properties_changed(...) --luacheck: no unused args
 
             local muted = false
             -- mute the color of the event if it has already passed
-            if (start_hour * 60 + start_minute) < (now.hour * 60 + now.min) then
-                muted = true
+            if tonumber(start_day) == tonumber(now.day) then
+                if (start_hour * 60 + start_minute) < (now.hour * 60 + now.min) then
+                    muted = true
+                end
             end
             -- if the start day is less then today mute the event
             if (tonumber(start_day) < tonumber(now.day)) then
@@ -123,15 +128,18 @@ end
 -- is sent any time there is new data.
 local function watch_calendar()
     local Gio = lgi.Gio
-    local client = proxy.Proxy:new({
-        bus = proxy.Bus.SESSION,
-        name = "org.eventable.service",
-        path = "/org/eventable/Calendar",
-        interface = "org.eventable.CalendarInterface",
-        flags = Gio.DBusSignalFlags.NONE
-    })
+    if meetings.client == nil then
+        local client = proxy.Proxy:new({
+                bus = proxy.Bus.SESSION,
+                name = "org.eventable.service",
+                path = "/org/eventable/Calendar",
+                interface = "org.eventable.CalendarInterface",
+                flags = Gio.DBusSignalFlags.NONE
+        })
+        meetings.client = client
 
-    client:connect_signal(properties_changed, "PropertiesChanged")
+        client:connect_signal(properties_changed, "PropertiesChanged")
+    end
 end
 
 --- Start watching the session dbus for the Eventable service.

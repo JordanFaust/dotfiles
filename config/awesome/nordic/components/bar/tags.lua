@@ -7,7 +7,7 @@ local dpi = beautiful.xresources.apply_dpi
 -- custom modules
 local mod = require("config.keys.mod")
 local nordic = {
-    color = require("nordic.color")
+    core = require("nordic.core")
 }
 
 -- @module layout.bar.tags
@@ -89,14 +89,14 @@ function tags.new(args)
                         self.backup     = self.bg
                         self.has_backup = true
                     end
-                    self.bg = nordic.color.lighten(beautiful.frost_4, 20)
+                    self.bg = nordic.core.color.lighten(beautiful.frost_4, 20)
                 end)
                 self:connect_signal('mouse::leave', function()
                     if self.has_backup then self.bg = self.backup end
                 end)
                 -- Make sure color doesn't switch to old bg on mouse leave
                 self:connect_signal('button::release', function()
-                    self.backup = nordic.color.lighten(beautiful.frost_4, 20)
+                    self.backup = nordic.core.color.lighten(beautiful.frost_4, 20)
                 end)
             end,
         },

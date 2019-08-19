@@ -28,41 +28,41 @@ local nordic = require("nordic")
 
 -- theme
 local theme_dir = os.getenv("HOME") .. "/.config/awesome/themes/"
-nordic.util.log("loading theme")
+nordic.core.util.log("loading theme")
 beautiful.init( theme_dir .. "skyfall" .. "/theme.lua" )
 
 -- Setup all configuration
-nordic.util.log("loading configuration")
+nordic.core.util.log("loading configuration")
 require("config.client")
-nordic.util.log("config.client loaded")
+nordic.core.util.log("config.client loaded")
 require("config.tags")
-nordic.util.log("config.tags loaded")
+nordic.core.util.log("config.tags loaded")
 root.keys(require("config.keys.global"))
-nordic.util.log("config.keys.global loaded")
+nordic.core.util.log("config.keys.global loaded")
 root.buttons(require("config.buttons.global"))
-nordic.util.log("config.buttons.global loaded")
+nordic.core.util.log("config.buttons.global loaded")
 
 -- Layout
-nordic.util.log("creating layout")
+nordic.core.util.log("creating layout")
 require("layout")
 
 -- Init all modules
 
-nordic.util.log("loading modules")
+nordic.core.util.log("loading modules")
 require("module.notifications")
-nordic.util.log("module.notifications loaded")
+nordic.core.util.log("module.notifications loaded")
 require("module.autostart")
-nordic.util.log("module.autostart loaded")
+nordic.core.util.log("module.autostart loaded")
 require("module.titlebars")
-nordic.util.log("module.titlbars loaded")
+nordic.core.util.log("module.titlbars loaded")
 require("module.exitscreen")
-nordic.util.log("module.exitscreen loaded")
+nordic.core.util.log("module.exitscreen loaded")
 -- require("module.splashscreen")
-nordic.util.log("module.splashscreen loaded")
+nordic.core.util.log("module.splashscreen loaded")
 require("module.hotkeys")
-nordic.util.log("module.hotkeys loaded")
+nordic.core.util.log("module.hotkeys loaded")
 require("module.menu")
-nordic.util.log("module.menu loaded")
+nordic.core.util.log("module.menu loaded")
 
 -- {{{ Signals
 -- Signal function to execute when a new client appears.
@@ -92,16 +92,16 @@ end)
 if beautiful.border_radius ~= 0 then
     client.connect_signal("manage", function (c, _)
         if not c.fullscreen then
-            c.shape = nordic.shape.rrect(beautiful.border_radius)
+            c.shape = nordic.core.shape.rrect(beautiful.border_radius)
         end
     end)
 
     -- Fullscreen clients should not have rounded corners
     client.connect_signal("property::fullscreen", function (c)
         if c.fullscreen then
-            c.shape = nordic.shape.rect()
+            c.shape = nordic.core.shape.rect()
         else
-            c.shape = nordic.shape.rrect(beautiful.border_radius)
+            c.shape = nordic.core.shape.rrect(beautiful.border_radius)
         end
     end)
 end
@@ -120,8 +120,8 @@ client.connect_signal("manage", function(c)
 end)
 
 -- Apply shapes
-beautiful.notification_shape = nordic.shape.rrect(beautiful.notification_border_radius)
-beautiful.snap_shape = nordic.shape.rrect(beautiful.border_radius * 2)
+beautiful.notification_shape = nordic.core.shape.rrect(beautiful.notification_border_radius)
+beautiful.snap_shape = nordic.core.shape.rrect(beautiful.border_radius * 2)
 
 client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)

@@ -7,8 +7,7 @@ local dpi = beautiful.xresources.apply_dpi
 -- custom modules
 local registry = require("widgets.registry")
 local nordic = {
-    color = require("nordic.color"),
-    util = require("nordic.util")
+    core = require("nordic.core"),
 }
 
 -- @module layout.bar.power
@@ -26,7 +25,7 @@ local function popup()
         {
             {
                 {
-                    markup = nordic.util.colorize_text("Suspend", beautiful.snow_storm_3),
+                    markup = nordic.core.util.colorize_text("Suspend", beautiful.snow_storm_3),
                     widget = wibox.widget.textbox
                 },
                 top = dpi(20),
@@ -42,7 +41,7 @@ local function popup()
         {
             {
                 {
-                    markup = nordic.util.colorize_text("Restart", beautiful.snow_storm_3),
+                    markup = nordic.core.util.colorize_text("Restart", beautiful.snow_storm_3),
                     widget = wibox.widget.textbox
                 },
                 top = dpi(20),
@@ -58,7 +57,7 @@ local function popup()
         {
             {
                 {
-                    markup = nordic.util.colorize_text("Shutdown", beautiful.snow_storm_3),
+                    markup = nordic.core.util.colorize_text("Shutdown", beautiful.snow_storm_3),
                     widget = wibox.widget.textbox
                 },
                 top = dpi(20),
@@ -110,7 +109,7 @@ local function popup()
                 option.backup     = option.bg
                 option.has_backup = true
             end
-            option.bg = nordic.color.lighten(beautiful.frost_4, 20)
+            option.bg = nordic.core.color.lighten(beautiful.frost_4, 20)
         end)
 
         option:connect_signal("mouse::leave", function(_)
@@ -171,7 +170,7 @@ function power.new(args)
             widget.backup     = widget.bg
             widget.has_backup = true
         end
-        widget.bg = nordic.color.lighten(beautiful.frost_4, 20)
+        widget.bg = nordic.core.color.lighten(beautiful.frost_4, 20)
     end)
     widget:connect_signal('mouse::leave', function()
         if widget.has_backup then widget.bg = widget.backup end

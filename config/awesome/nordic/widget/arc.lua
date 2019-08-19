@@ -2,7 +2,7 @@
 local beautiful = require("beautiful")
 local wibox = require("wibox")
 -- custom modules
-local color = require("nordic.color")
+local color = require("nordic.core.color")
 
 -- @module nordic.widget.arch
 local arc = { mt = {} }

@@ -5,23 +5,20 @@ module Eventable
   module Command
     class Run
       def self.execute()
+        logger = Logger.new(STDOUT)
+        logger.formatter = proc do |severity, datetime, _, message|
+          "#{Time.parse(datetime.to_s).utc.iso8601}: #{message}\n"
+        end
+
         bus = DBus.session_bus
         service = bus.request_service("org.eventable.service")
 
-        # Setup Calendar Interface
-        calendar_worker = Eventable::Worker::Calendar.new({ threads: 5 })
-        calendar = Eventable::Interface::Calendar.new("/org/eventable/Calendar", calendar_worker)
+        calendar = Eventable::Interface::Calendar.new("/org/eventable/Calendar", logger)
         # Export the service on the bus
         service.export(calendar)
-        # Define the change handler
-        calendar_worker.on_change do
-          calendar.PropertiesChanged()
-        end
-        # Use the current set date to refresh the data at the specified interval
-        # calendar_worker.refresh({ interval: 30 }) do |w|
-        #   start_time, end_time = w.store[:time_range]
-        #   w.client.list(start_time, end_time)
-        # end
+
+        github = Eventable::Interface::Github.new("/org/eventable/Github", logger)
+        service.export(github)
 
         # Start bus loop
         loop = DBus::Main.new

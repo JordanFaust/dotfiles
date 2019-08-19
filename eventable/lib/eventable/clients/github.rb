@@ -6,15 +6,15 @@ module Eventable
 
       def list()
         Octokit.configure do |c|
-          c.api_endpoint = ENV["GITHUB_API_ENDPOINT"] || "https://github.bamtech.co/api/v3/"
-          c.access_token = ENV["GITHUB_ACCESS_TOKEN"]
+          c.api_endpoint = ENV['GITHUB_API_ENDPOINT']
+          c.access_token = ENV['GITHUB_ACCESS_TOKEN']
         end
 
         client = Octokit::Client.new
 
         issues = client.search_issues("is:open is:pr review-requested:jfaust")
 
-        pull_requests = {}
+        pull_requests = []
         issues[:items].each do |pr|
           title = pr[:title]
           comments = pr[:comments]
@@ -34,6 +34,9 @@ module Eventable
         end
 
         pull_requests
+      rescue Exception => e
+        puts "got an exception"
+        puts e
       end
     end
   end

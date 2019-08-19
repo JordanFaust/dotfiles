@@ -9,7 +9,7 @@ local dpi = xresources.apply_dpi
 
 -- custom modules
 local globals = require("globals")
-local shape = require("nordic.shape")
+local shape = require("nordic.core.shape")
 
 -- @submodule nordic.widget.event
 local event = { mt = {} }

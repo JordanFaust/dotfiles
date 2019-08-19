@@ -9,8 +9,5 @@
 return {
     core = require("nordic.core"),
     components = require("nordic.components"),
-    color = require("nordic.color"),
     widget = require("nordic.widget"),
-    util = require("nordic.util"),
-    shape = require("nordic.shape")
 }

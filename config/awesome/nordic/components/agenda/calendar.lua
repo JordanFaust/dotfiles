@@ -109,8 +109,9 @@ function calendar.new(args)
 
     local widget = wibox.widget {
         date     = os.date('*t'),
-        font     = "sans 16",
+        font     = "sans 15",
         long_weekdays = false,
+        start_sunday = true,
         spacing  = dpi(3),
         fn_embed = decorate_cell,
         widget   = wibox.widget.calendar.month
@@ -120,6 +121,7 @@ function calendar.new(args)
 
     widget:connect_signal("date::update", function()
         widget.date = os.date('*t')
+        registry.emit("agenda::meetings", "update::value", widget.date)
     end)
 
     -- Update the day of the date to the provided day

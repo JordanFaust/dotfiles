@@ -7,7 +7,7 @@ local dpi = beautiful.xresources.apply_dpi
 -- custom modules
 local registry = require("widgets.registry")
 local nordic = {
-    color = require("nordic.color")
+    core = require("nordic.core")
 }
 
 -- @module layout.bar.bluetooth
@@ -55,7 +55,7 @@ function bluetooth.new(args)
             widget.backup     = widget.bg
             widget.has_backup = true
         end
-        widget.bg = nordic.color.lighten(beautiful.frost_4, 20)
+        widget.bg = nordic.core.color.lighten(beautiful.frost_4, 20)
     end)
     widget:connect_signal('mouse::leave', function()
         if widget.has_backup then widget.bg = widget.backup end

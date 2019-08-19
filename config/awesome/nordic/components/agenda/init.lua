@@ -64,7 +64,7 @@ function agenda.new(args)
                 },
                 {
                     agenda.widgets.calendar.new({}),
-                    left = dpi(36),
+                    left = dpi(32),
                     right = dpi(48),
                     widget = wibox.container.margin
                 },

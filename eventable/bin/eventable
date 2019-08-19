@@ -59,6 +59,22 @@ class App
       ENV['GOOGLE_CLIENT_SECRET'] = secret
     end
 
+    endpoint_lookup = 'system widget service github type endpoint'
+    Open3.popen3("#{root} #{endpoint_lookup}") do |_, out, _, _|
+      secret = out.read
+      raise Exception, "Missing required secret '#{endpoint_lookup}'" if secret.empty?
+
+      ENV['GITHUB_API_ENDPOINT'] = secret
+    end
+
+    token_lookup = 'system widget service github type token'
+    Open3.popen3("#{root} #{token_lookup}") do |_, out, _, _|
+      secret = out.read
+      raise Exception, "Missing required secret '#{token_lookup}'" if secret.empty?
+
+      ENV['GITHUB_ACCESS_TOKEN'] = secret
+    end
+
     true
   end
 

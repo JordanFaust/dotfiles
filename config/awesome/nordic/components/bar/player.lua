@@ -11,7 +11,7 @@ local registry = require("widgets.registry")
 local lgi = require("lgi")
 local proxy = require("dbus_proxy")
 local nordic = {
-    util = require("nordic.util")
+    core = require("nordic.core")
 }
 
 -- @module player
@@ -91,11 +91,11 @@ local function properties_changed(...) --luacheck: no unused args
 
     local metadata, err = client:Get("org.mpris.MediaPlayer2.Player", "Metadata")
     if not err == nil then
-        nordic.util.debug("something went wrong")
+        nordic.core.util.debug("something went wrong")
     end
 
     if metadata == nil then
-        nordic.util.debug("failed to get player metadata")
+        nordic.core.util.debug("failed to get player metadata")
         return
     end
 
@@ -225,7 +225,7 @@ function player.new(args) --luacheck: no unused args
                 {
                     {
                         id = "now_playing",
-                        markup = nordic.util.colorize_text("[not connected]", beautiful.snow_storm_3),
+                        markup = nordic.core.util.colorize_text("[not connected]", beautiful.snow_storm_3),
                         align = 'center',
                         valign = 'center',
                         forced_width = dpi(200),
@@ -251,7 +251,7 @@ function player.new(args) --luacheck: no unused args
     widget:connect_signal("update::value", function(_, params)
         local textbox = widget:get_children_by_id("now_playing")[1]
         local text = params.title .. " - " .. params.artist
-        textbox.markup = nordic.util.colorize_text(text, beautiful.snow_storm_3)
+        textbox.markup = nordic.core.util.colorize_text(text, beautiful.snow_storm_3)
     end)
 
     previous:buttons(previous_buttons())

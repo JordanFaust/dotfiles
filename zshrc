@@ -45,4 +45,13 @@ if [ -x "$(command -v rbenv)" ]; then
     eval "$(rbenv init -)"
 fi
 
+### SSH
+if ! pgrep -u "$USER" ssh-agent > /dev/null; then
+    ssh-agent > ~/.ssh/cache
+fi
+if [[ ! "$SSH_AUTH_SOCK" ]]; then
+    eval "$(<~/.ssh/cache)"
+fi
+
+
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
