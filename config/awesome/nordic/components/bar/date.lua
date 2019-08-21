@@ -25,7 +25,7 @@ function date.new(args) --luacheck: no unused args
         },
         id = "background_role",
         forced_height = dpi(48),
-        forced_width = dpi(220),
+        forced_width = dpi(300),
         bg = beautiful.frost_1,
         fg = beautiful.snow_storm_3,
         widget = wibox.container.background

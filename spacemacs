@@ -30,7 +30,7 @@ values."
    dotspacemacs-configuration-layer-path '()
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(
+   '(systemd
      lua
      vimscript
      ansible
@@ -100,8 +100,8 @@ values."
                                     evil-escape
                                     multiple-cursors
                                     ;; Remove to implement custom modeline
-                                    spaceline
                                     ;; Remove until spacemacs bug is fixed
+                                    ;; spaceline
                                     org-projectile)
    ;; Defines the behaviour of Spacemacs when installing packages.
    ;; Possible values are `used-only', `used-but-keep-unused' and `all'.
@@ -185,6 +185,9 @@ values."
                                :weight semibold
                                :width normal
                                :powerline-scale 1.0)
+
+   dotspacemacs-mode-line-theme 'spacemacs
+
    ;; The leader key
    dotspacemacs-leader-key "SPC"
    ;; The key used for Emacs commands (M-x) (after pressing on the leader key).
@@ -372,6 +375,8 @@ you should place your code here."
   ;; https://github.com/kwrooijen/.spacemacs.d
   (require 'functions)
   (doom-themes-neotree-config)
+  (setq doom-themes-treemacs-theme "doom-colors")
+  (doom-themes-treemacs-config)
 
   (load-my-packages)
 
@@ -388,7 +393,7 @@ you should place your code here."
         helm-display-header-line nil helm-echo-input-in-header-line t
         helm-make-comint t helm-make-named-buffer t indent-buffer-modes
         '(scss-mode) projectile-enable-caching t projectile-use-git-grep t
-        scroll-error-top-bottom t spaceline-helm-mode t spaceline-info-mode t
+        scroll-error-top-bottom t spaceline-helm-mode t spAceline-info-mode t
         shell-pop-full-span nil evil-want-fine-undo t css-indent-offset 2)
 
   ;; Fix path for go
@@ -458,3 +463,33 @@ you should place your code here."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(default ((((class color) (min-colors 89)) (:foreground "#ffffff" :background "#2E3440" :family "Fira Mono" :foundry "nil")))))
+(defun dotspacemacs/emacs-custom-settings ()
+  "Emacs custom settings.
+This is an auto-generated function, do not modify its content directly, use
+Emacs customize menu instead.
+This function is called at the very end of Spacemacs initialization."
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(ansi-color-faces-vector
+   [default bold shadow italic underline bold bold-italic bold])
+ '(custom-safe-themes
+   (quote
+    ("ce3e6c12b48979ce89754884d913c7ecc8a7956543d8b09ef13abfab6af9aa35" default)))
+ '(evil-want-Y-yank-to-eol nil)
+ '(hl-sexp-background-color "#1c1f26")
+ '(jdee-db-active-breakpoint-face-colors (cons "#191C25" "#80A0C2"))
+ '(jdee-db-requested-breakpoint-face-colors (cons "#191C25" "#A2BF8A"))
+ '(jdee-db-spec-breakpoint-face-colors (cons "#191C25" "#434C5E"))
+ '(package-selected-packages
+   (quote
+    (systemd spaceline-all-the-icons zones lv transient lua-mode groovy-mode vimrc-mode dactyl-mode jinja2-mode company-ansible ansible-doc ansible toml-mode racer flycheck-rust cargo rust-mode powerline pcre2el spinner org-plus-contrib hydra parent-mode projectile request pkg-info epl flx ghub let-alist smartparens iedit anzu evil goto-chg undo-tree highlight bind-map bind-key packed f dash s helm avy helm-core async popup org-journal helm-gtags ggtags sr-speedbar org-category-capture alert log4e gntp org-mime doom-nord-theme perspeen d-mode company-dcd ivy flycheck-dmd-dub string-inflection solaire-mode simpleclip rainbow-mode ov key-chord deferred all-the-icons memoize evil-multiedit eldoc-eval beacon seq anaphora yapfify pyvenv pytest pyenv-mode py-isort pip-requirements live-py-mode hy-mode helm-pydoc cython-mode company-anaconda anaconda-mode pythonic nginx-mode terraform-mode hcl-mode dockerfile-mode docker tablist docker-tramp web-beautify livid-mode skewer-mode simple-httpd json-snatcher json-reformat multiple-cursors js2-mode dash-functional tern go-mode markdown-mode haml-mode web-completion-data gitignore-mode git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter flyspell-correct pos-tip flycheck magit magit-popup git-commit with-editor diff-hl company yasnippet auto-complete inf-ruby define-word zenburn-theme yaml-mode xterm-color ws-butler winum which-key web-mode volatile-highlights vi-tilde-fringe uuidgen use-package unfill toc-org tagedit spaceline smeargle slim-mode shell-pop scss-mode sass-mode rvm ruby-tools ruby-test-mode rubocop rspec-mode robe reveal-in-osx-finder restart-emacs rbenv rake rainbow-delimiters pug-mode popwin persp-mode pbcopy paradox ox-gfm osx-trash osx-dictionary orgit org-projectile org-present org-pomodoro org-download org-bullets open-junk-file noflet neotree mwim multi-term move-text mmm-mode minitest material-theme markdown-toc magit-gitflow magit-gh-pulls macrostep lorem-ipsum linum-relative link-hint less-css-mode launchctl json-mode js2-refactor js-doc jira-markup-mode info+ indent-guide imenu-list hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-gitignore helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag google-translate golden-ratio go-guru go-eldoc gnuplot github-search github-clone github-browse-file gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gist gh-md fuzzy flyspell-correct-helm flycheck-pos-tip flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu eshell-z eshell-prompt-extras esh-help ensime enh-ruby-mode emmet-mode elisp-slime-nav dumb-jump doom-themes diminish csv-mode company-web company-tern company-statistics company-go column-enforce-mode coffee-mode clean-aindent-mode chruby bundler auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile apropospriate-theme aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(default ((((class color) (min-colors 89)) (:foreground "#ffffff" :background "#2E3440" :family "Fira Mono" :foundry "nil")))))
+)

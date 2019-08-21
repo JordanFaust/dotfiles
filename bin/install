@@ -203,6 +203,7 @@ install/dependencies/manjaro() {
     pacman/install networkmanager-openconnect
     pacman/install networkmanager-openvpn
     pacman/install net-tools
+    pacman/install nm-connection-editor
 
     e_header "* Installing CLI tools"
     pacman/install expect
@@ -238,13 +239,21 @@ install/dependencies/manjaro() {
     e_header "* Installing package management tools"
     pacman/install yay
 
+    e_header "* Install Window Manager"
+    pacman/install awesome
+
+    e_header "* Graphics Driver"
+    pacman/install nvidia-390xx
+    pacman/install nvidia-390xx-utils
+
     e_header "* Installing Custom Window Manager tools"
+    pacman/install pavucontrol
     pacman/install papirus-icon-theme
     pacman/install rofi
     pacman/install powerline-fonts
     pacman/install libnotify
     pacman/install gobject-introspection
-    pacman/install paper-icon-theme-git
+    # pacman/install paper-icon-theme-git
     yay/install cava
 
     e_header "* Installing Greeter"
@@ -522,6 +531,7 @@ install/software() {
         if ! [ -x "$(command -v finto)" ]; then
             go get github.com/threadwaste/finto/cmd/finto
             sudo cp "${DOTFILES_DIRECTORY}/systemd/finto.service" /etc/systemd/system/finto.service
+            sudo mv $(which finto) /usr/local/bin/finto
             if [ -x "$(sudo systemctl is-system-running)" ]; then
                 sudo systemctl daemon-reload
                 sudo systemctl enable finto
@@ -787,6 +797,10 @@ if [[ "$help" = true || "$nothing" = true ]]; then
     run_help >&3
     exit
 fi
+
+e_header "Additional Steps"
+echo "* Add user to groups: wheel network docker"
+echo "* Create VPN connection"
 
 # handle non-option arguments
 if [[ $# -eq 0 ]]; then
