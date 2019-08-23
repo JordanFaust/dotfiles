@@ -34,6 +34,15 @@ class App
     end
   end
 
+  command :authorize do |c|
+    c.desc 'authorization code'
+    c.flag :code
+
+    c.action do |globals, options, args|
+      Eventable::Clients::Calendar.new.authorize(options[:code])
+    end
+  end
+
   pre do |global,command,options,args|
     # Pre logic here
     # Return true to proceed; false to abort and not call the

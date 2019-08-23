@@ -53,5 +53,13 @@ if [[ ! "$SSH_AUTH_SOCK" ]]; then
     eval "$(<~/.ssh/cache)"
 fi
 
+export ZDOTDIR=$HOME/.dotfiles/zdotdir
+# Load external files
+if [[ -d "${ZDOTDIR:-$HOME}"/zsh.d ]]; then
+    for ZSH_FILE in $(ls -A "${ZDOTDIR:-$HOME}"/zsh.d/*.zsh); do
+        source "${ZSH_FILE}"
+    done
+fi
+
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

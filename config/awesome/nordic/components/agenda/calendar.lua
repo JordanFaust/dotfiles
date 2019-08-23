@@ -56,7 +56,7 @@ function calendar.new(args)
         ["header"] = {
             fg_color = beautiful.xcolor7,
             bg_color = beautiful.xcolor1 .. "00",
-            markup   = function(t) return '<span font_desc="sans bold 24">' .. t .. '</span>' end,
+            markup   = function(t) return '<span font_desc="sans bold 22">' .. t .. '</span>' end,
         },
         ["weekday"] = {
             fg_color = beautiful.xcolor7,
@@ -109,7 +109,7 @@ function calendar.new(args)
 
     local widget = wibox.widget {
         date     = os.date('*t'),
-        font     = "sans 15",
+        font     = "sans 14",
         long_weekdays = false,
         start_sunday = true,
         spacing  = dpi(3),

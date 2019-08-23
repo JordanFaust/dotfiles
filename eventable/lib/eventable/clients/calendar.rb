@@ -17,6 +17,7 @@ module Eventable
       def list(params)
         calendar = CalendarV3::CalendarService.new
         calendar.authorization = user_credentials_for(CalendarV3::AUTH_CALENDAR)
+        puts "authorizing"
 
         page_token = nil
         limit = params[:limit] || 1000
@@ -55,6 +56,23 @@ module Eventable
         end while !page_token.nil? && limit > 0
 
         return events
+      rescue StandardError => e
+        puts e.message
+      end
+
+      def authorize(code)
+        FileUtils.mkdir_p(File.dirname(token_store_path))
+
+        client_id = Google::Auth::ClientId.new(ENV['GOOGLE_CLIENT_ID'], ENV['GOOGLE_CLIENT_SECRET'])
+        token_store = Google::Auth::Stores::FileTokenStore.new(:file => token_store_path)
+        authorizer = Google::Auth::UserAuthorizer.new(client_id, CalendarV3::AUTH_CALENDAR, token_store)
+
+        user_id = 'default'
+
+        credentials = authorizer.get_and_store_credentials_from_code(
+          user_id: user_id, code: code, base_url: OOB_URI)
+      rescue StandardError => e
+        puts e.message
       end
 
       private
@@ -105,8 +123,8 @@ module Eventable
         credentials = authorizer.get_credentials(user_id)
         if credentials.nil?
           url = authorizer.get_authorization_url(base_url: OOB_URI)
-          say "Open the following URL in your browser and authorize the application."
-          say url
+          puts "Open the following URL in your browser and authorize the application."
+          puts url
           code = ask "Enter the authorization code:"
           credentials = authorizer.get_and_store_credentials_from_code(
             user_id: user_id, code: code, base_url: OOB_URI)

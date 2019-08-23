@@ -70,7 +70,7 @@ function tags.new(args)
                             id     = 'text_role',
                             widget = wibox.widget.textbox,
                         },
-                        top = dpi(12),
+                        top = dpi(9),
                         bottom = dpi(8),
                         widget  = wibox.container.margin
                     },

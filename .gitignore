@@ -9,6 +9,7 @@ config/openbox/menu.xml.bak
 config/gtk-3.0/bookmarks
 
 eventable/.bundle/*
+eventable/pkg/*
 
 */.spacemacs.env
 

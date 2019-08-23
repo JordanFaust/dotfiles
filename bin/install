@@ -108,11 +108,17 @@ install/dotfiles() {
     dotfiles/link "${DOTFILES_DIRECTORY}/themes" "${HOME}/.themes"
     dotfiles/link "${DOTFILES_DIRECTORY}/lightdm/lightdm-webkit.conf" "/etc/lightdm/lightdm-webkit.conf"
     dotfiles/link "${DOTFILES_DIRECTORY}/lightdm/lightdm-webkit2-greeter.conf" "/etc/lightdm/lightdm-webkit2-greeter.conf"
-    # dotfiles/link "${DOTFILES_DIRECTORY}/lightdm/lightdm.conf" "/etc/lightdm/lightdm.conf"
-    # dotfiles/link "${DOTFILES_DIRECTORY}/lightdm/pantheon-greeter.conf" "/etc/lightdm/pantheon-greeter.conf"
 
     e_header "* Copying files..."
+    rm -rf "${HOME}/.urxvt"
     dotfiles/copy "${DOTFILES_DIRECTORY}/urxvt/" "${HOME}/.urxvt/"
+
+    e_header "* Setting up local user system units"
+    mkdir -p "${HOME}/.config/systemd/user"
+    dotfiles/link "${DOTFILES_DIRECTORYb}/config/systemd/user/eventable.service" "${HOME}/.config/systemd/user/eventable.service"
+
+    e_header "* Reloading Xresources config"
+    xrdb ~/.Xresources
 }
 
 apt/exists() {
@@ -247,6 +253,8 @@ install/dependencies/manjaro() {
     pacman/install nvidia-390xx-utils
 
     e_header "* Installing Custom Window Manager tools"
+    pacman/install nm-connection-editor
+    pacman/install gnome-keyring
     pacman/install pavucontrol
     pacman/install papirus-icon-theme
     pacman/install rofi
@@ -255,6 +263,7 @@ install/dependencies/manjaro() {
     pacman/install gobject-introspection
     # pacman/install paper-icon-theme-git
     yay/install cava
+    yay/install nerd-fonts-complete
 
     e_header "* Installing Greeter"
     yay/install lightdm-webkit-theme-aether
