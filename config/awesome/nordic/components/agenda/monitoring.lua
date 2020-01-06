@@ -25,7 +25,7 @@ local ram_command = [[
 
 local disk_command = [[
     bash -c "
-    df -k -h /dev/nvme1n1p4 | tail -1 | awk '{print $5}'
+    df -k -h /dev/nvme0n1p4 | tail -1 | awk '{print $5}'
     "]]
 
 local function cpu(wrapper, textbox)

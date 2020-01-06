@@ -15,10 +15,6 @@ module Eventable
 
       dbus_interface "org.eventable.GithubInterface" do
         # Change the date that calendar events are returned for
-        # dbus_method :ChangeDate, "in start:s, in end:s" do |start_time, end_time|
-        #   @logger.info("[#{@interface}] changing date: start=#{start_time} end=#{end_time}")
-        #   change_date(start_time, end_time)
-        # end
         dbus_method :Refresh do
           @worker.process do
             @logger.info("[#{@interface}] triggering refresh")

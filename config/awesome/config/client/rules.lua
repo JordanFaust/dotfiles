@@ -178,6 +178,35 @@ awful.rules.rules = {
         end
     },
 
+    -- Chrome
+    {
+        rule_any = {
+            class = {
+                "Chrome",
+                "chrome"
+            }
+        },
+        properties = {
+            floating = true
+        },
+        callback = function (c)
+            c.name = "Chrome"
+            -- change the icon
+            -- local icon = gears.surface(beautiful.browser_icon)
+            -- c.icon = icon._native
+            -- Prevent changing tabs from changing the tasklist name
+            c:connect_signal("property::name", function(_)
+                c.name = "Chrome"
+            end)
+            c:geometry({
+                x = dpi(64),
+                y = dpi(96),
+                width = dpi(1704),
+                height = dpi(1357)
+            })
+        end
+    },
+
     -- Slack
     {
         rule_any = {

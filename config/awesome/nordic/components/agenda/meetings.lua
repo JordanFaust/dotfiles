@@ -76,7 +76,7 @@ local function properties_changed(...) --luacheck: no unused args
             local subject = event["summary"]
             local location = event["location"]
 
-            local pattern = "(%d+)%-(%d+)%-(%d+)T(%d+):(%d+):(%d+)-05:00"
+            local pattern = "(%d+)%-(%d+)%-(%d+)T(%d+):(%d+):(%d+)-(%d+):00"
             local _, _, start_day, start_hour, start_minute, _ = start_date:match(pattern)
             local _, _, _, end_hour, end_minute, _ = end_date:match(pattern)
             local start_time = start_hour .. ":" .. start_minute

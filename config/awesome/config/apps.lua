@@ -70,6 +70,10 @@ local apps = {
             name = "compton",
             command = "compton -b --config ~/.config/compton.conf"
         },
+        eventable = {
+            name = "eventable",
+            command = "systemctl --user restart eventable"
+        }
         -- xsettingsd = {
         --     name = "xsettingsd",
         --     command = "xsettingsd &"

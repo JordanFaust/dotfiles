@@ -8,6 +8,7 @@ Environment="PATH=/home/jfaust/.rbenv/shims/gem:/home/jfaust/.gem/bin:/usr/bin:$
 BusName=org.eventable.service
 ExecStartPre=/home/jfaust/.rbenv/shims/gem install /home/jfaust/.dotfiles/eventable/pkg/eventable-0.0.1.gem
 ExecStart=/home/jfaust/.gem/bin/eventable run
+Restart=always
 
 [Install]
 WantedBy=multi-user.target
