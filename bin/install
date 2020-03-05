@@ -96,6 +96,7 @@ install/dotfiles() {
     dotfiles/link "${DOTFILES_DIRECTORY}/vim/vimrc" "${HOME}/.vimrc"
     dotfiles/link "${DOTFILES_DIRECTORY}/spacemacs" "${HOME}/.spacemacs"
     dotfiles/link "${DOTFILES_DIRECTORY}/spacemacs.d" "${HOME}/.spacemacs.d"
+    dotfiles/link "${DOTFILES_DIRECTORY}/doom.d" "${HOME}/.doom.d"
     dotfiles/link "${DOTFILES_DIRECTORY}/xsessionrc" "${HOME}/.xsessionrc"
     dotfiles/link "${DOTFILES_DIRECTORY}/xsettingsd" "${HOME}/.xsettingsd"
     dotfiles/link "${DOTFILES_DIRECTORY}/Xresources" "${HOME}/.Xresources"

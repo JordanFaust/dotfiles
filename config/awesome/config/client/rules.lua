@@ -245,7 +245,7 @@ awful.rules.rules = {
             floating = true,
         },
         callback = function (c)
-            c.name = "Spacemacs"
+            c.name = "Doom"
             -- change the icon
             local icon = gears.surface(beautiful.tasklist_editor_icon)
             c.icon = icon._native
@@ -265,6 +265,53 @@ awful.rules.rules = {
                   timer:stop()
             end)
 
+            c:connect_signal("property::name", function(_)
+                c.name = "Doom"
+            end)
+            c:geometry({
+                x = dpi(1836),
+                y = dpi(96),
+                width = dpi(1720),
+                height = dpi(1368)
+            })
+        end
+    },
+
+    -- VSCode
+    {
+        rule_any = {
+            class = {
+                "code-oss",
+                "code-oss"
+            }
+        },
+        properties = {
+            floating = true,
+        },
+        callback = function (c)
+            c.name = "Code"
+            -- change the icon
+            local icon = gears.surface(beautiful.tasklist_editor_icon)
+            c.icon = icon._native
+
+            -- TODO: Figure out a desktop config to prevent this from happening
+            -- This does not appear to only be tied to desktop files. It appears
+            -- projectile is doing something to change this
+            local timer = gears.timer.start_new(2, function()
+                  c.icon = icon._native
+                  return true
+            end)
+            c:connect_signal("focus", function()
+                  timer:again()
+            end)
+
+            c:connect_signal("unfocus", function()
+                  timer:stop()
+            end)
+
+            c:connect_signal("property::name", function(_)
+                c.name = "Code"
+            end)
             c:geometry({
                 x = dpi(1836),
                 y = dpi(96),

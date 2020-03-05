@@ -8,7 +8,7 @@ local dpi = beautiful.xresources.apply_dpi
 local apps = {
     default = {
         emacs = {
-            name = "Spacemacs",
+            name = "Doom",
             command = "emacs",
             tag = 1,
             properties = {}
@@ -93,7 +93,9 @@ function apps:launch_or_focus(app)
     tag:view_only()
 
     local exists = false
+    -- helpers.debug("opening app " .. app)
     for _, client in pairs(tag:clients()) do
+        -- helpers.debug("client " .. client.name .. " == " .. config.name)
         if client.name == config.name then
             exists = true
             client:raise()

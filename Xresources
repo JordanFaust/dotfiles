@@ -36,29 +36,65 @@ xscreensaver.unfade: false
 #define nord14 #A3BE8C
 #define nord15 #B48EAD
 
-*.foreground:   nord4
-*.background:   nord0
-*.cursorColor:  nord4
-*fading: 35
-*fadeColor: nord3
+! *.foreground:   nord4
+! *.background:   nord0
+! *.cursorColor:  nord4
+! *fading: 35
+! *fadeColor: nord3
 
-*.color0: nord1
-*.color1: nord11
-*.color2: nord14
-*.color3: nord13
-*.color4: nord9
-*.color5: nord15
-*.color6: nord8
-*.color7: nord5
-*.color8: nord3
-*.color9: nord11
-*.color10: nord14
-*.color11: nord13
-*.color12: nord9
-*.color13: nord15
-*.color14: nord7
-*.color15: nord6
+! *.color0: nord1
+! *.color1: nord11
+! *.color2: nord14
+! *.color3: nord13
+! *.color4: nord9
+! *.color5: nord15
+! *.color6: nord8
+! *.color7: nord5
+! *.color8: nord3
+! *.color9: nord11
+! *.color10: nord14
+! *.color11: nord13
+! *.color12: nord9
+! *.color13: nord15
+! *.color14: nord7
+! *.color15: nord6
 
+! special
+*.background: #172030
+*.foreground: #A2A3AA
+*.cursorColor: #969E92
+
+! black
+*.color0: #5D5D6B
+*.color8: #616274
+
+! blue
+*.color4: #6e94b9
+*.color12: #98b3cd
+
+! cyan
+*.color6: #8ab6c1
+*.color14: #abcbd3
+
+! green
+*.color2: #969E92
+*.color10: #B6BBB3
+
+! magenta
+*.color5: #4C4E78
+*.color13: #8283A1
+
+! red
+*.color1: #C6797E
+*.color9: #C6797E
+
+! white
+*.color7: #E8E8EA
+*.color15: #E8E8EA
+
+! yellow
+*.color3: #DBCDAB
+*.color11: #E6DCC4
 ! ===== urxvt =====
 
 !! Fonts
