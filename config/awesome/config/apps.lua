@@ -8,7 +8,7 @@ local dpi = beautiful.xresources.apply_dpi
 local apps = {
     default = {
         emacs = {
-            name = "Spacemacs",
+            name = "Doom",
             command = "emacs",
             tag = 1,
             properties = {}
@@ -70,14 +70,18 @@ local apps = {
             name = "compton",
             command = "compton -b --config ~/.config/compton.conf"
         },
+        eventable = {
+            name = "eventable",
+            command = "systemctl --user restart eventable"
+        }
         -- xsettingsd = {
         --     name = "xsettingsd",
         --     command = "xsettingsd &"
         -- },
-        desktopevents = {
-            name = "desktopevents-data",
-            command = "nohup /usr/bin/desktopevents-data --file=/tmp/desktopevents/data.json >/dev/null &"
-        },
+        -- desktopevents = {
+        --     name = "desktopevents-data",
+        --     command = "nohup /usr/bin/desktopevents-data --file=/tmp/desktopevents/data.json >/dev/null &"
+        -- },
     }
 }
 
@@ -89,7 +93,9 @@ function apps:launch_or_focus(app)
     tag:view_only()
 
     local exists = false
+    -- helpers.debug("opening app " .. app)
     for _, client in pairs(tag:clients()) do
+        -- helpers.debug("client " .. client.name .. " == " .. config.name)
         if client.name == config.name then
             exists = true
             client:raise()

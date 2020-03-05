@@ -39,23 +39,6 @@ local keys = gears.table.join(
         {description = "show help", group = "awesome"}
     ),
 
-    -- Sidebar
-    awful.key({ superkey }, "b",
-        function()
-            registry.emit("dashboard", "dashboard::toggle", { search = false })
-        end,
-        {description = "show dashboard", group = "awesome"}
-    ),
-
-    -- Sidebar Search
-    awful.key({ superkey }, "space",
-        function()
-            -- awful.spawn.with_shell("rofi-apps")
-            registry.emit("dashboard", "dashboard::toggle", { search = true })
-        end,
-        {description = "rofi apps", group = "launcher"}
-    ),
-
     -- {{{ Window Movement
 
     -- Place window to the right

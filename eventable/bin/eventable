@@ -1,0 +1,103 @@
+#!/usr/bin/env ruby
+require 'gli'
+require 'open3'
+require 'eventable'
+
+class App
+  extend GLI::App
+
+  program_desc 'Describe your application here'
+
+  version Eventable::VERSION
+
+  subcommand_option_handling :normal
+  arguments :strict
+
+  desc 'Describe some switch here'
+  switch [:s,:switch]
+
+  desc 'Describe some flag here'
+  default_value 'the default'
+  arg_name 'The name of the argument'
+  flag [:f,:flagname]
+
+  desc 'Describe run here'
+  arg_name 'Describe arguments to run here'
+  command :run do |c|
+    c.action do |global_options,options,args|
+
+      # Your command logic here
+
+      # If you have any errors, just raise them
+      # raise "that command made no sense"
+      Eventable::Command::Run.execute()
+    end
+  end
+
+  command :authorize do |c|
+    c.desc 'authorization code'
+    c.flag :code
+
+    c.action do |globals, options, args|
+      Eventable::Clients::Calendar.new.authorize(options[:code])
+    end
+  end
+
+  pre do |global,command,options,args|
+    # Pre logic here
+    # Return true to proceed; false to abort and not call the
+    # chosen command
+    # Use skips_pre before a command to skip this block
+    # on that command only
+
+    root = 'secret-tool lookup'
+
+    client_lookup = 'system widget service google type client-id'
+    Open3.popen3("#{root} #{client_lookup}") do |_, out, _, _|
+      client_id = out.read
+      raise Exception, "Missing required secret '#{client_lookup}'" if client_id.empty?
+
+      ENV['GOOGLE_CLIENT_ID'] = client_id
+    end
+
+    secret_lookup = 'system widget service google type secret'
+    Open3.popen3("#{root} #{secret_lookup}") do |_, out, _, _|
+      secret = out.read
+      raise Exception, "Missing required secret '#{secret_lookup}'" if secret.empty?
+
+      ENV['GOOGLE_CLIENT_SECRET'] = secret
+    end
+
+    endpoint_lookup = 'system widget service github type endpoint'
+    Open3.popen3("#{root} #{endpoint_lookup}") do |_, out, _, _|
+      secret = out.read
+      raise Exception, "Missing required secret '#{endpoint_lookup}'" if secret.empty?
+
+      ENV['GITHUB_API_ENDPOINT'] = secret
+    end
+
+    token_lookup = 'system widget service github type token'
+    Open3.popen3("#{root} #{token_lookup}") do |_, out, _, _|
+      secret = out.read
+      raise Exception, "Missing required secret '#{token_lookup}'" if secret.empty?
+
+      ENV['GITHUB_ACCESS_TOKEN'] = secret
+    end
+
+    true
+  end
+
+  post do |global,command,options,args|
+    # Post logic here
+    # Use skips_post before a command to skip this
+    # block on that command only
+  end
+
+  on_error do |exception|
+    # Error logic here
+    # return false to skip default error handling
+    true
+  end
+end
+
+exit App.run(ARGV)

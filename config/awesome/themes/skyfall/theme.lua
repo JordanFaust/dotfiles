@@ -2,16 +2,16 @@ local theme_name = "skyfall"
 local theme_assets = require("beautiful.theme_assets")
 local xresources = require("beautiful.xresources")
 local dpi = xresources.apply_dpi
--- local gfs = require("gears.filesystem")
--- local themes_path = gfs.get_themes_dir()
 local icon_path = os.getenv("HOME") .. "/.config/awesome/themes/" .. theme_name .. "/icons/"
 local layout_icon_path = os.getenv("HOME") .. "/.config/awesome/themes/" .. theme_name .. "/layout/"
 local titlebar_icon_path = os.getenv("HOME") .. "/.config/awesome/themes/" .. theme_name .. "/titlebar/"
 local weather_icon_path = os.getenv("HOME") .. "/.config/awesome/themes/" .. theme_name .. "/weather/"
--- local taglist_icon_path = os.getenv("HOME") .. "/.config/awesome/themes/" .. theme_name .. "/taglist/"
 local tip = titlebar_icon_path --alias to save time/space
 local xrdb = xresources.get_current_theme()
--- local theme = dofile(themes_path.."default/theme.lua")
+-- custom modules
+local nordic = require("nordic")
+
+-- module theme
 local theme = {}
 
 -- theme.tip = titlebar_icon_path -- NOT local so that scripts can access it
@@ -48,6 +48,23 @@ theme.xcolor12    = xrdb.color12    or "#3DBAC2"
 theme.xcolor13    = xrdb.color13    or "#825ECE"
 theme.xcolor14    = xrdb.color14    or "#62CDCD"
 theme.xcolor15    = xrdb.color15    or "#E0E5E5"
+
+theme.polar_night_1 = '#2e3440'
+theme.polar_night_2 = '#3b4252'
+theme.polar_night_3 = '#434c5e'
+theme.polar_night_4 = '#4c566a'
+theme.snow_storm_1 = '#d8dee9'
+theme.snow_storm_2 = '#e5e9f0'
+theme.snow_storm_3 = '#eceff4'
+theme.frost_1 = '#8fbcbb'
+theme.frost_2 = '#88c0d0'
+theme.frost_3 = '#81a1c1'
+theme.frost_4 = '#5e81ac'
+theme.aurora_1 = '#bf616a'
+theme.aurora_2 = '#d08770'
+theme.aurora_3 = '#ebcb8b'
+theme.aurora_4 = '#a3be8c'
+theme.aurora_5 = '#b48ead'
 
 -- This is how to get other .Xresources values (beyond colors 0-15, or custom variables)
 -- local cool_color = awesome.xrdb_get_value("", "color16")
@@ -163,22 +180,27 @@ theme.wibar_border_radius = dpi(0)
 
 theme.prefix_fg = theme.xcolor8
 
- --Tasklist
+--- Tasklist
 theme.tasklist_disable_icon = false
 theme.tasklist_plain_task_name = true
-theme.tasklist_bg_focus = theme.xcolor0
+theme.tasklist_bg_focus = nordic.core.color.lighten(theme.frost_3, 20)
 theme.tasklist_fg_focus = theme.xforeground
-theme.tasklist_bg_normal = theme.xbackground
+theme.tasklist_bg_normal = theme.frost_3 -- theme.xbackground
 theme.tasklist_fg_normal = theme.xcolor15
-theme.tasklist_bg_minimize = theme.xcolor0
+theme.tasklist_bg_minimize = nordic.core.color.darken(theme.frost_3, 20)
 theme.tasklist_fg_minimize = theme.fg_minimize
-theme.tasklist_bg_urgent = theme.xcolor0
+theme.tasklist_bg_urgent = theme.frost_3
 theme.tasklist_fg_urgent = theme.xcolor3
 theme.tasklist_spacing = dpi(5)
 theme.tasklist_align = "center"
 
 -- Tasklist Icons
 theme.tasklist_task_close = icon_path .. "taglist/tag/close.png"
+theme.tasklist_editor_icon = icon_path .. "tasklist/editor.png"
+theme.browser_icon = icon_path .. "tasklist/browser.png"
+theme.tasklist_terminal_icon = icon_path .. "tasklist/terminal.png"
+theme.slack_icon = icon_path .. "tasklist/slack.png"
+theme.spotify_icon = icon_path .. "tasklist/spotify.png"
 
 -- Tagbar Icons
 theme.menu_icon = icon_path .. "taglist/menu.svg"
@@ -192,6 +214,11 @@ theme.package_icon = icon_path .. "tagbar/package.svg"
 theme.package_up_icon = icon_path .. "tagbar/package-up.svg"
 theme.delete_lock_icon = icon_path .. "tagbar/delete-lock.png"
 theme.checked_lock_icon = icon_path .. "tagbar/checked-lock.png"
+theme.power_icon = icon_path .. "tagbar/power.png"
+theme.bluetooth_icon = icon_path .. "tagbar/bluetooth.png"
+theme.media_back_icon = icon_path .. "tagbar/media-back.png"
+theme.media_pause_icon = icon_path .. "tagbar/media-pause.png"
+theme.media_end_icon = icon_path .. "tagbar/media-end.png"
 
 -- Sidebar
 -- (Sidebar items can be customized in sidebar.lua)
@@ -278,27 +305,13 @@ theme.lock_icon = icon_path .. "lock.png"
 theme.prompt_fg = theme.xcolor12
 
 -- Text Taglist (default)
-theme.taglist_font = "monospace bold 9"
-
--- Material Taglist
-theme.taglist_bg_urgent =
-    'linear:0,0:' ..
-    dpi(48) ..
-    ',0:0,' ..
-    theme.xforeground ..
-    ':0.08,' .. theme.xforeground .. ':0.08,' .. theme.xbackground .. ':1,' .. theme.xbackground
-theme.taglist_bg_focus =
-    'linear:0,0:' ..
-    dpi(48) ..
-    ',0:0,' ..
-    theme.xforeground ..
-    ':0.08,' .. theme.xforeground .. ':0.08,' .. theme.xbackground .. ':1,' .. theme.xbackground
-theme.tasklist_bg_focus =
-    'linear:0,0:0,' ..
-    dpi(48) ..
-    ':0,' ..
-    theme.xbackground ..
-    ':0.95,' .. theme.xbackground .. ':0.95,' .. theme.xforeground .. ':1,' .. theme.xforeground
+theme.taglist_font = "Source Code Pro Bold 9"
+theme.taglist_bg_occupied = theme.frost_4
+theme.taglist_bg_empty = theme.frost_4
+theme.taglist_bg_focus = nordic.core.color.lighten(theme.frost_4, 20)
+theme.taglist_fg_focus = theme.xforeground
+theme.taglist_bg_urgent = theme.frost_4
+theme.taglist_fg_urgent = theme.xforeground
 
 -- Variables set for theming the menu:
 theme.menu_submenu_icon = icon_path.."submenu.png"
@@ -310,11 +323,6 @@ theme.menu_bg_focus = theme.xcolor8 .. "55"
 theme.menu_fg_focus= theme.xcolor7
 theme.menu_border_width = dpi(0)
 theme.menu_border_color = theme.xcolor0
-
--- You can add as many variables as
--- you wish and access them by using
--- beautiful.variable in your rc.lua
---theme.bg_widget = "#cc0000"
 
 -- Titlebar buttons
 -- Define the images to load
@@ -377,24 +385,6 @@ theme.layout_cornernw = layout_icon_path .. "cornernw.png"
 theme.layout_cornerne = layout_icon_path .. "cornerne.png"
 theme.layout_cornersw = layout_icon_path .. "cornersw.png"
 theme.layout_cornerse = layout_icon_path .. "cornerse.png"
-
--- Recolor layout icons
---theme = theme_assets.recolor_layout(theme, theme.xcolor1)
-
--- Desktop mode widget variables
--- Symbols     
--- theme.desktop_mode_color_floating = theme.xcolor4
--- theme.desktop_mode_color_tile = theme.xcolor3
--- theme.desktop_mode_color_max = theme.xcolor1
--- theme.desktop_mode_text_floating = "f"
--- theme.desktop_mode_text_tile = "t"
--- theme.desktop_mode_text_max = "m"
-
--- Minimal tasklist widget variables
-theme.minimal_tasklist_visible_clients_color = theme.xcolor4
-theme.minimal_tasklist_visible_clients_text = ""
-theme.minimal_tasklist_hidden_clients_color = theme.xcolor7
-theme.minimal_tasklist_hidden_clients_text = ""
 
 -- Mpd song
 theme.mpd_song_title_color = theme.xcolor7

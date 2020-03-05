@@ -15,6 +15,10 @@ import desktopevents
 # Retrieves data used for various desktop data displays and notifications
 def main(argv):
     format = '%(asctime)-15s %(message)s'
+
+    if not os.path.exists("/tmp/desktopevents/"):
+        os.makedirs("/tmp/desktopevents/")
+
     logging.basicConfig(level=logging.INFO, filename='/tmp/desktopevents/data.log', format=format)
     log = logging.getLogger()
 

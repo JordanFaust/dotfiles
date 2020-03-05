@@ -1,4 +1,4 @@
-
+-- @module nordic.core.color
 local color = {}
 
 local function tohex(num)

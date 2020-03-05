@@ -206,9 +206,9 @@ function taskbar.create(screen, offset)
         ontop = true,
         screen = screen,
         height = dpi(48),
-        width = screen.geometry.width - offsetx,
-        x = screen.geometry.x + offsetx,
-        y = screen.geometry.y,
+        width = screen.geometry.width - offsetx - dpi(370) - dpi(400),
+        x = screen.geometry.x + offsetx + 370,
+        y = screen.geometry.y + 16,
         stretch = false,
         bg = beautiful.xbackground,
         fg = beautiful.xforeground,
@@ -217,9 +217,163 @@ function taskbar.create(screen, offset)
         }
     })
 
-    panel:struts({
-         top = dpi(48)
-    })
+    -- panel:struts({
+    --      top = dpi(48)
+    -- })
+    local list = awful.widget.tasklist {
+        screen   = screen,
+        filter   = awful.widget.tasklist.filter.currenttags,
+        buttons  = tasklist_buttons,
+        layout   = {
+            spacing_widget = {
+                {
+                    forced_width  = 5,
+                    forced_height = 48,
+                    thickness     = 1,
+                    color         = '#777777',
+                    widget        = wibox.widget.separator
+                },
+                valign = 'center',
+                halign = 'center',
+                widget = wibox.container.place,
+            },
+            spacing = dpi(0),
+            layout  = wibox.layout.fixed.horizontal
+        },
+        -- Notice that there is *NO* wibox.wibox prefix, it is a template,
+        -- not a widget instance.
+        widget_template = {
+            {
+                {
+                    -- wibox.widget.base.make_widget(),
+                    forced_height = dpi(48),
+                    forced_width = dpi(96),
+                    bg     = '#8fbcbb',
+                    id            = 'background_role',
+                    widget        = wibox.container.background,
+                    {
+                        {
+                            {
+                                id     = 'clienticon',
+                                widget = awful.widget.clienticon,
+                            },
+                            top = dpi(8),
+                            bottom = dpi(8),
+                            left = dpi(12),
+                            right = dpi(24),
+                            widget  = wibox.container.margin
+                        },
+                        {
+                            {
+                                id = 'close',
+                                image = beautiful.tasklist_task_close,
+                                forced_width = dpi(24),
+                                forced_height = dpi(24),
+                                widget = wibox.widget.imagebox
+                            },
+                            top = dpi(14),
+                            right = dpi(8),
+                            widget = wibox.container.margin,
+                        },
+                        layout = wibox.layout.align.horizontal,
+                    }
+                },
+                layout = wibox.layout.align.horizontal,
+            },
+            nil,
+            create_callback = function(self, c, index, objects) --luacheck: no unused args
+                self:get_children_by_id('clienticon')[1].client = c
+            end,
+            layout = wibox.layout.align.vertical,
+        },
+    }
+
+    local tags =  awful.widget.taglist {
+        screen  = screen,
+        filter  = awful.widget.taglist.filter.all,
+        style   = {
+            -- shape = gears.shape.powerline
+        },
+        layout   = {
+            -- spacing = -24,
+            spacing_widget = {
+                color  = '#dddddd',
+                -- shape  = gears.shape.powerline,
+                widget = wibox.widget.separator,
+            },
+            layout  = wibox.layout.fixed.horizontal
+        },
+        widget_template = {
+            {
+                {
+                    {
+                        -- bg     = '#a3be8c',
+                        -- bg     = '#8fbcbb',
+                        -- bg     = '#81a1c1',
+                        -- bg     = '#88c0d0',
+                        bg     = '#5e81ac',
+                        -- shape  = gears.shape.circle,
+                        forced_height = dpi(48),
+                        forced_width = dpi(120),
+                        id            = 'background_role',
+                        widget        = wibox.container.background,
+                        {
+                            {
+                                {
+                                    id     = 'icon_role',
+                                    forced_width = dpi(24),
+                                    forced_height = dpi(24),
+                                    widget = wibox.widget.imagebox,
+                                },
+                                top = dpi(12),
+                                bottom = dpi(8),
+                                left = dpi(12),
+                                right = dpi(24),
+                                widget  = wibox.container.margin
+                            },
+                            {
+                                {
+                                    id     = 'text_role',
+                                    widget = wibox.widget.textbox,
+                                },
+                                top = dpi(12),
+                                bottom = dpi(8),
+                                -- left = dpi(12),
+                                -- right = dpi(24),
+                                widget  = wibox.container.margin
+                            },
+
+                            layout = wibox.layout.fixed.horizontal,
+                        }
+                    },
+                    layout = wibox.layout.fixed.horizontal,
+                },
+                -- left  = 18,
+                -- right = 18,
+                widget = wibox.container.margin
+            },
+            id     = 'background_role',
+            widget = wibox.container.background,
+            -- Add support for hover colors and an index label
+            create_callback = function(self, c3, index, objects) --luacheck: no unused args
+                -- self:get_children_by_id('index_role')[1].markup = '<b> '..index..' </b>'
+                self:connect_signal('mouse::enter', function()
+                    if self.bg ~= '#ff0000' then
+                        self.backup     = self.bg
+                        self.has_backup = true
+                    end
+                    self.bg = '#ff0000'
+                end)
+                self:connect_signal('mouse::leave', function()
+                    if self.has_backup then self.bg = self.backup end
+                end)
+            end,
+            -- update_callback = function(self, c3, index, objects) --luacheck: no unused args
+            --     self:get_children_by_id('index_role')[1].markup = '<b> '..index..' </b>'
+            -- end,
+        },
+        -- buttons = taglist_buttons
+    }
 
     local tasklist = awful.widget.tasklist(
         screen,
@@ -233,7 +387,8 @@ function taskbar.create(screen, offset)
     panel:setup {
         {
             layout = wibox.layout.fixed.horizontal,
-            tasklist,
+            tags,
+            list,
         },
         layout = wibox.layout.align.horizontal
     }

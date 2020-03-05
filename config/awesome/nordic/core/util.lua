@@ -197,4 +197,8 @@ function util.debug(message, config)
     }
 end
 
+function util.log(message)
+    gears.debug.dump(os.date("%Y-%m-%d %T ") .. message)
+end
+
 return util

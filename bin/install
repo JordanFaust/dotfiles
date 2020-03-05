@@ -96,6 +96,7 @@ install/dotfiles() {
     dotfiles/link "${DOTFILES_DIRECTORY}/vim/vimrc" "${HOME}/.vimrc"
     dotfiles/link "${DOTFILES_DIRECTORY}/spacemacs" "${HOME}/.spacemacs"
     dotfiles/link "${DOTFILES_DIRECTORY}/spacemacs.d" "${HOME}/.spacemacs.d"
+    dotfiles/link "${DOTFILES_DIRECTORY}/doom.d" "${HOME}/.doom.d"
     dotfiles/link "${DOTFILES_DIRECTORY}/xsessionrc" "${HOME}/.xsessionrc"
     dotfiles/link "${DOTFILES_DIRECTORY}/xsettingsd" "${HOME}/.xsettingsd"
     dotfiles/link "${DOTFILES_DIRECTORY}/Xresources" "${HOME}/.Xresources"
@@ -108,11 +109,17 @@ install/dotfiles() {
     dotfiles/link "${DOTFILES_DIRECTORY}/themes" "${HOME}/.themes"
     dotfiles/link "${DOTFILES_DIRECTORY}/lightdm/lightdm-webkit.conf" "/etc/lightdm/lightdm-webkit.conf"
     dotfiles/link "${DOTFILES_DIRECTORY}/lightdm/lightdm-webkit2-greeter.conf" "/etc/lightdm/lightdm-webkit2-greeter.conf"
-    # dotfiles/link "${DOTFILES_DIRECTORY}/lightdm/lightdm.conf" "/etc/lightdm/lightdm.conf"
-    # dotfiles/link "${DOTFILES_DIRECTORY}/lightdm/pantheon-greeter.conf" "/etc/lightdm/pantheon-greeter.conf"
 
     e_header "* Copying files..."
+    rm -rf "${HOME}/.urxvt"
     dotfiles/copy "${DOTFILES_DIRECTORY}/urxvt/" "${HOME}/.urxvt/"
+
+    e_header "* Setting up local user system units"
+    mkdir -p "${HOME}/.config/systemd/user"
+    dotfiles/link "${DOTFILES_DIRECTORYb}/config/systemd/user/eventable.service" "${HOME}/.config/systemd/user/eventable.service"
+
+    e_header "* Reloading Xresources config"
+    xrdb ~/.Xresources
 }
 
 apt/exists() {
@@ -203,6 +210,7 @@ install/dependencies/manjaro() {
     pacman/install networkmanager-openconnect
     pacman/install networkmanager-openvpn
     pacman/install net-tools
+    pacman/install nm-connection-editor
 
     e_header "* Installing CLI tools"
     pacman/install expect
@@ -238,14 +246,25 @@ install/dependencies/manjaro() {
     e_header "* Installing package management tools"
     pacman/install yay
 
+    e_header "* Install Window Manager"
+    pacman/install awesome
+
+    e_header "* Graphics Driver"
+    pacman/install nvidia-390xx
+    pacman/install nvidia-390xx-utils
+
     e_header "* Installing Custom Window Manager tools"
+    pacman/install nm-connection-editor
+    pacman/install gnome-keyring
+    pacman/install pavucontrol
     pacman/install papirus-icon-theme
     pacman/install rofi
     pacman/install powerline-fonts
     pacman/install libnotify
     pacman/install gobject-introspection
-    pacman/install paper-icon-theme-git
+    # pacman/install paper-icon-theme-git
     yay/install cava
+    yay/install nerd-fonts-complete
 
     e_header "* Installing Greeter"
     yay/install lightdm-webkit-theme-aether
@@ -522,6 +541,7 @@ install/software() {
         if ! [ -x "$(command -v finto)" ]; then
             go get github.com/threadwaste/finto/cmd/finto
             sudo cp "${DOTFILES_DIRECTORY}/systemd/finto.service" /etc/systemd/system/finto.service
+            sudo mv $(which finto) /usr/local/bin/finto
             if [ -x "$(sudo systemctl is-system-running)" ]; then
                 sudo systemctl daemon-reload
                 sudo systemctl enable finto
@@ -787,6 +807,10 @@ if [[ "$help" = true || "$nothing" = true ]]; then
     run_help >&3
     exit
 fi
+
+e_header "Additional Steps"
+echo "* Add user to groups: wheel network docker"
+echo "* Create VPN connection"
 
 # handle non-option arguments
 if [[ $# -eq 0 ]]; then

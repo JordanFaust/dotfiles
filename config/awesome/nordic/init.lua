@@ -7,8 +7,7 @@
 ---------------------------------------------------------------------------
 
 return {
-    color = require("nordic.color"),
+    core = require("nordic.core"),
+    components = require("nordic.components"),
     widget = require("nordic.widget"),
-    util = require("nordic.util"),
-    shape = require("nordic.shape")
 }
