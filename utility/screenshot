@@ -9,7 +9,6 @@ TIMESTAMP="$(date +%Y.%m.%d-%H.%M.%S)"
 FILENAME=$SCREENSHOTS_DIR/$TIMESTAMP.screenshot.png
 PHOTO_ICON_PATH=/usr/share/icons/Paper/48x48@2x/apps/accessories-camera.png
 
-
 # -u option hides cursor
 # -m option changes the compression level
 #   -m 3 takes the shot faster but the file size is slightly bigger

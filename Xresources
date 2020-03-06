@@ -98,13 +98,10 @@ xscreensaver.unfade: false
 ! ===== urxvt =====
 
 !! Fonts
-! URxvt.font: xft:Fira Mono Medium:size=16,xft:Source Code Pro Medium:size=16
-! URxvt.font: xft:Source Code Pro Medium:size=18:antialias=true:hinting=full
-! URxvt.font: xft:Inconsolata for Powerline:size=18
-! URxvt.font: xft:source code pro for powerline:size=20:style=regular,xft:Noto Color Emoji:style=Regular
-URxvt.font: xft:Source Code pro for Powerline:size=20:style=Semibold,xft:DejaVu Sans Mono for Powerline:size=20:style=Regular
-! URxvt.font: xft:Fira Mono for Powerline:size=20:style=Regular,xft:DejaVu Sans Mono for Powerline:size=20:style=Regular
-URxvt.letterSpace: 0
+! URxvt.font: xft:Source Code pro for Powerline:size=20:style=Semibold,xft:DejaVu Sans Mono for Powerline:size=20:style=Regular
+! URxvt.font: xft:Source Code pro for Powerline:size=20:style=Semibold,xft:DejaVu Sans Mono for Powerline:size=20:style=Regular
+URxvt.font: xft:Iosevka Semibold Extended:size=20:style=Semibold Extended,xft:DejaVu Sans Mono for Powerline:size=20:style=Regular
+! URxvt.letterSpace: 0
 
 !! scroll
 !! do not scroll with output

@@ -19,7 +19,8 @@
 ;;
 ;; They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
 ;; font string. You generally only need these two:
-(setq doom-font (font-spec :family "Source Code Pro for Powerline" :size 20 :weight 'semi-bold))
+;; (setq doom-font (font-spec :family "Source Code Pro for Powerline" :size 20 :weight 'semi-bold))
+(setq doom-font (font-spec :family "Iosevka Semibold Extended" :size 20 :weight 'semibold))
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
@@ -65,41 +66,29 @@
     (doom-modeline-set-modeline 'jfaust 'default))
   (add-hook 'doom-modeline-mode-hook 'setup-custom-doom-modeline))
 
-;; (after! centaur-tabs
-;;   :config
-;;   (setq centaur-tabs-height 48)
-;;   ;; (setq centaur-tabs-bar-height 5) ;; What is this changing
-;;   (setq centaur-tabs-icon-scale-factor 0.8)
-;;   ;; (setq centaur-tabs-icon-v-adjust 0) ;; Better alignment for icons
-;;   (setq centaur-tabs-show-navigation-buttons t)
-;;   (setq centaur-tabs-set-bar 'under)
-;;   (setq x-underline-at-descent-line t)
-;;   (setq centaur-tabs-left-edge-margin nil)
-;;   (centaur-tabs-headline-match))
-
-(use-package! centaur-tabs
-  :after-call doom-load-theme-hook
-  :init
-  (setq centaur-tabs-set-icons t
-        centaur-tabs-gray-out-icons 'buffer
-        centaur-tabs-set-modified-marker t
-        centaur-tabs-close-button "✕"
-        centaur-tabs-modified-marker "⬤")
+(after! centaur-tabs
   :config
-  (add-hook '+doom-dashboard-mode-hook #'centaur-tabs-local-mode)
-
   (setq centaur-tabs-height 48
-        centaur-tabs-icon-scale-factor 0.8
-        centaur-tabs-show-navigation-buttons t
+        ;; highlight bar
         centaur-tabs-set-bar 'under
         x-underline-at-descent-line t
-        ;; Remove extra spacing for better centering of tabs
-        centaur-tabs-left-edge-margin nil)
-  ;; Prevent colored icons in tabs
-  (setq all-the-icons-color-icons nil)
+        ;; close/modified overrides
+        centaur-tabs-left-edge-margin nil
+        centaur-tabs-set-modified-marker t
+        centaur-tabs-close-button "✕"
+        centaur-tabs-modified-marker "⬤"
+        ;; icon config
+        centaur-tabs-set-icons t
+        centaur-tabs-gray-out-icons 'buffer
+        all-the-icons-color-icons nil
+        centaur-tabs-plain-icons t
+        centaur-tabs-icon-scale-factor 0.8)
   (centaur-tabs-headline-match)
-  (centaur-tabs-group-by-projectile-project)
-  (centaur-tabs-mode +1))
+  (centaur-tabs-group-by-projectile-project))
+
+;; Use the otf-fira-code-symbol font from yay for the font for pretty code
+(setq +pretty-code-iosevka-font-name "Iosevka Nerd Font Mono"
+      +pretty-code-fira-font-name "Fira Code Symbol")
 
 (load! "+functions")
 (load! "themes/doom-rouge-theme")

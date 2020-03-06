@@ -106,6 +106,8 @@ install/dotfiles() {
     dotfiles/link "${DOTFILES_DIRECTORY}/config/gtk-3.0" "${HOME}/.config/gtk-3.0"
     dotfiles/link "${DOTFILES_DIRECTORY}/config/compton.conf" "${HOME}/.config/compton.conf"
     dotfiles/link "${DOTFILES_DIRECTORY}/config/cava/config" "${HOME}/.config/cava/config"
+    dotfiles/link "${DOTFILES_DIRECTORY}/config/id" "${HOME}/.config/i3"
+    dotfiles/link "${DOTFILES_DIRECTORY}/config/polybar" "${HOME}/.config/polybar"
     dotfiles/link "${DOTFILES_DIRECTORY}/themes" "${HOME}/.themes"
     dotfiles/link "${DOTFILES_DIRECTORY}/lightdm/lightdm-webkit.conf" "/etc/lightdm/lightdm-webkit.conf"
     dotfiles/link "${DOTFILES_DIRECTORY}/lightdm/lightdm-webkit2-greeter.conf" "/etc/lightdm/lightdm-webkit2-greeter.conf"

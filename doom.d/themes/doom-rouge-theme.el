@@ -11,7 +11,7 @@
   :group 'doom-rouge-theme
   :type 'boolean)
 
-(defcustom doom-rouge-brighter-tabs nil
+(defcustom doom-rouge-brighter-tabs t
   "If non-nil, tabs will a more vivid background color."
   :group 'doom-rouge-theme
   :type 'boolean)
@@ -34,63 +34,50 @@ determine the exact padding."
 
   ;; name        default   256       16
   ((bg         '("#172030" nil       nil            )) ;; modified
-   (bg-alt     '("#17182B" nil       nil            ))
+   (bg-alt     '("#172030" nil       nil            ))
    (base0      '("#070A0E" "black"   "black"        ))
    (base1      '("#0E131D" "#1e1e1e" "brightblack"  ))
    (base2      '("#151D2B" "#2e2e2e" "brightblack"  ))
-   (base3      '("172030" "#262626" "brightblack"  ))
+   (base3      '("#1F2A3F" "#262626" "brightblack"  ))
    (base4      '("#5D636E" "#3f3f3f" "brightblack"  ))
-   (base5      '("#A2A6AC" "#64727d" "brightblack"  ))
-   (base6      '("#E8E9EA" "#6b6b6b" "brightblack"  ))
-   (base7      '("#E8E9EB'" "#979797" "brightblack"  ))
+   (base5      '("#64727d" "#64727d" "brightblack"  ))
+   (base6      '("#B16E75" "#6b6b6b" "brightblack"  ))
+   (base7      '("#E8E9EB" "#979797" "brightblack"  ))
    (base8      '("#F0F4FC" "#dfdfdf" "white"        ))
-   (fg         '("#bbb" "#bbb" "white"        ))
-   (fg-alt     '("#E5E9F0" "#bfbfbf" "brightwhite"  ))
-  ;; ((bg         '("#172030" nil       nil            )) ;; modified
-  ;;  (bg-alt     '("#172030" nil       nil            ))
-  ;;  (base0      '("#191C25" "black"   "black"        ))
-  ;;  (base1      '("#242832" "#1e1e1e" "brightblack"  ))
-  ;;  (base2      '("#2C333F" "#2e2e2e" "brightblack"  ))
-  ;;  (base3      '("#373E4C" "#262626" "brightblack"  ))
-  ;;  (base4      '("#434C5E" "#3f3f3f" "brightblack"  ))
-  ;;  (base5      '("#64727d" "#64727d" "brightblack"  ))
-  ;;  (base6      '("#9099AB" "#6b6b6b" "brightblack"  ))
-  ;;  (base7      '("#D8DEE9" "#979797" "brightblack"  ))
-  ;;  (base8      '("#F0F4FC" "#dfdfdf" "white"        ))
-  ;;  (fg         '("#bbb" "#bbb" "white"        ))
-  ;;  (fg-alt     '("#E5E9F0" "#bfbfbf" "brightwhite"  ))
+   (fg         '("#FAFFF6"    "#bbb"    "white"        ))
+   (fg-alt     '("#A7ACB9" "#bfbfbf" "brightwhite"  ))
 
-   (grey       base4)
+   (grey       base5)
    (red        '("#c6797e" "#c6797e" "red"          ))
-   (light-red  '("#AD6A6E" "#C6878F" "red"          ))
+   (light-red  '("#DB6E8F" "#DB6E8F" "red"          ))
    (orange     '("#eabe9a" "#eabe9a" "brightred"    ))
-   (green      '("#969E92" "#ADB9A4" "green"        ))
-   (teal       '("#8FBCBB" "#44b9b1" "brightgreen"  ))
-   (yellow     '("#EBCB8B" "#ECBE7B" "yellow"       ))
-   (blue       '("#1E6378" "#51afef" "brightblue"   ))
-   (dark-blue  '("#91d1bd" "#91d1bd" "blue"         ))
-   (magenta    '("#4C4E78" "#b18bb1" "magenta"      ))
+   (green      '("#A3B09A" "#A3B9A4" "green"        ))
+   (teal       '("#7ea9a9" "#7ea9a9" "brightgreen"  ))
+   (yellow     '("#F7E3AF" "#F7E3AF" "yellow"       ))
+   (blue       '("#6e94b9" "#6e94b9" "brightblue"   ))
+   (dark-blue  '("#1E6378" "#1E6378" "blue"         ))
+   (magenta    '("#b18bb1" "#b18bb1" "magenta"      ))
    (salmon     '("#F9B5AC" "#F9B5AC" "orange"       ))
-   (violet     '("#5D80AE" "#a9a1e1" "brightmagenta"))
-   (cyan       '("#88C0D0" "#46D9FF" "brightcyan"   ))
-   (dark-cyan  '("#507681" "#5699AF" "cyan"         ))
+   (violet     '("#5D80AE" "#5D80AE" "brightmagenta"))
+   (cyan       '("#88C0D0" "#88C0D0" "brightcyan"   ))
+   (dark-cyan  '("#507681" "#507681" "cyan"         ))
 
    ;; face categories -- required for all themes
-   (highlight      red)
+   (highlight      base6)
    (vertical-bar   (doom-darken base1 0.2))
    (selection      base4)
-   (builtin        red)
-   (comments       (if doom-rouge-brighter-comments dark-cyan (doom-lighten base5 0.2)))
-   (doc-comments   (doom-lighten (if doom-rouge-brighter-comments dark-cyan base5) 0.25))
-   (constants      orange)
+   (builtin        light-red)
+   (comments       grey)
+   (doc-comments   green)
+   (constants      red)
    (functions      salmon)
    (keywords       magenta)
-   (methods        red)
-   (operators      green)
+   (methods        light-red)
+   (operators      magenta)
    (type           red)
    (strings        green)
-   (variables      light-red)
-   (numbers        magenta)
+   (variables      red)
+   (numbers        orange)
    (region         base4)
    (error          red)
    (warning        yellow)
@@ -105,8 +92,10 @@ determine the exact padding."
     (when doom-rouge-padded-modeline
       (if (integerp doom-rouge-padded-modeline) doom-rouge-padded-modeline 4)))
 
-   (tabs-bg (if doom-rouge-brighter-tabs red bg))
+   (tabs-bg (if doom-rouge-brighter-tabs base6 bg))
+   (tabs-fg (if doom-rouge-brighter-tabs base8 fg))
    (tabs-bar-bg (if doom-rouge-brighter-tabs bg red))
+   (tabs-marker (if doom-rouge-brighter-tabs base8 highlight))
 
    (modeline-fg     nil)
    (modeline-fg-alt base6)
@@ -119,8 +108,14 @@ determine the exact padding."
 
   ;; --- extra faces ------------------------
   ((lazy-highlight :background base4)
-   (cursor :background green)
 
+   ;; ivy
+   (ivy-current-match :background base3)
+   (ivy-minibuffer-match-face-2 :foreground highlight :weight 'extra-bold)
+
+   ;; ivy-posframe
+   (ivy-posframe :background bg-alt)
+   (ivy-posframe-border :background highlight)
 
    ((line-number &override) :foreground (doom-lighten 'base5 0.2))
    ((line-number-current-line &override) :foreground base7)
@@ -129,15 +124,15 @@ determine the exact padding."
    ((vimish-fold-overlay &override) :inherit 'font-lock-comment-face :background base3 :weight 'light)
    ((vimish-fold-fringe &override)  :foreground teal)
 
-   (font-lock-comment-face
-    :foreground comments
-    :background (if doom-rouge-comment-bg (doom-lighten bg 0.05)))
-   (font-lock-doc-face
-    :inherit 'font-lock-comment-face
-    :foreground doc-comments)
+   ;; font-lock
+   (font-lock-keyword-face :slant 'italic :foreground keywords)
+   (font-lock-comment-face :foreground comments :slant 'italic)
+   (font-lock-doc-face :foreground doc-comments :slant 'italic)
+   (font-lock-preprocessor-face :foreground magenta :slant 'italic)
+   ;; vertical border
+   (vertical-border :foreground base6)
 
-   (doom-modeline-bar :background highlight)
-
+   ;; mode-line
    (mode-line
     :background modeline-bg :foreground modeline-fg
     :box (if -modeline-pad `(:line-width ,-modeline-pad :color ,modeline-bg)))
@@ -147,7 +142,6 @@ determine the exact padding."
    (mode-line-emphasis
     :foreground highlight)
 
-   (doom-modeline-project-root-dir :foreground base6)
    (solaire-mode-line-face
     :inherit 'mode-line
     :background modeline-bg-l
@@ -156,6 +150,9 @@ determine the exact padding."
     :inherit 'mode-line-inactive
     :background modeline-bg-inactive-l
     :box (if -modeline-pad `(:line-width ,-modeline-pad :color ,modeline-bg-inactive-l)))
+
+   ;; doom-modeline
+   (doom-modeline-project-root-dir :foreground base6)
 
    ;; ediff
    (ediff-fine-diff-A    :background (doom-darken violet 0.4) :weight 'bold)
@@ -175,18 +172,28 @@ determine the exact padding."
    (markdown-header-face :inherit 'bold :foreground red)
    ((markdown-code-face &override) :background (doom-lighten base3 0.05))
 
+   ;; magit
+   (magit-diff-hunk-heading           :foreground bg                    :background (doom-blend highlight bg 0.3) :extend t)
+   (magit-diff-hunk-heading-highlight :foreground bg                    :background highlight :weight 'bold :extend t)
+   (magit-section-heading :foreground highlight)
+
    ;; org-mode
    (org-hide :foreground hidden)
    (solaire-org-hide-face :foreground hidden)
 
    ;; centuar-tabs
-   (centaur-tabs-selected :background tabs-bg)
-   (centaur-tabs-selected-modified :background tabs-bg)
-   (centaur-tabs-unselected-modified :background base0)
+   (centaur-tabs-selected :foreground tabs-fg :background tabs-bg)
+   (centaur-tabs-selected-modified :foreground tabs-fg :background tabs-bg)
+   (centaur-tabs-unselected-modified :foreground tabs-fg :background bg)
    (centaur-tabs-active-bar-face :background tabs-bar-bg)
+   (centaur-tabs-modified-marker-selected :inherit 'centaur-tabs-selected :foreground tabs-marker)
+   (centaur-tabs-modified-marker-unselected :inherit 'centaur-tabs-unselected :foreground tabs-marker)
 
    ;; neotree
-   (neo-root-dir-face :foreground red))
+   (neo-root-dir-face :foreground red)
+
+   ;; tooltip
+   (tooltip :background base3 :foreground fg-alt))
   ;; --- extra variables ---------------------
   ()
   )

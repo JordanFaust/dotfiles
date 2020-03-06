@@ -16,8 +16,10 @@
  ;; Tab Cycling
  :n "g T"  #'centaur-tabs-backward
  :n "g t"  #'centaur-tabs-forward
+ :n "C-<"  #'centaur-tabs-backward
+ :n "C->"  #'centaur-tabs-forward
 
  ;; Leader Configs
  (:leader
-   :desc "Switch to last buffer" :n "SPC" #'wc/switch-to-mru-buffer
+   :desc "Switch to last buffer" :n "SPC" #'evil-switch-to-windows-last-buffer
    ))
