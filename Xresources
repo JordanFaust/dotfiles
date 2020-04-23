@@ -100,7 +100,7 @@ xscreensaver.unfade: false
 !! Fonts
 ! URxvt.font: xft:Source Code pro for Powerline:size=20:style=Semibold,xft:DejaVu Sans Mono for Powerline:size=20:style=Regular
 ! URxvt.font: xft:Source Code pro for Powerline:size=20:style=Semibold,xft:DejaVu Sans Mono for Powerline:size=20:style=Regular
-URxvt.font: xft:Iosevka Semibold Extended:size=20:style=Semibold Extended,xft:DejaVu Sans Mono for Powerline:size=20:style=Regular
+URxvt.font: xft:Iosevka Semibold Extended:size=20:style=Semibold Extended,xft:DejaVu Sans Mono for Powerline:size=20:style=Regular,xft:Fira Code Symbol:size=20:style=Symbol-Regular
 ! URxvt.letterSpace: 0
 
 !! scroll

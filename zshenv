@@ -28,12 +28,14 @@ export BUNDLER_EDITOR=$EDITOR
 export GIT_EDITOR=$EDITOR
 export GIT_TERMINAL_PROMPT=1
 
+# Go
 export GOPATH="${HOME}/ws/go"
 if [[ ":${PATH}:" != *"/usr/local/go/bin:${GOPATH}/bin:${PATH}" ]]; then
     export PATH="/usr/local/go/bin:${GOPATH}/bin:${PATH}"
 fi
 
 
+# Python
 if [ -x "$(command -v python)" ]; then
     USER_BASE_PATH=$(python -m site --user-base)
     if [[ ":${PATH}:" != *"${PATH}:${USER_BASE_PATH}/bin" ]]; then
@@ -41,14 +43,19 @@ if [ -x "$(command -v python)" ]; then
     fi
 fi
 
+# Ruby
 if [[ ":${PATH}:" != *"${HOME}/.rbenv/bin:${PATH}" ]]; then
     export PATH="${HOME}/.rbenv/bin:${PATH}"
 fi
 
-# Ruby
 export GEM_HOME=$HOME/.gem
 if [[ ":${PATH}:" != *"${GEM_HOME}/bin:${PATH}" ]]; then
     export PATH="${GEM_HOME}/bin:${PATH}"
+fi
+
+# Rust
+if [[ ":${PATH}:" != *"${HOME}/.cargo/bin:${PATH}" ]]; then
+    export PATH="${HOME}/.cargo/bin:${PATH}"
 fi
 
 if [[ ":${PATH}:" != *"${PATH}:${HOME}/.utility" ]]; then
@@ -196,8 +203,8 @@ alias map="xargs -n1"
 
 # One of @janmoesen’s ProTip™s
 for method in GET HEAD POST PUT DELETE TRACE OPTIONS; do
-	# shellcheck disable=SC2139,SC2140
-	alias "$method"="lwp-request -m \"$method\""
+    # shellcheck disable=SC2139,SC2140
+    alias "$method"="lwp-request -m \"$method\""
 done
 
 # Kill all the tabs in Chrome to free up memory
@@ -228,8 +235,7 @@ alias pubkey="more ~/.ssh/id_ed25519.pub | xclip -selection clipboard | echo '=>
 # Pipe my private key to my clipboard.
 alias prikey="more ~/.ssh/id_ed25519 | xclip -selection clipboard | echo '=> Private key copied to pasteboard.'"
 
-alias ssm-session='docker run -it --rm --detach-keys "ctrl-e,e" -v $HOME/.aws:/root/.aws -e AWS_PROFILE="${AWS_PROFILE}" -e AWS_REGION="${AWS_REGION}" ced.docker.artifactory.global.bamgrid.net/ssm-helpers:latest ssm-session -t bamazon:team -t bamazon:env -t bamazon:app -t bamazon:pool'
-
+# alias ssm-session='docker run -it --rm --detach-keys "ctrl-e,e" -v $HOME/.aws:/root/.aws -e AWS_PROFILE="${AWS_PROFILE}" -e AWS_REGION="${AWS_REGION}" ced.docker.artifactory.global.bamgrid.net/ssm-helpers:latest ssm-session -t bamazon:team -t bamazon:env -t bamazon:app -t bamazon:pool'
 if [ -x "$(command -v rbenv)" ]; then
     eval "$(rbenv init -)"
 fi

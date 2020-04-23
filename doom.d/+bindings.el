@@ -11,7 +11,9 @@
  "<C-tab>"  #'+popup/other
 
  ;; Code Navigation
- "C-t" #'pop-tag-mark
+ (:after persp-mode
+   :map evil-normal-state-map
+   "C-t" #'pop-tag-mark)
 
  ;; Tab Cycling
  :n "g T"  #'centaur-tabs-backward
@@ -21,5 +23,4 @@
 
  ;; Leader Configs
  (:leader
-   :desc "Switch to last buffer" :n "SPC" #'evil-switch-to-windows-last-buffer
-   ))
+   :desc "Switch to last buffer" :n "SPC" #'evil-switch-to-windows-last-buffer))

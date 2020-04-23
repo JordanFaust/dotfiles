@@ -20,12 +20,12 @@
 ;; They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
 ;; font string. You generally only need these two:
 ;; (setq doom-font (font-spec :family "Source Code Pro for Powerline" :size 20 :weight 'semi-bold))
-(setq doom-font (font-spec :family "Iosevka Semibold Extended" :size 20 :weight 'semibold))
+(setq doom-font (font-spec :family "Iosevka Semibold" :size 20 :weight 'semibold))
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-nord)
+(setq doom-theme 'doom-rouge)
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
@@ -55,12 +55,14 @@
 (after! ivy-posframe
   (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-top-center))))
 
-
 (after! doom-modeline
   (setq doom-modeline-bar-width 10
         doom-modeline-buffer-file-name-style 'relative-to-project)
+  ;; (doom-modeline-def-modeline 'jfaust
+  ;;   '(bar workspace-name window-number matches buffer-info buffer-position word-count parrot selection-info)
+  ;;   '(misc-info persp-name grip gnus github debug lsp minor-modes input-method indent-info buffer-encoding major-mode process vcs checker))
   (doom-modeline-def-modeline 'jfaust
-    '(bar workspace-name window-number matches buffer-info buffer-position word-count parrot selection-info)
+    '(bar matches buffer-info buffer-position word-count selection-info)
     '(misc-info persp-name grip gnus github debug lsp minor-modes input-method indent-info buffer-encoding major-mode process vcs checker))
   (defun setup-custom-doom-modeline ()
     (doom-modeline-set-modeline 'jfaust 'default))
@@ -86,16 +88,14 @@
   (centaur-tabs-headline-match)
   (centaur-tabs-group-by-projectile-project))
 
-;; Use the otf-fira-code-symbol font from yay for the font for pretty code
-(setq +pretty-code-iosevka-font-name "Iosevka Nerd Font Mono"
-      +pretty-code-fira-font-name "Fira Code Symbol")
+(after! doom-themes
+  :config
+  (setq doom-rouge-brighter-tabs t
+        doom-rouge-brighter-comments t
+        doom-rouge-padded-modeline t))
+
+(setq lsp-gopls-server-args "serve")
+(setq lsp-clients-go-server "gopls")
 
 (load! "+functions")
-(load! "themes/doom-rouge-theme")
 (load! "+bindings")
-;; FIXME
-(setq doom-rouge-brighter-tabs t)
-(setq doom-rouge-brighter-comments t)
-;; (setq doom-rouge-brighter-modeline t)
-(setq doom-rouge-padded-modeline t)
-(load-theme 'doom-rouge)
