@@ -52,18 +52,26 @@
 ;; You can also try 'gd' (or 'C-c g d') to jump to their definition and see how
 ;; they are implemented.
 
-(after! ivy-posframe
-  (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-top-center))))
+;;
+;; Theme Config
+;;
+
+(after! doom-themes
+  :config
+  (setq doom-rouge-brighter-tabs t
+        doom-rouge-brighter-comments t
+        doom-rouge-padded-modeline t))
 
 (after! doom-modeline
   (setq doom-modeline-bar-width 10
+        doom-modeline-height 40
         doom-modeline-buffer-file-name-style 'relative-to-project)
   ;; (doom-modeline-def-modeline 'jfaust
   ;;   '(bar workspace-name window-number matches buffer-info buffer-position word-count parrot selection-info)
   ;;   '(misc-info persp-name grip gnus github debug lsp minor-modes input-method indent-info buffer-encoding major-mode process vcs checker))
   (doom-modeline-def-modeline 'jfaust
     '(bar matches buffer-info buffer-position word-count selection-info)
-    '(misc-info persp-name grip gnus github debug lsp minor-modes input-method indent-info buffer-encoding major-mode process vcs checker))
+    '(misc-info persp-name grip gnus github debug lsp minor-modes input-method indent-info buffer-encoding major-mode process vcs checker "  "))
   (defun setup-custom-doom-modeline ()
     (doom-modeline-set-modeline 'jfaust 'default))
   (add-hook 'doom-modeline-mode-hook 'setup-custom-doom-modeline))
@@ -88,14 +96,40 @@
   (centaur-tabs-headline-match)
   (centaur-tabs-group-by-projectile-project))
 
-(after! doom-themes
+;;
+;; LSP Configuration
+;;
+
+(after! lsp-mode
   :config
-  (setq doom-rouge-brighter-tabs t
-        doom-rouge-brighter-comments t
-        doom-rouge-padded-modeline t))
+  (setq lsp-gopls-server-args "serve"
+        lsp-clients-go-server "gopls"
+        ;; Limit the width of the completion tooltip to allow room for
+        ;; function documentation
+        company-tooltip-maximum-width 90))
 
-(setq lsp-gopls-server-args "serve")
-(setq lsp-clients-go-server "gopls")
+;;
+;; Project Configuration
+;;
 
+(after! projectile
+  :config
+  ;; Ignore the following project directories
+  ;; * ~/ws/go/pkg/ - Go project dependencies (code navigation jumps)
+  ;; * ~/.rustup/ - Rust project dependencies (code navigation jumps)
+  ;; * ~/.gems/ - Ruby project dependencies (code navigation jumps)
+  (setq projectile-ignored-projects '("~/" "/tmp" "~/.rustup/" "~/.gem/" "~/ws/go/pkg/"))
+  (defun projectile-ignored-project-regexp-function (project-root)
+    (cl-loop for project in projectile-ignored-projects
+             when (f-descendant-of? project-root (expand-file-name project))
+             return 't))
+  (setq projectile-ignored-project-function #'projectile-ignored-project-regexp-function))
+
+(after! ivy-posframe
+  (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-top-center))))
+
+
+
+(load! "+ruby")
 (load! "+functions")
 (load! "+bindings")
