@@ -102,11 +102,8 @@
 
 (after! lsp-mode
   :config
-  (setq lsp-gopls-server-args "serve"
-        lsp-clients-go-server "gopls"
-        ;; Limit the width of the completion tooltip to allow room for
-        ;; function documentation
-        company-tooltip-maximum-width 90))
+  ;; Limit the width of the completion tooltip to allow room for function documentation
+  (setq company-tooltip-maximum-width 90))
 
 ;;
 ;; Project Configuration
@@ -114,21 +111,64 @@
 
 (after! projectile
   :config
-  ;; Ignore the following project directories
+  ;; Prevent projects within the following directory from becoming projectile projects
   ;; * ~/ws/go/pkg/ - Go project dependencies (code navigation jumps)
   ;; * ~/.rustup/ - Rust project dependencies (code navigation jumps)
   ;; * ~/.gems/ - Ruby project dependencies (code navigation jumps)
-  (setq projectile-ignored-projects '("~/" "/tmp" "~/.rustup/" "~/.gem/" "~/ws/go/pkg/"))
+  ;; * ~/.emacs.d/.local
+  (setq projectile-ignored-projects '("/tmp" "~/.rustup/" "~/.gem/" "~/ws/go/pkg/" "~/.emacs.d/.local/"))
   (defun projectile-ignored-project-regexp-function (project-root)
     (cl-loop for project in projectile-ignored-projects
-             when (f-descendant-of? project-root (expand-file-name project))
+             ;; Ignore the home directory
+             ;; TODO: make this agnostic to user
+             when (and (f-descendant-of? project-root (expand-file-name project))
+                       (string-match "/home/jfaust" (expand-file-name project)))
              return 't))
-  (setq projectile-ignored-project-function #'projectile-ignored-project-regexp-function))
+  (setq projectile-ignored-project-function #'projectile-ignored-project-regexp-function)
+  ;; Ignore the following directories when doing project searches
+  ;; * .bundle - Ignore local dependency files in project search and don't cache opened buffers
+  (add-to-list 'projectile-globally-ignored-directories ".bundle"))
 
 (after! ivy-posframe
   (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-top-center))))
 
+;;
+;; Neotree Configuration
+;;
 
+(after! neotree
+  :config
+  (defun doom-neo--longest-line ()
+    "Calculates the longest line in the neotree buffer"
+    (with-current-buffer (neo-global--get-buffer)
+      (let ((longest-line 0))
+        (save-excursion
+          (goto-char (point-min))
+          (while (not(eobp))
+            (let* ((line-beggining (line-beginning-position))
+                   (line-end (line-end-position)))
+              (setq longest-line (max longest-line (- line-end line-beggining)))
+              (forward-line 1))))
+        longest-line)))
+
+  (defun neo-window-size-change-function (_)
+    "Dynamically set the width of the NEOTREE buffer within the configured bounds"
+    (let ((neo-window (neo-global--get-window)))
+      (unless (null neo-window)
+        ;; Dynamically set the window width within the allowed bounds
+        (neo-global--set-window-width
+         (let ((width (doom-neo--longest-line)))
+           ;; Add 10 to the total width to account for difference in ligature width
+           ;; in the calculation
+           (pcase width
+             ;; Don't allow the window width to be smaller than 30
+             ((guard (< width 25)) 30)
+             ;; Don't allow the window width to be greater than 55
+             ((guard (> width 55)) 65)
+             ;; Return the current width if within bounds
+             (_ (+ width 10))))))))
+
+  (add-to-list 'window-size-change-functions #'neo-window-size-change-function))
 
 (load! "+ruby")
 (load! "+functions")
