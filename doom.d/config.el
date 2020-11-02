@@ -97,6 +97,13 @@
   (centaur-tabs-group-by-projectile-project))
 
 ;;
+;; Theme Customization
+;;
+
+(custom-theme-set-faces! 'doom-rouge
+  `(ivy-posframe :background ,(doom-darken "#0E131D"  0.1)))
+
+;;
 ;; LSP Configuration
 ;;
 
@@ -127,10 +134,37 @@
   (setq projectile-ignored-project-function #'projectile-ignored-project-regexp-function)
   ;; Ignore the following directories when doing project searches
   ;; * .bundle - Ignore local dependency files in project search and don't cache opened buffers
-  (add-to-list 'projectile-globally-ignored-directories ".bundle"))
+  (add-to-list 'projectile-globally-ignored-directories ".bundle")
+  (add-to-list 'projectile-globally-ignored-directories ".yardoc"))
 
 (after! ivy-posframe
-  (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-top-center))))
+  ;; Force project and symbol search to a the top posframe
+  ;; Explicitly set the width of the posframe to prevent possibly violent
+  ;; resizing as it async processes results and displays them
+  (setf (alist-get t ivy-posframe-display-functions-alist)
+        #'ivy-posframe-display-at-frame-top-center)
+  (setf (alist-get 'swiper ivy-posframe-display-functions-alist)
+        #'ivy-posframe-display-at-frame-top-center)
+  (setf (alist-get 'counsel-rg ivy-posframe-display-functions-alist)
+        #'ivy-posframe-display-at-frame-top-center)
+  (setq ivy-posframe-width 120)
+  (setq posframe-arghandler
+        (lambda (buffer-or-name key value)
+          (or (and (eq key :lines-truncate)
+                   (string-match-p
+                    "ivy\\|counsel"
+                    (if (stringp buffer-or-name)
+                        buffer-or-name
+                      (buffer-name (get-buffer buffer-or-name))))
+                   t)
+              value)))
+  (setq ivy-posframe-border-width 5
+        ivy-posframe-parameters (append ivy-posframe-parameters '((left-fringe . 5)
+                                                                  (right-fringe . 5)))))
+
+(after! counsel
+  ;; Fix improper handling of error codes from ripgrep on Linux
+  (setq counsel-rg-base-command "rg -M 240 --with-filename --no-heading --line-number --color never %s || true"))
 
 ;;
 ;; Neotree Configuration
@@ -145,10 +179,8 @@
         (save-excursion
           (goto-char (point-min))
           (while (not(eobp))
-            (let* ((line-beggining (line-beginning-position))
-                   (line-end (line-end-position)))
-              (setq longest-line (max longest-line (- line-end line-beggining)))
-              (forward-line 1))))
+            (setq longest-line (max longest-line (- (line-end-position) (line-beginning-position))))
+            (forward-line)))
         longest-line)))
 
   (defun neo-window-size-change-function (_)

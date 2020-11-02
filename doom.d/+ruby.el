@@ -6,20 +6,16 @@
   :when (executable-find "ruby")
   :after ruby-mode
   :config
-  ;; If ruby is present, `enh-ruby-mode' provides superior (semantic) syntax
-  ;; highlighting so use it instead.
-  (advice-add #'ruby-mode :override #'enh-ruby-mode))
-
-(after! enh-ruby-mode
-  :config
-  (add-hook! '(ruby-mode-local-vars-hook
-             enh-ruby-mode-local-vars-hook)
-             #'lsp!)
-
   (map! :localleader
         :map ruby-mode-map
         "[" #'ruby-toggle-block
-        "{" #'ruby-toggle-block))
+        "{" #'ruby-toggle-block)
+  ;; If ruby is present, `enh-ruby-mode' provides superior (semantic) syntax
+  ;; highlighting so use it instead.
+  (advice-add #'ruby-mode :override #'enh-ruby-mode)
+
+  (add-hook! '(ruby-mode-local-vars-hook enh-ruby-mode-local-vars-hook) #'lsp!)
+  (set-electric! 'enh-ruby-mode :words '("else" "end" "elsif" "module" "end" "class" "end")))
 
 (use-package! rubocop
   :hook (enh-ruby-mode . rubocop-mode)
