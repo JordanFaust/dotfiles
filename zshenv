@@ -96,16 +96,16 @@ export PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
 #######################
 
 for opener in browser-exec xdg-open cmd.exe cygstart "start" open; do
-	if command -v $opener >/dev/null 2>&1; then
-		if [[ "$opener" == "cmd.exe" ]]; then
-			# shellcheck disable=SC2139
-			alias open="$opener /c start";
-		else
-			# shellcheck disable=SC2139
-			alias open="$opener";
-		fi
-		break;
-	fi
+    if command -v $opener >/dev/null 2>&1; then
+        if [[ "$opener" == "cmd.exe" ]]; then
+            # shellcheck disable=SC2139
+            alias open="$opener /c start";
+        else
+            # shellcheck disable=SC2139
+            alias open="$opener";
+        fi
+        break;
+    fi
 done
 
 # Code Search

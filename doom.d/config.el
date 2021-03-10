@@ -20,7 +20,8 @@
 ;; They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
 ;; font string. You generally only need these two:
 ;; (setq doom-font (font-spec :family "Source Code Pro for Powerline" :size 20 :weight 'semi-bold))
-(setq doom-font (font-spec :family "Iosevka Semibold" :size 20 :weight 'semibold))
+;; (setq doom-font (font-spec :family "Iosevka Semibold" :size 20 :weight 'semibold))
+(setq doom-font (font-spec :family "JetBrains Mono" :size 18 :weight 'bold))
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
@@ -66,9 +67,6 @@
   (setq doom-modeline-bar-width 10
         doom-modeline-height 40
         doom-modeline-buffer-file-name-style 'relative-to-project)
-  ;; (doom-modeline-def-modeline 'jfaust
-  ;;   '(bar workspace-name window-number matches buffer-info buffer-position word-count parrot selection-info)
-  ;;   '(misc-info persp-name grip gnus github debug lsp minor-modes input-method indent-info buffer-encoding major-mode process vcs checker))
   (doom-modeline-def-modeline 'jfaust
     '(bar matches buffer-info buffer-position word-count selection-info)
     '(misc-info persp-name grip gnus github debug lsp minor-modes input-method indent-info buffer-encoding major-mode process vcs checker "  "))
@@ -110,7 +108,7 @@
 (after! lsp-mode
   :config
   ;; Limit the width of the completion tooltip to allow room for function documentation
-  (setq company-tooltip-maximum-width 90))
+  (setq company-tooltip-maximum-width 70))
 
 ;;
 ;; Project Configuration
@@ -127,9 +125,8 @@
   (defun projectile-ignored-project-regexp-function (project-root)
     (cl-loop for project in projectile-ignored-projects
              ;; Ignore the home directory
-             ;; TODO: make this agnostic to user
              when (and (f-descendant-of? project-root (expand-file-name project))
-                       (string-match "/home/jfaust" (expand-file-name project)))
+                       (string-match (getenv "HOME") (expand-file-name project)))
              return 't))
   (setq projectile-ignored-project-function #'projectile-ignored-project-regexp-function)
   ;; Ignore the following directories when doing project searches
@@ -194,11 +191,11 @@
            ;; in the calculation
            (pcase width
              ;; Don't allow the window width to be smaller than 30
-             ((guard (< width 25)) 30)
+             ((guard (< width 25)) 25)
              ;; Don't allow the window width to be greater than 55
-             ((guard (> width 55)) 65)
+             ((guard (> width 55)) 55)
              ;; Return the current width if within bounds
-             (_ (+ width 10))))))))
+             (_ (+ width 1))))))))
 
   (add-to-list 'window-size-change-functions #'neo-window-size-change-function))
 

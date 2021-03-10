@@ -8,4 +8,4 @@ rofi -sidebar-mode \
   -location 0 \
   -show drun \
   -columns 3 \
-  -font "Fira Mono Medium 10"
+  -font "Fira Mono Medium 22"
