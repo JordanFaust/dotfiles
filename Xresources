@@ -59,43 +59,108 @@ xscreensaver.unfade: false
 ! *.color14: nord7
 ! *.color15: nord6
 
-! special
-*.background: #172030
-*.foreground: #A2A3AA
-*.cursorColor: #969E92
+!! Custom Color Scheme for i3-rouge
+! ! special
+! *.background: #172030
+! *.foreground: #A2A3AA
+! *.cursorColor: #969E92
 
-! black
-*.color0: #5D5D6B
-*.color8: #616274
+! ! black
+! *.color0: #5D5D6B
+! *.color8: #616274
 
-! blue
-*.color4: #6e94b9
-*.color12: #98b3cd
+! ! blue
+! *.color4: #6e94b9
+! *.color12: #98b3cd
 
-! cyan
-*.color6: #8ab6c1
-*.color14: #abcbd3
+! ! cyan
+! *.color6: #8ab6c1
+! *.color14: #abcbd3
 
-! green
-*.color2: #969E92
-*.color10: #B6BBB3
+! ! green
+! *.color2: #969E92
+! *.color10: #B6BBB3
 
-! magenta
-*.color5: #4C4E78
-*.color13: #8283A1
+! ! magenta
+! *.color5: #4C4E78
+! *.color13: #8283A1
 
-! red
-*.color1: #C6797E
-*.color9: #C6797E
+! ! red
+! *.color1: #C6797E
+! *.color9: #C6797E
 
-! white
-*.color7: #E8E8EA
-*.color15: #E8E8EA
+! ! white
+! *.color7: #E8E8EA
+! *.color15: #E8E8EA
 
-! yellow
-*.color3: #DBCDAB
-*.color11: #E6DCC4
+! ! yellow
+! *.color3: #DBCDAB
+! *.color11: #E6DCC4
 ! ===== urxvt =====
+
+!! Amarena from Elenapan
+! *background:    #1A2026
+! *foreground:    #FFFFFF
+! *cursorColor:   #FFFFFF
+! *color0:        #242D35
+! *color1:        #FB6396
+! *color2:        #94CF95
+! *color3:        #F692B2
+! *color4:        #6EC1D6
+! *color5:        #CD84C8
+! *color6:        #7FE4D2
+! *color7:        #FFFFFF
+! *color8:        #526170
+! *color9:        #F92D72
+! *color10:       #6CCB6E
+! *color11:       #F26190
+! *color12:       #4CB9D6
+! *color13:       #C269BC
+! *color14:       #58D6BF
+! *color15:       #F4F5F2
+
+!! Ephemeral from Elenapan
+! *background:    #323F4E
+! *foreground:    #F8F8F2
+! *cursorColor:   #F8F8F2
+! *color0:        #3D4C5F
+! *color1:        #F48FB1
+! *color2:        #A1EFD3
+! *color3:        #F1FA8C
+! *color4:        #92B6F4
+! *color5:        #BD99FF
+! *color6:        #87DFEB
+! *color7:        #F8F8F2
+! *color8:        #56687E
+! *color9:        #EE4F84
+! *color10:       #53E2AE
+! *color11:       #F1FF52
+! *color12:       #6498EF
+! *color13:       #985EFF
+! *color14:       #24D1E7
+! *color15:       #E5E5E5
+
+!! Skyfall from Elenapan
+*background:  #282F37
+*foreground:  #F1FCF9
+*cursorColor: #F1FCF9
+*color0:      #20262C
+*color1:      #DB86BA
+*color2:      #74DD91
+*color3:      #E49186
+*color4:      #75DBE1
+*color5:      #B4A1DB
+*color6:      #9EE9EA
+*color7:      #F1FCF9
+*color8:      #465463
+*color9:      #D04E9D
+*color10:     #4BC66D
+*color11:     #DB695B
+*color12:     #3DBAC2
+*color13:     #825ECE
+*color14:     #62CDCD
+*color15:     #E0E5E5
+
 
 !! Fonts
 ! URxvt.font: xft:Source Code pro for Powerline:size=20:style=Semibold,xft:DejaVu Sans Mono for Powerline:size=20:style=Regular

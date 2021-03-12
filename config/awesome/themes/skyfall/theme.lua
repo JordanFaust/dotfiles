@@ -1,25 +1,19 @@
+local awful = require("awful")
 local theme_name = "skyfall"
 local theme_assets = require("beautiful.theme_assets")
 local xresources = require("beautiful.xresources")
 local dpi = xresources.apply_dpi
+local gfs = require("gears.filesystem")
+local themes_path = gfs.get_themes_dir()
 local icon_path = os.getenv("HOME") .. "/.config/awesome/themes/" .. theme_name .. "/icons/"
 local layout_icon_path = os.getenv("HOME") .. "/.config/awesome/themes/" .. theme_name .. "/layout/"
 local titlebar_icon_path = os.getenv("HOME") .. "/.config/awesome/themes/" .. theme_name .. "/titlebar/"
 local weather_icon_path = os.getenv("HOME") .. "/.config/awesome/themes/" .. theme_name .. "/weather/"
+local taglist_icon_path = os.getenv("HOME") .. "/.config/awesome/themes/" .. theme_name .. "/taglist/"
 local tip = titlebar_icon_path --alias to save time/space
 local xrdb = xresources.get_current_theme()
--- custom modules
-local nordic = require("nordic")
-
--- module theme
+-- local theme = dofile(themes_path.."default/theme.lua")
 local theme = {}
-
--- theme.tip = titlebar_icon_path -- NOT local so that scripts can access it
-
--- This is used to make it easier to align the panels in specific monitor positions
-local awful = require("awful")
-local screen_width = awful.screen.focused().geometry.width
-local screen_height = awful.screen.focused().geometry.height
 
 -- Set theme wallpaper.
 -- It won't change anything if you are using feh to set the wallpaper like I do.
@@ -27,59 +21,22 @@ theme.wallpaper = os.getenv("HOME") .. "/.config/awesome/themes/" .. theme_name 
 
 -- Set the theme font. This is the font that will be used by default in menus, bars, titlebars etc.
 -- theme.font          = "sans 11"
-theme.font          = "sans 11"
-
--- Get colors from .Xresources and set fallback colors
-theme.xbackground = xrdb.background or "#282F37"
-theme.xforeground = xrdb.foreground or "#F1FCF9"
-theme.xcolor0     = xrdb.color0     or "#20262C"
-theme.xcolor1     = xrdb.color1     or "#DB86BA"
-theme.xcolor2     = xrdb.color2     or "#74DD91"
-theme.xcolor3     = xrdb.color3     or "#E49186"
-theme.xcolor4     = xrdb.color4     or "#75DBE1"
-theme.xcolor5     = xrdb.color5     or "#B4A1DB"
-theme.xcolor6     = xrdb.color6     or "#9EE9EA"
-theme.xcolor7     = xrdb.color7     or "#F1FCF9"
-theme.xcolor8     = xrdb.color8     or "#465463"
-theme.xcolor9     = xrdb.color9     or "#D04E9D"
-theme.xcolor10    = xrdb.color10    or "#4BC66D"
-theme.xcolor11    = xrdb.color11    or "#DB695B"
-theme.xcolor12    = xrdb.color12    or "#3DBAC2"
-theme.xcolor13    = xrdb.color13    or "#825ECE"
-theme.xcolor14    = xrdb.color14    or "#62CDCD"
-theme.xcolor15    = xrdb.color15    or "#E0E5E5"
-
-theme.polar_night_1 = '#2e3440'
-theme.polar_night_2 = '#3b4252'
-theme.polar_night_3 = '#434c5e'
-theme.polar_night_4 = '#4c566a'
-theme.snow_storm_1 = '#d8dee9'
-theme.snow_storm_2 = '#e5e9f0'
-theme.snow_storm_3 = '#eceff4'
-theme.frost_1 = '#8fbcbb'
-theme.frost_2 = '#88c0d0'
-theme.frost_3 = '#81a1c1'
-theme.frost_4 = '#5e81ac'
-theme.aurora_1 = '#bf616a'
-theme.aurora_2 = '#d08770'
-theme.aurora_3 = '#ebcb8b'
-theme.aurora_4 = '#a3be8c'
-theme.aurora_5 = '#b48ead'
+theme.font          = "monospace 11"
 
 -- This is how to get other .Xresources values (beyond colors 0-15, or custom variables)
 -- local cool_color = awesome.xrdb_get_value("", "color16")
 
-theme.bg_dark       = theme.xbackground
-theme.bg_normal     = theme.xcolor0
-theme.bg_focus      = theme.xcolor8
-theme.bg_urgent     = theme.xcolor8
-theme.bg_minimize   = theme.xcolor8
-theme.bg_systray    = theme.xbackground
+theme.bg_dark       = x.background
+theme.bg_normal     = x.color0
+theme.bg_focus      = x.color8
+theme.bg_urgent     = x.color8
+theme.bg_minimize   = x.color8
+theme.bg_systray    = x.background
 
-theme.fg_normal     = theme.xcolor8
-theme.fg_focus      = theme.xcolor4
-theme.fg_urgent     = theme.xcolor3
-theme.fg_minimize   = theme.xcolor8
+theme.fg_normal     = x.color8
+theme.fg_focus      = x.color4
+theme.fg_urgent     = x.color3
+theme.fg_minimize   = x.color8
 
 -- Gaps
 theme.useless_gap   = dpi(3)
@@ -89,9 +46,9 @@ theme.screen_margin = dpi(3)
 
 -- Borders
 theme.border_width  = dpi(0)
-theme.border_color = theme.xcolor0
-theme.border_normal = theme.xcolor0
-theme.border_focus  = theme.xcolor0
+theme.border_color = x.color0
+theme.border_normal = x.color0
+theme.border_focus  = x.color0
 -- Rounded corners
 theme.border_radius = dpi(6)
 
@@ -99,20 +56,18 @@ theme.border_radius = dpi(6)
 -- (Titlebar items can be customized in titlebars.lua)
 theme.titlebars_enabled = true
 theme.titlebar_size = dpi(35)
-theme.titlebar_title_enabled = false
+theme.titlebar_title_enabled = true
 theme.titlebar_font = "sans bold 9"
 -- Window title alignment: left, right, center
 theme.titlebar_title_align = "center"
 -- Titlebar position: top, bottom, left, right
 theme.titlebar_position = "top"
--- Use 4 titlebars around the window to imitate borders
-theme.titlebars_imitate_borders = false
-theme.titlebar_bg = theme.xcolor0
--- theme.titlebar_bg_focus = theme.xcolor5
--- theme.titlebar_bg_normal = theme.xcolor13
-theme.titlebar_fg_focus = theme.xcolor7
-theme.titlebar_fg_normal = theme.xcolor8
---theme.titlebar_fg = theme.xcolor7
+theme.titlebar_bg = x.color0
+-- theme.titlebar_bg_focus = x.color5
+-- theme.titlebar_bg_normal = x.color13
+theme.titlebar_fg_focus = x.color7
+theme.titlebar_fg_normal = x.color8
+--theme.titlebar_fg = x.color7
 
 -- Notifications
 -- Position: bottom_left, bottom_right, bottom_middle,
@@ -120,22 +75,19 @@ theme.titlebar_fg_normal = theme.xcolor8
 theme.notification_position = "top_right" -- BUG: some notifications appear at top_right regardless
 theme.notification_border_width = dpi(0)
 theme.notification_border_radius = theme.border_radius
-theme.notification_border_color = theme.xcolor10
-theme.notification_bg = theme.xcolor0
-theme.notification_fg = theme.xcolor7
-theme.notification_crit_bg = theme.xcolor3
-theme.notification_crit_fg = theme.xcolor0
+theme.notification_border_color = x.color10
+theme.notification_bg = x.color0
+theme.notification_fg = x.color7
+theme.notification_crit_bg = x.color3
+theme.notification_crit_fg = x.color0
 theme.notification_icon_size = dpi(60)
-theme.notification_height = dpi(80)
-theme.notification_width = dpi(300)
+-- theme.notification_height = dpi(80)
+-- theme.notification_width = dpi(300)
 theme.notification_margin = dpi(15)
 theme.notification_opacity = 1
 theme.notification_font = theme.font
-theme.notification_padding = dpi(32)
+theme.notification_padding = theme.screen_margin * 2
 theme.notification_spacing = theme.screen_margin * 2
-
--- Tile Settings
-theme.useless_gap = 32
 
 -- Edge snap
 theme.snap_bg = theme.bg_focus
@@ -144,6 +96,8 @@ if theme.border_width == 0 then
 else
     theme.snap_border_width = dpi(theme.border_width * 2)
 end
+-- Doesnt work with 4.2, need awesome-git?
+--theme.snapper_gap = theme.useless_gap
 
 -- Tag names
 theme.tagnames = {
@@ -164,80 +118,63 @@ theme.separator_text = "|"
 --theme.separator_text = " :: "
 --theme.separator_text = " • "
 -- theme.separator_text = " •• "
-theme.separator_fg = theme.xcolor8
+theme.separator_fg = x.color8
 
 -- Wibar(s)
--- (Bar items can be customized in bars.lua)
 theme.wibar_position = "bottom"
-theme.wibar_detached = false
+theme.wibar_ontop = false
 theme.wibar_height = dpi(35)
-theme.wibar_fg = theme.xcolor7
-theme.wibar_bg = theme.xcolor0
+theme.wibar_fg = x.color7
+theme.wibar_bg = x.color0
 --theme.wibar_opacity = 0.7
-theme.wibar_border_color = theme.xcolor0
+theme.wibar_border_color = x.color0
 theme.wibar_border_width = dpi(0)
 theme.wibar_border_radius = dpi(0)
 
-theme.prefix_fg = theme.xcolor8
+theme.prefix_fg = x.color8
 
---- Tasklist
-theme.tasklist_disable_icon = false
+ --There are other variable sets
+ --overriding the default one when
+ --defined, the sets are:
+ --taglist_[bg|fg]_[focus|urgent|occupied|empty|volatile]
+ --tasklist_[bg|fg]_[focus|urgent]
+ --titlebar_[bg|fg]_[normal|focus]
+ --tooltip_[font|opacity|fg_color|bg_color|border_width|border_color]
+ --mouse_finder_[color|timeout|animate_timeout|radius|factor]
+ --prompt_[fg|bg|fg_cursor|bg_cursor|font]
+ --hotkeys_[bg|fg|border_width|border_color|shape|opacity|modifiers_fg|label_bg|label_fg|group_margin|font|description_font]
+ --Example:
+--theme.taglist_bg_focus = "#ff0000"
+
+ --Tasklist
+theme.tasklist_disable_icon = true
 theme.tasklist_plain_task_name = true
-theme.tasklist_bg_focus = nordic.core.color.lighten(theme.frost_3, 20)
-theme.tasklist_fg_focus = theme.xforeground
-theme.tasklist_bg_normal = theme.frost_3 -- theme.xbackground
-theme.tasklist_fg_normal = theme.xcolor15
-theme.tasklist_bg_minimize = nordic.core.color.darken(theme.frost_3, 20)
+theme.tasklist_bg_focus = x.color0
+theme.tasklist_fg_focus = x.color4
+theme.tasklist_bg_normal = x.color0
+theme.tasklist_fg_normal = x.color15
+theme.tasklist_bg_minimize = x.color0
 theme.tasklist_fg_minimize = theme.fg_minimize
-theme.tasklist_bg_urgent = theme.frost_3
-theme.tasklist_fg_urgent = theme.xcolor3
+theme.tasklist_bg_urgent = x.color0
+theme.tasklist_fg_urgent = x.color3
 theme.tasklist_spacing = dpi(5)
 theme.tasklist_align = "center"
 
--- Tasklist Icons
-theme.tasklist_task_close = icon_path .. "taglist/tag/close.png"
-theme.tasklist_editor_icon = icon_path .. "tasklist/editor.png"
-theme.browser_icon = icon_path .. "tasklist/browser.png"
-theme.tasklist_terminal_icon = icon_path .. "tasklist/terminal.png"
-theme.slack_icon = icon_path .. "tasklist/slack.png"
-theme.spotify_icon = icon_path .. "tasklist/spotify.png"
-
--- Tagbar Icons
-theme.menu_icon = icon_path .. "taglist/menu.svg"
-theme.close_icon = icon_path .. "taglist/close.svg"
-theme.code_icon = icon_path .. "taglist/code-braces.svg"
-theme.social_icon = icon_path .. "taglist/forum.svg"
-theme.tag_music_icon = icon_path .. "taglist/music.svg"
-theme.lab_icon = icon_path .. "taglist/flask.svg"
-theme.magnify_icon = icon_path .. "taglist/magnify.svg"
-theme.package_icon = icon_path .. "tagbar/package.svg"
-theme.package_up_icon = icon_path .. "tagbar/package-up.svg"
-theme.delete_lock_icon = icon_path .. "tagbar/delete-lock.png"
-theme.checked_lock_icon = icon_path .. "tagbar/checked-lock.png"
-theme.power_icon = icon_path .. "tagbar/power.png"
-theme.bluetooth_icon = icon_path .. "tagbar/bluetooth.png"
-theme.media_back_icon = icon_path .. "tagbar/media-back.png"
-theme.media_pause_icon = icon_path .. "tagbar/media-pause.png"
-theme.media_end_icon = icon_path .. "tagbar/media-end.png"
-
 -- Sidebar
 -- (Sidebar items can be customized in sidebar.lua)
-theme.sidebar_bg = theme.xcolor0
-theme.sidebar_fg = theme.xcolor7
+theme.sidebar_bg = x.color0
+theme.sidebar_fg = x.color7
 theme.sidebar_opacity = 1
 -- theme.sidebar_position = "left" -- left or right
 theme.sidebar_width = dpi(300)
-theme.sidebar_height = screen_height
 theme.sidebar_x = 0
 theme.sidebar_y = 0
 theme.sidebar_border_radius = 0
 -- theme.sidebar_border_radius = theme.border_radius
-theme.sidebar_hide_on_mouse_leave = true
-theme.sidebar_show_on_mouse_edge = true
 
 -- Exit screen
-theme.exit_screen_bg = theme.xcolor0 .. "CC"
-theme.exit_screen_fg = theme.xcolor7
+theme.exit_screen_bg = x.color0 .. "CC"
+theme.exit_screen_fg = x.color7
 theme.exit_screen_font = "sans 20"
 theme.exit_screen_icon_size = dpi(180)
 
@@ -256,7 +193,7 @@ theme.reddit_icon = icon_path .. "reddit.png"
 theme.discord_icon = icon_path .. "discord.png"
 theme.telegram_icon = icon_path .. "telegram.png"
 theme.steam_icon = icon_path .. "steam.png"
-theme.lutris_icon = icon_path .. "lutris.png"
+theme.games_icon = icon_path .. "games.png"
 theme.files_icon = icon_path .. "files.png"
 theme.manual_icon = icon_path .. "manual.png"
 theme.keyboard_icon = icon_path .. "keyboard.png"
@@ -279,7 +216,6 @@ theme.home_icon = icon_path .. "home.png"
 theme.alarm_icon = icon_path .. "alarm.png"
 theme.alarm_off_icon = icon_path .. "alarm_off.png"
 theme.alert_icon = icon_path .. "alert.png"
-theme.vpn_icon = icon_path .. "vpn.png"
 
 -- Weather icons
 theme.cloud_icon = weather_icon_path .. "cloud.png"
@@ -301,28 +237,73 @@ theme.suspend_icon = icon_path .. "suspend.png"
 theme.lock_icon = icon_path .. "lock.png"
 -- theme.hibernate_icon = icon_path .. "hibernate.png"
 
+-- Icon taglist
+local ntags = 10
+theme.taglist_icons_empty = {}
+theme.taglist_icons_occupied = {}
+theme.taglist_icons_focused = {}
+theme.taglist_icons_urgent = {}
+-- table.insert(tag_icons, tag)
+for i = 1, ntags do
+  theme.taglist_icons_empty[i] = taglist_icon_path .. tostring(i) .. "_empty.png"
+  theme.taglist_icons_occupied[i] = taglist_icon_path .. tostring(i) .. "_occupied.png"
+  theme.taglist_icons_focused[i] = taglist_icon_path .. tostring(i) .. "_focused.png"
+  theme.taglist_icons_urgent[i] = taglist_icon_path .. tostring(i) .. "_urgent.png"
+end
+
+-- Noodle Text Taglist
+theme.taglist_text_font = "Typicons 11"
+theme.taglist_text_empty    = {"","","","","","","","","",""}
+theme.taglist_text_occupied = {"","","","","","","","","",""}
+theme.taglist_text_focused  = {"","","","","","","","","",""}
+theme.taglist_text_urgent   = {"","","","","","","","","",""}
+-- theme.taglist_text_urgent   = {"","","","","","","","","",""}
+-- theme.taglist_text_urgent   = {"","","","","","","","","",""}
+
+theme.taglist_text_color_empty    = { x.color8, x.color8, x.color8, x.color8, x.color8, x.color8, x.color8, x.color8, x.color8, x.color8 }
+theme.taglist_text_color_occupied  = { x.color1, x.color2, x.color3, x.color4, x.color5, x.color6, x.color1, x.color2, x.color3, x.color4 }
+theme.taglist_text_color_focused  = { x.color1, x.color2, x.color3, x.color4, x.color5, x.color6, x.color1, x.color2, x.color3, x.color4 }
+theme.taglist_text_color_urgent   = { x.color9, x.color10, x.color11, x.color12, x.color13, x.color14, x.color9, x.color10, x.color11, x.color12 }
+
 -- Prompt
-theme.prompt_fg = theme.xcolor12
+theme.prompt_fg = x.color12
 
 -- Text Taglist (default)
-theme.taglist_font = "Source Code Pro Bold 9"
-theme.taglist_bg_occupied = theme.frost_4
-theme.taglist_bg_empty = theme.frost_4
-theme.taglist_bg_focus = nordic.core.color.lighten(theme.frost_4, 20)
-theme.taglist_fg_focus = theme.xforeground
-theme.taglist_bg_urgent = theme.frost_4
-theme.taglist_fg_urgent = theme.xforeground
+theme.taglist_font = "monospace bold 9"
+theme.taglist_bg_focus = x.background
+theme.taglist_fg_focus = x.color12
+theme.taglist_bg_occupied = x.background
+theme.taglist_fg_occupied = x.color8
+theme.taglist_bg_empty = x.background
+theme.taglist_fg_empty = x.background
+theme.taglist_bg_urgent = x.background
+theme.taglist_fg_urgent = x.color3
+theme.taglist_disable_icon = true
+theme.taglist_spacing = dpi(0)
+-- Generate taglist squares:
+local taglist_square_size = dpi(0)
+theme.taglist_squares_sel = theme_assets.taglist_squares_sel(
+    taglist_square_size, theme.fg_focus
+)
+theme.taglist_squares_unsel = theme_assets.taglist_squares_unsel(
+    taglist_square_size, theme.fg_normal
+)
 
 -- Variables set for theming the menu:
 theme.menu_submenu_icon = icon_path.."submenu.png"
 theme.menu_height = dpi(35)
 theme.menu_width  = dpi(180)
-theme.menu_bg_normal = theme.xcolor0
-theme.menu_fg_normal= theme.xcolor7
-theme.menu_bg_focus = theme.xcolor8 .. "55"
-theme.menu_fg_focus= theme.xcolor7
+theme.menu_bg_normal = x.color0
+theme.menu_fg_normal= x.color7
+theme.menu_bg_focus = x.color8 .. "55"
+theme.menu_fg_focus= x.color7
 theme.menu_border_width = dpi(0)
-theme.menu_border_color = theme.xcolor0
+theme.menu_border_color = x.color0
+
+-- You can add as many variables as
+-- you wish and access them by using
+-- beautiful.variable in your rc.lua
+--theme.bg_widget = "#cc0000"
 
 -- Titlebar buttons
 -- Define the images to load
@@ -386,44 +367,55 @@ theme.layout_cornerne = layout_icon_path .. "cornerne.png"
 theme.layout_cornersw = layout_icon_path .. "cornersw.png"
 theme.layout_cornerse = layout_icon_path .. "cornerse.png"
 
+-- Recolor layout icons
+--theme = theme_assets.recolor_layout(theme, x.color1)
+
+-- Noodle widgets customization --
+-- Desktop mode widget variables
+-- Symbols     
+-- theme.desktop_mode_color_floating = x.color4
+-- theme.desktop_mode_color_tile = x.color3
+-- theme.desktop_mode_color_max = x.color1
+-- theme.desktop_mode_text_floating = "f"
+-- theme.desktop_mode_text_tile = "t"
+-- theme.desktop_mode_text_max = "m"
+
+-- Minimal tasklist widget variables
+theme.minimal_tasklist_visible_clients_color = x.color4
+theme.minimal_tasklist_visible_clients_text = ""
+theme.minimal_tasklist_hidden_clients_color = x.color7
+theme.minimal_tasklist_hidden_clients_text = ""
+
 -- Mpd song
-theme.mpd_song_title_color = theme.xcolor7
-theme.mpd_song_artist_color = theme.xcolor7
-theme.mpd_song_paused_color = theme.xcolor8
+theme.mpd_song_title_color = x.color7
+theme.mpd_song_artist_color = x.color7
+theme.mpd_song_paused_color = x.color8
 
 -- Volume bar
-theme.volume_bar_active_color = theme.xcolor6
-theme.volume_bar_active_background_color = theme.xcolor6 .. "33"
-theme.volume_bar_muted_color = theme.xcolor8
-theme.volume_bar_muted_background_color = theme.xcolor8 .. "33"
+theme.volume_bar_active_color = x.color6
+theme.volume_bar_active_background_color = x.color6 .. "33"
+theme.volume_bar_muted_color = x.color8
+theme.volume_bar_muted_background_color = x.color8 .. "33"
 
 -- Temperature bar
-theme.temperature_bar_active_color = theme.xcolor1
-theme.temperature_bar_background_color = theme.xcolor1 .. "33"
+theme.temperature_bar_active_color = x.color1
+theme.temperature_bar_background_color = x.color1 .. "33"
 
 -- Battery bar
-theme.battery_bar_active_color = theme.xcolor5
-theme.battery_bar_background_color = theme.xcolor5 .. "33"
+theme.battery_bar_active_color = x.color5
+theme.battery_bar_background_color = x.color5 .. "33"
 
 -- CPU bar
-theme.cpu_bar_active_color = theme.xcolor2
-theme.cpu_bar_background_color = theme.xcolor2 .. "33"
+theme.cpu_bar_active_color = x.color2
+theme.cpu_bar_background_color = x.color2 .. "33"
 
 -- RAM bar
-theme.ram_bar_active_color = theme.xcolor12
-theme.ram_bar_background_color = theme.xcolor12 .. "33"
-
--- VPN bar
-theme.vpn_bar_active_color = theme.xcolor3
-theme.vpn_bar_background_color = theme.xcolor3 .. "33"
-
--- Disk bar
-theme.disk_bar_active_color = theme.xcolor4
-theme.disk_bar_background_color = theme.xcolor4 .. "33"
+theme.ram_bar_active_color = x.color12
+theme.ram_bar_background_color = x.color12 .. "33"
 
 -- Brightness bar
-theme.brightness_bar_active_color = theme.xcolor14
-theme.brightness_bar_background_color = theme.xcolor14 .. "33"
+theme.brightness_bar_active_color = x.color14
+theme.brightness_bar_background_color = x.color14 .. "33"
 
 -- Generate Awesome icon:
 theme.awesome_icon = theme_assets.awesome_icon(
@@ -432,7 +424,7 @@ theme.awesome_icon = theme_assets.awesome_icon(
 
 -- Define the icon theme for application icons. If not set then the icons
 -- from /usr/share/icons and /usr/share/icons/hicolor will be used.
-theme.icon_theme = "/usr/share/icons/Papirus-Dark"
+theme.icon_theme = "/usr/share/icons/Numix"
 
 return theme
 
