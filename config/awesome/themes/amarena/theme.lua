@@ -384,6 +384,39 @@ theme.awesome_icon = theme_assets.awesome_icon(
 -- from /usr/share/icons and /usr/share/icons/hicolor will be used.
 theme.icon_theme = "/usr/share/icons/Numix"
 
+-- Setting xcolor colors for use with external widgets
+-- Currently used by JavaCafe widgets
+theme.xbackground = x.background
+theme.xforeground = x.foreground
+theme.xcolor0 = x.color0
+theme.xcolor1 = x.color1
+theme.xcolor2 = x.color2
+theme.xcolor3 = x.color3
+theme.xcolor4 = x.color4
+theme.xcolor5 = x.color5
+theme.xcolor6 = x.color6
+theme.xcolor7 = x.color7
+theme.xcolor8 = x.color8
+theme.xcolor9 = x.color9
+theme.xcolor10 = x.color10
+theme.xcolor11 = x.color11
+theme.xcolor12 = x.color12
+theme.xcolor13 = x.color13
+theme.xcolor14 = x.color14
+theme.xcolor15 = x.color15
+-- JavaCafe start panel
+theme.widget_border_width = dpi(1)
+theme.widget_border_color = theme.xcolor0
+theme.font_name           = "Fira Code " -- used by JavaCafe bloat widgets
+theme.icon_font           = "FiraCode Nerd Font Mono 18"
+theme.border_radius       = dpi(12)
+local icon_path = gfs.get_configuration_dir() .. "icons/"
+theme.clear_icon = icon_path .. "notif-center/clear.png"
+theme.clear_grey_icon = icon_path .. "notif-center/clear_grey.png"
+theme.notification_icon = icon_path .. "notif-center/notification.png"
+theme.delete_icon = icon_path .. "notif-center/delete.png"
+theme.delete_grey_icon = icon_path .. "notif-center/delete_grey.png"
+
 return theme
 
 -- vim: filetype=lua:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:textwidth=80

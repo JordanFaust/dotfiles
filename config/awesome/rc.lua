@@ -216,7 +216,7 @@ require("elemental.bar."..bar_theme)
 -- Exit screen
 require("elemental.exit_screen."..exit_screen_theme)
 -- Sidebar
-require("elemental.sidebar."..sidebar_theme)
+-- require("elemental.sidebar."..sidebar_theme)
 -- Dashboard (previously called: Start screen)
 require("elemental.dashboard."..dashboard_theme)
 -- Lock screen
@@ -1238,3 +1238,6 @@ end
 for app, config in pairs(apps) do
     app_run_once(app, config.command)
 end
+
+
+require('bloat.pop')

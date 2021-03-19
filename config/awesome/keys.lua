@@ -537,8 +537,10 @@ keys.globalkeys = gears.table.join(
     awful.key({ superkey }, "F11", function() awful.spawn("networks-rofi") end,
         {description = "spawn network dialog", group = "launcher"}),
     -- Toggle sidebar
-    awful.key({ superkey }, "grave", function() sidebar_toggle() end,
-        {description = "show or hide sidebar", group = "awesome"}),
+    awful.key({ superkey }, "grave", function()
+        awesome.emit_signal("widgets::start::show", mouse.screen)
+    end,
+    {description = "show or hide sidebar", group = "awesome"}),
     -- Toggle wibar(s)
     awful.key({ superkey }, "b", function() wibars_toggle() end,
         {description = "show or hide wibar(s)", group = "awesome"}),

@@ -49,3 +49,7 @@ Options:
 See https://www.reddit.com/r/unixporn/comments/6xdbo6/lightdm_showing_my_login_some_love/
 
 LightDM background is overriden by AccountServices. Edit the /var/lib/AccountService/users/jfaust file to set the login background
+
+## Firefox
+
+Theme from mut-ex found at https://github.com/mut-ex/minimal-functional-fox
