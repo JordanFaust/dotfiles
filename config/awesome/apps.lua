@@ -7,6 +7,9 @@ local helpers = require("helpers")
 local icons = require("icons")
 local notifications = require("notifications")
 
+-- Get user config
+local user = _G.user
+
 local apps = {}
 
 apps.browser = function ()
@@ -125,6 +128,11 @@ end
 -- Scratchpad terminal with tmux (see bin/scratchpad)
 apps.scratchpad = function()
     helpers.scratchpad({instance = "scratchpad"}, "scratchpad", nil)
+end
+
+apps.logs = function()
+    local command = user.terminal .. " --class logs --hold -e sh -c 'tail -n 1000 ~/.cache/awesome/stdout'"
+    helpers.run_or_raise({instance = "logs"}, false, command, { switchtotag = true })
 end
 
 -- Screenshots

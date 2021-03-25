@@ -13,7 +13,7 @@ local box_gap = dpi(8)
 
 local width = dpi(450)
 -- local height = dpi(1000 - 1 + 48)
-local height = dpi(awful.screen.focused().geometry.height - 48)
+local height = dpi(awful.screen.focused().geometry.height - 48 - 90)
 local function create_boxed_widget(widget_to_be_boxed, width, height, bg_color)
     local box_container = wibox.container.background()
     box_container.bg = beautiful.xbackground

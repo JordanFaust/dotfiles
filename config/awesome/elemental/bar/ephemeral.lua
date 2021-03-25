@@ -112,7 +112,7 @@ music:buttons(gears.table.join(
 local sandwich = create_button("", x.color1, x.color8.."30", x.color8.."50")
 sandwich:buttons(gears.table.join(
     awful.button({ }, 1, function ()
-        app_drawer_show()
+        _G.awesome.emit_signal("widgets::start::show")
     end),
     awful.button({ }, 2, apps.scratchpad),
     awful.button({ }, 3, function ()

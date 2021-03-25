@@ -10,6 +10,7 @@ local dpi = beautiful.xresources.apply_dpi
 -- local registry = require("widgets.registry")
 local naughty = require("naughty")
 local helpers = require("helpers")
+local logger = require("logger")
 local lgi = require("lgi")
 local proxy = require("dbus_proxy")
 -- local nordic = {
@@ -47,119 +48,20 @@ local function spotify_client()
     })
 end
 
--- local function properties_changed(...) --luacheck: no unused args
---     local client = spotify_client()
---     local metadata, err = client:Get("org.mpris.MediaPlayer2.Player", "Metadata")
---     if not err == nil then
---         naughty.notification {
---             urgency = "critical",
---             title   = "Spotify Control",
---             message = "failed to get metadata"
---         }
---     end
-
---     if metadata == nil then
---         naughty.notification {
---             urgency = "critical",
---             title   = "Spotify Control",
---             message = "metadata nil"
---         }
---         -- nordic.core.util.debug("failed to get player metadata")
---         return
---     end
-
---     if metadata["mpris:artUrl"] == nil then
---         return
---     end
-
---     -- Linux Spotify currently retunrs a broken link. Extract the image ID and use the appropriate
---     -- CDN link.
---     -- from: https://community.spotify.com/t5/Desktop-Linux/MPRIS-cover-art-url-file-not-found/td-p/4920104
---     local imageId = string.sub(metadata["mpris:artUrl"], 32)
---     local url = "https://i.scdn.co/image/" .. imageId
---     local artist = metadata["xesam:artist"][1]
---     local title = metadata["xesam:title"]
---     local length_in_microoseconds = metadata["mpris:length"]
---     local length = length_in_microoseconds / 1000 / 1000
---     if title and artist and url then
---         update(artist, title, url, length)
---     end
--- end
-
--- -- Leverage DBUS player signals and methods to watch and update now playing details.
--- --
--- -- <p> Leverages the dbus_proxy module for watching signals and calling methods for
--- -- player. The PropertiesChanged signal is monitored for any changes to the player.
--- -- Due to the limitation in specifying specific things to watch aggressive caching must
--- -- be but inplace to limit the number of changes actually performed due to the large number
--- -- of triggered callbacks per change.
--- local function watch_player()
---     local Gio = lgi.Gio
---     local changes = proxy.Proxy:new({
---         bus = proxy.Bus.SESSION,
---         name = "org.mpris.MediaPlayer2.spotify",
---         path = "/org/mpris/MediaPlayer2",
---         interface = "org.freedesktop.DBus.Properties",
---         flags = Gio.DBusSignalFlags.NONE
---     })
-
---     changes:connect_signal(properties_changed, "PropertiesChanged")
--- end
-
--- -- Wait for Player to start before registering proxies to watch for changes.
--- --
--- -- <p> If a proxy is created for a dbus service that doesn't exist, it will crash.
--- -- Due to this limitation we must watch for a NameOwnerChanged event for player.
--- -- When this happens we will connect the signal watch for player changes and react
--- -- to changes as they happen in player. </p>
--- local function watch()
---     local Gio = lgi.Gio
---     local watch_proxy = proxy.Proxy:new({
---         bus = proxy.Bus.SESSION,
---         name = "org.freedesktop.DBus",
---         path = "/org/freedesktop/DBus",
---         interface = "org.freedesktop.DBus",
---         flags = Gio.DBusSignalFlags.NONE
---     })
---     watch_proxy:connect_signal(
---         function(_, changed, _)
---             if changed == "org.mpris.MediaPlayer2.spotify" then
---                 watch_player()
---             end
---         end,
---         "NameOwnerChanged"
---     )
-
---     local services = proxy.Proxy:new({
---         bus = proxy.Bus.SESSION,
---         name = "org.freedesktop.DBus",
---         path = "/org/freedesktop/DBus",
---         interface = "org.freedesktop.DBus",
---     })
---     local connected, _ = services:ListNames()
-
---     -- check to see if player is currently running. If it is start the watches
---     -- on that service.
---     for _, name in pairs(connected) do
---         if name == "org.mpris.MediaPlayer2.spotify" then
-
---             watch_player()
---             properties_changed()
---         end
---     end
--- end
-
-local function create_button(symbol, color, command, playpause)
-    local icon = wibox.widget {
-        markup = helpers.colorize_text(symbol, color),
-        font = "FiraCode Nerd Font Mono 20",
-        align = "center",
-        valigin = "center",
-        widget = wibox.widget.textbox()
-    }
-
+local function create_button(symbol, color, command, id)
+    -- Use a signle wibox.widget { ... } to enable external lookups
+    -- by ID on the internal widgets. Currently widget:get_children_by_id('role')
+    -- does not work across wibox.widget { ... } boundaries.
     local button = wibox.widget {
-        icon,
+        id = id,
+        {
+            id = 'icon_role',
+            markup = helpers.colorize_text(symbol, color),
+            font = "FiraCode Nerd Font Mono 20",
+            align = "center",
+            valigin = "center",
+            widget = wibox.widget.textbox
+        },
         forced_height = dpi(30),
         forced_width = dpi(30),
         widget = wibox.container.background
@@ -169,30 +71,16 @@ local function create_button(symbol, color, command, playpause)
                        awful.button({}, 1, function() command() end)))
 
     button:connect_signal("mouse::enter", function()
+        local icon = button:get_children_by_id('icon_role')[1]
         icon.markup = helpers.colorize_text(icon.text, beautiful.xforeground)
     end)
 
     button:connect_signal("mouse::leave", function()
+        local icon = button:get_children_by_id('icon_role')[1]
         icon.markup = helpers.colorize_text(icon.text, color)
     end)
 
     return button
-end
-
-local function update_album_art(url, f)
-    local command = [[
-        bash -c '
-        url="]]..url..[["
-        mkdir -p /tmp/spotify
-        cover=/tmp/spotify/cover.jpeg
-        touch $cover
-        curl $url --output $cover &> /dev/null
-        convert /tmp/spotify/cover.jpeg /tmp/spotify/cover.png
-        ']]
-
-    awful.spawn.easy_async_with_shell(command, function()
-        f()
-    end)
 end
 
 function player.new(args) --luacheck: no unused args
@@ -255,9 +143,9 @@ function player.new(args) --luacheck: no unused args
       client:Next()
     end
 
-    local playerctl_play_symbol = create_button("", beautiful.xcolor4, play_command, true)
-    local playerctl_prev_symbol = create_button("玲", beautiful.xcolor4, prev_command, false)
-    local playerctl_next_symbol = create_button("怜", beautiful.xcolor4, next_command, false)
+    local playerctl_play_symbol = create_button("", beautiful.xcolor4, play_command, 'playpause')
+    local playerctl_prev_symbol = create_button("玲", beautiful.xcolor4, prev_command, 'previous')
+    local playerctl_next_symbol = create_button("怜", beautiful.xcolor4, next_command, 'next')
 
     local widget = wibox.widget {
         {
@@ -314,15 +202,21 @@ function player.new(args) --luacheck: no unused args
             '<span foreground="' .. beautiful.xcolor5 .. '">' .. track.title .. '</span>')
         artist_widget:set_markup_silently(
             '<span foreground="' .. beautiful.xcolor6 .. '">' .. track.artist .. '</span>')
-        -- textbox.markup = helpers.colorize_text(text, beautiful.snow_storm_3)
-    end)
-
-    _G.awesome.connect_signal("evil::spotifyd::position", function(track)
+        local playpause = playerctl_play_symbol:get_children_by_id('icon_role')[1]
+        if track.playback_status == "Playing" then
+            playpause:set_markup_silently(helpers.colorize_text("", beautiful.xcolor4))
+        else
+            playpause:set_markup_silently(helpers.colorize_text("", beautiful.xcolor4))
+        end
+        logger.info("[spotifyctl] current track is " .. track.playback_status)
+        -- gears.debug.dump(playpause)
+        art:set_image(gears.surface.load_uncached(track.album_art_path))
         slider.value = (track.position / track.length) * 100
     end)
 
-    _G.awesome.connect_signal("evil::spotifyd::album_art", function(track)
-        art:set_image(gears.surface.load_uncached(track.album_art_path))
+    _G.awesome.connect_signal("evil::spotifyd::position", function(track)
+                                logger.debug("[spotifyctl] updating position slider")
+        slider.value = (track.position / track.length) * 100
     end)
 
     return widget
