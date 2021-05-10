@@ -4,19 +4,46 @@
 ######## THEME ########
 #######################
 
-# ZSH_THEME="robbyrussell"
-ZSH_THEME="bullet-train"
-BULLETTRAIN_PROMPT_ADD_NEWLINE=false
-BULLETTRAIN_TIME_BG=red
-BULLETTRAIN_TIME_FG="#172030"
-BULLETTRAIN_STATUS_ERROR_BG=yellow
-BULLETTRAIN_STATUS_FG="#172030"
-BULLETTRAIN_DIR_EXTENDED=0
-BULLETTRAIN_DIR_BG=magenta
-BULLETTRAIN_DIR_FG="#172030"
-BULLETTRAIN_GIT_BG=green
-BULLETTRAIN_GIT_FG="#172030"
 ZSH="$HOME/.oh-my-zsh"
+ZSH_THEME="spaceship"
+SPACESHIP_KUBECTL_SHOW=true
+SPACESHIP_KUBECTL_VERSION_SHOW=false
+SPACESHIP_PROMPT_ORDER=(
+  time          # Time stamps section
+  user          # Username section
+  dir           # Current directory section
+  host          # Hostname section
+  git           # Git section (git_branch + git_status)
+  hg            # Mercurial section (hg_branch  + hg_status)
+  package       # Package version
+  node          # Node.js section
+  ruby          # Ruby section
+  elixir        # Elixir section
+  xcode         # Xcode section
+  swift         # Swift section
+  golang        # Go section
+  php           # PHP section
+  rust          # Rust section
+  haskell       # Haskell Stack section
+  julia         # Julia section
+  docker        # Docker section
+  aws           # Amazon Web Services section
+  gcloud        # Google Cloud Platform section
+  venv          # virtualenv section
+  conda         # conda virtualenv section
+  pyenv         # Pyenv section
+  dotnet        # .NET section
+  ember         # Ember.js section
+  kubectl       # Kubectl context section
+  terraform     # Terraform workspace section
+  exec_time     # Execution time
+  line_sep      # Line break
+  battery       # Battery level and status
+  vi_mode       # Vi-mode indicator
+  jobs          # Background jobs indicator
+  exit_code     # Exit code section
+  char          # Prompt character
+)
 
 #######################
 ####### EXPORTS #######
@@ -69,6 +96,10 @@ export PATH=$PATH:/usr/local/kubebuilder/bin
 # krew
 # export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 
+# export istio
+# export PATH=$PATH:/usr/local/istio-1.6/bin
+export PATH=$PATH:/usr/local/istio-1.9.3/bin
+
 export GOCACHE=$GOPATH/cache
 
 export GITHUB_USER="jfaust"
@@ -94,6 +125,14 @@ export PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
 #######################
 ####### ALIASES #######
 #######################
+
+# Kubernetes Aliases
+alias k=kubectl
+# complete -F __start_kubectl k
+
+# Alias kind kubectl interactions to explicitly isolate local testing
+alias kindk="kubectl --kubeconfig ~/.kube/kind "
+# complete -F __start_kubectl kindk
 
 for opener in browser-exec xdg-open cmd.exe cygstart "start" open; do
     if command -v $opener >/dev/null 2>&1; then
