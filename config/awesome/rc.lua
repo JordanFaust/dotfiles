@@ -76,8 +76,8 @@ local exit_screen_theme = exit_screen_themes[1]
 user = {
     -- >> Default applications <<
     -- Check apps.lua for more
-    terminal = "urxvt",
-    floating_terminal = "urxvt",
+    terminal = "kitty",
+    floating_terminal = "kitty",
     browser = "firefox",
     file_manager = "urxvt",
     editor = "emacs",
@@ -206,7 +206,7 @@ end)
 -- Initialize core infrastructure libraries
 require("logger")
 -- Set logger level to DEBUG
-_G.logger_level = 0
+_G.logger_level = 1
 -- Set logger level to INFO
 -- _G.logger_level = 1
 

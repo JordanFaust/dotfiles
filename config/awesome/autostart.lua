@@ -39,9 +39,9 @@ local apps = {
         name = "twitch",
         command = "firefox --no-remote -P default --class twitch"
     },
-    urxvt = {
+    kitty = {
         name = "Terminal",
-        command = "urxvt -e /usr/bin/zsh"
+        command = "kitty -e /usr/bin/zsh"
     },
     slack = {
         name = "Slack",

@@ -6,16 +6,8 @@ local wibox = require("wibox")
 local beautiful = require("beautiful")
 local dpi = beautiful.xresources.apply_dpi
 -- custom modules
--- local util = require("widgets.util")
--- local registry = require("widgets.registry")
-local naughty = require("naughty")
 local helpers = require("helpers")
-local logger = require("logger")
-local lgi = require("lgi")
 local proxy = require("dbus_proxy")
--- local nordic = {
---     core = require("nordic.core")
--- }
 
 -- @module player
 local player = {
@@ -25,17 +17,6 @@ local player = {
     running = false,
     mt = {}
 }
-
--- Client for communicating with the spotifyd daemon. This provides extended
--- dbus support for linux
-local function spotifyd_client()
-    return proxy.Proxy:new({
-        bus = proxy.Bus.SESSION,
-        name = "org.mpris.MediaPlayer2.spotifyd",
-        path = "/org/mpris/MediaPlayer2",
-        interface = "org.mpris.MediaPlayer2.Player"
-    })
-end
 
 -- Client for the default spotifyd application. This has limited support
 -- and uses the application
@@ -86,144 +67,142 @@ end
 function player.new(args) --luacheck: no unused args
     local art = wibox.widget {
         image = gears.filesystem.get_configuration_dir() .. "images/default.png",
-        resize = true,
-        forced_height = dpi(80),
-        forced_width = dpi(80),
-        clip_shape = helpers.rrect(beautiful.border_radius - 5),
-        widget = wibox.widget.imagebox
-    }
+      resize = true,
+      forced_height = dpi(80),
+      forced_width = dpi(80),
+      clip_shape = helpers.rrect(beautiful.border_radius - 5),
+      widget = wibox.widget.imagebox
+  }
 
-    local title_widget = wibox.widget {
-        markup = 'Nothing Playing',
-        align = 'center',
-        valign = 'center',
-        ellipsize = 'middle',
-        widget = wibox.widget.textbox
-    }
+  local title_widget = wibox.widget {
+      markup = 'Nothing Playing',
+      align = 'center',
+      valign = 'center',
+      ellipsize = 'middle',
+      widget = wibox.widget.textbox
+  }
 
-    local artist_widget = wibox.widget {
-        markup = 'Nothing Playing',
-        align = 'center',
-        valign = 'center',
-        ellipsize = 'middle',
-        wrap = 'word_char',
-        widget = wibox.widget.textbox
-    }
+  local artist_widget = wibox.widget {
+      markup = 'Nothing Playing',
+      align = 'center',
+      valign = 'center',
+      ellipsize = 'middle',
+      wrap = 'word_char',
+      widget = wibox.widget.textbox
+  }
 
-    local slider = wibox.widget {
-        forced_height = dpi(5),
-        bar_shape = helpers.rrect(beautiful.border_radius),
-        shape = helpers.rrect(beautiful.border_radius),
-        background_color = beautiful.xcolor0,
-        color = {
-            type = 'linear',
-            from = {0, 0},
-            to = {200, 50},
-            stops = {{0, beautiful.xcolor0}, {0.75, beautiful.xcolor5}}
-        },
-        value = 25,
-        max_value = 100,
-        widget = wibox.widget.progressbar
-    }
+  local slider = wibox.widget {
+      forced_height = dpi(5),
+      bar_shape = helpers.rrect(beautiful.border_radius),
+      shape = helpers.rrect(beautiful.border_radius),
+      background_color = beautiful.xcolor0,
+      color = {
+          type = 'linear',
+          from = {0, 0},
+          to = {200, 50},
+          stops = {{0, beautiful.xcolor0}, {0.75, beautiful.xcolor5}}
+      },
+      value = 25,
+      max_value = 100,
+      widget = wibox.widget.progressbar
+  }
 
-    local play_command = function()
-      local client = spotify_client()
-      client:PlayPause()
-    end
-    local prev_command = function()
-      local client = spotify_client()
-      -- reset slider on track change
-      slider.value = 0
-      client:Previous()
-    end
-    local next_command = function()
-      local client = spotify_client()
-      -- reset slider on track change
-      slider.value = 0
-      client:Next()
-    end
+  local play_command = function()
+    local client = spotify_client()
+    client:PlayPause()
+  end
+  local prev_command = function()
+    local client = spotify_client()
+    -- reset slider on track change
+    slider.value = 0
+    client:Previous()
+  end
+  local next_command = function()
+    local client = spotify_client()
+    -- reset slider on track change
+    slider.value = 0
+    client:Next()
+  end
 
-    local playerctl_play_symbol = create_button("", beautiful.xcolor4, play_command, 'playpause')
-    local playerctl_prev_symbol = create_button("玲", beautiful.xcolor4, prev_command, 'previous')
-    local playerctl_next_symbol = create_button("怜", beautiful.xcolor4, next_command, 'next')
+  local playerctl_play_symbol = create_button("", beautiful.xcolor4, play_command, 'playpause')
+  local playerctl_prev_symbol = create_button("玲", beautiful.xcolor4, prev_command, 'previous')
+  local playerctl_next_symbol = create_button("怜", beautiful.xcolor4, next_command, 'next')
 
-    local widget = wibox.widget {
-        {
-            art,
-            left = dpi(22),
-            top = dpi(17),
-            bottom = dpi(17),
-            layout = wibox.container.margin
-        },
-        {
-            {
-                {
-                    {
-                        title_widget,
-                        artist_widget,
-                        layout = wibox.layout.fixed.vertical
-                    },
-                    top = 10,
-                    left = 25,
-                    right = 25,
-                    widget = wibox.container.margin
-                },
-                {
-                    nil,
-                    {
-                        playerctl_prev_symbol,
-                        playerctl_play_symbol,
-                        playerctl_next_symbol,
-                        spacing = dpi(40),
-                        layout = wibox.layout.fixed.horizontal
-                    },
-                    nil,
-                    expand = "none",
-                    layout = wibox.layout.align.horizontal
-                },
-                {
-                    slider,
-                    top = dpi(10),
-                    left = dpi(25),
-                    right = dpi(25),
-                    widget = wibox.container.margin
-                },
-                layout = wibox.layout.align.vertical
-            },
-            top = dpi(0),
-            bottom = dpi(10),
-            widget = wibox.container.margin
-        },
-        layout = wibox.layout.align.horizontal
-    }
+  local widget = wibox.widget {
+      {
+          art,
+          left = dpi(22),
+          top = dpi(17),
+          bottom = dpi(17),
+          layout = wibox.container.margin
+      },
+      {
+          {
+              {
+                  {
+                      title_widget,
+                      artist_widget,
+                      layout = wibox.layout.fixed.vertical
+                  },
+                  top = 10,
+                  left = 25,
+                  right = 25,
+                  widget = wibox.container.margin
+              },
+              {
+                  nil,
+                  {
+                      playerctl_prev_symbol,
+                      playerctl_play_symbol,
+                      playerctl_next_symbol,
+                      spacing = dpi(40),
+                      layout = wibox.layout.fixed.horizontal
+                  },
+                  nil,
+                  expand = "none",
+                  layout = wibox.layout.align.horizontal
+              },
+              {
+                  slider,
+                  top = dpi(10),
+                  left = dpi(25),
+                  right = dpi(25),
+                  widget = wibox.container.margin
+              },
+              layout = wibox.layout.align.vertical
+          },
+          top = dpi(0),
+          bottom = dpi(10),
+          widget = wibox.container.margin
+      },
+      layout = wibox.layout.align.horizontal
+  }
 
-    _G.awesome.connect_signal("evil::spotifyd::track", function(track)
-        title_widget:set_markup_silently(
-            '<span foreground="' .. beautiful.xcolor5 .. '">' .. track.title .. '</span>')
-        artist_widget:set_markup_silently(
-            '<span foreground="' .. beautiful.xcolor6 .. '">' .. track.artist .. '</span>')
-        local playpause = playerctl_play_symbol:get_children_by_id('icon_role')[1]
-        if track.playback_status == "Playing" then
-            playpause:set_markup_silently(helpers.colorize_text("", beautiful.xcolor4))
-        else
-            playpause:set_markup_silently(helpers.colorize_text("", beautiful.xcolor4))
-        end
-        logger.info("[spotifyctl] current track is " .. track.playback_status)
-        -- gears.debug.dump(playpause)
-        art:set_image(gears.surface.load_uncached(track.album_art_path))
-        slider.value = (track.position / track.length) * 100
-    end)
+  _G.awesome.connect_signal("evil::spotifyd::track", function(track)
+      -- Update title, artist, and album art
+      title_widget:set_markup_silently(
+          '<span foreground="' .. beautiful.xcolor5 .. '">' .. track.title .. '</span>')
+      artist_widget:set_markup_silently(
+          '<span foreground="' .. beautiful.xcolor6 .. '">' .. track.artist .. '</span>')
+      art:set_image(gears.surface.load_uncached(track.album_art_path))
 
-    _G.awesome.connect_signal("evil::spotifyd::position", function(track)
-                                logger.debug("[spotifyctl] updating position slider")
-        slider.value = (track.position / track.length) * 100
-    end)
+      -- Toggle play/pause button if playback status changed
+      local playpause = playerctl_play_symbol:get_children_by_id('icon_role')[1]
+      if track.playback_status == "Playing" then
+          playpause:set_markup_silently(helpers.colorize_text("", beautiful.xcolor4))
+      else
+          playpause:set_markup_silently(helpers.colorize_text("", beautiful.xcolor4))
+      end
 
-    return widget
+      -- Update slider
+      slider.value = (track.position /track.length) * 100
+  end)
+
+  return widget
 end
 
 function player.mt:__call(...) --luacheck: no unused args
-    return player.new(...)
+  return player.new(...)
 end
 
 return setmetatable(player, player.mt)

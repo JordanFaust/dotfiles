@@ -24,6 +24,8 @@ local SPOTIFY_ASSET_URL_PREFIX = "https://i.scdn.co/image/"
 local spotifyd = {
     -- The current track from spotify
     current_track = nil,
+    -- Table holding a cache of signal watches to prevent duplicate watches
+    watches = {}
 }
 
 -- An object containing details about the currently playing song
@@ -167,15 +169,18 @@ end
 -- Respond to changes in properties for the spotify dbus
 local function properties_changed(...) --luacheck: no unused args
     local function change(...) --luacheck: no unused args
-        local client, interface = ...
+        -- Use the provide client if available. Create a new one for when
+        -- this function was force called to update the widget on AwesomeWM restart.
+        local client, _ = ...
         if not client then
             client = spotify_client()
         end
+
+        -- Get the metadata about the current playing track
         local metadata, err = client:Get("org.mpris.MediaPlayer2.Player", "Metadata")
         if not err == nil then
             logger.warn("[spotifyd] failed to get player metadata")
         end
-
         if metadata == nil then
             logger.warn("[spotifyd] failed to get player metadata")
             return
@@ -190,7 +195,7 @@ local function properties_changed(...) --luacheck: no unused args
         end
 
         -- Only rerender album art on new song
-        local update_album_art = false
+        local new_track = false
 
         -- If the track has not been created or this is a brand new track create it
         if spotifyd.current_track == nil then
@@ -200,10 +205,10 @@ local function properties_changed(...) --luacheck: no unused args
             logger.debug("[spotifyd] creating timer")
             spotifyd.current_track:create_position_timer()
             -- Render album art on next pass
-            update_album_art = true
+            new_track = true
         end
 
-        logger.debug("CHECKING TRACK EQUALITY")
+        -- If the track has changed cleanup the old track and create and store the new one
         if not spotifyd.current_track:same_track(metadata["xesam:title"]) then
             -- Free any timers from the existing track
             logger.debug("[spotifyd] Track changed, destroying old track")
@@ -213,19 +218,26 @@ local function properties_changed(...) --luacheck: no unused args
             -- Start the position tracker timer
             logger.debug("[spotifyd] creating timer")
             spotifyd.current_track:create_position_timer()
-            -- Don't rerender the album art if it hasn't changed
-            update_album_art = true
+            -- Render album art on next pass
+            new_track = true
         end
 
+        -- Get the PlaybackStatus of the current song
         local status, serr = client:Get("org.mpris.MediaPlayer2.Player", "PlaybackStatus")
         if not serr == nil then
             logger.warn("[spotifyd] failed to get PlaybackStatus")
         end
-
         -- Update the playback status
         spotifyd.current_track:update_playback_status(status)
 
-        if update_album_art then
+        -- If we are not processing a new track or a change in PlaybackStatus ignore the
+        -- properties changes.
+        if not new_track and status == spotifyd.current_track._playback_status then
+            logger.debug("[spotifyd] could have skipped update")
+            return
+        end
+
+        if new_track then
             spotifyd.current_track:update_album_art()
         end
 
@@ -244,17 +256,10 @@ end
 -- Due to the limitation in specifying specific things to watch aggressive caching must
 -- be but inplace to limit the number of changes actually performed due to the large number
 -- of triggered callbacks per change.
-local watch_player_registered = false
-local function watch_player(override)
-    if watch_player_registered == false then
-        logger.debug("[spotifyd] player watch not setup, registering watch")
-        watch_player_registered = true
-    end
-
-    --  Don't double register the player dbus watch
-    if watch_player_registered == true and override == false then
-        logger.debug("[spotifyd] attempt to double register player watch")
-        -- return
+local function watch_player()
+    if spotifyd.watches["player"] then
+        logger.debug("[spotifyd] already watching spotify player property changes")
+        return
     end
 
     local changes = proxy.Proxy:new({
@@ -266,6 +271,7 @@ local function watch_player(override)
     })
 
     changes:connect_signal(properties_changed, "PropertiesChanged")
+    spotifyd.watches["player"] = true
 end
 
 -- Wait for Player to start before registering proxies to watch for changes.
@@ -289,7 +295,7 @@ local function watch()
             -- fully features in spotifyd
             if changed == "org.mpris.MediaPlayer2.spotify" then
                 logger.debug("[spotifyd] connect signal changed for spotify dbus name")
-                watch_player(true)
+                watch_player()
             end
         end,
         "NameOwnerChanged"
@@ -307,7 +313,7 @@ local function watch()
     -- on that service.
     for _, name in pairs(connected) do
         if name == "org.mpris.MediaPlayer2.spotify" then
-            watch_player(false)
+            watch_player()
             properties_changed()
         end
     end
