@@ -54,3 +54,6 @@
 (package! centaur-tabs :pin "96b7c90bdc")
 
 (package! enh-ruby-mode)
+
+(package! tree-sitter)
+(package! tree-sitter-langs)

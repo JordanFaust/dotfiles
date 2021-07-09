@@ -200,6 +200,17 @@
 
   (add-to-list 'window-size-change-functions #'neo-window-size-change-function))
 
+;;;
+;;; Tree Sitter Configuration
+;;;
+
+(use-package! tree-sitter
+  :config
+  (require 'tree-sitter-langs)
+  (global-tree-sitter-mode)
+  ;; (pushnew! tree-sitter-major-mode-language-alist '(enh-ruby-mode . ruby))
+  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
+
 (load! "+ruby")
 (load! "+functions")
 (load! "+bindings")
