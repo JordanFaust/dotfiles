@@ -44,6 +44,12 @@ SPACESHIP_PROMPT_ORDER=(
   exit_code     # Exit code section
   char          # Prompt character
 )
+SPACESHIP_VI_MODE_SHOW=true
+SPACESHIP_VI_MODE_PREFIX=""
+SPACESHIP_VI_MODE_SUFFIX="$SPACESHIP_PROMPT_DEFAULT_SUFFIX"
+SPACESHIP_VI_MODE_INSERT="[I]"
+SPACESHIP_VI_MODE_NORMAL="[N]"
+SPACESHIP_VI_MODE_COLOR="green"
 
 #######################
 ####### EXPORTS #######
@@ -146,6 +152,9 @@ for opener in browser-exec xdg-open cmd.exe cygstart "start" open; do
         break;
     fi
 done
+
+# TMUX 256 Colors
+alias tmux=tmux -2
 
 # Code Search
 alias search="grep -iRl "

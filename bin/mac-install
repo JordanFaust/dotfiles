@@ -1,0 +1,143 @@
+#!/bin/bash
+
+# saner programming env: these switches turn some bugs into errors
+set -o errexit -o pipefail -o noclobber -o nounset
+
+DOTFILES_DIRECTORY="${HOME}/.dotfiles"
+
+#######################################
+############### Utility ###############
+#######################################
+
+# header logging
+e_header() {
+    printf "\n$(tput setaf 3)%s$(tput sgr0)\n" "$@"
+}
+
+# success logging
+e_success() {
+    printf "$(tput setaf 2)✓ %s$(tput sgr0)\n" "$@"
+}
+
+# error logging
+e_error() {
+    printf "$(tput setaf 1)x %s$(tput sgr0)\n" "$@"
+}
+
+# warning logging
+e_warning() {
+    printf "$(tput setaf 7)! %s$(tput sgr0)\n" "$@"
+}
+
+# ask for confirmation before proceeding
+seek_confirmation() {
+    e_header "$@"
+    e_success "continue? (y/n)"
+    read  -n 1 -u 3
+    printf "\n"
+}
+
+# test whether the result of an 'ask' is a confirmation
+is_confirmed() {
+    if [[ "$reply" =~ ^[yy]$ ]]; then
+      return 0
+    fi
+    return 1
+}
+
+# test whether we're in a git repo
+is_git_repo() {
+    $(git rev-parse --is-inside-work-tree &> /dev/null)
+}
+
+# test whether a command exists
+# $1 - cmd to test
+type_exists() {
+    if [ $(type -p $1) ]; then
+      return 0
+    fi
+    return 1
+}
+# This is an installer of all the dependencies and my dotfiles
+# Prerequisites to all of the files
+e_header "Installing ohmyzsh"
+/bin/sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+# Homebrew PKGs moved to brewdepen.sh
+
+e_header "Installing Homebrew and it's custom packages"
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+
+#######################################
+############## Functions ##############
+#######################################
+
+dotfiles/link() {
+    # Force create/replace the symlink.
+    # rm "$1"
+    sudo ln -sfn "${1}" "${2}"
+    e_success "created link ${1} -> ${2}"
+}
+
+dotfiles/copy() {
+    # Recursively copy the directory content to the specified directory
+    mkdir -p "/${2}"
+    cp -R "${1}" "${2}"
+    e_success "copied file(s) ${1} -> ${2}"
+}
+
+#Installing Homebrew Dependencies
+e_header "Installing Homebrew Dependencies"
+brew tap homebrew/cask-fonts
+brew cask install font-fira-code-nerd-font
+brew cask install font-jetbrains-mono-nerd-font.rb
+brew cask install ubersicht
+brew install python@3.8
+brew install rbenv
+brew install pip3
+brew install ranger
+brew install neofetch
+brew install neovim
+brew install --cask emacs-mac
+brew install ffsend
+brew install sassc
+brew install khanhas/tap/spicetify-cli
+brew install lazygit
+brew install lazydocker
+brew install koekeishiya/formulae/skhd
+brew install koekeishiya/formulae/yabai
+sudo pip3 install pywal
+brew services start yabai
+brew update
+brew services restart --all
+
+e_header "Downloading dotfiles"
+git clone git@github.com:JordanFaust/dotfiles.git ~/.dotfiles
+
+e_header "Installing simple-bar"
+#Clone bar into default Übersicht location
+git clone git@github.com:Jean-Tinland/simple-bar.git $HOME/Library/Application\ Support/Übersicht/widgets/simple-bar
+
+e_header "Linking Config Files"
+
+mkdir -p "${HOME}/.config"
+
+dotfiles/link "${DOTFILES_DIRECTORY}/tmux.conf" "${HOME}/.tmux.conf"
+dotfiles/link "${DOTFILES_DIRECTORY}/vim/vimrc" "${HOME}/.vimrc"
+dotfiles/link "${DOTFILES_DIRECTORY}/zshrc" "${HOME}/.zshrc"
+dotfiles/link "${DOTFILES_DIRECTORY}/zshenv" "${HOME}/.zshenv"
+dotfiles/link "${DOTFILES_DIRECTORY}/doom.d" "${HOME}/.doom.d"
+dotfiles/link "${DOTFILES_DIRECTORY}/Xresources" "${HOME}/.Xresources"
+dotfiles/link "${DOTFILES_DIRECTORY}/config/yabai" "${HOME}/.config/yabai"
+dotfiles/link "${DOTFILES_DIRECTORY}/config/skhd" "${HOME}/.config/skhd"
+dotfiles/link "${DOTFILES_DIRECTORY}/config/kitty" "${HOME}/.config/kitty"
+dotfiles/link "${DOTFILES_DIRECTORY}/config/alacritty" "${HOME}/.config/alacritty"
+dotfiles/link "${DOTFILES_DIRECTORY}/config/tmuxinator" "${HOME}/.config/tmuxinator"
+
+e_header "Marking Required Files Executable"
+
+chmod +x "${HOME}/.config/yabai"
+chmod +x "${HOME}/.config/skhd"
+
+xrdb ~/.Xresources
+
+brew services restart --all

@@ -1,13 +1,14 @@
 #!/usr/bin/env zsh
 
 INSIDE_EMACS=${INSIDE_EMACS:-false}
+export TERM=screen-256color
 
 #######################
 ###### TERMINAL #######
 #######################
 # If not starting a shell in emacs and not currently in TMUX, create or attach to a TMUX session
 if [[ "$INSIDE_EMACS" = "false" && -z "$TMUX" ]]; then
-    tmux attach -t TMUX || tmuxinator start TMUX -n TMUX -p ~/.dotfiles/config/tmuxinator/session.yaml
+    tmux -2 attach -t TMUX || tmuxinator start TMUX -n TMUX -p ~/.dotfiles/config/tmuxinator/session.yaml
 fi
 
 #######################
@@ -36,6 +37,9 @@ autoload -U compinit && compinit # reload completions for zsh-completions
 ####### ZSH INIT #######
 ########################
 
+# Disable default <<< Normal mode indicator in right prompt
+export RPS1="%{$reset_color%}"
+
 source $ZSH/oh-my-zsh.sh # required
 
 if [ -x "$(command -v rbenv)" ]; then
@@ -61,5 +65,60 @@ if [[ -d "${ZDOTDIR:-$HOME}"/zsh.d ]]; then
     done
 fi
 
+########################
+####### ZSH VIM #######
+########################
+
+# Vim Keybindings for Shell
+bindkey -v
+bindkey 'jk' vi-cmd-mode
+bindkey 'kj' vi-cmd-mode
+
+# Change cursor shape for different vi modes.
+function zle-keymap-select {
+  if [[ ${KEYMAP} == vicmd ]] ||
+      [[ $1 = 'block' ]]; then
+    echo -ne '\e[1 q'
+
+  elif [[ ${KEYMAP} == main ]] ||
+        [[ ${KEYMAP} == viins ]] ||
+        [[ ${KEYMAP} = '' ]] ||
+        [[ $1 = 'beam' ]]; then
+    echo -ne '\e[5 q'
+  fi
+}
+zle -N zle-keymap-select
+
+# Use beam shape cursor on startup.
+echo -ne '\e[5 q'
+
+# Use beam shape cursor for each new prompt.
+preexec() {
+    echo -ne '\e[5 q'
+}
+
+# Allows for changing in quotes
+autoload -U select-quoted
+zle -N select-quoted
+for m in visual viopp; do
+  for c in {a,i}{\',\",\`}; do
+    bindkey -M $m $c select-quoted
+  done
+done
+
+# Allows for changing in brackets
+autoload -U select-bracketed
+zle -N select-bracketed
+for m in visual viopp; do
+  for c in {a,i}${(s..)^:-'()[]{}<>bB'}; do
+    bindkey -M $m $c select-bracketed
+  done
+done
+
+########################
+####### FZF ZSH ########
+########################
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+(cat ~/.cache/wal/sequences &)

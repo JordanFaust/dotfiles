@@ -1,0 +1,56 @@
+TERM: screen-256color
+
+font:
+  size: 20.0
+  normal:
+    family: JetBrains Mono
+    style: Medium
+
+  Bold:
+    family: JetBrains Mono
+    style: Bold
+
+  italic:
+    family: jetbrains-mono Nerd Font
+    style: Italic
+
+window:
+  # Window dimensions (changes require restart)
+  #
+  # Specified in number of columns/lines, not pixels.
+  # If both are `0`, this setting is ignored.
+  dimensions:
+    columns: 0
+    lines: 0
+
+  decorations: none
+
+  dynamic_title: true
+
+  offset:
+    x: 0
+    y: 0
+
+  glyph_offset:
+    x: 0
+    y: 1
+
+  padding:
+    x: 10
+    y: 10
+
+  dynamic_padding: true
+
+startup_mode: windowed
+
+key: return,
+mods: Command,
+action: SpawnNewInstance
+
+cursor:
+  style: Block
+
+use_thin_strokes: true
+
+live_config_reload: true
+
