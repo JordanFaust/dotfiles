@@ -29,7 +29,7 @@
 (load! "themes/doom-lena-theme.el")
 (load! "themes/doom-vilebloom-theme.el")
 (load! "themes/doom-valley-theme.el")
-(setq doom-theme 'doom-valley)
+(setq doom-theme 'doom-vilebloom)
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
