@@ -3,15 +3,15 @@ TERM: screen-256color
 font:
   size: 20.0
   normal:
-    family: JetBrains Mono
+    family: JetBrainsMonoMedium Nerd Font Mono
     style: Medium
 
   Bold:
-    family: JetBrains Mono
+    family: JetBrainsMonoMedium Nerd Font Mono
     style: Bold
 
   italic:
-    family: jetbrains-mono Nerd Font
+    family: JetBrainsMonoMedium Nerd Font Mono
     style: Italic
 
 window:
@@ -54,3 +54,30 @@ use_thin_strokes: true
 
 live_config_reload: true
 
+# BEGIN ACE
+colors:
+  primary:
+    background: '#152733'
+    foreground: '#dfd9d8'
+  cursor:
+    text:       '#24455b'
+    cursor:     '#dfd9d8'
+  normal:
+    black:      '#24455b'
+    red:        '#ff777a'
+    green:      '#d97a9b'
+    yellow:     '#ffba95'
+    blue:       '#4684ae'
+    magenta:    '#325f7d'
+    cyan:       '#c7bcba'
+    white:      '#dfd9d8'
+  bright:
+    black:      '#24455b'
+    red:        '#ff777a'
+    green:      '#d97a9b'
+    yellow:     '#ffba95'
+    blue:       '#4684ae'
+    magenta:    '#325f7d'
+    cyan:       '#c7bcba'
+    white:      '#ded8d7'
+# END ACE

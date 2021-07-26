@@ -11,36 +11,36 @@ cmd - m : /usr/local/opt/python@3.8/libexec/bin/python /Users/jordy/bin/dropdown
 cmd - d : /usr/local/opt/python@3.8/libexec/bin/python /Users/jordy/bin/dropdown Discord && #~/bin/opacity
 
 # vim keybinds (focus tmux and yabai with alt key)
-alt - h [
+cmd - h [
     *           : yabai -m window --focus west
     "Alacritty" : if [ $(tmux display-message -p '#{pane_at_left}') -ne 1 ]; then tmux select-pane -L; else yabai -m window --focus west || true; fi
 ]
 
-alt - j [
+cmd - j [
     *           : yabai -m window --focus south
     "Alacritty" : if [ $(tmux display-message -p '#{pane_at_bottom}') -ne 1 ]; then tmux select-pane -D; else yabai -m window --focus south || true; fi
 ]
 
-alt - k [
+cmd - k [
     *           : yabai -m window --focus north
     "Alacritty" : if [ $(tmux display-message -p '#{pane_at_top}') -ne 1 ]; then tmux select-pane -U; else yabai -m window --focus north || true; fi
 ]
 
-alt - l [
+cmd - l [
     *           : yabai -m window --focus east
     "Alacritty" : if [ $(tmux display-message -p '#{pane_at_right}') -ne 1 ]; then tmux select-pane -R; else yabai -m window --focus east || true; fi
 ]
 
 
-shift + alt - h : yabai -m window --warp west
-shift + alt- j : yabai -m window --warp south
-shift + alt - k : yabai -m window --warp north
-shift + alt - l : yabai -m window --warp east
+shift + cmd - h : yabai -m window --warp west
+shift + cmd - j : yabai -m window --warp south
+shift + cmd - k : yabai -m window --warp north
+shift + cmd - l : yabai -m window --warp east
 
 
 
 # balance size of windows
-shift + alt - 0 : yabai -m space --balance
+shift + cmd - 0 : yabai -m space --balance
 
 # create desktop, move window and follow focus - uses jq for parsing json (brew install jq)
 shift + cmd - n : yabai -m space --create && \
@@ -49,20 +49,20 @@ shift + cmd - n : yabai -m space --create && \
                    yabai -m space --focus "${index}"
 
 # create desktop and follow focus - uses jq for parsing json (brew install jq)
-cmd + alt - n : yabai -m space --create && \
+cmd + ctrl - n : yabai -m space --create && \
                  index="$(yabai -m query --spaces --display | jq 'map(select(."native-fullscreen" == 0))[-1].index')" && \
                  yabai -m space --focus "${index}"
 
 
 # destroy desktop
-cmd + alt - w : yabai -m space --destroy
+cmd + ctrl - w : yabai -m space --destroy
 
 #focus space
-alt - 1 : yabai -m space --focus 1
-alt - 2 : yabai -m space --focus 2
-alt - 3 : yabai -m space --focus 3
-alt - 4 : yabai -m space --focus 4
-alt - 5 : yabai -m space --focus 5
+cmd - 1 : yabai -m space --focus 1
+cmd - 2 : yabai -m space --focus 2
+cmd - 3 : yabai -m space --focus 3
+cmd - 4 : yabai -m space --focus 4
+cmd - 5 : yabai -m space --focus 5
 # cannot focus above 6 as it is the scratchpad space
 # alt - 6 : yabai -m space --focus 6
 # alt - 7 : yabai -m space --focus 7
@@ -71,21 +71,21 @@ alt - 5 : yabai -m space --focus 5
 # alt - 0 : yabai -m space --focus 10
 
 # send window to desktop and follow focus
-shift + cmd - 1 : yabai -m window --space  1; yabai -m space --focus 1
-shift + cmd - 2 : yabai -m window --space  2; yabai -m space --focus 2
-shift + cmd - 3 : yabai -m window --space  3; yabai -m space --focus 3
-shift + cmd - 4 : yabai -m window --space  4; yabai -m space --focus 4
-shift + cmd - 5 : yabai -m window --space  5; yabai -m space --focus 5
+ctrl + cmd - 1 : yabai -m window --space  1; yabai -m space --focus 1
+ctrl + cmd - 2 : yabai -m window --space  2; yabai -m space --focus 2
+ctrl + cmd - 3 : yabai -m window --space  3; yabai -m space --focus 3
+ctrl + cmd - 4 : yabai -m window --space  4; yabai -m space --focus 4
+ctrl + cmd - 5 : yabai -m window --space  5; yabai -m space --focus 5
 
 # focus monitor
-ctrl + alt - 1  : yabai -m display --focus 1
-ctrl + alt - 2  : yabai -m display --focus 2
-ctrl + alt - 3  : yabai -m display --focus 3
+ctrl + shift - 1  : yabai -m display --focus 1
+ctrl + shift - 2  : yabai -m display --focus 2
+ctrl + shift - 3  : yabai -m display --focus 3
 
 # send window to monitor and follow focus
-ctrl + cmd - 1  : yabai -m window --display 1; yabai -m display --focus 1
-ctrl + cmd - 2  : yabai -m window --display 2; yabai -m display --focus 2
-ctrl + cmd - 3  : yabai -m window --display 3; yabai -m display --focus 3
+alt + cmd - 1  : yabai -m window --display 1; yabai -m display --focus 1
+alt + cmd - 2  : yabai -m window --display 2; yabai -m display --focus 2
+alt + cmd - 3  : yabai -m window --display 3; yabai -m display --focus 3
 
 # move window
 shift + ctrl - a : yabai -m window --move rel:-1:0
@@ -109,10 +109,10 @@ shift + cmd - w : yabai -m window --resize top:0:30
 shift + cmd - d : yabai -m window --resize right:-30:0
 
 # set insertion point in focused container
-shift + cmd - h : yabai -m window --insert west
-shift + cmd - j : yabai -m window --insert south
-shift + cmd - k : yabai -m window --insert north
-shift + cmd - l : yabai -m window --insert east
+# shift + cmd - h : yabai -m window --insert west
+# shift + cmd - j : yabai -m window --insert south
+# shift + cmd - k : yabai -m window --insert north
+# shift + cmd - l : yabai -m window --insert east
 
 # rotate tree
 alt - r : yabai -m space --rotate 90

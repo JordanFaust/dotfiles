@@ -33,8 +33,8 @@ determine the exact padding."
   "A dark theme inspired by the Vilebloom Keycap set."
 
   ;; name        default   256       16
-  ((bg         '("#172030" nil       nil            )) ;; modified
-   (bg-alt     '("#172030" nil       nil            ))
+  ((bg         '("#152733" nil       nil            )) ;; modified
+   (bg-alt     '("#152733" nil       nil            ))
    (base0      '("#24455b" "black"   "black"        ))
    (base1      '("#0E131D" "#1e1e1e" "brightblack"  ))
    (base2      '("#151D2B" "#2e2e2e" "brightblack"  ))

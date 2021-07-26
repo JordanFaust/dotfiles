@@ -21,7 +21,7 @@
 ;; font string. You generally only need these two:
 ;; (setq doom-font (font-spec :family "Source Code Pro for Powerline" :size 20 :weight 'semi-bold))
 ;; (setq doom-font (font-spec :family "Iosevka Semibold" :size 20 :weight 'semibold))
-(setq doom-font (font-spec :family "JetBrains Mono" :size 18 :weight 'bold))
+(setq doom-font (font-spec :family "JetBrainsMonoMedium Nerd Font Mono" :size 18 :weight 'bold))
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
