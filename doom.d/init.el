@@ -47,11 +47,13 @@
        (popup            ; tame sudden yet inevitable temporary windows
         +all             ; catch all popups that start with an asterix
         +defaults)       ; default popup rules
+
         ;;+fira)
        tabs              ; an tab bar for Emacs
        ;;treemacs        ; a project drawer, like neotree but cooler
        ;; unicode        ; extended unicode support for various languages
-       vc-gutter         ; vcs diff in the fringe
+       (vc-gutter         ; vcs diff in the fringe
+        +vc-gutter-default-style nil)
        vi-tilde-fringe   ; fringe tildes to mark beyond EOB
        window-select     ; visually switch windows
        workspaces        ; tab emulation, persistence & separate workspaces
@@ -159,7 +161,9 @@
         ;;+jupyter         ; ipython/jupyter support for babel
         ;;+pandoc          ; export-with-pandoc support
         ;;+pomodoro        ; be fruitful with the tomato technique
-        +present)          ; using org-mode for presentations
+        +pretty
+        +present           ; using org-mode for presentations
+        +roam2)
        ;;php               ; perl's insecure younger brother
        ;;plantuml          ; diagrams for confusing people more
        ;;purescript        ; javascript, but functional

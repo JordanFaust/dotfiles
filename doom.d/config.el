@@ -22,6 +22,7 @@
 ;; (setq doom-font (font-spec :family "Source Code Pro for Powerline" :size 20 :weight 'semi-bold))
 ;; (setq doom-font (font-spec :family "Iosevka Semibold" :size 20 :weight 'semibold))
 (setq doom-font (font-spec :family "JetBrainsMonoMedium Nerd Font Mono" :size 18 :weight 'bold))
+(setq doom-big-font (font-spec :family "JetBrainsMonoExtraBold Nerd Font Mono" :size 18 :weight 'bold))
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
@@ -111,7 +112,30 @@
 (after! lsp-mode
   :config
   ;; Limit the width of the completion tooltip to allow room for function documentation
-  (setq company-tooltip-maximum-width 70))
+  (setq company-tooltip-maximum-width 70)
+  ;; Performance tuning for LSP mode until it doesn't cause issues with company/emacs
+  (setq lsp-idle-delay 0.500)
+  (setq lsp-lens-enable nil)
+  (setq lsp-ui-sideline-enable nil)
+  (setq lsp-modeline-code-actions-enable nil)
+  (setq lsp-keep-workspace-alive nil))
+
+
+;;
+;; Git Fringe
+;;
+(after! git-gutter-fringe
+  :config
+  (fringe-mode '12)
+  ;; places the git gutter outside the margins.
+  (setq-default fringes-outside-margins t)
+  ;; thin fringe bitmaps
+  (define-fringe-bitmap 'git-gutter-fr:added [224]
+    nil 12 '(center repeated))
+  (define-fringe-bitmap 'git-gutter-fr:modified [224]
+    nil 12 '(center repeated))
+  (define-fringe-bitmap 'git-gutter-fr:deleted [128 192 224 240]
+    nil 12 'bottom))
 
 ;;
 ;; Project Configuration
@@ -124,7 +148,7 @@
   ;; * ~/.rustup/ - Rust project dependencies (code navigation jumps)
   ;; * ~/.gems/ - Ruby project dependencies (code navigation jumps)
   ;; * ~/.emacs.d/.local
-  (setq projectile-ignored-projects '("/tmp" "~/.rustup/" "~/.gem/" "~/ws/go/pkg/" "~/.emacs.d/.local/"))
+  (setq projectile-ignored-projects '("/tmp" "~/.rustup/" "~/.cargo/registry/" "~/.gem/" "~/ws/go/pkg/" "~/.emacs.d/.local/" "~/notes/roam"))
   (defun projectile-ignored-project-regexp-function (project-root)
     (cl-loop for project in projectile-ignored-projects
              ;; Ignore the home directory
@@ -210,9 +234,53 @@
   :config
   (require 'tree-sitter-langs)
   (global-tree-sitter-mode)
-  ;; (pushnew! tree-sitter-major-mode-language-alist '(enh-ruby-mode . ruby))
+  (setq tree-sitter-hl-use-font-lock-keywords nil)
+  (pushnew! tree-sitter-major-mode-language-alist '(enh-ruby-mode . ruby))
+  (pushnew! tree-sitter-major-mode-language-alist '(terraform-mode . hcl))
+  (pushnew! tree-sitter-major-mode-language-alist '(hcl-mode . hcl))
+  ;; Add terraform specific highlights
+  (tree-sitter-hl-add-patterns 'hcl
+    [
+     ([
+      "in"
+      ] @keyword)
+
+     ;; Resource syntax does not need types to be strings.
+     ;; Mark them as something other then types
+     ;;
+     ;; Mark the first identifier in a block as a type
+     (block \. (identifier) @type)
+     ;; Mark the proceding identifiers in a block definition as keywords
+     (block ((identifier) \. (identifier)\*) @keyword)
+     ;; Mark the first identifier in a one line block as a type
+     (one_line_block \. (identifier) @type)
+     ;; Mark the proceding identifiers in a one line block definition as keywords
+     (one_line_block ((identifier) \. (identifier)\*) @keyword)
+
+     ;; Mark use of var, data, and local as keywords
+     ((identifier) @keyword
+      (.match? @keyword "^(var|data|local)$"))
+
+     ;; Highlight variables in for loops
+     (for_expr (for_intro (identifier) @variable))
+
+     ;; Highlight all other variables
+     (variable_expr (identifier) @variable)
+     ])
   (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
+
+; Turn off font lock keywords inplace of tree sitter
+; TODO: This is needed since font face text properties from font
+; lock are prefixed before the tree-sitter properties. This is overriding
+; the highlighting from tree sitter with font lock properties. Ideally this
+; would be reveresed
+(use-package! enh-ruby-mode
+  :config
+  (setq enh-ruby-font-lock-keywords nil)
+  (setq enh-ruby-font-names nil)
+  (setq ruby-font-lock-keywords nil))
 
 (load! "+ruby")
 (load! "+functions")
 (load! "+bindings")
+(load! "+org")

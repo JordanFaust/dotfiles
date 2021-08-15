@@ -55,5 +55,9 @@
 
 (package! enh-ruby-mode)
 
-(package! tree-sitter)
 (package! tree-sitter-langs)
+(package! tree-sitter)
+
+;; Org and Org Roam Dependencies
+(package! vulpea)
+(package! org-super-agenda)

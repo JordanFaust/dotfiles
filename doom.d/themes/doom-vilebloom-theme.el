@@ -168,6 +168,8 @@ determine the exact padding."
    (neo-root-dir-face :foreground red)
    ;;;; org <built-in>
    (org-hide :foreground hidden)
+   ;;;; org roam
+   (org-roam-title :foreground yellow)
    ;;;; solaire-mode
    (solaire-mode-line-face
     :inherit 'mode-line
