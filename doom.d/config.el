@@ -280,7 +280,9 @@
   (setq enh-ruby-font-names nil)
   (setq ruby-font-lock-keywords nil))
 
-(load! "+ruby")
-(load! "+functions")
-(load! "+bindings")
-(load! "+org")
+(add-to-list 'load-path "~/.doom.d/snippets")
+
+(load! "snippets/+ruby")
+(load! "snippets/+functions")
+(load! "snippets/+bindings")
+(load! "snippets/+org")
