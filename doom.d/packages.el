@@ -61,3 +61,7 @@
 ;; Org and Org Roam Dependencies
 (package! vulpea)
 (package! org-super-agenda)
+(package! org-gcal)
+
+;; Performace improvements
+(package! hl-line+)

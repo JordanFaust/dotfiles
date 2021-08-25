@@ -14,16 +14,21 @@
 ;;; Agenda Specific Changes
 
 ;; Lookup and assign all files that have the todo tag to the org-agenda-files
-(advice-add 'org-agenda :before #'+org-agena-files-update)
-(advice-add 'org-todo-list :before #'+org-agena-files-update)
+(advice-add 'org-agenda :before #'+org-agenda-files-update)
+(advice-add 'org-todo-list :before #'+org-agenda-files-update)
+;; Lookup and assign all files used in the refile workflows
+(advice-add 'org-refile :before #'+org-refile-agenda-files-update)
+(advice-add 'org-agenda-refile :before #'+org-refile-agenda-files-update)
 ;; Update the list of org-refile-targets to those at the appropriate headline
-;; level and with the appropriate tags
 (advice-add 'org-agenda-refile :before #'+org-agenda-refile-targets-update)
 ;; Refresh the agenda after refiling a task
 (advice-add 'org-agenda-refile :after #'+org-my-agenda)
 ;; UI adjustments for Org Agenda buffer
 (add-hook 'org-agenda-finalize-hook #'+org-agenda-finalizer-set-window-clean 100)
+;; Change back the headline settings when moving to a different buffer
 (add-hook 'window-configuration-change-hook #'+org-agenda-finalizer-undo-window-changes)
+;; Reset the clean window when the window changes
+(add-hook 'window-configuration-change-hook #'+org-agenda-finalizer-reset-margins-after-window-change)
 
 ;;; Org Archive workflow adjustments
 
@@ -40,3 +45,4 @@
 
 ;; Capture created at timestamp for captured items
 (add-hook 'org-capture-before-finalize-hook '+org-capture-add-property-with-date-captured)
+

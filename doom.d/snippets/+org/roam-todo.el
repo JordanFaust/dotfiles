@@ -27,7 +27,14 @@
 (defun +org-roam-daily-current-file ()
   "Build the path to the current dialy file."
   (expand-file-name
-   (concat org-roam-dailies-directory "/" (format-time-string "%Y-%m-%d") ".org")))
+   (concat
+    org-roam-dailies-directory
+    "/"
+    (format-time-string "%Y")
+    "/"
+    (format-time-string "%B")
+    "/"
+    (format-time-string "%Y-%m-%d") ".org")))
 
 (defun +org-roam-todo-archive-location ()
   "Build the archive location string for the current daily entry."
@@ -84,8 +91,14 @@ tasks."
                 :on (= tags:node-id nodes:id)
                 :where (like tag $r1)] tag-filter)))))
 
-(defun +org-agena-files-update (&rest _)
-  "Update the value of `org-agenda-files'."
+(defun +org-agenda-files-update (&rest _)
+  "Update the value of `org-agenda-files' used in the Org Agenda views."
+  (setq org-agenda-files
+        (cons "~/notes/roam/todos/schedule.org"
+              (+org-roam-notes-with-tag-key +org-roam-todo-tag-key))))
+
+(defun +org-refile-agenda-files-update (&rest _)
+  "Update the value of `org-agenda-files' used in the org refile workflow."
   (setq org-agenda-files (+org-roam-notes-with-tag-key +org-roam-todo-tag-key)))
 
 (defun +org-agenda-refile-targets-update (&rest _)
@@ -107,26 +120,6 @@ tasks."
                            :templates org-roam-capture-templates)))
     ;; Update the archive location to the daily file for the current day
     (setq org-archive-location (+org-roam-todo-archive-location))))
-
-(defun +org-agenda-finalizer-set-window-clean ()
-  "Make the agenda buffer look better by adjusting faces and disabling modes."
-  ;; Remove the modeline
-  (setq mode-line-format nil)
-  ;; Remove modeline formatting
-  (setq header-line-format " ")
-  ;; Disable highlight line mode to better mask the different line heights
-  (hl-line-mode -1)
-  ;; Increase the height of the modeline
-  (set-face-attribute 'header-line nil :background "#00000000" :height 600)
-  ;; Add side margin padding
-  (set-window-margins (frame-selected-window) 6)
-  ;; Force the cursor back to the top of the window
-  (goto-char (point-min)))
-
-(defun +org-agenda-finalizer-undo-window-changes ()
-  "Reset headline changes when leaving the org agenda buffer"
-  (unless (string-equal (buffer-name) "*Org Agenda*")
-    (set-face-attribute 'header-line nil :height 200)))
 
 (defun +org-roam-buffer-backlink-appearence-update ()
   "Resize the faces within the backlink buffer"

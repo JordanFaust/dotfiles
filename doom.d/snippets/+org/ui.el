@@ -35,6 +35,17 @@
   org-log-reschedule 'time
   org-image-actual-width nil)
 
+(after! org-fancy-priorities
+  (setq org-priority-faces
+        `((65 . ( :foreground ,(doom-color 'light-red) :weight bold ))
+          (66 . ( :foreground ,(doom-color 'yellow) :weight bold ))
+          (67 . ( :foreground ,(doom-color 'blue) :weight bold ))))
+  (setq org-fancy-priorities-list
+        `((?A . ,(propertize (format "%s [ SEVERE ]" (all-the-icons-faicon "exclamation-circle" :v-adjust -0.01))))
+          (?B . ,(propertize (format "%s [ MEDIUM ]" (all-the-icons-faicon "arrow-circle-up" :v-adjust -0.01))))
+          (?C . ,(propertize (format "%s [ NORMAL ]" (all-the-icons-faicon "arrow-circle-down" :v-adjust -0.01))))))
+  )
+
 ;; Define the icons associated with the category of each headline
 ;; a todo was filed to. Use all the icons where available for each
 ;; icon, centering and slightly increasing the size of the icon.
@@ -48,28 +59,22 @@
       ("events" ,(list (all-the-icons-material "event" :height 1.2)) nil nil :ascent center :mask heuristic)
       ("inbox" ,(list (all-the-icons-material "inbox" :height 1.2)) nil nil :ascent center :mask heuristic)
       ("walk" ,(list (all-the-icons-material "directions_walk" :height 1.2)) nil nil :ascent center :mask heuristic)
-      ("community" ,(list (all-the-icons-material "group" :height 1.2)) nil nil :ascent center :mask heuristic)
-      ("idea" ,(list (all-the-icons-material "lightbulb_outline" :height 1.2)) nil nil :ascent center :mask heuristic)
-      ("man" ,(list (all-the-icons-material "accessibility" :height 1.2)) nil nil :ascent center :mask heuristic)
       ("scheduled" ,(list (all-the-icons-material "schedule" :height 1.2)) nil nil :ascent center :mask heuristic)
-      ("class" ,(list (all-the-icons-material "school" :height 1.2)) nil nil :ascent center :mask heuristic)
-      ("plant" ,(list (all-the-icons-faicon "tree" :height 1.2)) nil nil :ascent center :mask heuristic)
-      ("check" ,(list (all-the-icons-material "check" :height 1.2)) nil nil :ascent center :mask heuristic)
-      ("search" ,(list (all-the-icons-material "search" :height 1.2)) nil nil :ascent center :mask heuristic)
       ("home" ,(list (all-the-icons-material "home" :height 1.2)) nil nil :ascent center :mask heuristic)
-      ("buy" ,(list (all-the-icons-material "attach_money" :height 1.2)) nil nil :ascent center :mask heuristic)
-      ))
+      ("buy" ,(list (all-the-icons-material "attach_money" :height 1.2)) nil nil :ascent center :mask heuristic)))
 
 (custom-set-faces!
   ;; Org
-  '((org-level-1) :weight normal :height 1.6 :inherit outline-1)
-  '((org-level-2) :weight normal :height 1.2 :inherit outline-2)
+  `((org-level-1) :weight normal :height 1.6 :inherit outline-1)
+  `((org-level-2) :weight normal :height 1.2 :inherit outline-2)
   ;; Org Agenda
-  '((org-agenda-structure) :weight normal :height 350 :foreground "#ff777a")
-  '((org-agenda-date-today) :foreground "#ffba95")
-  '((org-agenda-date) :foreground "#d97a9b")
-  '((org-time-grid) :foreground "#FAFFF6")
-  '((org-agenda-current-time) :foreground "#ffba95"))
+  `((org-agenda-structure) :weight normal :height 350 :foreground ,(doom-color 'red))
+  `((org-agenda-date-today) :foreground ,(doom-color 'yellow))
+  `((org-agenda-date) :foreground ,(doom-color 'green))
+  `((org-time-grid) :foreground ,(doom-color 'fg))
+  `((org-agenda-current-time) :foreground ,(doom-color 'yellow))
+  ;; Event synced with org-gcal. This is not scheduled
+  `(org-agenda-calendar-event :foreground ,(doom-color 'blue)))
 
 (after! org-superstar
   ;; Every non-TODO headline now have no bullet

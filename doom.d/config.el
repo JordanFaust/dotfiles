@@ -280,6 +280,21 @@
   (setq enh-ruby-font-names nil)
   (setq ruby-font-lock-keywords nil))
 
+;;;
+;;; Performance Tweaks
+;;;
+
+(use-package! hl-line+
+  :load-path "3rd"
+  :config
+  (hl-line-when-idle-interval 0.3)
+  (toggle-hl-line-when-idle 1))
+
+(use-package! display-line-numbers
+  :ensure nil
+  :init
+  (setq display-line-numbers-width-start t))
+
 (add-to-list 'load-path "~/.doom.d/snippets")
 
 (load! "snippets/+ruby")
