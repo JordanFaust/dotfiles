@@ -98,24 +98,30 @@ This function makes sure that dates are aligned for easy reading."
 (defun +org-agenda-finalizer-set-window-clean (&optional changes)
   "Make the agenda buffer look better by adjusting faces and disabling modes."
   ;; Remove the modeline
-  (setq mode-line-format nil)
-  ;; Remove modeline formatting
-  (setq header-line-format " ")
-  ;; Disable highlight line mode to better mask the different line heights
-  (hl-line-mode -1)
-  ;; Disable displaying line numbers
-  (display-line-numbers-mode -1)
-  ;; Increase the height of the modeline
-  (set-face-attribute 'header-line nil :background "#00000000" :height 600)
-  ;; Add side margin padding
-  (set-window-margins (frame-selected-window) 6)
-  ;; Force the cursor back to the top of the window
-  (goto-char (point-min))
-  ;; (when (not (eq changes 'minimal))
-    (message "running full changes")
-    (+org-agenda-scan-finalized-agenda)
-    ;; )
-  )
+  ;; (setq mode-line-format nil)
+  (if (eq changes 'minimal)
+      (progn
+        ;; Remove modeline formatting
+        (setq header-line-format " ")
+        ;; Increase the height of the modeline
+        (set-face-attribute 'header-line nil :background "#00000000" :height 600)
+        ;; Add side margin padding
+        (set-window-margins (frame-selected-window) 6))
+    (progn
+      ;; Remove modeline formatting
+      (setq header-line-format " ")
+      ;; Disable highlight line mode to better mask the different line heights
+      (hl-line-mode -1)
+      ;; Disable displaying line numbers
+      (display-line-numbers-mode -1)
+      ;; Increase the height of the modeline
+      (set-face-attribute 'header-line nil :background "#00000000" :height 600)
+      ;; Add side margin padding
+      (set-window-margins (frame-selected-window) 6)
+      ;; Force the cursor back to the top of the window
+      (goto-char (point-min))
+      ;; Scan and add overlays to the rendered agenda
+      (+org-agenda-scan-finalized-agenda))))
 
 (defun +org-agenda-finalizer-undo-window-changes ()
   "Reset headline changes when leaving the org agenda buffer"
@@ -134,12 +140,12 @@ This function makes sure that dates are aligned for easy reading."
           ;; The whitespace before the breadcrumbs
           "\\(?1:[[:space:]]*\\)"
           ;; The breadcrumbs
-          "\\(?2:[[:word:]]*[[:space:]]*❱[[:space:]]*\\)"
+          "\\(?2:[[:word:]]*[[:space:]]*❱\\)[[:space:]]*"
           ;; The effort for the task
           " \\(?3:\\[[[:digit:]]*\\:[[:digit:]]*\\]\\)?"
-          ;; The TODOs keywords
-          "\\(?4:[[:upper:]]*\\)[[:space:]]"
-          ;; The Priority
+          ;; ;; The TODOs keywords
+          ;; "\\(?4:[[:upper:]]*\\)?[[:space:]]?"
+          ;; ;; The Priority
           "\\(?5:\\[\\#[[:upper:]]*\\]\\)?[[:space:]]?"
           ;; The headline of the task
           "\\(?6:.*\\)")
@@ -153,38 +159,54 @@ This function makes sure that dates are aligned for easy reading."
           :todo (list :text (match-string 6 line) :start (match-beginning 6) :end (match-end 6)))
     )
   )
-;; (+org-agenda-parse-formatted-item "     Today ❱  [8:00]TODO [#A] CPO-809 | Task | Create cluster dashboard for cluster components")
-;; (+org-agenda-parse-formatted-item "    INBOX ❱ TODO Define How to schedule tasks/todos in org")
+;; (+org-agenda-parse-agenda-line-item "     INBOX ❱  Review [[id:ce2d96f7-3529-430c-94cf-aac008e658ef][RFD - Cloud Accounts, User Roles and Procore Environments]]")
 
+(defun +org-agenda-scan-finalized-agenda--todo-overlays (line start end overlays)
+  "Add overlays to the given line containing the todo text of the agenda item."
+  (when (car overlays)
+    ;; If there are existing overlays adjust the start to the end
+    ;; of the existing overlays. This is largely an issue with the
+    ;; org-fancy-priority overlays.
+    (dolist (overlay overlays)
+      (when (< start (overlay-end overlay))
+        (setq start (overlay-end overlay)))))
+  (overlay-put (make-overlay start end nil 't 't) 'face `(:foreground ,(doom-color 'yellow))))
 
 (defun +org-agenda-scan-finalized-agenda ()
   "Scan each line of the finalized agenda and add highlighting to the TODOs lines"
-  (goto-char (point-max))
-  (while (> (point) (point-min))
-    (let* ((line-beginning (line-beginning-position))
-           (line-end (line-end-position))
-           (line (buffer-substring-no-properties line-beginning line-end))
-           (properties (+org-agenda-parse-agenda-line-item line))
-           (breadcrumbs (plist-get properties :breadcrumbs))
-           (effort (plist-get properties :effort))
-           (todo (plist-get properties :todo)))
-      (message "properties %s" properties)
-      (message "breadcrumb properties %s" breadcrumbs)
-      (message "line: %s" line)
-      (when (plist-get breadcrumbs :text)
-        (let* ((start (+ (line-beginning-position (plist-get breadcrumbs :start))))
-               (end (+ start (plist-get breadcrumbs :end)))
-               (overlay (make-overlay start end)))
-          (overlay-put overlay 'face `(:foreground ,(doom-color 'blue)))))
-      (when (plist-get effort :text)
-        (let* ((start (+ (line-beginning-position (plist-get effort :start))))
-               (end (+ start (plist-get effort :end)))
-               (overlay (make-overlay start end)))
-          (overlay-put overlay 'face `(:foreground ,(doom-color 'grey)))))
-      (when (plist-get todo :text)
-        (let* ((start (+ (line-beginning-position (plist-get todo :start))))
-               (end (+ start (plist-get todo :end)))
-               (overlay (make-overlay start end)))
-          (overlay-put overlay 'face `(:foreground ,(doom-color 'yellow)))))
-      (forward-line -1)))
-  )
+  (let ((inhibit-read-only t)
+        (buffer-invisibility-spec '(org-link)))
+    (save-excursion
+      (goto-char (point-max))
+      (while (> (point) (point-min))
+        (let* ((line-beginning (line-beginning-position))
+               (line-end (line-end-position))
+               (line (buffer-substring-no-properties line-beginning line-end))
+               (properties (+org-agenda-parse-agenda-line-item line))
+               (breadcrumbs (plist-get properties :breadcrumbs))
+               (effort (plist-get properties :effort))
+               (todo (plist-get properties :todo)))
+          (when properties
+            ;; Add the todo text overlays first since they appear before the other
+            ;; components
+            (when (plist-get todo :text)
+              (let* ((start (+ line-beginning (plist-get todo :start)))
+                     (end (+ line-beginning (plist-get todo :end)))
+                     (overlays (overlays-at start)))
+                (+org-agenda-scan-finalized-agenda--todo-overlays line start end overlays)))
+            ;; Add the effort text overlays
+            (when (plist-get effort :text)
+              (let* ((start (+ line-beginning (plist-get effort :start)))
+                     (end (+ line-beginning (plist-get effort :end))))
+                (unless (overlays-at start)
+                  (overlay-put (make-overlay start end nil 't 't) 'face `(:foreground ,(doom-color 'grey))))))
+            ;; Add the breadcrumb overlays
+            (when (plist-get breadcrumbs :text)
+              ;; Subtract 3 from the start to capture the icon prefixed before the breadcrumbs
+              (let* ((start (+ line-beginning (plist-get breadcrumbs :start) -3))
+                     (end (+ line-beginning (plist-get breadcrumbs :end))))
+                (unless (overlays-at start)
+                  (overlay-put (make-overlay start end nil 't 't) 'face `(:foreground ,(doom-color 'blue))))
+                ))
+            )
+          (forward-line -1))))))
