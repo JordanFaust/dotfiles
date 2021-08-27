@@ -65,7 +65,9 @@
   :config
   (setq doom-rouge-brighter-tabs t
         doom-rouge-brighter-comments t
-        doom-rouge-padded-modeline t))
+        doom-rouge-padded-modeline t)
+  (doom-themes-visual-bell-config)
+  (doom-themes-org-config))
 
 (after! doom-modeline
   (setq doom-modeline-bar-width 10

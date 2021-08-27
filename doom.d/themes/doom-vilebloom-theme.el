@@ -129,6 +129,14 @@ determine the exact padding."
    (centaur-tabs-active-bar-face :background tabs-bar-bg)
    (centaur-tabs-modified-marker-selected :inherit 'centaur-tabs-selected :foreground tabs-marker)
    (centaur-tabs-modified-marker-unselected :inherit 'centaur-tabs-unselected :foreground tabs-marker)
+
+   ;;;; Which Key
+   (which-key-key-face :foreground red)
+   (which-key-separator-face :foreground green)
+   (which-key-note-face :foreground blue)
+   (which-key-command-discription-face :foreground blue)
+   (which-key-group-description-face :foreground yellow)
+
    ;;;; css-mode <built-in> / scss-mode
    (css-proprietary-property :foreground orange)
    (css-property             :foreground green)
@@ -168,6 +176,7 @@ determine the exact padding."
    (neo-root-dir-face :foreground red)
    ;;;; org <built-in>
    (org-hide :foreground hidden)
+   (org-agenda-clocking :background bg)
    ;;;; org roam
    (org-roam-title :foreground yellow)
    ;;;; solaire-mode

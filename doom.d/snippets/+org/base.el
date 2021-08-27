@@ -13,6 +13,9 @@
 ;;; Config
 ;;;
 
+;; Set idle time for clocked tasks to 15 minutes
+(setq org-clock-idle-time 15)
+;; Define the tag and tag groups
 (setq org-tag-alist
       '((:startgroup . nil)
         ;; Tag work related items

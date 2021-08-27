@@ -95,43 +95,40 @@ This function makes sure that dates are aligned for easy reading."
 ;;; Agenda Display Functions
 ;;;
 
-(defun +org-agenda-finalizer-set-window-clean (&optional changes)
+(defun +org-agenda-finalizer-set-window-clean-h (&optional changes)
   "Make the agenda buffer look better by adjusting faces and disabling modes."
-  ;; Remove the modeline
-  ;; (setq mode-line-format nil)
-  (if (eq changes 'minimal)
-      (progn
-        ;; Remove modeline formatting
-        (setq header-line-format " ")
-        ;; Increase the height of the modeline
-        (set-face-attribute 'header-line nil :background "#00000000" :height 600)
-        ;; Add side margin padding
-        (set-window-margins (frame-selected-window) 6))
-    (progn
-      ;; Remove modeline formatting
-      (setq header-line-format " ")
-      ;; Disable highlight line mode to better mask the different line heights
-      (hl-line-mode -1)
-      ;; Disable displaying line numbers
-      (display-line-numbers-mode -1)
-      ;; Increase the height of the modeline
-      (set-face-attribute 'header-line nil :background "#00000000" :height 600)
-      ;; Add side margin padding
-      (set-window-margins (frame-selected-window) 6)
-      ;; Force the cursor back to the top of the window
-      (goto-char (point-min))
-      ;; Scan and add overlays to the rendered agenda
-      (+org-agenda-scan-finalized-agenda))))
+  ;; Remove the headline formatting
+  (setq header-line-format " ")
+  ;; Remove mode line formatting
+  (setq mode-line-format nil)
+  ;; Increase the height of the modeline
+  (set-face-attribute 'header-line nil :background "#00000000" :height 600)
+  ;; Turn off mouse highlighting
+  (setq mouse-highlight nil)
+  ;; Add side margin padding
+  (set-window-margins (frame-selected-window) 6)
 
-(defun +org-agenda-finalizer-undo-window-changes ()
+  ;; When doing a full clean
+  (when (not (eq changes 'minimal))
+    ;; Disable highlight line mode to better mask the different line heights
+    (hl-line-mode -1)
+    ;; Disable displaying line numbers
+    (display-line-numbers-mode -1)
+    ;; Force the cursor back to the top of the window
+    (goto-char (point-min))
+    ;; Scan and add overlays to the rendered agenda
+    (+org-agenda-scan-finalized-agenda)))
+
+(defun +org-agenda-finalizer-undo-window-changes-h ()
   "Reset headline changes when leaving the org agenda buffer"
   (unless (string-equal (buffer-name) "*Org Agenda*")
-    (set-face-attribute 'header-line nil :height 200)))
+    (set-face-attribute 'header-line nil :height 200)
+    (setq mouse-highlight 't)))
 
-(defun +org-agenda-finalizer-reset-margins-after-window-change ()
+(defun +org-agenda-finalizer-reset-margins-after-window-change-h ()
   "Reset the margins after window configuration has changed for the agenda buffer."
   (when (string-equal (buffer-name) "*Org Agenda*")
-    (+org-agenda-finalizer-set-window-clean 'minimal)))
+    (+org-agenda-finalizer-set-window-clean-h 'minimal)))
 
 (defun +org-agenda-parse-agenda-line-item (line)
   "Attempt to parse and extract start and end locations of todo components."
@@ -161,16 +158,74 @@ This function makes sure that dates are aligned for easy reading."
   )
 ;; (+org-agenda-parse-agenda-line-item "     INBOX ❱  Review [[id:ce2d96f7-3529-430c-94cf-aac008e658ef][RFD - Cloud Accounts, User Roles and Procore Environments]]")
 
-(defun +org-agenda-scan-finalized-agenda--todo-overlays (line start end overlays)
+(defun +org-agenda-create-overlay (start end color)
+  "Create an overlay for the given positions with the provided foreground color"
+  (let ((overlay (make-overlay start end nil 't 't)))
+    (progn
+      (overlay-put overlay 'face `(:foreground ,color))
+      (overlay-put overlay 'category 'custom-agenda-overlay))))
+
+(defun +org-agenda-scan-finalized-agenda--todo-overlays (line line-beginning properties)
   "Add overlays to the given line containing the todo text of the agenda item."
-  (when (car overlays)
-    ;; If there are existing overlays adjust the start to the end
-    ;; of the existing overlays. This is largely an issue with the
-    ;; org-fancy-priority overlays.
-    (dolist (overlay overlays)
-      (when (< start (overlay-end overlay))
-        (setq start (overlay-end overlay)))))
-  (overlay-put (make-overlay start end nil 't 't) 'face `(:foreground ,(doom-color 'yellow))))
+  (let* ((start (+ line-beginning (plist-get properties :start)))
+         (end (+ line-beginning (plist-get properties :end)))
+         (overlays (overlays-at start))
+         (existing-overlay 'f)
+         (color (doom-color 'yellow)))
+    (when (car overlays)
+      (dolist (overlay overlays)
+        ;; If there is an existing overlay and it is not the org-agenda-clocking
+        ;; overlay adjust the start position of our overlay
+        (when (and (< start (overlay-end overlay))
+                   (not (eq (overlay-get overlay 'face) 'org-agenda-clocking)))
+          (setq start (overlay-end overlay)))
+        ;; If the todo overlay exists record it so we don't double generate
+        ;; overlays.
+        (when (eq (overlay-get overlay 'category) 'custom-agenda-overlay)
+          (setq existing-overlay 't))))
+    (when (eq existing-overlay 'f)
+      (+org-agenda-create-overlay start end color))))
+
+(defun +org-agenda-scan-finalized-agenda--effort-overlays (line line-beginning properties)
+  "Add overlays to the given line containing the effort text of the agenda item."
+  (let* ((start (+ line-beginning (plist-get properties :start)))
+         (end (+ line-beginning (plist-get properties :end)))
+         (overlays (overlays-at start))
+         (existing-overlay 'f)
+         (color (doom-color 'grey)))
+    (when (car overlays)
+      (dolist (overlay overlays)
+        ;; If the org-agenda-clocking overlay exists change the color
+        ;; of the text color
+        (when (eq (overlay-get overlay 'face) 'org-agenda-clocking)
+          (setq color (doom-color 'fg)))
+        ;; If the effort overlay exists record it so we don't double generate
+        ;; overlays.
+        (when (eq (overlay-get overlay 'category) 'custom-agenda-overlay)
+          (setq existing-overlay 't))))
+    ;; Create the overlay for the effort text with the given color if
+    ;; it doesn't exist
+    (when (eq existing-overlay 'f)
+      (+org-agenda-create-overlay start end color))))
+
+
+(defun +org-agenda-scan-finalized-agenda--breadcrumb-overlays (line line-beginning properties)
+  "Add overlays to the given line containing the breadcrumbs of the agenda item."
+  ;; Subtract 3 from the start to capture the icon prefixed before the breadcrumbs
+  (let* ((start (+ line-beginning (plist-get properties :start) -3))
+         (end (+ line-beginning (plist-get properties :end)))
+         (overlays (overlays-at start))
+         (existing-overlay 'f)
+         (color (doom-color 'blue)))
+    (when (car overlays)
+      (dolist (overlay overlays)
+        ;; If the effort overlay exists record it so we don't double generate
+        ;; overlays.
+        (when (eq (overlay-get overlay 'category) 'ccustom-agenda-overlay)
+          (setq existing-overlay 't))))
+    ;; Create the overlay for the breadcrumbs if it doesn't exist
+    (when (eq existing-overlay 'f)
+      (+org-agenda-create-overlay start end color))))
 
 (defun +org-agenda-scan-finalized-agenda ()
   "Scan each line of the finalized agenda and add highlighting to the TODOs lines"
@@ -190,23 +245,11 @@ This function makes sure that dates are aligned for easy reading."
             ;; Add the todo text overlays first since they appear before the other
             ;; components
             (when (plist-get todo :text)
-              (let* ((start (+ line-beginning (plist-get todo :start)))
-                     (end (+ line-beginning (plist-get todo :end)))
-                     (overlays (overlays-at start)))
-                (+org-agenda-scan-finalized-agenda--todo-overlays line start end overlays)))
+              (+org-agenda-scan-finalized-agenda--todo-overlays line line-beginning todo))
             ;; Add the effort text overlays
             (when (plist-get effort :text)
-              (let* ((start (+ line-beginning (plist-get effort :start)))
-                     (end (+ line-beginning (plist-get effort :end))))
-                (unless (overlays-at start)
-                  (overlay-put (make-overlay start end nil 't 't) 'face `(:foreground ,(doom-color 'grey))))))
+              (+org-agenda-scan-finalized-agenda--effort-overlays line line-beginning effort))
             ;; Add the breadcrumb overlays
             (when (plist-get breadcrumbs :text)
-              ;; Subtract 3 from the start to capture the icon prefixed before the breadcrumbs
-              (let* ((start (+ line-beginning (plist-get breadcrumbs :start) -3))
-                     (end (+ line-beginning (plist-get breadcrumbs :end))))
-                (unless (overlays-at start)
-                  (overlay-put (make-overlay start end nil 't 't) 'face `(:foreground ,(doom-color 'blue))))
-                ))
-            )
+              (+org-agenda-scan-finalized-agenda--breadcrumb-overlays line line-beginning breadcrumbs)))
           (forward-line -1))))))

@@ -56,7 +56,7 @@ tasks."
      (lambda (h)
        (org-element-property :todo-type h)))))
 
-(defun +org-roam-update-todo-tag ()
+(defun +org-roam-update-todo-tag-h ()
     "Update PROJECT tag in the current buffer."
     (when (and (not (active-minibuffer-window))
                (+org-roam-note-p))
@@ -80,7 +80,6 @@ tasks."
 (defun +org-roam-notes-with-tag-key (filter-key)
     "Return a list of note files containing 'project' tag." ;
     (let ((tag-filter (concat "%\"" filter-key "\"%")))
-      (message "%s" tag-filter)
       (seq-uniq
        (seq-map
         #'car
@@ -91,42 +90,41 @@ tasks."
                 :on (= tags:node-id nodes:id)
                 :where (like tag $r1)] tag-filter)))))
 
-(defun +org-agenda-files-update (&rest _)
+(defun +org-agenda-files-update-a (&rest _)
   "Update the value of `org-agenda-files' used in the Org Agenda views."
   (setq org-agenda-files
         (cons "~/notes/roam/todos/schedule.org"
               (+org-roam-notes-with-tag-key +org-roam-todo-tag-key))))
 
-(defun +org-refile-agenda-files-update (&rest _)
+(defun +org-refile-agenda-files-update-a (&rest _)
   "Update the value of `org-agenda-files' used in the org refile workflow."
   (setq org-agenda-files (+org-roam-notes-with-tag-key +org-roam-todo-tag-key)))
 
-(defun +org-agenda-refile-targets-update (&rest _)
+(defun +org-agenda-refile-targets-update-a (&rest _)
   "Update the targets for a refiling."
   (setq org-refile-targets '(
                              (org-agenda-files :maxlevel . 1)
                              (org-agenda-files :level . 1)
                              (org-agenda-files :tag . "@refile"))))
 
-(defun +org-achive-location-update (&rest _)
+(defun +org-achive-location-update-a (&rest _)
   "Dynamically update the archive target location to the current dailies file."
   (save-current-buffer
     ;; Create the current daily template unless it already exists
     (unless (file-exists-p (+org-roam-daily-current-file))
       (progn
-        (message "The daily file does not exist, creating")
         (org-roam-capture- :keys "xd"
                            :node (org-roam-node-create)
                            :templates org-roam-capture-templates)))
     ;; Update the archive location to the daily file for the current day
     (setq org-archive-location (+org-roam-todo-archive-location))))
 
-(defun +org-roam-buffer-backlink-appearence-update ()
+(defun +org-roam-buffer-backlink-appearence-update-h ()
   "Resize the faces within the backlink buffer"
   (set-face-attribute 'magit-section-heading nil :height 280)
   (set-face-attribute 'org-roam-title nil :height 230))
 
-(defun +org-capture-add-property-with-date-captured ()
+(defun +org-capture-add-property-with-date-captured-h ()
   "Add CREATED property to current item"
   (interactive)
   (org-set-property "CREATED" (format-time-string "%F")))

@@ -9,6 +9,13 @@
 ;;; Config
 ;;;
 
+
+(defvar +org-current-effort "1:00"
+  "Current effort for agenda items.")
+
+(defvar +org-screenshot-width "600"
+  "Desired width of the captured screenshot.")
+
 (defun +org-my-agenda (&rest _)
   "Iteractive command to navigate to My Agenda"
   (interactive "P")
@@ -82,12 +89,17 @@
       (+org-show-properties)
     (+org-hide-properties)))
 
-(defvar +org-current-effort "1:00"
-  "Current effort for agenda items.")
+(defun +org-download-screenshot (width)
+  "Capture a screen shot and specify the desired image width in the capture."
+  (interactive
+   (list (read-string (format "Width [%s]: " +org-screenshot-width) nil nil +org-screenshot-width)))
+  (setq org-image-actual-width (string-to-number width))
+  (funcall-interactively 'org-download-screenshot nil))
 
 (map! :leader :desc "My Agenda"        :nvg "na" '+org-my-agenda)
 (map! :leader :desc "Capture to Inbox" :nvg "ni" '+org-roam-capture-to-inbox)
 (map! :leader :desc "Goto Inbox"       :nvg "nI" '+org-roam-go-to-inbox)
 (map! :localleader (:map org-mode-map :nvg "h" '+org-toggle-properties))
 (map! :localleader (:map org-mode-map :nvg "H" 'org-toggle-heading))
+(map! :localleader (:map org-mode-map :nvg "ac" '+org-download-screenshot))
 (map! :localleader (:map org-agenda-mode-map :nvg "r" '+org-agenda-process-inbox-item))

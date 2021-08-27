@@ -51,7 +51,9 @@
 ;(package! builtin-package :recipe (:branch "develop"))
 
 ;; TODO: manually include/configure centaur until a fix is included
-(package! centaur-tabs :pin "96b7c90bdc")
+;; (package! centaur-tabs :pin "96b7c90bdc")
+(package! centaur-tabs)
+
 
 (package! enh-ruby-mode)
 
