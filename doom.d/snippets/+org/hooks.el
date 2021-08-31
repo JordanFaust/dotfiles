@@ -48,3 +48,8 @@
 
 ;; Capture created at timestamp for captured items
 (add-hook 'org-capture-before-finalize-hook '+org-capture-add-property-with-date-captured-h)
+
+;;;
+;;; Timers
+;;;
+(run-with-timer 0 (* 24 60 60) '+org-roam-archive-dailies)
