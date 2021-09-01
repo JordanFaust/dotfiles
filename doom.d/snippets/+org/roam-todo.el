@@ -39,18 +39,36 @@
 (defconst +org-roam-todo-refile-tag-key "TodoRefile")
 ;; The archive headline used to place todos when archiving them
 (defconst +org-roam-todo-archive-headline "::* Completed")
+;; The keyword used to capture the date the note was created
+(defconst +org-roam-note-created-keyword "CREATED")
+
+(defun +org-roam-format-daily-file (&optional date)
+  "Generate the formatted roam daily file path for the current day or the given date."
+  (let ((timestamp (or date (decode-time))))
+    (concat org-roam-dailies-directory
+            "/"
+            (format-time-string "%Y" (apply #'encode-time timestamp))
+            "/"
+            (format-time-string "%B" (apply #'encode-time timestamp))
+            "/"
+            (format-time-string "%Y-%m-%d" (apply #'encode-time timestamp))
+            ".org")))
+
+(defun +org-roam-daily-date-from-file (file)
+  "Extract the date of the daily form the filename."
+  (when (string-match
+         (concat
+          org-roam-directory
+          "daily"
+          "/[[:digit:]]\\{4\\}"
+          "/[[:word:]]*/"
+          "\\(?1:[[:digit:]]\\{4\\}\-[[:digit:]]\\{2\\}\-[[:digit:]]\\{2\\}\\).org")
+         file)
+    (match-string 1 file)))
 
 (defun +org-roam-daily-current-file ()
   "Build the path to the current dialy file."
-  (expand-file-name
-   (concat
-    org-roam-dailies-directory
-    "/"
-    (format-time-string "%Y")
-    "/"
-    (format-time-string "%B")
-    "/"
-    (format-time-string "%Y-%m-%d") ".org")))
+  (expand-file-name (+org-roam-format-daily-file)))
 
 (defun +org-roam-todo-archive-location ()
   "Build the archive location string for the current daily entry."
@@ -87,9 +105,7 @@ tasks."
   (seq-find                                 ; (3)
    (lambda (type)
      (eq type 'todo))
-   (org-element-map                         ; (2)
-       (org-element-parse-buffer 'headline) ; (1)
-       'headline
+   (org-element-map (org-element-parse-buffer 'headline) 'headline
      (lambda (h)
        (org-element-property :todo-type h)))))
 
@@ -119,20 +135,22 @@ tasks."
     "Update PROJECT tag in the current buffer."
     (when (and (not (active-minibuffer-window))
                (+org-roam-note-p))
+      (message "updating roam note tags %s" (buffer-name))
       (save-excursion
         (goto-char (point-min))
-        (let* ((tags (vulpea-buffer-tags-get))
+        (let* ((tags (seq-uniq (vulpea-buffer-tags-get)))
                (original-tags tags))
           ;; Add the todo tag key if the note has any top level todos
           (message "Evaluating tags on note")
           (if (+org-roam-note-has-todos-p)
-              (setq tags (cons +org-roam-todo-tag-key tags))
+              (setq tags (seq-uniq (cons +org-roam-todo-tag-key tags)))
             (setq tags (remove +org-roam-todo-tag-key tags)))
           ;; Add the completed tag key if the notes has any completed todos
           (if (+org-roam-note-has-completed-todos-p)
-              (setq tags (cons +org-roam-completed-todo-tag-key tags))
+              (setq tags (seq-uniq (cons +org-roam-completed-todo-tag-key tags)))
             (setq tags (remove +org-roam-completed-todo-tag-key tags)))
-          (unless (eq original-tags tags)
+          (unless (cl-equalp original-tags tags)
+            (message "original %s updated %s" original-tags tags)
             (apply #'vulpea-buffer-tags-set (seq-uniq tags)))))))
 
 ;;;
@@ -143,39 +161,63 @@ tasks."
 ;; roam files are used as archives for meetings and completed tasks.
 ;;
 
-(defun +org-clock-report-weekly-files--created-timestamp ()
-  "Return the CREATED at keyword added to the file when it was created."
-  (seq-find
-   (lambda (timestamp)
-     ;; FIX
-     (when timestamp 't))
-   (org-element-map (org-element-parse-buffer 'element) 'keyword
-     (lambda (h)
-       (when (string= (org-element-property :key h) "CREATED")
-         (org-element-property :value h))))))
+(defun +org-clock-report-weekly-files ()
+  "Return the set of files that can be used in a clock report.
 
-(defun +org-clock-report-weekly-files (&rest _)
-  "Return the list of Daily files that were created within the current calendar week."
-  (let ((dailies (+org-roam-notes-with-tag-key +org-roam-daily-note-tag-key))
-        (weekly '()))
+This set includes Daily files that have not been archived and the current
+todo files that have active clocks and tasks."
+  (let* ((dailies (+org-roam-notes-with-tag-key +org-roam-daily-note-tag-key))
+         (weekly (+org-roam-notes-with-tag-key +org-roam-todo-tag-key)))
     (dolist (daily dailies)
-      (with-temp-buffer
-        ;; Prevent hooks from running on the files
-        (insert-file-contents-literally daily)
-        (let* ((timestamp (+org-clock-report-weekly-files--created-timestamp))
-              (now (decode-time))
-              (start-of-week (copy-sequence now))
-              (day-of-week (string-to-number (format-time-string "%w"))))
-          (when timestamp
-            ;; Set the date of start-of-week to the start of the week. This is done by
-            ;; subtracting the current day by the day-of-week representation in format-time-string
-            (cl-decf (nth 3 start-of-week) day-of-week)
-            (let ((start-of-week-timestamp (format-time-string "<%Y-%m-%d>" (apply #'encode-time start-of-week))))
-              (when (or (string< start-of-week-timestamp timestamp)
-                        (string-equal start-of-week-timestamp timestamp))
-                (message "the file %s is for the current week" daily)
-                (setq weekly (cons daily weekly))))))))
+      (let* ((timestamp (+org-roam-daily-date-from-file daily))
+            (now (decode-time))
+            (start-of-week (copy-sequence now))
+            (day-of-week (string-to-number (format-time-string "%w"))))
+        (when timestamp
+          ;; Set the date of start-of-week to the start of the week. This is done by
+          ;; subtracting the current day by the day-of-week representation in format-time-string
+          (cl-decf (nth 3 start-of-week) day-of-week)
+          (let ((start-of-week-timestamp (format-time-string "%Y-%m-%d" (apply #'encode-time start-of-week))))
+            (when (or (string-greaterp timestamp start-of-week-timestamp )
+                      (string-equal start-of-week-timestamp timestamp))
+              (setq weekly (cons daily weekly)))))))
     weekly))
+
+
+(defun +org-clock-report-monthly-files ()
+  "Return the set of files that can be used in a clock report.
+
+This set includes Daily files that have not been archived and the current
+todo files that have active clocks and tasks."
+  (let* ((dailies (+org-roam-notes-with-tag-key +org-roam-daily-note-tag-key))
+         (monthly (+org-roam-notes-with-tag-key +org-roam-todo-tag-key)))
+    (dolist (daily dailies)
+      (let* ((timestamp (+org-roam-daily-date-from-file daily))
+            (now (decode-time))
+            (start-of-month (copy-sequence now))
+            (day-of-month (string-to-number (format-time-string "%e"))))
+        (when timestamp
+          ;; Set the date of start-of-week to the start of the week. This is done by
+          ;; subtracting the current day by the day-of-week representation in format-time-string
+          (cl-decf (nth 3 start-of-month) day-of-month)
+          (let ((start-of-month-timestamp (format-time-string "%Y-%m-%d" (apply #'encode-time start-of-month))))
+            (when (or (string-greaterp timestamp start-of-month-timestamp )
+                      (string-equal start-of-month-timestamp timestamp))
+              (setq monthly (cons daily monthly)))))))
+    monthly))
+
+(defun +org-clock-report-close-file-buffers ()
+  "Close all open buffers opened generating the clock report.
+
+The org clock report function opens a buffer for every file included in the report. This
+closes those buffers if they have not been modified"
+  (let ((dailies (+org-roam-notes-with-tag-key +org-roam-daily-note-tag-key)))
+    (dolist (daily dailies)
+      (let* ((daily-buffer-name (concat (+org-roam-daily-date-from-file daily) ".org"))
+             (daily-buffer (get-buffer daily-buffer-name)))
+        (when daily-buffer
+          (unless (buffer-modified-p daily-buffer)
+            (kill-buffer daily-buffer)))))))
 
 ;;;
 ;;; Add Archive Tag
@@ -203,26 +245,21 @@ as archived.
 
 (run-with-timer 0 (* 24 60 60) '+org-roam-archive-dailies)"
   (let ((dailies (+org-roam-notes-with-tag-key +org-roam-daily-note-tag-key))
-        (archive-date (decode-time))
-        (dailies-to-archive '()))
+        (archive-date (decode-time)))
     ;; Get the target archive date
     (cl-decf (nth 3 archive-date) +org-roam-daily-archive-after)
     (dolist (daily dailies)
-      (when (string-match "\\(?1:[[:digit:]]\\{4\\}\\-[[:digit:]]\\{2\\}\\-[[:digit:]]\\{2\\}\\).org" daily)
-        (let ((archive-date-timstamp (format-time-string "%Y-%m-%d" (apply #'encode-time archive-date)))
-              (timestamp (match-string 1 daily)))
-          (when (string-lessp timestamp archive-date-timstamp)
-            (setq dailies-to-archive (cons daily dailies-to-archive))))))
-    (dolist (daily dailies-to-archive)
       (with-temp-buffer
         ;; Prevent hooks from running on the files
         (insert-file-contents-literally daily)
         (save-excursion
           (goto-char (point-min))
-          (let* ((tags (vulpea-buffer-tags-get)))
-            ;; Remove the Daily tag from the note
-            (setq tags (cons "Archived" (remove "Daily" tags)))
-            (apply #'vulpea-buffer-tags-set (seq-uniq tags))))))))
+          (let ((timestamp (vulpea-buffer-prop-get +org-roam-note-created-keyword))
+                (archive-date-timestamp (format-time-string "%Y-%m-%d" (apply #'encode-time archive-date)))
+                (tags (vulpea-buffer-tags-get)))
+            (when (string-lessp timestamp archive-date-timestamp)
+              (setq tags (cons "Archived" (remove "Daily" tags)))
+              (apply #'vulpea-buffer-tags-set (seq-uniq tags)))))))))
 
 (defun +org-agenda-files-update-a (&rest _)
   "Update the value of `org-agenda-files' used in the Org Agenda views."
@@ -269,4 +306,4 @@ as archived.
   "Add CREATED property to current item"
   (interactive)
   (when (eq (+org-is-todo-capture-p) 't)
-    (org-set-property "CREATED" (format-time-string "%F"))))
+    (org-set-property +org-roam-note-created-keyword (format-time-string "%F"))))

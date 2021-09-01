@@ -27,11 +27,11 @@
 (advice-add 'org-agenda-clock-in :after #'+org-my-agenda)
 (advice-add 'org-agenda-clock-out :after #'+org-my-agenda)
 ;; UI adjustments for Org Agenda buffer
-(add-hook 'org-agenda-finalize-hook #'+org-agenda-finalizer-set-window-clean-h 100)
+(add-hook 'org-agenda-finalize-hook #'+org-set-window-clean-h 100)
 ;; Change back the headline settings when moving to a different buffer
-(add-hook 'window-configuration-change-hook #'+org-agenda-finalizer-undo-window-changes-h)
+(add-hook 'window-configuration-change-hook #'+org-undo-window-changes-h)
 ;; Reset the clean window when the window changes
-(add-hook 'window-configuration-change-hook #'+org-agenda-finalizer-reset-margins-after-window-change-h)
+(add-hook 'window-configuration-change-hook #'+org-reset-margins-after-window-change-h)
 
 ;;; Org Archive workflow adjustments
 
@@ -48,6 +48,16 @@
 
 ;; Capture created at timestamp for captured items
 (add-hook 'org-capture-before-finalize-hook '+org-capture-add-property-with-date-captured-h)
+
+;;;
+;;; Org Clock Advice/Hooks
+;;;
+
+;; UI adjustments for Org Clock buffer
+(advice-add '+org-weekly-clock-report :after #'+org-set-window-clean-h)
+(advice-add '+org-weekly-clock-report :after #'+org-clock-report-close-file-buffers)
+(advice-add '+org-monthly-clock-report :after #'+org-set-window-clean-h)
+(advice-add '+org-monthly-clock-report :after #'+org-clock-report-close-file-buffers)
 
 ;;;
 ;;; Timers

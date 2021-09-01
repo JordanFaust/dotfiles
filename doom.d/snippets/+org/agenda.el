@@ -90,45 +90,9 @@ This function makes sure that dates are aligned for easy reading."
                       (org-agenda-current-time-string "ᐊ┈┈┈┈┈┈┈ Now")
                       (org-agenda-time-grid (quote ((daily today remove-match) (0900 1200 1800 2100) "      " "┈┈┈┈┈┈┈┈┈┈┈┈┈")))))))))
 
-
 ;;;
-;;; Agenda Display Functions
+;;; Org Agenda Overlay UI
 ;;;
-
-(defun +org-agenda-finalizer-set-window-clean-h (&optional changes)
-  "Make the agenda buffer look better by adjusting faces and disabling modes."
-  ;; Remove the headline formatting
-  (setq header-line-format " ")
-  ;; Remove mode line formatting
-  (setq mode-line-format nil)
-  ;; Increase the height of the modeline
-  (set-face-attribute 'header-line nil :background "#00000000" :height 600)
-  ;; Turn off mouse highlighting
-  (setq mouse-highlight nil)
-  ;; Add side margin padding
-  (set-window-margins (frame-selected-window) 6)
-
-  ;; When doing a full clean
-  (when (not (eq changes 'minimal))
-    ;; Disable highlight line mode to better mask the different line heights
-    (hl-line-mode -1)
-    ;; Disable displaying line numbers
-    (display-line-numbers-mode -1)
-    ;; Force the cursor back to the top of the window
-    (goto-char (point-min))
-    ;; Scan and add overlays to the rendered agenda
-    (+org-agenda-scan-finalized-agenda)))
-
-(defun +org-agenda-finalizer-undo-window-changes-h ()
-  "Reset headline changes when leaving the org agenda buffer"
-  (unless (string-equal (buffer-name) "*Org Agenda*")
-    (set-face-attribute 'header-line nil :height 200)
-    (setq mouse-highlight 't)))
-
-(defun +org-agenda-finalizer-reset-margins-after-window-change-h ()
-  "Reset the margins after window configuration has changed for the agenda buffer."
-  (when (string-equal (buffer-name) "*Org Agenda*")
-    (+org-agenda-finalizer-set-window-clean-h 'minimal)))
 
 (defun +org-agenda-parse-agenda-line-item (line)
   "Attempt to parse and extract start and end locations of todo components."
@@ -156,7 +120,6 @@ This function makes sure that dates are aligned for easy reading."
           :todo (list :text (match-string 6 line) :start (match-beginning 6) :end (match-end 6)))
     )
   )
-;; (+org-agenda-parse-agenda-line-item "     INBOX ❱  Review [[id:ce2d96f7-3529-430c-94cf-aac008e658ef][RFD - Cloud Accounts, User Roles and Procore Environments]]")
 
 (defun +org-agenda-create-overlay (start end color)
   "Create an overlay for the given positions with the provided foreground color"

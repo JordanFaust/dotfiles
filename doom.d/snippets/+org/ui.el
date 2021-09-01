@@ -91,3 +91,45 @@
           ("DONE" "✔　")))
 
   (org-superstar-restart))
+
+;;;
+;;; Agenda/Clock Report Display Functions
+;;;
+
+(defun +org-set-window-clean-h (&optional changes)
+  "Make the agenda and clock report buffer look better by adjusting faces and disable modes."
+  ;; Remove the headline formatting
+  (setq header-line-format " ")
+  ;; Remove mode line formatting
+  (setq mode-line-format nil)
+  ;; Increase the height of the modeline
+  (set-face-attribute 'header-line nil :background "#00000000" :height 600)
+  ;; Turn off mouse highlighting
+  (setq mouse-highlight nil)
+  ;; Add side margin padding
+  (set-window-margins (frame-selected-window) 6)
+
+  ;; When doing a full clean
+  (when (not (eq changes 'minimal))
+    ;; Disable highlight line mode to better mask the different line heights
+    (hl-line-mode -1)
+    ;; Disable displaying line numbers
+    (display-line-numbers-mode -1)
+    ;; Force the cursor back to the top of the window
+    (goto-char (point-min))
+    ;; Scan and add overlays to the rendered agenda
+    (when (string-equal (buffer-name) "*Org Agenda*")
+      (+org-agenda-scan-finalized-agenda))))
+
+(defun +org-undo-window-changes-h ()
+  "Reset headline changes when leaving the org agenda or org clock report buffer"
+  (unless (or (string-equal (buffer-name) "*Org Agenda*")
+              (string-equal (buffer-name) "*Org Clock Report*"))
+    (set-face-attribute 'header-line nil :height 200)
+    (setq mouse-highlight 't)))
+
+(defun +org-reset-margins-after-window-change-h ()
+  "Reset the margins after window configuration has changed for the agenda or org clock buffer."
+  (when (or (string-equal (buffer-name) "*Org Agenda*")
+            (string-equal (buffer-name) "*Org Clock Report*"))
+    (+org-set-window-clean-h 'minimal)))
