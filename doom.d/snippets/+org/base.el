@@ -107,8 +107,9 @@
 ;;;
 
 (load "+org/ui.el")
-(load "+org/agenda")
 (load "+org/roam-todo")
+(load "+org/agenda")
+(load "+org/clock")
 (load "+org/gcal")
 (load "+org/keybinds")
 (load "+org/hooks")

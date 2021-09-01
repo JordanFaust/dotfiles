@@ -99,26 +99,12 @@
 (defun +org-weekly-clock-report ()
   "Open the weekly clock report"
   (interactive)
-  (switch-to-buffer (get-buffer-create "*Org Clock Report*"))
-  (org-mode)
-  (let ((inhibit-read-only 't)
-        (weekly-properties '(:scope +org-clock-report-weekly-files :maxlevel 2 :hidefiles 't :stepskip0 't :fileskip0 't)))
-    (erase-buffer)
-    (setq org-clock-clocktable-default-properties weekly-properties)
-    (org-clock-report))
-  (read-only-mode 1))
+  (+org-clockreport-render-ui 'weekly))
 
 (defun +org-monthly-clock-report ()
   "Open the monthly clock report."
   (interactive)
-  (switch-to-buffer (get-buffer-create "*Org Clock Report*"))
-  (org-mode)
-  (let ((inhibit-read-only 't)
-        (monthly-properties '(:scope +org-clock-report-monthly-files :maxlevel 2 :hidefiles 't :stepskip0 't :fileskip0 't)))
-    (erase-buffer)
-    (setq org-clock-clocktable-default-properties monthly-properties)
-    (org-clock-report))
-  (read-only-mode 1))
+  (+org-clockreport-render-ui 'monthly))
 
 (map! :leader :desc "My Agenda"        :nvg "na" '+org-my-agenda)
 (map! :leader :desc "Capture to Inbox" :nvg "ni" '+org-roam-capture-to-inbox)
