@@ -52,7 +52,7 @@
 
 ;; TODO: manually include/configure centaur until a fix is included
 ;; (package! centaur-tabs :pin "96b7c90bdc")
-(package! centaur-tabs)
+;; (package! centaur-tabs)
 
 
 (package! enh-ruby-mode)
@@ -67,3 +67,4 @@
 
 ;; Performace improvements
 (package! hl-line+)
+(package! nano-modeline :recipe '(:type git :host github :repo "rougier/nano-modeline"))

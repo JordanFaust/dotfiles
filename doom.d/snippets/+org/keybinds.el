@@ -60,7 +60,7 @@
   (interactive)
   (org-with-wide-buffer
    (org-agenda-set-tags)
-   (org-agenda-priority)
+   (org-agenda-priority 'set)
    (call-interactively '+org-agenda-set-effort)
    (org-agenda-refile nil nil t)))
 

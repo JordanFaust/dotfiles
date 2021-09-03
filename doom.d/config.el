@@ -21,8 +21,11 @@
 ;; font string. You generally only need these two:
 ;; (setq doom-font (font-spec :family "Source Code Pro for Powerline" :size 20 :weight 'semi-bold))
 ;; (setq doom-font (font-spec :family "Iosevka Semibold" :size 20 :weight 'semibold))
-(setq doom-font (font-spec :family "JetBrainsMonoMedium Nerd Font Mono" :size 18 :weight 'bold))
-(setq doom-big-font (font-spec :family "JetBrainsMonoExtraBold Nerd Font Mono" :size 18 :weight 'bold))
+
+;; (setq doom-font (font-spec :family "JetBrainsMonoMedium Nerd Font Mono" :size 18 :weight 'bold))
+;; (setq doom-big-font (font-spec :family "JetBrainsMonoExtraBold Nerd Font Mono" :size 18 :weight 'bold))
+(setq doom-font (font-spec :family "FiraCode Nerd Font Mono" :size 18 :weight 'medium))
+;; (setq doom-big-font (font-spec :family "JetBrainsMonoExtraBold Nerd Font Mono" :size 18 :weight 'bold))
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
@@ -38,7 +41,7 @@
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
-(setq display-line-numbers-type t)
+(setq display-line-numbers-type nil)
 
 ;; Here are some additional functions/macros that could help you configure Doom:
 ;;
@@ -63,42 +66,42 @@
 
 (after! doom-themes
   :config
-  (setq doom-rouge-brighter-tabs t
-        doom-rouge-brighter-comments t
-        doom-rouge-padded-modeline t)
-  (doom-themes-visual-bell-config)
+  ;; (setq doom-rouge-brighter-tabs t
+  ;;       doom-rouge-brighter-comments t
+  ;;       doom-rouge-padded-modeline t)
+  ;; (doom-themes-visual-bell-config)
   (doom-themes-org-config))
 
-(after! doom-modeline
-  (setq doom-modeline-bar-width 10
-        doom-modeline-height 40
-        doom-modeline-buffer-file-name-style 'relative-to-project)
-  (doom-modeline-def-modeline 'jfaust
-    '(bar matches buffer-info buffer-position word-count selection-info)
-    '(misc-info persp-name grip gnus github debug lsp minor-modes input-method indent-info buffer-encoding major-mode process vcs checker "  "))
-  (defun setup-custom-doom-modeline ()
-    (doom-modeline-set-modeline 'jfaust 'default))
-  (add-hook 'doom-modeline-mode-hook 'setup-custom-doom-modeline))
+;; (after! doom-modeline
+;;   (setq doom-modeline-bar-width 10
+;;         doom-modeline-height 40
+;;         doom-modeline-buffer-file-name-style 'relative-to-project)
+;;   (doom-modeline-def-modeline 'jfaust
+;;     '(bar matches buffer-info buffer-position word-count selection-info)
+;;     '(misc-info persp-name grip gnus github debug lsp minor-modes input-method indent-info buffer-encoding major-mode process vcs checker "  "))
+;;   (defun setup-custom-doom-modeline ()
+;;     (doom-modeline-set-modeline 'jfaust 'default))
+;;   (add-hook 'doom-modeline-mode-hook 'setup-custom-doom-modeline))
 
-(after! centaur-tabs
-  :config
-  (setq centaur-tabs-height 48
-        ;; highlight bar
-        centaur-tabs-set-bar 'under
-        x-underline-at-descent-line t
-        ;; close/modified overrides
-        centaur-tabs-left-edge-margin nil
-        centaur-tabs-set-modified-marker t
-        centaur-tabs-close-button "✕"
-        centaur-tabs-modified-marker "⬤"
-        ;; icon config
-        centaur-tabs-set-icons t
-        centaur-tabs-gray-out-icons 'buffer
-        all-the-icons-color-icons nil
-        centaur-tabs-plain-icons t
-        centaur-tabs-icon-scale-factor 0.8)
-  (centaur-tabs-headline-match)
-  (centaur-tabs-group-by-projectile-project))
+;; (after! centaur-tabs
+;;   :config
+;;   (setq centaur-tabs-height 48
+;;         ;; highlight bar
+;;         centaur-tabs-set-bar 'under
+;;         x-underline-at-descent-line t
+;;         ;; close/modified overrides
+;;         centaur-tabs-left-edge-margin nil
+;;         centaur-tabs-set-modified-marker t
+;;         centaur-tabs-close-button "✕"
+;;         centaur-tabs-modified-marker "⬤"
+;;         ;; icon config
+;;         centaur-tabs-set-icons t
+;;         centaur-tabs-gray-out-icons 'buffer
+;;         all-the-icons-color-icons nil
+;;         centaur-tabs-plain-icons t
+;;         centaur-tabs-icon-scale-factor 0.8)
+;;   (centaur-tabs-headline-match)
+;;   (centaur-tabs-group-by-projectile-project))
 
 ;;
 ;; Theme Customization
@@ -295,10 +298,13 @@
 (use-package! display-line-numbers
   :ensure nil
   :init
-  (setq display-line-numbers-width-start t))
+  (setq display-line-numbers-width-start t)
+  :config
+  (display-line-numbers-mode -1))
 
 (add-to-list 'load-path "~/.doom.d/snippets")
 
+(load! "snippets/+nano-modeline")
 (load! "snippets/+ruby")
 (load! "snippets/+functions")
 (load! "snippets/+bindings")

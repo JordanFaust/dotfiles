@@ -78,70 +78,44 @@ closes those buffers if they have not been modified"
 ;;; Org Clock Report Config
 ;;;
 
-(defun +org-clockreport-weekly-properteis ()
+(defun +org-clockreport-sorter (ipos tables params)
+  (let ((filtered-table '()))
+    (dolist (table tables)
+      (let ((file (nth 0 table))
+            (total-time (nth 1 table))
+            (headlines (nth 2 table)))
+        ;; Filter the first headline "Completed", "Today", etc
+        (setf (nth 2 table) (cdr headlines))
+        (setq filtered-table (cons table filtered-table))))
+    (setq filtered-table (cl-sort filtered-table (lambda (table1 table2) (string> (nth 0 table1) (nth 0 table2)))))
+    (funcall (or org-clock-clocktable-formatter 'org-clocktable-write-default) ipos filtered-table params)))
+
+(defun +org-clockreport-weekly-properties ()
   "Return the properties used to generate a weekly report"
   '(:scope +org-clock-report-weekly-files
     :maxlevel 2
-    :hidefiles 't
     :stepskip0 't
-    :fileskip0 't))
+    :fileskip0 't
+    ;; Table formatting
+    :formatter +org-clockreport-sorter
+    :indent nil
+    :tags 't))
 
-(defun +org-clockreport-monthly-properteis ()
+(defun +org-clockreport-monthly-properties ()
   "Return the properties used to generate a monthly report"
   '(:scope +org-clock-report-monthly-files
     :maxlevel 2
     :hidefiles 't
     :stepskip0 't
-    :fileskip0 't))
+    :fileskip0 't
+    ;; Table Formatting
+    ;; TODO make formatter combine each weeks items into a single column
+    :formatter +org-clockreport-sorter
+    :indent nil))
 
 ;;;
 ;;; Org Clock Report UI
 ;;;
-
-(defun +org-clockreport-render-ui-header (type)
-  "Render the header for the clock report."
-  (goto-char (point-min))
-  (insert "\n")
-  (let* ((header-length (min (window-width) 54))
-         (timestamp (format-time-string "%Y-%m-%d"))
-         (timestamp-length (length timestamp))
-         (icon (all-the-icons-material "date_range" :height 0.75 :v-adjust -0.1))
-         (icon-length (length icon))
-         (whitespace-padding (- header-length timestamp-length icon-length 2))
-         (padding (make-string whitespace-padding ?\s)))
-    (insert " " icon "  " (capitalize (format "%s" type)) padding timestamp " ")
-    ))
-
-(defun +org-clockreport-render-ui-header-overlay (line line-beginning)
-  "Add overlays with the desired text properties to the header."
-  (when (string-match
-         (concat
-          ;; Icon and whitespace right after
-          "\\(?1:[[:space:]][[:word:]][[:space:]]\\)"
-          ;; Whitespace and the type of calendar
-          "\\(?2:[[:space:]][[:word:]]*\\)"
-          ;; The whitespace padding
-          "\\(?3:[[:space:]]*\\)"
-          ;; The timestamp
-          "\\(?4:[[:digit:]]\\{4\\}\-[[:digit:]]\\{2\\}\-[[:digit:]]\\{2\\}[[:space:]]\\)")
-         line)
-    (let ((icon (list :start (+ line-beginning (match-beginning 1)) :end (+ line-beginning (match-end 1))))
-          (type (list :start (+ line-beginning (match-beginning 2)) :end (+ line-beginning (match-end 2))))
-          (padding (list :start (+ line-beginning (match-beginning 3)) :end (+ line-beginning (match-end 3))))
-          (timestamp (list :start (+ line-beginning (match-beginning 4)) :end (+ line-beginning (match-end 4)))))
-      (let ((overlay (make-overlay (plist-get icon :start) (plist-get icon :end))))
-        (overlay-put overlay 'face `(:background ,(doom-color 'red) :foreground ,(doom-color 'bg) :height 1.3))
-        (add-text-properties (plist-get icon :start) (plist-get icon :end) '(display '(raise 0.13))))
-      (let ((overlay (make-overlay (plist-get type :start) (plist-get type :end))))
-        (overlay-put overlay 'face `(:background ,(doom-color 'yellow) :foreground ,(doom-color 'bg) :height 1.3))
-        (add-text-properties (plist-get type :start) (plist-get type :end) '(display '(raise 0.15))))
-      (let ((overlay (make-overlay (plist-get padding :start) (plist-get padding :end))))
-        (overlay-put overlay 'face `(:background ,(doom-color 'yellow) :foreground ,(doom-color 'bg) :height 2.0))
-        (add-text-properties (plist-get padding :start) (plist-get padding :end) '(display '(raise 0.10))))
-      (let ((overlay (make-overlay (plist-get timestamp :start) (plist-get timestamp :end))))
-        (overlay-put overlay 'face `(:background ,(doom-color 'yellow) :foreground ,(doom-color 'bg) :height 1.3))
-        (add-text-properties (plist-get timestamp :start) (plist-get timestamp :end) '(display '(raise 0.15))))
-      )))
 
 (defun +org-clockreport-render-ui-hide-source-block (line line-beginning)
   "Hide the org clockreport definition lines."
@@ -159,7 +133,7 @@ closes those buffers if they have not been modified"
         (let* ((line-beginning (line-beginning-position))
                (line-end (line-end-position))
                (line (buffer-substring-no-properties line-beginning line-end)))
-          (+org-clockreport-render-ui-header-overlay line line-beginning)
+          (+org-overlay-header-render-overlay line line-beginning 2.0 (doom-color 'yellow) (doom-color 'red))
           (+org-clockreport-render-ui-hide-source-block line line-beginning))
         (forward-line -1)))))
 
@@ -173,10 +147,10 @@ TYPE specifies the kind of report to generate and can be 'weekly or 'monthly."
         (properties org-clock-clocktable-default-properties))
     (erase-buffer)
     (when (eq type 'weekly)
-      (setq org-clock-clocktable-default-properties (+org-clockreport-weekly-properteis)))
+      (setq org-clock-clocktable-default-properties (+org-clockreport-weekly-properties)))
     (when (eq type 'monthly)
-      (setq org-clock-clocktable-default-properties (+org-clockreport-monthly-properteis)))
-    (+org-clockreport-render-ui-header type)
+      (setq org-clock-clocktable-default-properties (+org-clockreport-monthly-properties)))
+    (+org-overlay-header-insert type (all-the-icons-material "date_range" :height 0.75 :v-adjust -0.1))
     (org-clock-report)
     (+org-clockreport-render-overlay-ui)
     (setq org-clock-clocktable-default-properties properties))

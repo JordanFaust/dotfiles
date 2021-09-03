@@ -215,4 +215,5 @@ This function makes sure that dates are aligned for easy reading."
             ;; Add the breadcrumb overlays
             (when (plist-get breadcrumbs :text)
               (+org-agenda-scan-finalized-agenda--breadcrumb-overlays line line-beginning breadcrumbs)))
-          (forward-line -1))))))
+          (forward-line -1))))
+    (goto-char (point-min))))

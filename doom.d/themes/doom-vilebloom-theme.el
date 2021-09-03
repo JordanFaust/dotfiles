@@ -112,12 +112,14 @@ determine the exact padding."
    (lazy-highlight :background base4)
    ((line-number &override) :foreground (doom-lighten 'base5 0.2))
    ((line-number-current-line &override) :foreground base7)
-   (mode-line
-    :background modeline-bg :foreground modeline-fg
-    :box (if -modeline-pad `(:line-width ,-modeline-pad :color ,modeline-bg)))
-   (mode-line-inactive
-    :background modeline-bg-inactive :foreground modeline-fg-alt
-    :box (if -modeline-pad `(:line-width ,-modeline-pad :color ,modeline-bg-inactive)))
+   ;; (mode-line
+   ;;  :background modeline-bg :foreground modeline-fg
+   ;;  :box (if -modeline-pad `(:line-width ,-modeline-pad :color ,modeline-bg)))
+   (mode-line :background bg)
+   ;; (mode-line-inactive
+   ;;  :background modeline-bg-inactive :foreground modeline-fg-alt
+   ;;  :box (if -modeline-pad `(:line-width ,-modeline-pad :color ,modeline-bg-inactive)))
+   (mode-line-inactive :background bg)
    (mode-line-emphasis :foreground highlight)
    (tooltip :background base3 :foreground fg-alt)
    (vertical-border :foreground base6)
@@ -129,6 +131,25 @@ determine the exact padding."
    (centaur-tabs-active-bar-face :background tabs-bar-bg)
    (centaur-tabs-modified-marker-selected :inherit 'centaur-tabs-selected :foreground tabs-marker)
    (centaur-tabs-modified-marker-unselected :inherit 'centaur-tabs-unselected :foreground tabs-marker)
+
+   ;;; nano-modeline
+   (nano-modeline-active :foreground fg :background yellow)
+   (nano-modeline-active-name :foreground bg :background yellow :weight 'bold)
+   (nano-modeline-active-primary :foreground bg :background yellow)
+   (nano-modeline-active-secondary :foreground fg :background yellow)
+   (nano-modeline-active-status-RO :foreground bg :background red :weight 'bold)
+   (nano-modeline-active-status-RW :foreground bg :background red :weight 'bold)
+   (nano-modeline-active-status-** :foreground bg :background red :weight 'bold)
+   (nano-modeline-inactive :foreground bg :background fg)
+   (nano-modeline-inactive-name :foreground bg :background fg :weight 'bold)
+   (nano-modeline-inactive-primary :foreground bg :background fg)
+   (nano-modeline-inactive-secondary :foreground fg :background fg)
+   (nano-modeline-inactive-status-RO :foreground bg :background red :weight 'bold)
+   (nano-modeline-inactive-status-RW :foreground bg :background red :weight 'bold)
+   (nano-modeline-inactive-status-** :foreground bg :background red :weight 'bold)
+   (nano-modeline-visual-bell :background red :foreground fg)
+
+   (window-divider :background bg :foreground bg)
 
    ;;;; Which Key
    (which-key-key-face :foreground red)
@@ -156,7 +177,7 @@ determine the exact padding."
    ;;;; highlight-thing
    (highlight-thing :background region :distant-foreground fg-alt)
    ;;;; ivy
-   (ivy-current-match :background base3)
+   (ivy-current-match :background (doom-lighten base3 0.1))
    (ivy-minibuffer-match-face-2 :foreground highlight :weight 'extra-bold)
    ;;;; ivy-posframe
    (ivy-posframe :background bg-alt)
