@@ -20,4 +20,4 @@
       org-gcal-fetch-file-alist '(("jordan.faust@procore.com" . "~/notes/roam/todos/schedule.org"))
       org-gcal-remove-cancelled-events 't)
 
-(run-with-timer 0 (* 4 60 60) '+org-gcal-sync-calendar)
+(run-with-timer 0 (* 1 60 60) '+org-gcal-sync-calendar)
