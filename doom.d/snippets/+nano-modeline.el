@@ -96,14 +96,63 @@
         visible-bell t))
 
 (after! nano-modeline
+
+  ;;;
+  ;;; Nano Modeline Current Focus
+  ;;;
+
+  (defun +nano-modeline--get-current-window (&optional frame)
+    "Get the current window but should exclude the child windows."
+    (if (and (fboundp 'frame-parent) (frame-parent frame))
+        (frame-selected-window (frame-parent frame))
+      (frame-selected-window frame)))
+
+  (defvar +nano-modeline-current-window (+nano-modeline--get-current-window))
+
+  (defun +nano-modeline--active ()
+    "Whether is an active window."
+    (unless (and (bound-and-true-p mini-frame-frame)
+                 (and (frame-live-p mini-frame-frame)
+                      (frame-visible-p mini-frame-frame)))
+      (and +nano-modeline-current-window
+           (eq (+nano-modeline--get-current-window) +nano-modeline-current-window))))
+
+  (defun +nano-modeline-set-selected-window (&rest _)
+    "Set `doom-modeline-current-window' appropriately."
+    (when-let ((win (+nano-modeline--get-current-window)))
+      (unless (or (minibuffer-window-active-p win)
+                  (and (bound-and-true-p lv-wnd) (eq lv-wnd win)))
+        (setq +nano-modeline-current-window win))))
+
+  (defun +nano-modeline-unset-selected-window ()
+    "Unset `doom-modeline-current-window' appropriately."
+    (setq +nano-modeline-current-window nil))
+
+  (add-hook 'after-make-frame-functions #'+nano-modeline-set-selected-window)
+  (add-hook 'buffer-list-update-hook #'+nano-modeline-set-selected-window)
+  (add-hook 'window-configuration-change-hook #'+nano-modeline-set-selected-window)
+  (add-hook 'window-selection-change-functions #'+nano-modeline-set-selected-window)
+  (add-hook 'exwm-workspace-switch-hook #'+nano-modeline-set-selected-window)
+  (with-no-warnings
+    (if (boundp 'after-focus-change-function)
+        (progn
+          (defun +nano-modeline-refresh-frame ()
+            (setq +nano-modeline-current-window nil)
+            (cl-loop for frame in (frame-list)
+                     if (eq (frame-focus-state frame) t)
+                     return (setq +nano-modeline-current-window
+                                  (+nano-modeline--get-current-window frame)))
+            (force-mode-line-update))
+          (add-function :after after-focus-change-function #'+nano-modeline-refresh-frame))
+      (progn
+        (add-hook 'focus-in-hook #'+nano-modeline-set-selected-window)
+        (add-hook 'focus-out-hook #'+nano-modeline-unset-selected-window))))
+
   (defun nano-modeline-compose (status name primary secondary)
     "Compose a string with provided information"
     (let* ((char-width    (window-font-width nil 'header-line))
            (window        (get-buffer-window (current-buffer)))
-           ;; Don't mark the buffer as inactive when using the minibuffer
-           ;; See if there is a better way to handle this
-           (active        (or (window-minibuffer-p nano-modeline--selected-window)
-                              (eq window nano-modeline--selected-window)))
+           (active        (+nano-modeline--active))
            (space-up       +0.3)
            (space-down     -0.25)
            (prefix (cond ((string= status "RO")
