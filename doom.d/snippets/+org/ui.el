@@ -182,7 +182,6 @@ WIDTH is the width of the Org Overlay Header."
     ;; The timestamp
     "\\(?4:[[:digit:]]\\{4\\}\-[[:digit:]]\\{2\\}\-[[:digit:]]\\{2\\}[[:space:]]\\)")
    line))
-(+org-overlay-header-text-p "   Weekly                                               2021-09-01 ")
 
 (defun +org-overlay-header-render-overlay (line line-beginning height primary accent)
   "Add overlays with the desired text properties to the header.

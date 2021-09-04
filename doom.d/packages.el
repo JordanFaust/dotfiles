@@ -50,11 +50,6 @@
 ;; our package manager can't deal with; see raxod502/straight.el#279)
 ;(package! builtin-package :recipe (:branch "develop"))
 
-;; TODO: manually include/configure centaur until a fix is included
-;; (package! centaur-tabs :pin "96b7c90bdc")
-;; (package! centaur-tabs)
-
-
 (package! enh-ruby-mode)
 
 (package! tree-sitter-langs)
@@ -68,3 +63,6 @@
 ;; Performace improvements
 (package! hl-line+)
 (package! nano-modeline :recipe '(:type git :host github :repo "rougier/nano-modeline"))
+(package! anzu :pin "bdb3da5028935a4aea55c40769bc191a81afb54e")
+(when (featurep! :editor evil)
+  (package! evil-anzu :pin "d3f6ed4773b48767bd5f4708c7f083336a8a8a86"))

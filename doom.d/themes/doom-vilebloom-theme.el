@@ -147,7 +147,7 @@ determine the exact padding."
    (nano-modeline-inactive-status-RO :foreground bg :background red :weight 'bold)
    (nano-modeline-inactive-status-RW :foreground bg :background red :weight 'bold)
    (nano-modeline-inactive-status-** :foreground bg :background red :weight 'bold)
-   (nano-modeline-visual-bell :background red :foreground fg)
+   (nano-modeline-visual-bell :background red :foreground bg)
 
    (window-divider :background bg :foreground bg)
 

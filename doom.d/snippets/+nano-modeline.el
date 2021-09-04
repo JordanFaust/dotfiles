@@ -16,7 +16,30 @@
   ;; Add window dividers for keeping floating headline when using virtical splits
   (setq window-divider-default-right-width 32)
   (setq window-divider-default-places 'right-only)
-  (window-divider-mode 1))
+  (window-divider-mode 1)
+
+  ;; Extensions
+  (use-package! anzu
+    :after-call isearch-mode
+    :config
+    ;; We manage our own modeline segments
+    (setq anzu-cons-mode-line-p nil)
+    ;; Ensure anzu state is cleared when searches & iedit are done
+    (add-hook 'iedit-mode-end-hook #'anzu--reset-status)
+    (advice-add #'evil-force-normal-state :before #'anzu--reset-status)
+    ;; Fix matches segment mirroring across all buffers
+    (mapc #'make-variable-buffer-local
+          '(anzu--total-matched
+            anzu--current-position
+            anzu--state
+            anzu--cached-count
+            anzu--cached-positions anzu--last-command
+            anzu--last-isearch-string anzu--overflow-p)))
+
+  (use-package! evil-anzu
+    :when (featurep! :editor evil)
+    :after-call evil-ex-start-search evil-ex-start-word-search evil-ex-search-activate-highlight
+    :config (global-anzu-mode +1)))
 
 (defun hide-nano-modeline-h ()
   "Add hook that extends hide-mode-line-mode to work for nano headerline."
@@ -77,7 +100,10 @@
     "Compose a string with provided information"
     (let* ((char-width    (window-font-width nil 'header-line))
            (window        (get-buffer-window (current-buffer)))
-           (active        (eq window nano-modeline--selected-window))
+           ;; Don't mark the buffer as inactive when using the minibuffer
+           ;; See if there is a better way to handle this
+           (active        (or (window-minibuffer-p nano-modeline--selected-window)
+                              (eq window nano-modeline--selected-window)))
            (space-up       +0.3)
            (space-down     -0.25)
            (prefix (cond ((string= status "RO")
@@ -116,6 +142,7 @@
            (available-width (- (window-total-width)
                                (length prefix) (length left) (length right)
                                (floor (* char-width-multiple char-width))))
+
            (available-width (max 1 available-width)))
       (concat prefix
               left
@@ -127,11 +154,33 @@
 
   ;; Keep the org clock info in the modeline
   (defun nano-modeline-default-mode ()
+    (let* ((buffer-name (format-mode-line "%b"))
+           (mode-name   (nano-mode-name))
+           (branch      (vc-branch))
+           (position (format-mode-line "%l:%c")))
+      (let ((secondary position))
+        (cond ((+nano-modeline-anzu) (setq secondary (+nano-modeline-anzu)))
+              ((+nano-modeline-evil-substitute-p) (setq secondary (+nano-modeline-evil-substitute))))
+        (if (string-match " \\*NeoTree\\*" buffer-name)
+            (nano-modeline-compose (nano-modeline-status) buffer-name "" "")
+          (nano-modeline-compose (nano-modeline-status)
+                                 buffer-name
+                                 (concat "(" mode-name
+                                         (if branch (concat ", "
+                                                            (propertize branch 'face 'italic)))
+                                         ")" )
+                                 secondary)))))
+
+  (defun nano-modeline-org-clock-mode ()
     (let ((buffer-name (format-mode-line "%b"))
           (mode-name   (nano-mode-name))
-          (branch      (vc-branch)))
-      (if (string-match " \\*NeoTree\\*" buffer-name)
-          (nano-modeline-compose (nano-modeline-status) buffer-name "" "")
+          (branch      (vc-branch))
+          (position    (format-mode-line "%l:%c"))
+          )
+      ;; Use the term mode even when clocked in
+      ;; TODO fix the check for
+      (if (nano-modeline-vterm-mode-p)
+          (nano-modeline-term-mode)
         (nano-modeline-compose (nano-modeline-status)
                                buffer-name
                                (concat "(" mode-name
@@ -139,6 +188,44 @@
                                                           (propertize branch 'face 'italic)))
                                        ")" )
                                org-mode-line-string))))
+
+  (defun +nano-modeline-evil-substitute-p ()
+    "Return non-nil when an evil substitution is performed"
+    (when (and (bound-and-true-p evil-local-mode)
+               (or (assq 'evil-ex-substitute evil-ex-active-highlights-alist)
+                   (assq 'evil-ex-global-match evil-ex-active-highlights-alist)
+                   (assq 'evil-ex-buffer-match evil-ex-active-highlights-alist)))
+      't))
+
+  (defun +nano-modeline-evil-substitute ()
+    "Show number of matches for evil-ex substitutions and highlights in real time."
+    (when (+nano-modeline-evil-substitute-p)
+      (propertize
+       (let ((range (if evil-ex-range
+                        (cons (car evil-ex-range) (cadr evil-ex-range))
+                      (cons (line-beginning-position) (line-end-position))))
+             (pattern (car-safe (evil-delimited-arguments evil-ex-argument 2))))
+         (if pattern
+             (format " %s matches " (how-many pattern (car range) (cdr range)))
+           " - ")))))
+
+  (defun +nano-modeline-anzu ()
+    "Show the match index and total number thereof.
+  Requires `anzu', also `evil-anzu' if using `evil-mode' for compatibility with
+  `evil-search'."
+    (when (and (bound-and-true-p anzu--state)
+               (not (bound-and-true-p iedit-mode)))
+      (propertize
+       (let ((here anzu--current-position)
+             (total anzu--total-matched))
+         (cond ((eq anzu--state 'replace-query)
+                (format " %d replace " anzu--cached-count))
+               ((eq anzu--state 'replace)
+                (format " %d/%d " here total))
+               (anzu--overflow-p
+                (format " %s+ " total))
+               (t
+                (format " %s/%d " here total)))))))
 
   ;; (add-hook 'neotree-mode-hook #'hide-nano-modeline-h)
   (+nano-modeline-visual-bell-config))
