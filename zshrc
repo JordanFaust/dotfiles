@@ -27,11 +27,61 @@ plugins=(
   tmuxinator
   # zsh-autosuggestions # Suggests commands based on your history
   # zsh-completions # More completions
-  zsh-syntax-highlighting # Fish shell like syntax highlighting for Zsh
-  zsh-history-substring-search
+  # zsh-syntax-highlighting # Fish shell like syntax highlighting for Zsh
+  # zsh-history-substring-search
   colored-man-pages # Self-explanatory
   )
 autoload -U compinit && compinit # reload completions for zsh-completions
+
+#######################
+######## THEME ########
+#######################
+
+ZSH_THEME="spaceship"
+SPACESHIP_KUBECTL_SHOW=true
+SPACESHIP_KUBECTL_VERSION_SHOW=false
+SPACESHIP_PROMPT_ORDER=(
+  time          # Time stamps section
+  user          # Username section
+  dir           # Current directory section
+  host          # Hostname section
+  git           # Git section (git_branch + git_status)
+  hg            # Mercurial section (hg_branch  + hg_status)
+  package       # Package version
+  node          # Node.js section
+  ruby          # Ruby section
+  elixir        # Elixir section
+  xcode         # Xcode section
+  swift         # Swift section
+  golang        # Go section
+  php           # PHP section
+  rust          # Rust section
+  haskell       # Haskell Stack section
+  julia         # Julia section
+  docker        # Docker section
+  aws           # Amazon Web Services section
+  gcloud        # Google Cloud Platform section
+  venv          # virtualenv section
+  conda         # conda virtualenv section
+  pyenv         # Pyenv section
+  dotnet        # .NET section
+  ember         # Ember.js section
+  kubectl       # Kubectl context section
+  terraform     # Terraform workspace section
+  exec_time     # Execution time
+  line_sep      # Line break
+  battery       # Battery level and status
+  vi_mode       # Vi-mode indicator
+  jobs          # Background jobs indicator
+  exit_code     # Exit code section
+  char          # Prompt character
+)
+SPACESHIP_VI_MODE_SHOW=true
+SPACESHIP_VI_MODE_PREFIX=""
+SPACESHIP_VI_MODE_SUFFIX="$SPACESHIP_PROMPT_DEFAULT_SUFFIX"
+SPACESHIP_VI_MODE_INSERT="[I]"
+SPACESHIP_VI_MODE_NORMAL="[N]"
+SPACESHIP_VI_MODE_COLOR="green"
 
 ########################
 ####### ZSH INIT #######
@@ -40,6 +90,7 @@ autoload -U compinit && compinit # reload completions for zsh-completions
 # Disable default <<< Normal mode indicator in right prompt
 export RPS1="%{$reset_color%}"
 
+export ZSH="$HOME/.oh-my-zsh"
 source $ZSH/oh-my-zsh.sh # required
 
 if [ -x "$(command -v rbenv)" ]; then
@@ -114,6 +165,38 @@ for m in visual viopp; do
     bindkey -M $m $c select-bracketed
   done
 done
+
+export PATH="/usr/local/sbin:$PATH"
+export PATH="${HOME}/.rbenv/bin:${PATH}"
+eval "$(rbenv init -)"
+
+# NVM
+export NVM_DIR="$HOME/.nvm"
+[ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
+[ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && . "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+
+########################
+######## VTERM #########
+########################
+
+vterm_printf(){
+    if [ -n "$TMUX" ] && ([ "${TERM%%-*}" = "tmux" ] || [ "${TERM%%-*}" = "screen" ] ); then
+        # Tell tmux to pass the escape sequences through
+        printf "\ePtmux;\e\e]%s\007\e\\" "$1"
+    elif [ "${TERM%%-*}" = "screen" ]; then
+        # GNU screen (screen, screen-256color, screen-256color-bce)
+        printf "\eP\e]%s\007\e\\" "$1"
+    else
+        printf "\e]%s\e\\" "$1"
+    fi
+}
+
+if [[ "$INSIDE_EMACS" = "vterm" ]]; then
+    autoload -U promptinit; promptinit
+    prompt spaceship
+    echo "autoloading spaceshipt"
+    alias clear='vterm_printf "51;Evterm-clear-scrollback";tput clear'
+fi
 
 ########################
 ####### FZF ZSH ########

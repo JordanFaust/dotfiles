@@ -1,57 +1,6 @@
 #!/usr/bin/env zsh
 
 #######################
-######## THEME ########
-#######################
-
-ZSH="$HOME/.oh-my-zsh"
-ZSH_THEME="spaceship"
-SPACESHIP_KUBECTL_SHOW=true
-SPACESHIP_KUBECTL_VERSION_SHOW=false
-SPACESHIP_PROMPT_ORDER=(
-  time          # Time stamps section
-  user          # Username section
-  dir           # Current directory section
-  host          # Hostname section
-  git           # Git section (git_branch + git_status)
-  hg            # Mercurial section (hg_branch  + hg_status)
-  package       # Package version
-  node          # Node.js section
-  ruby          # Ruby section
-  elixir        # Elixir section
-  xcode         # Xcode section
-  swift         # Swift section
-  golang        # Go section
-  php           # PHP section
-  rust          # Rust section
-  haskell       # Haskell Stack section
-  julia         # Julia section
-  docker        # Docker section
-  aws           # Amazon Web Services section
-  gcloud        # Google Cloud Platform section
-  venv          # virtualenv section
-  conda         # conda virtualenv section
-  pyenv         # Pyenv section
-  dotnet        # .NET section
-  ember         # Ember.js section
-  kubectl       # Kubectl context section
-  terraform     # Terraform workspace section
-  exec_time     # Execution time
-  line_sep      # Line break
-  battery       # Battery level and status
-  vi_mode       # Vi-mode indicator
-  jobs          # Background jobs indicator
-  exit_code     # Exit code section
-  char          # Prompt character
-)
-SPACESHIP_VI_MODE_SHOW=true
-SPACESHIP_VI_MODE_PREFIX=""
-SPACESHIP_VI_MODE_SUFFIX="$SPACESHIP_PROMPT_DEFAULT_SUFFIX"
-SPACESHIP_VI_MODE_INSERT="[I]"
-SPACESHIP_VI_MODE_NORMAL="[N]"
-SPACESHIP_VI_MODE_COLOR="green"
-
-#######################
 ####### EXPORTS #######
 #######################
 
@@ -75,6 +24,7 @@ if [ -x "$(command -v python)" ]; then
         export PATH="${PATH}:${USER_BASE_PATH}/bin"
     fi
 fi
+
 
 # Ruby
 if [[ ":${PATH}:" != *"${HOME}/.rbenv/bin:${PATH}" ]]; then
@@ -134,7 +84,6 @@ export PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
 
 # Kubernetes Aliases
 alias k=kubectl
-# complete -F __start_kubectl k
 
 # Alias kind kubectl interactions to explicitly isolate local testing
 alias kindk="kubectl --kubeconfig ~/.kube/kind "
@@ -158,10 +107,6 @@ alias tmux=tmux -2
 
 # Code Search
 alias search="grep -iRl "
-
-# Linux specific aliases
-alias pbcopy='xclip -selection clipboard'
-alias pbpaste='xclip -selection clipboard -o'
 
 # Easier navigation: .., ..., ...., ....., ~ and -
 alias ..="cd .."
@@ -235,7 +180,7 @@ command -v md5sum > /dev/null || alias md5sum="md5"
 command -v sha1sum > /dev/null || alias sha1sum="shasum"
 
 # Trim new lines and copy to clipboard
-alias c="tr -d '\\n' | xclip -selection clipboard"
+alias c="tr -d '\\n' | pbcopy"
 
 # URL-encode strings
 alias urlencode='python -c "import sys, urllib as ul; print ul.quote_plus(sys.argv[1]);"'
@@ -255,18 +200,11 @@ for method in GET HEAD POST PUT DELETE TRACE OPTIONS; do
     alias "$method"="lwp-request -m \"$method\""
 done
 
-# Kill all the tabs in Chrome to free up memory
-# [C] explained: http://www.commandlinefu.com/commands/view/402/exclude-grep-from-your-grepped-output-of-ps-alias-included-in-description
-alias chromekill="ps ux | grep '[C]hrome Helper --type=renderer' | grep -v extension-process | tr -s ' ' | cut -d ' ' -f2 | xargs kill"
-
-# Lock the screen (when going AFK)
-alias afk="i3lock -c 000000"
-
 # vhosts
 alias hosts='sudo vim /etc/hosts'
 
 # copy working directory
-alias cwd='pwd | tr -d "\r\n" | xclip -selection clipboard'
+alias cwd='pwd | tr -d "\r\n" | pbcopy'
 
 # copy file interactive
 alias cp='cp -i'
@@ -277,15 +215,11 @@ alias mv='mv -i'
 # untar
 alias untar='tar xvf'
 
-# Pipe my public key to my clipboard.
-alias pubkey="more ~/.ssh/id_ed25519.pub | xclip -selection clipboard | echo '=> Public key copied to pasteboard.'"
+export PATH="${HOME}/.rbenv/bin:${PATH}"
+eval "$(rbenv init -)"
 
-# Pipe my private key to my clipboard.
-alias prikey="more ~/.ssh/id_ed25519 | xclip -selection clipboard | echo '=> Private key copied to pasteboard.'"
-
-# alias ssm-session='docker run -it --rm --detach-keys "ctrl-e,e" -v $HOME/.aws:/root/.aws -e AWS_PROFILE="${AWS_PROFILE}" -e AWS_REGION="${AWS_REGION}" ced.docker.artifactory.global.bamgrid.net/ssm-helpers:latest ssm-session -t bamazon:team -t bamazon:env -t bamazon:app -t bamazon:pool'
-if [ -x "$(command -v rbenv)" ]; then
-    eval "$(rbenv init -)"
-fi
+# ASDF
+. "$HOME/.asdf/asdf.sh"
 
 export PATH="$(perl -e 'print join(":", grep { not $seen{$_}++ } split(/:/, $ENV{PATH}))')"
+. "$HOME/.cargo/env"
