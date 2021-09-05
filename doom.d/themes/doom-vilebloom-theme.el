@@ -162,10 +162,12 @@ determine the exact padding."
    (css-proprietary-property :foreground orange)
    (css-property             :foreground green)
    (css-selector             :foreground blue)
+   ;;; hl-line
+   (hl-line :background (doom-lighten bg 0.1))
    ;;;; doom-modeline
    (doom-modeline-project-root-dir :foreground base6)
    ;;;; doom-themes
-   (doom-themes-treemacs-root-face :foreground highlight :weight 'ultra-bold :height 1.2)
+   (doom-themes-treemacs-root-face :foreground highlight :weight 'ultra-bold :height 1.5)
    (doom-themes-treemacs-file-face :foreground highlight)
    ;;;; ediff <built-in>
    (ediff-fine-diff-A    :background (doom-darken violet 0.4) :weight 'bold)
@@ -211,8 +213,9 @@ determine the exact padding."
     :box (if -modeline-pad `(:line-width ,-modeline-pad :color ,modeline-bg-inactive-l)))
    (solaire-hl-line-face :background base3)
    ;;;; treemacs
-   (treemacs-root-face :foreground highlight :weight 'ultra-bold :height 1.2)
+   (treemacs-root-face :foreground highlight :weight 'ultra-bold :height 1.5)
    (treemacs-directory-face :foreground highlight)
+   (treemacs-fringe-indicator-face :background red)
    ;;;; vimish-fold
    ((vimish-fold-overlay &override) :inherit 'font-lock-comment-face :background base3 :weight 'light)
    ((vimish-fold-fringe &override)  :foreground teal))

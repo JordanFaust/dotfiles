@@ -31,7 +31,8 @@
        hl-todo           ; highlight TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW
        ligatures         ; ligatures and symbols to make your code pretty again
        nav-flash         ; blink the current line after jumping
-       neotree           ; a project drawer, like NERDTree for vim
+       ;; neotree           ; a project drawer, like NERDTree for vim
+       treemacs
        ophints           ; highlight the region an operation acts on
        (popup            ; tame sudden yet inevitable temporary windows
         +all             ; catch all popups that start with an asterix

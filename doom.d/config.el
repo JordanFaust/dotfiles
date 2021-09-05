@@ -66,10 +66,7 @@
 
 (after! doom-themes
   :config
-  ;; (setq doom-rouge-brighter-tabs t
-  ;;       doom-rouge-brighter-comments t
-  ;;       doom-rouge-padded-modeline t)
-  ;; (doom-themes-visual-bell-config)
+  (doom-themes-treemacs-config)
   (doom-themes-org-config))
 
 ;; (after! doom-modeline
@@ -301,6 +298,10 @@
   (setq display-line-numbers-width-start t)
   :config
   (display-line-numbers-mode -1))
+
+(use-package! treemacs
+  :config
+  (setq treemacs-user-header-line-format header-line-format))
 
 (add-to-list 'load-path "~/.doom.d/snippets")
 
