@@ -38,6 +38,8 @@
 (setq org-roam-dailies-directory "~/notes/roam/daily")
 ;; Set the directory for image attachements
 (setq org-attach-id-dir "~/notes/roam/attachments")
+;; Only show roam backlink buffer when explicitly opened
+(setq +org-roam-open-buffer-on-find-file nil)
 
 (defun +org-roam-create-date ()
   "Return the date the note was created"
