@@ -1,7 +1,7 @@
 TERM: screen-256color
 
 font:
-  size: 20.0
+  size: 24.0
   normal:
     family: JetBrainsMonoMedium Nerd Font Mono
     style: Medium

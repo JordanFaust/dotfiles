@@ -1,9 +1,12 @@
 #!/bin/env sh
 
 # open apps
-cmd - return  : env WAYLAND_DISPLAY= kitty
+cmd - return  : env WAYLAND_DISPLAY= alacritty
 alt - return : open -na '/Applications/Firefox.app'
 alt - m : open -na /Applications/mpv.app $(pbpaste)
+
+# Restart Yabai
+cmd + shift - r : launchctl kickstart -k "gui/${UID}/homebrew.mxcl.yabai"
 
 # Launch from scratchpad (all floating)
 cmd - p : /usr/local/opt/python@3.8/libexec/bin/python /Users/jordy/bin/dropdown_terminal alacritty && #~/bin/opacity
@@ -31,13 +34,11 @@ cmd - l [
     "Alacritty" : if [ $(tmux display-message -p '#{pane_at_right}') -ne 1 ]; then tmux select-pane -R; else yabai -m window --focus east || true; fi
 ]
 
-
+# Move windows
 shift + cmd - h : yabai -m window --warp west
 shift + cmd - j : yabai -m window --warp south
 shift + cmd - k : yabai -m window --warp north
 shift + cmd - l : yabai -m window --warp east
-
-
 
 # balance size of windows
 shift + cmd - 0 : yabai -m space --balance
