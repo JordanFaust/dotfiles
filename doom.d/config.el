@@ -19,13 +19,9 @@
 ;;
 ;; They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
 ;; font string. You generally only need these two:
-;; (setq doom-font (font-spec :family "Source Code Pro for Powerline" :size 20 :weight 'semi-bold))
-;; (setq doom-font (font-spec :family "Iosevka Semibold" :size 20 :weight 'semibold))
-
 ;; (setq doom-font (font-spec :family "JetBrainsMonoMedium Nerd Font Mono" :size 18 :weight 'bold))
 ;; (setq doom-big-font (font-spec :family "JetBrainsMonoExtraBold Nerd Font Mono" :size 18 :weight 'bold))
 (setq doom-font (font-spec :family "FiraCode Nerd Font Mono" :size 18 :weight 'medium))
-;; (setq doom-big-font (font-spec :family "JetBrainsMonoExtraBold Nerd Font Mono" :size 18 :weight 'bold))
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
@@ -122,6 +118,14 @@
   (setq lsp-modeline-code-actions-enable nil)
   (setq lsp-keep-workspace-alive nil))
 
+;;
+;; Company Configuration
+;;
+(after! company-box
+  :config
+  ;; Disable scrollbar. The default-frame-alist settings are messing with the
+  ;; display of the scrollbar and the right margin
+  (setq company-box-scrollbar nil))
 
 ;;
 ;; Git Fringe
@@ -301,7 +305,10 @@
 
 (use-package! treemacs
   :config
-  (setq treemacs-user-header-line-format header-line-format))
+  (setq treemacs-user-header-line-format header-line-format)
+
+  (treemacs-fringe-indicator-mode 'always)
+  (treemacs-follow-mode t))
 
 (add-to-list 'load-path "~/.doom.d/snippets")
 
