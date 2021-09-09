@@ -14,3 +14,7 @@ eventable/pkg/*
 */.spacemacs.env
 
 install.log
+
+rfd/*
+
+doom.d/secrets/*
