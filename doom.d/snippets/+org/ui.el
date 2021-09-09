@@ -112,7 +112,7 @@
   ;; Remove mode line formatting
   (setq mode-line-format nil)
   ;; Increase the height of the modeline
-  (set-face-attribute 'header-line nil :background "#00000000" :height 500)
+  (set-face-attribute 'header-line nil :background (doom-color 'bg) :height 500)
   ;; Turn off mouse highlighting
   (setq mouse-highlight nil)
   ;; Add side margin padding
