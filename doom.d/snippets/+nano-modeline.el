@@ -97,10 +97,6 @@
 
 (after! nano-modeline
 
-  ;;;
-  ;;; Nano Modeline Current Focus
-  ;;;
-
   (defun +nano-modeline--get-current-window (&optional frame)
     "Get the current window but should exclude the child windows."
     (if (and (fboundp 'frame-parent) (frame-parent frame))
@@ -188,14 +184,14 @@
            (char-width-multiple (if (floatp header-line-height)
                                     header-line-height
                                   (/ header-line-height 100.0)))
-           (available-width (- (window-total-width)
-                               (length prefix) (length left) (length right)
-                               (floor (* char-width-multiple char-width))))
-
-           (available-width (max 1 available-width)))
+           (used-space (+ (length prefix) (length left) (length right)))
+           (unused-space (- (window-total-width) used-space))
+           (char-width-adjustment (floor (* char-width-multiple char-width)))
+           (available-width (- unused-space char-width-adjustment))
+           (available-width (max (- char-width-adjustment (window-total-width)) available-width)))
       (concat prefix
               left
-              (propertize (make-string available-width ?\ )
+              (propertize (make-string available-width ?\s)
                           'face (if active 'nano-modeline-active
                                   'nano-modeline-inactive))
               (propertize right 'face (if active 'nano-modeline-active-secondary
