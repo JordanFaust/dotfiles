@@ -310,6 +310,21 @@
   (treemacs-fringe-indicator-mode 'always)
   (treemacs-follow-mode t))
 
+;;;
+;;; Notifications
+;;;
+
+(use-package! alert
+  :config
+  (defun alert-osx-notifier-notify (info)
+    (message "%s" info)
+    (mac-do-applescript (format "display notification %S with title %S sound name \"Bubble\""
+                                (alert-encode-string (plist-get info :message))
+                                (alert-encode-string (plist-get info :title))))
+    (alert-message-notify info))
+
+  (setq alert-default-style 'osx-notifier))
+
 (add-to-list 'load-path "~/.doom.d/snippets")
 
 (load! "snippets/+nano-modeline")
