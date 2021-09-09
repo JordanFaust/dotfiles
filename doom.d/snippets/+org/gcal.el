@@ -91,10 +91,12 @@
 ;; day. Possible bucketed by their start and end time. Then every minute
 ;; this can be used to lookup if a meeting has started. When it has clock it
 ;; in (and mark it in the structure). When the meeting has ended clock out.
+
 (defvar +org-gcal--meetings-today (list)
   "The list of gcal meetings left for the day.")
 (defun +org-gcal--build-meetings-list ()
   "Parse the schedule and find the current meetings.
+
 
 Iterate through all scheduled meetings pulled down from gcal and collect
 the meetings happening today."
@@ -104,27 +106,29 @@ the meetings happening today."
     (let* ((now (decode-time))
            (tomorrow-copy (copy-sequence now)))
       ;; Set tomorrow to the start of the next day
-      (setf (nth 0 tomorrow-copy) 0
-            (nth 1 tomorrow-copy) 0
-            (nth 2 tomorrow-copy) 0
-            (nth 3 tomorrow-copy) (1+ (nth 3 tomorrow-copy)))
-      ;; Reset meeting list
-      (setq +org-gcal--meetings-today nil)
-      (org-map-entries
-       (lambda ()
-         (let* ((headline (cadr (org-element-headline-parser (point-max) t)))
-                (time-and-desc (org-gcal--get-time-and-desc))
-                (details (list :title (plist-get headline :title)
-                               :start (plist-get time-and-desc :start)
-                               :end   (plist-get time-and-desc :end)))
-                (start (parse-iso8601-time-string (plist-get time-and-desc :start)))
-                (end (parse-iso8601-time-string (plist-get time-and-desc :end)))
-                (tomorrow (encode-time now)))
-           (when (and (time-less-p (encode-time now) end)
-                      (time-less-p start tomorrow))
-             (if (null +org-gcal--meetings-today)
-                 (setq +org-gcal--meetings-today `(details))
-               (cl-pushnew details +org-gcal--meetings-today :test #'equal-including-properties))))))
+      (cl-letf* (((nth 0 tomorrow-copy) 0)
+                 ((nth 1 tomorrow-copy) 0)
+                 ((nth 2 tomorrow-copy) 0)
+                 ((nth 3 tomorrow-copy) (1+ (nth 3 tomorrow-copy))))
+        ;; Reset meeting list
+        (setq +org-gcal--meetings-today nil)
+        (org-map-entries
+         (lambda ()
+           (let* ((headline (cadr (org-element-headline-parser (point-max) t)))
+                  (time-and-desc (org-gcal--get-time-and-desc))
+                  (details (list :title (plist-get headline :title)
+                                 :start (plist-get time-and-desc :start)
+                                 :end   (plist-get time-and-desc :end)))
+                  (start (parse-iso8601-time-string (plist-get time-and-desc :start)))
+                  (end (parse-iso8601-time-string (plist-get time-and-desc :end)))
+                  (tomorrow (encode-time tomorrow-copy)))
+             (when (and (time-less-p (encode-time now) end)
+                        (time-less-p end tomorrow)
+                        (time-less-p start tomorrow)
+                        (not (time-equal-p start end)))
+               (if (null +org-gcal--meetings-today)
+                   (setq +org-gcal--meetings-today `(,details))
+                 (cl-pushnew details +org-gcal--meetings-today :test #'equal-including-properties)))))))
       +org-gcal--meetings-today)))
 
 (defun +org-gcal--strip-entry-id-on-archive ()
@@ -136,5 +140,3 @@ This is not desired behavior as anything moved outside of the schedule is an arc
 Stripping the entry-id will prevent org-gcal from considering the file a calendar file."
   (save-excursion
     (org-delete-property "entry-id")))
-
-;; (+org-gcal-sync-calendar)
