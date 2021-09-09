@@ -111,6 +111,7 @@ closes those buffers if they have not been modified"
     ;; Table Formatting
     ;; TODO make formatter combine each weeks items into a single column
     :formatter +org-clockreport-sorter
+    :tags t
     :indent nil))
 
 ;;;
