@@ -212,7 +212,7 @@ as archived.
                              (org-agenda-files :level . 1)
                              (org-agenda-files :tag . "@refile"))))
 
-(defun +org-achive-location-update-a (&rest _)
+(defun +org-archive-location-update-a (&rest _)
   "Dynamically update the archive target location to the current dailies file."
   (save-current-buffer
     ;; Create the current daily template unless it already exists
