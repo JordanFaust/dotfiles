@@ -187,15 +187,18 @@
            (used-space (+ (length prefix) (length left) (length right)))
            (unused-space (- (window-total-width) used-space))
            (char-width-adjustment (floor (* char-width-multiple char-width)))
-           (available-width (- unused-space char-width-adjustment))
-           (available-width (max (- char-width-adjustment (window-total-width)) available-width)))
-      (concat prefix
+           (available-width-wide (- unused-space char-width-adjustment))
+           ;; IDK why this works. The magic appears to be the char-widht-multiple / 2.0
+           (available-width-short (1+ (floor (/ unused-space (/ char-width-multiple (/ char-width-multiple 2.0))))))
+           (available-width (max 1 (- char-width-adjustment (window-total-width)) available-width-short available-width-wide)))
+      (let ((filler-string (make-string available-width ?\s)))
+        (concat prefix
               left
-              (propertize (make-string available-width ?\s)
+              (propertize filler-string
                           'face (if active 'nano-modeline-active
                                   'nano-modeline-inactive))
               (propertize right 'face (if active 'nano-modeline-active-secondary
-                                        'nano-modeline-inactive-secondary)))))
+                                        'nano-modeline-inactive-secondary))))))
 
   ;; Keep the org clock info in the modeline
   (defun nano-modeline-default-mode ()
@@ -217,15 +220,15 @@
                                  (concat "(" mode-name
                                          (if branch (concat ", "
                                                             (propertize branch 'face 'italic)))
-                                         ")" )
+                                         ")")
                                  secondary)))))
 
   (defun nano-modeline-org-clock-mode ()
     (let ((buffer-name (format-mode-line "%b"))
           (mode-name   (nano-mode-name))
           (branch      (vc-branch))
-          (position    (format-mode-line "%l:%c"))
-          )
+          (position    (format-mode-line "%l:%c")))
+          
       ;; Use the term mode even when clocked in
       ;; TODO fix the check for
       (if (nano-modeline-vterm-mode-p)
@@ -235,7 +238,7 @@
                                (concat "(" mode-name
                                        (if branch (concat ", "
                                                           (propertize branch 'face 'italic)))
-                                       ")" )
+                                       ")")
                                org-mode-line-string))))
 
   (defun +nano-modeline-evil-substitute-p ()
