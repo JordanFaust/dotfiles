@@ -1,51 +1,52 @@
-;;; doom-vilebloom-theme.el --- ported from Rouge Theme -*- lexical-binding: t; no-byte-compile: t; -*-
+
+;;; doom-vilebloom-light-light-theme.el --- ported from vilebloom -*- lexical-binding: t; no-byte-compile: t; -*-
 (require 'doom-themes)
 
 ;;
-(defgroup doom-vilebloom-theme nil
-  "Options for the `doom-vilebloom' theme."
+(defgroup doom-vilebloom-light-theme nil
+  "Options for the `doom-vilebloom-light' theme."
   :group 'doom-themes)
 
-(defcustom doom-vilebloom-brighter-comments nil
+(defcustom doom-vilebloom-light-brighter-comments nil
   "If non-nil, comments will be highlighted in more vivid colors."
-  :group 'doom-vilebloom-theme
+  :group 'doom-vilebloom-light-theme
   :type 'boolean)
 
-(defcustom doom-vilebloom-brighter-tabs t
+(defcustom doom-vilebloom-light-brighter-tabs t
   "If non-nil, tabs will a more vivid background color."
-  :group 'doom-vilebloom-theme
+  :group 'doom-vilebloom-light-theme
   :type 'boolean)
 
-(defcustom doom-vilebloom-comment-bg doom-vilebloom-brighter-comments
+(defcustom doom-vilebloom-light-comment-bg doom-vilebloom-brighter-comments
   "If non-nil, comments will have a subtle, darker background. Enhancing their
 legibility."
-  :group 'doom-vilebloom-theme
+  :group 'doom-vilebloom-light-theme
   :type 'boolean)
 
-(defcustom doom-vilebloom-padded-modeline doom-themes-padded-modeline
+(defcustom doom-vilebloom-light-padded-modeline doom-themes-padded-modeline
   "If non-nil, adds a 4px padding to the mode-line. Can be an integer to
 determine the exact padding."
-  :group 'doom-vilebloom-theme
+  :group 'doom-vilebloom-light-theme
   :type '(choice integer boolean))
 
 ;;
-(def-doom-theme doom-vilebloom
+(def-doom-theme doom-vilebloom-light
   "A dark theme inspired by the Vilebloom Keycap set."
 
   ;; name        default   256       16
-  ((bg         '("#152733" nil       nil)) ;; modified
-   (bg-alt     '("#152733" nil       nil))
-   (base0      '("#24455b" "black"   "black"))
-   (base1      '("#0E131D" "#1e1e1e" "brightblack"))
-   (base2      '("#151D2B" "#2e2e2e" "brightblack"))
+  ((bg         '("#FAFFF6" nil       nil)) ;; modified
+   (bg-alt     '("#F0F4FC" nil       nil))
+   (base0      '("#E8E9EB" "black"   "black"))
+   (base1      '("#64727d" "#1e1e1e" "brightblack"))
+   (base2      '("#5D636E" "#2e2e2e" "brightblack"))
    (base3      '("#1F2A3F" "#262626" "brightblack"))
-   (base4      '("#5D636E" "#3f3f3f" "brightblack"))
-   (base5      '("#64727d" "#64727d" "brightblack"))
+   (base4      '("#151D2B" "#3f3f3f" "brightblack"))
+   (base5      '("#0E131D" "#64727d" "brightblack"))
    (base6      '("#ff777a" "#6b6b6b" "brightblack"))
-   (base7      '("#E8E9EB" "#979797" "brightblack"))
-   (base8      '("#F0F4FC" "#dfdfdf" "white"))
-   (fg         '("#FAFFF6"    "#bbb"    "white"))
-   (fg-alt     '("#A7ACB9" "#bfbfbf" "brightwhite"))
+   (base7      '("#24455b" "#979797" "brightblack"))
+   (base8      '("#A7ACB9" "#dfdfdf" "white"))
+   (fg         '("#152733"    "#bbb"    "white"))
+   (fg-alt     '("#152733" "#bfbfbf" "brightwhite"))
 
    (grey       base5)
    (red        '("#ff777a" "#c6797e" "red"))
@@ -65,7 +66,7 @@ determine the exact padding."
    ;; face categories -- required for all themes
    (highlight      base6)
    (vertical-bar   (doom-darken base1 0.2))
-   (selection      base4)
+   (selection      base0)
    (builtin        (doom-lighten red 0.2))
    (comments       grey)
    (doc-comments   blue)
@@ -78,7 +79,7 @@ determine the exact padding."
    (strings        green)
    (variables      red)
    (numbers        orange)
-   (region         base4)
+   (region         base0)
    (error          red)
    (warning        yellow)
    (success        green)
@@ -89,13 +90,13 @@ determine the exact padding."
    ;; custom categories
    (hidden     `(,(car bg) "black" "black"))
    (-modeline-pad
-    (when doom-vilebloom-padded-modeline
-      (if (integerp doom-vilebloom-padded-modeline) doom-vilebloom-padded-modeline 4)))
+    (when doom-vilebloom-light-padded-modeline
+      (if (integerp doom-vilebloom-light-padded-modeline) doom-vilebloom-padded-modeline 4)))
 
-   (tabs-bg (if doom-vilebloom-brighter-tabs (doom-darken base6 0.15) bg))
-   (tabs-fg (if doom-vilebloom-brighter-tabs base8 fg))
-   (tabs-bar-bg (if doom-vilebloom-brighter-tabs bg red))
-   (tabs-marker (if doom-vilebloom-brighter-tabs base8 highlight))
+   (tabs-bg (if doom-vilebloom-light-brighter-tabs (doom-darken base6 0.15) bg))
+   (tabs-fg (if doom-vilebloom-light-brighter-tabs base8 fg))
+   (tabs-bar-bg (if doom-vilebloom-light-brighter-tabs bg red))
+   (tabs-marker (if doom-vilebloom-light-brighter-tabs base8 highlight))
 
    (modeline-fg     nil)
    (modeline-fg-alt base6)
@@ -109,7 +110,7 @@ determine the exact padding."
   (((font-lock-comment-face &override) :slant 'italic)
    ((font-lock-keyword-face &override) :slant 'italic)
    (font-lock-preprocessor-face :foreground magenta :slant 'italic)
-   (lazy-highlight :background base4)
+   (lazy-highlight :background base0)
    ((line-number &override) :foreground (doom-lighten 'base5 0.2))
    ((line-number-current-line &override) :foreground base7)
    ;; (mode-line
@@ -121,7 +122,7 @@ determine the exact padding."
    ;;  :box (if -modeline-pad `(:line-width ,-modeline-pad :color ,modeline-bg-inactive)))
    (mode-line-inactive :background bg)
    (mode-line-emphasis :foreground highlight)
-   (tooltip :background base3 :foreground fg-alt)
+   (tooltip :background bg-alt :foreground base4)
    (vertical-border :foreground base6)
 
    ;;;; centuar-tabs
@@ -194,13 +195,12 @@ determine the exact padding."
    (highlight-thing :background region :distant-foreground fg-alt)
 
    ;;;; ivy
-   (ivy-current-match :background (doom-lighten base3 0.1))
+   (ivy-current-match :background base0 :foreground base4)
    (ivy-minibuffer-match-face-2 :foreground highlight :weight 'extra-bold)
 
    ;;;; ivy-posframe
    (ivy-posframe :background bg-alt)
    (ivy-posframe-border :background highlight)
-
 
    ;;;; magit
    (magit-diff-hunk-heading           :foreground bg                    :background (doom-blend highlight bg 0.3) :extend t)
@@ -213,7 +213,7 @@ determine the exact padding."
    ((markdown-code-face &override) :background (doom-lighten base3 0.05))
 
    ;;;; mic-paren
-   ((paren-face-match &override) :foreground red :background base3 :weight 'ultra-bold)
+   ((paren-face-match &override) :foreground red :background base0 :weight 'ultra-bold)
    ((paren-face-mismatch &override) :foreground base3 :background red :weight 'ultra-bold)
 
    ;;;; neotree
@@ -235,7 +235,7 @@ determine the exact padding."
     :inherit 'mode-line-inactive
     :background modeline-bg-inactive-l
     :box (if -modeline-pad `(:line-width ,-modeline-pad :color ,modeline-bg-inactive-l)))
-   (solaire-hl-line-face :background base3)
+   (solaire-hl-line-face :background base0)
 
    ;;;; treemacs
    (treemacs-root-face :foreground highlight :weight 'ultra-bold :height 1.5)
@@ -249,4 +249,4 @@ determine the exact padding."
   ;;;; Base theme variable overrides-
   ())
 
-;;; doom-vilebloom-theme.el ends here
+;;; doom-vilebloom-light-theme.el ends here

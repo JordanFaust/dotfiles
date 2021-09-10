@@ -28,6 +28,7 @@
 ;; `load-theme' function. This is the default:
 (load! "themes/doom-lena-theme.el")
 (load! "themes/doom-vilebloom-theme.el")
+(load! "themes/doom-vilebloom-light-theme.el")
 (load! "themes/doom-valley-theme.el")
 (setq doom-theme 'doom-vilebloom)
 
@@ -248,8 +249,8 @@
   (tree-sitter-hl-add-patterns 'hcl
     [
      ([
-      "in"
-      ] @keyword)
+       "in"]
+      @keyword)
 
      ;; Resource syntax does not need types to be strings.
      ;; Mark them as something other then types
@@ -271,8 +272,8 @@
      (for_expr (for_intro (identifier) @variable))
 
      ;; Highlight all other variables
-     (variable_expr (identifier) @variable)
-     ])
+     (variable_expr (identifier) @variable)])
+     
   (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
 
 ; Turn off font lock keywords inplace of tree sitter
@@ -314,16 +315,16 @@
 ;;; Notifications
 ;;;
 
-(use-package! alert
-  :config
-  (defun alert-osx-notifier-notify (info)
-    (message "%s" info)
-    (mac-do-applescript (format "display notification %S with title %S sound name \"Bubble\""
-                                (alert-encode-string (plist-get info :message))
-                                (alert-encode-string (plist-get info :title))))
-    (alert-message-notify info))
+;; (use-package! alert
+;;   :config
+;;   (defun alert-osx-notifier-notify (info)
+;;     (message "%s" info)
+;;     (mac-do-applescript (format "display notification %S with title %S sound name \"Bubble\""
+;;                                 (alert-encode-string (plist-get info :message))
+;;                                 (alert-encode-string (plist-get info :title))))
+;;     (alert-message-notify info))
 
-  (setq alert-default-style 'osx-notifier))
+;;   (setq alert-default-style 'osx-notifier))
 
 (add-to-list 'load-path "~/.doom.d/snippets")
 
@@ -332,3 +333,4 @@
 (load! "snippets/+functions")
 (load! "snippets/+bindings")
 (load! "snippets/+org")
+(load! "snippets/+mu4u")
