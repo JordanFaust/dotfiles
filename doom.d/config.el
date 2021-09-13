@@ -307,6 +307,7 @@
 (use-package! treemacs
   :config
   (setq treemacs-user-header-line-format header-line-format)
+  ;; (setq treemacs-window-background-color `(,(doom-color 'fg) . ,(doom-color 'base0)))
 
   (treemacs-fringe-indicator-mode 'always)
   (treemacs-follow-mode t))
@@ -326,6 +327,24 @@
 
 ;;   (setq alert-default-style 'osx-notifier))
 
+;;;
+;;; Ligature Modifications
+;;;
+
+(setq +ligatures-composition-alist (cl-remove ?. +ligatures-composition-alist :test 'eq :key 'car))
+
+;;;
+;;; Better Lisp Editing
+;;;
+(setq lisp-indent-function 'common-lisp-indent-function)
+
+(after! parinfer-rust-mode
+  (setq parinfer-rust-preferred-mode 'indent))
+
+;;;
+;;; Extensions
+;;;
+
 (add-to-list 'load-path "~/.doom.d/snippets")
 
 (load! "snippets/+nano-modeline")
@@ -333,4 +352,5 @@
 (load! "snippets/+functions")
 (load! "snippets/+bindings")
 (load! "snippets/+org")
-(load! "snippets/+mu4u")
+(load! "snippets/+sidebar")
+(load! "snippets/+mu4e")

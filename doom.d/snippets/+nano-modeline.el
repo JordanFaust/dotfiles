@@ -207,12 +207,16 @@
            (branch      (vc-branch))
            (position (format-mode-line "%l:%c")))
       (let ((secondary position))
+        ;; Handle setting the secondary
         (when org-mode-line-string
           (setq secondary org-mode-line-string))
         (when (+nano-modeline-anzu)
           (setq secondary (+nano-modeline-anzu)))
         (when (+nano-modeline-evil-substitute-p)
           (setq secondary (+nano-modeline-evil-substitute)))
+        ;; Handle setting the buffer name
+        (when (string-match " \\*Sidebar\\*" buffer-name)
+          (setq buffer-name "Dashboard"))
         (if (string-match " \\*NeoTree\\*" buffer-name)
             (nano-modeline-compose (nano-modeline-status) buffer-name "" "")
           (nano-modeline-compose (nano-modeline-status)

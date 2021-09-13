@@ -35,7 +35,8 @@ determine the exact padding."
 
   ;; name        default   256       16
   ((bg         '("#FAFFF6" nil       nil)) ;; modified
-   (bg-alt     '("#F0F4FC" nil       nil))
+   ;; (bg-alt     '("#F0F4FC" nil       nil))
+   (bg-alt     '("#FAFFF6" nil       nil))
    (base0      '("#E8E9EB" "black"   "black"))
    (base1      '("#64727d" "#1e1e1e" "brightblack"))
    (base2      '("#5D636E" "#2e2e2e" "brightblack"))
@@ -141,10 +142,10 @@ determine the exact padding."
    (nano-modeline-active-status-RO :foreground bg :background red :weight 'bold)
    (nano-modeline-active-status-RW :foreground bg :background red :weight 'bold)
    (nano-modeline-active-status-** :foreground bg :background red :weight 'bold)
-   (nano-modeline-inactive :foreground bg :background fg)
-   (nano-modeline-inactive-name :foreground bg :background fg :weight 'bold)
-   (nano-modeline-inactive-primary :foreground bg :background fg)
-   (nano-modeline-inactive-secondary :foreground fg :background fg)
+   (nano-modeline-inactive :foreground bg :background base0)
+   (nano-modeline-inactive-name :foreground bg :background base0 :weight 'bold)
+   (nano-modeline-inactive-primary :foreground bg :background base0)
+   (nano-modeline-inactive-secondary :foreground fg :background base0)
    (nano-modeline-inactive-status-RO :foreground bg :background red :weight 'bold)
    (nano-modeline-inactive-status-RW :foreground bg :background red :weight 'bold)
    (nano-modeline-inactive-status-** :foreground bg :background red :weight 'bold)
@@ -155,9 +156,12 @@ determine the exact padding."
    ;;;; mu4e
    (mu4e-attach-number-face :foreground yellow)
    (mu4e-cited-1-face :foreground yellow)
-   (mu4e-unread-face :foreground blue :slant 'normal)
-   (mu4e-header-face :weight 'light)
-   (mu4e-thread-folding-root-unfolded-face :weight 'normal)
+   (mu4e-unread-face :foreground base4 :slant 'normal :weight 'bold)
+   (mu4e-header-face :foreground base4 :weight 'light)
+   (mu4e-header-highlight-face :background violet :foreground bg :weight 'normal)
+   ((mu4e-thread-folding-root-unfolded-face &override) :background (doom-lighten blue 0.4) :weight 'normal)
+   (mu4e-thread-folding-root-prefix-face :background 'unspecified)
+   ((mu4e-thread-folding-child-face &override) :background (doom-lighten blue 0.8) :weight 'light)
 
    ;;;; Which Key
    (which-key-key-face :foreground red)

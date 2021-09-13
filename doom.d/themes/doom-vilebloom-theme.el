@@ -154,9 +154,13 @@ determine the exact padding."
    ;;;; mu4e
    (mu4e-attach-number-face :foreground yellow)
    (mu4e-cited-1-face :foreground yellow)
-   (mu4e-unread-face :foreground blue :slant 'normal)
-   (mu4e-header-face :weight 'light)
-   (mu4e-thread-folding-root-unfolded-face :weight 'normal)
+   (mu4e-unread-face :foreground fg :slant 'normal :weight 'bold)
+   (mu4e-header-face :foreground fg :weight 'light)
+   (mu4e-header-highlight-face :background violet :foreground bg :weight 'normal)
+   ((mu4e-thread-folding-root-unfolded-face &override) :background blue :weight 'normal)
+   ((mu4e-thread-folding-root-folded-face &override) :background base0 :weight 'normal)
+   ;; (mu4e-thread-folding-root-prefix-face :background 'unspecified)
+   ((mu4e-thread-folding-child-face &override) :background (doom-lighten blue 0.4) :weight 'light)
 
    ;;;; Which Key
    (which-key-key-face :foreground red)
