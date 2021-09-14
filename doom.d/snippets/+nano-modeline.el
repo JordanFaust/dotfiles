@@ -179,18 +179,16 @@
                                               'nano-modeline-inactive-primary))))
            (right (concat secondary " "))
            (header-line-height (face-attribute 'header-line :height))
-           ;; Handle the header-line height being set as an integer or a floating point
-           ;; scaler
-           (char-width-multiple (if (floatp header-line-height)
-                                    header-line-height
-                                  (/ header-line-height 100.0)))
            (used-space (+ (length prefix) (length left) (length right)))
            (unused-space (- (window-total-width) used-space))
-           (char-width-adjustment (floor (* char-width-multiple char-width)))
-           (available-width-wide (- unused-space char-width-adjustment))
-           ;; IDK why this works. The magic appears to be the char-widht-multiple / 2.0
-           (available-width-short (1+ (floor (/ unused-space (/ char-width-multiple (/ char-width-multiple 2.0))))))
-           (available-width (max 1 (- char-width-adjustment (window-total-width)) available-width-short available-width-wide)))
+           ;; Get the width difference between the default font width and the header-line font width
+           (char-width-delta (/ (float char-width) (float (window-font-width))))
+           ;; Get the adjusted window width based on the header-line font width
+           (window-total-width-adjusted (/ (window-total-width) char-width-delta))
+           ;; Calculate the available center padding space, rounding up
+           (available-width (ceiling (- window-total-width-adjusted (float used-space))))
+           ;; Ensure available width is a positive number
+           (available-width (max 1 available-width)))
       (let ((filler-string (make-string available-width ?\s)))
         (concat prefix
               left
