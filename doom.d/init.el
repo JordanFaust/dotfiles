@@ -30,7 +30,7 @@
        doom-quit         ; DOOM quit-message prompts when you quit Emacs
        hl-todo           ; highlight TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW
        ligatures         ; ligatures and symbols to make your code pretty again
-       nav-flash         ; blink the current line after jumping
+       ;; nav-flash         ; blink the current line after jumping
        ;; neotree           ; a project drawer, like NERDTree for vim
        treemacs
        ophints           ; highlight the region an operation acts on
@@ -45,13 +45,13 @@
 
        :editor
        (evil +everywhere)  ; come to the dark side, we have cookies
-       file-templates      ; auto-snippets for empty files
-       fold                ; (nigh) universal code folding
+       ;; file-templates      ; auto-snippets for empty files
+       ;; fold                ; (nigh) universal code folding
        (format)  ; automated prettiness
        ;; lispy             ; vim for lisp, for people who don't like vim
-       multiple-cursors    ; editing in many places at once
-       rotate-text         ; cycle region at point between text candidates
-       snippets            ; my elves. They type so I don't have to
+       ;; multiple-cursors    ; editing in many places at once
+       ;; rotate-text         ; cycle region at point between text candidates
+       ;; snippets            ; my elves. They type so I don't have to
        (parinfer
         +rust)
 
@@ -83,7 +83,7 @@
         +peek)
        magit               ; a git porcelain for Emacs
        make              ; run make tasks from Emacs
-       rgb               ; creating color strings
+       ;; rgb               ; creating color strings
        taskrunner        ; taskrunner for all your projects
        terraform           ; infrastructure as code
 
@@ -93,8 +93,8 @@
        (go                 ; the hipster dialect
         +lsp)
        json              ; At least it ain't XML
-       (javascript          ; all(hope(abandon(ye(who(enter(here))))))
-        +lsp)
+       ;; (javascript          ; all(hope(abandon(ye(who(enter(here))))))
+       ;;  +lsp)
        lua                 ; one-based indices? one-based indices
        markdown            ; writing docs for people to ignore
        (org                ; organize your plain life in plain text
@@ -102,8 +102,8 @@
         +pretty
         +present           ; using org-mode for presentations
         +roam2)
-       (python           ; beautiful is better than ugly
-        +lsp)
+       ;; (python           ; beautiful is better than ugly
+       ;;  +lsp)
        (ruby               ; 1.step {|i| p "Ruby is #{i.even? ? 'love' : 'life'}"}
         +lsp)
        (rust               ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
