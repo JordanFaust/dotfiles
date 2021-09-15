@@ -65,7 +65,6 @@
 
 ;; Nano
 (package! nano-modeline :recipe '(:type git :host github :repo "rougier/nano-modeline"))
-(package! nano-sidebar :recipe '(:type git :host github :repo "rougier/nano-sidebar"))
 (package! anzu :pin "bdb3da5028935a4aea55c40769bc191a81afb54e")
 (when (featurep! :editor evil)
   (package! evil-anzu :pin "d3f6ed4773b48767bd5f4708c7f083336a8a8a86"))
@@ -73,6 +72,3 @@
 ;; mu4e
 (package! mu4e-thread-folding :recipe '(:type git :host github :repo "rougier/mu4e-thread-folding"))
 (package! mu4e-dashboard :recipe '(:type git :host github :repo "rougier/mu4e-dashboard"))
-
-;; Theme Packages
-(package! per-buffer-theme)

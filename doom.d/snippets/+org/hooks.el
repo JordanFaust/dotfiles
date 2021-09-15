@@ -89,6 +89,6 @@ that captures the duration of the meeting."
 ;;;
 
 ;; Archive daily files that are older then the specified configuration
-(run-with-timer 0 (* 24 60 60) '+org-roam-archive-dailies)
+(run-with-timer 30 (* 24 60 60) '+org-roam-archive-dailies)
 ;; Sync Google Calendar events
-(run-with-timer 0 (* 8 60 60) '+org-gcal-sync-calendar)
+(run-with-timer 60 (* 8 60 60) '+org-gcal-sync-calendar)

@@ -321,7 +321,7 @@ sidebar buffer for this frame."
 
   (face-remap-add-relative 'italic :slant 'normal :foreground (doom-color 'blue))
   (face-remap-add-relative 'org-link :underline nil :foreground (doom-lighten (doom-color 'blue) 0.2))
-  (face-remap-add-relative 'cursor :foreground 'undefined :background 'undefined)
+  (face-remap-add-relative 'highlight :background (doom-color 'bg))
 
   (add-hook 'window-configuration-change-hook #'+sidebar:on-window-config-change)
   (add-hook 'kill-buffer-hook #'+sidebar:on-buffer-kill nil t))

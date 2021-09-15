@@ -82,11 +82,11 @@
      (seq-map
       #'car
       (org-roam-db-query
-      [:select [nodes:file]
-              :from tags
-              :left-join nodes
-              :on (= tags:node-id nodes:id)
-              :where (like tag $r1)] tag-filter)))))
+       [:select [nodes:file]
+               :from tags
+               :left-join nodes
+               :on (= tags:node-id nodes:id)
+               :where (like tag $r1)] tag-filter)))))
 
 ;;;
 ;;; Update Roam Filetags

@@ -37,14 +37,14 @@
 
 (after! org-fancy-priorities
   (setq org-priority-faces
-        `((65 . ( :foreground ,(doom-color 'light-red) :weight bold ))
-          (66 . ( :foreground ,(doom-color 'yellow) :weight bold ))
-          (67 . ( :foreground ,(doom-color 'blue) :weight bold ))))
+        `((65 . ( :foreground ,(doom-color 'light-red) :weight bold))
+          (66 . ( :foreground ,(doom-color 'yellow) :weight bold))
+          (67 . ( :foreground ,(doom-color 'blue) :weight bold))))
   (setq org-fancy-priorities-list
         `((?A . ,(propertize (format "%s [ SEVERE ]" (all-the-icons-faicon "exclamation-circle" :v-adjust -0.01))))
           (?B . ,(propertize (format "%s [ MEDIUM ]" (all-the-icons-faicon "arrow-circle-up" :v-adjust -0.01))))
-          (?C . ,(propertize (format "%s [ NORMAL ]" (all-the-icons-faicon "arrow-circle-down" :v-adjust -0.01))))))
-  )
+          (?C . ,(propertize (format "%s [ NORMAL ]" (all-the-icons-faicon "arrow-circle-down" :v-adjust -0.01)))))))
+  
 
 ;; Define the icons associated with the category of each headline
 ;; a todo was filed to. Use all the icons where available for each
@@ -140,7 +140,7 @@
   (unless (or (string-equal (buffer-name) "*Org Agenda*")
               (string-equal (buffer-name) "*Org Clock Report*"))
     (fringe-mode)
-    (set-face-attribute 'header-line nil :height 250)
+    (set-face-attribute 'header-line nil :height 1.45)
     (setq mouse-highlight 't)))
 
 (defun +org-reset-margins-after-window-change-h ()
@@ -182,6 +182,7 @@ WIDTH is the width of the Org Overlay Header."
     ;; The timestamp
     "\\(?4:[[:digit:]]\\{4\\}\-[[:digit:]]\\{2\\}\-[[:digit:]]\\{2\\}[[:space:]]\\)")
    line))
+
 
 (defun +org-overlay-header-render-overlay (line line-beginning height primary accent)
   "Add overlays with the desired text properties to the header.
