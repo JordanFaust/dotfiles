@@ -6,7 +6,7 @@
   :group '+sidebar
   :prefix "+sidebar:")
 
-(defcustom +sidebar:position 'left
+(defcustom +sidebar-position 'left
   "Position of sidebar buffer.
 
 Valid values are
@@ -16,17 +16,31 @@ Valid values are
                  (const right))
   :group '+sidebar)
 
+(defcustom +sidebar-default-init '+sidebar:default-init
+  "Default sidebar initialization function."
+
+  :type '(sexp)
+  :group 'sidebar)
+
+(defcustom +sidebar-buffer-init-alist nil
+  "Default sidebar initialization alist.
+This attempts to match the current buffer name to the sidebar buffer initialization
+function. This is used to display specific content based on the current buffer name."
+
+  :type '(alist :key-type regexp :value-type sexp)
+  :group 'sidebar)
+
 (defgroup +sidebar-window nil
   "Customisations for the behaviour of the sidebar window."
   :group '+sidebar
   :prefix "+sidebar:")
 
-(defcustom +sidebar:width 35
+(defcustom +sidebar-width 35
   "Width of the sidebar window."
   :type 'integer
   :group 'sidebar-window)
 
-(defcustom +sidebar:no-delete-other-windows t
+(defcustom +sidebar-no-delete-other-windows t
   "When non-nil sidebar will have the `no-delete-other-windows' parameter.
 This parameter prevents the sidebar window from closing when calling
 `delete-other-windows' or when a command like `magit-status' would launch a new
@@ -34,7 +48,7 @@ full-screen buffer."
   :type 'boolean
   :group '+sidebar-window)
 
-(defcustom +sidebar:is-never-other-window t
+(defcustom +sidebar-is-never-other-window t
   "When non-nil sidebar will use the `no-other-window' parameter.
 
 In practice it means that sidebar will become invisible to commands like
@@ -42,7 +56,7 @@ In practice it means that sidebar will become invisible to commands like
   :type 'boolean
   :group '+sidebar-window)
 
-(defcustom +sidebar:window-background-color nil
+(defcustom +sidebar-window-background-color nil
   "Custom background colours for the sidebar window.
 Value must be a cons cell consisting of two colours: first the background of the
 sidebar window proper, then a second colour for sidebar' `hl-line' overlay
@@ -79,10 +93,10 @@ Used to show an error message if someone mistakenly activates `sidebar-mode'.")
        ;; apparently keeping the hook around can lead to a feeback loop together with helms
        ;; auto-resize mode as seen in https://github.com/Alexander-Miller/treemacs/issues/76
        (let (window-configuration-change-hook)
-         (set-window-parameter w 'no-delete-other-windows +sidebar:no-delete-other-windows)
-         (set-window-parameter w 'window-side +sidebar:position)
+         (set-window-parameter w 'no-delete-other-windows +sidebar-no-delete-other-windows)
+         (set-window-parameter w 'window-side +sidebar-position)
          (set-window-parameter w 'window-slot 0)
-         (when +sidebar:is-never-other-window
+         (when +sidebar-is-never-other-window
            (set-window-parameter w 'no-other-window t))))))
 
 (defun +sidebar:set-width (width)
@@ -122,32 +136,29 @@ Used to show an error message if someone mistakenly activates `sidebar-mode'.")
 (defun +sidebar:setup-buffer ()
   "Create and setup a buffer for sidebar in the right position and size."
   (+sidebar:log "+sidebar:setup-buffer")
-  (-if-let (lv-buffer (-some->
-                       (--find (string= " *LV*" (buffer-name (window-buffer it)))
-                               (window-list (selected-frame)))
-                       (window-buffer)))
-      (progn
-        ;; workaround for LV windows like spacemacs' transient states preventing
-        ;; side windows from popping up right
-        ;; see https://github.com/abo-abo/hydra/issues/362
-        (setf (buffer-local-value 'window-size-fixed lv-buffer) nil)
-        (+sidebar:log "+sidebar:setup-buffer using lv-buffer")
-        (+sidebar:popup-window)
-        (setf (buffer-local-value 'window-size-fixed lv-buffer) t))
-    (+sidebar:log "+sidebar:setup-buffer not using lv-buffer")
-    (+sidebar:popup-window))
-  (let ((inhibit-read-only t))
-    (with-current-buffer +sidebar:buffer
-      (erase-buffer)
-      (insert-file-contents "~/.doom.d/snippets/+sidebar/sidebar-dashboard.org")
-      (org-mode)
-      (+sidebar-mode)
-      ;; The order here matters
-      (mu4e-dashboard-mode 1)))
-  (set-window-dedicated-p (selected-window) t)
-  (setq-local +sidebar:in-this-buffer t)
-  (let ((window-size-fixed))
-    (+sidebar:set-width +sidebar:width)))
+  (let ((init-fn (+sidebar:get-init)))
+    (-if-let (lv-buffer (-some->
+                          (--find (string= " *LV*" (buffer-name (window-buffer it)))
+                                  (window-list (selected-frame))))
+                        (window-buffer))
+        (progn
+          ;; workaround for LV windows like spacemacs' transient states preventing
+          ;; side windows from popping up right
+          ;; see https://github.com/abo-abo/hydra/issues/362
+          (setf (buffer-local-value 'window-size-fixed lv-buffer) nil)
+          (+sidebar:log "+sidebar:setup-buffer using lv-buffer")
+          (+sidebar:popup-window)
+          (setf (buffer-local-value 'window-size-fixed lv-buffer) t))
+      (+sidebar:log "+sidebar:setup-buffer not using lv-buffer")
+      (+sidebar:popup-window))
+    (let ((inhibit-read-only t))
+      (with-current-buffer +sidebar:buffer
+        (+sidebar:log "the init function is %s" init-fn)
+        (funcall init-fn)))
+    (set-window-dedicated-p (selected-window) t)
+    (setq-local +sidebar:in-this-buffer t)
+    (let ((window-size-fixed))
+      (+sidebar:set-width +sidebar-width))))
 
 (defun +sidebar:on-buffer-kill ()
   "Cleanup to run when a sidebar buffer is killed."
@@ -204,8 +215,13 @@ Valid states are 'visible, 'exists and 'none."
   "Pop up a side window and buffer for sidebar."
   (+sidebar:log "+sidebar:popup-window")
   (-> (+sidebar:get-local-buffer-create)
-    (display-buffer-in-side-window `((side . ,+sidebar:position)))
+    (display-buffer-in-side-window `((side . ,+sidebar-position)))
     (select-window)))
+
+
+;;;
+;;; Sidebar Init
+;;;
 
 (defun +sidebar:init ()
   "Create the buffer that will hold the sidebar content."
@@ -221,6 +237,33 @@ Valid states are 'visible, 'exists and 'none."
        ;; Render the Sidebar content
        ;; (goto-char 2)
        (message "buffer created")))))
+
+;; TODO: Don't use : in variable names and rename this to
+;; +sidebar:default-init
+(defun +sidebar:default-init ()
+  "Default sidebar initialization function."
+  (erase-buffer)
+  (insert "* Sidebar Buffer\n")
+  (org-mode)
+  (+sidebar-mode))
+
+(defun +sidebar:get-init (&optional buffer)
+  "Get the initialization function for the buffer based on the +sidebar-buffer-alist.
+
+BUFFER is the name of the buffer, defaults to the current buffer."
+  (let* ((name (buffer-name buffer))
+         (init +sidebar-default-init))
+    ;; Find the init function to use for the current buffer. The +sidebar-buffer-alist
+    ;; provides a list of regex's to match against the current buffer name and will use
+    ;; the associated init function for the first match.
+    (message "getting init function for buffer %s" name)
+    (message "  alist %s" +sidebar-buffer-init-alist)
+    (dolist (buffer-init +sidebar-buffer-init-alist)
+      (-when-let* ((buffer-init-regex (car buffer-init))
+                   (buffer-init-function (cdr buffer-init))
+                   (match-index (string-match buffer-init-regex name)))
+        (setq init buffer-init-function)))
+    init))
 
 ;;;
 ;;; Sidebar Mode
@@ -310,14 +353,14 @@ sidebar buffer for this frame."
     (+sidebar:on-window-config-change))
   ;; set the parameter immediately so it can take effect when `treemacs' is called programatically
   ;; alongside other window layout chaning commands that might delete it again
-  (set-window-parameter (selected-window) 'no-delete-other-windows +sidebar:no-delete-other-windows)
+  (set-window-parameter (selected-window) 'no-delete-other-windows +sidebar-no-delete-other-windows)
 
   (setq header-line-format " ")
 
-  (when +sidebar:window-background-color
-    (face-remap-add-relative 'default :background (car +sidebar:window-background-color))
-    (face-remap-add-relative 'fringe  :background (car +sidebar:window-background-color))
-    (face-remap-add-relative 'hl-line :background (cdr +sidebar:window-background-color)))
+  (when +sidebar-window-background-color
+    (face-remap-add-relative 'default :background (car +sidebar-window-background-color))
+    (face-remap-add-relative 'fringe  :background (car +sidebar-window-background-color))
+    (face-remap-add-relative 'hl-line :background (cdr +sidebar-window-background-color)))
 
   (face-remap-add-relative 'italic :slant 'normal :foreground (doom-color 'blue))
   (face-remap-add-relative 'org-link :underline nil :foreground (doom-lighten (doom-color 'blue) 0.2))

@@ -91,23 +91,31 @@
   :config
   (mu4e-icalendar-setup))
 
+(defun +mu4e-sidebar-init ()
+  "Buffer initialization function for the sidebar within mu4e views."
+  (insert-file-contents "~/.doom.d/snippets/+sidebar/sidebar-dashboard.org" nil nil nil t)
+  ;; The order here matters
+  (+sidebar-mode)
+  (mu4e-dashboard-mode 1))
+
 (defun +mu4e-open-inbox ()
   "Launch a view of the mu4e inbox with the sidebar dashboard."
   (interactive)
-  (if (or (member major-mode '(+sidebar-mode mu4e-headers-mode mu4e:main-mode mu4e-view-mode))
-          (get-buffer "*mu4e-headers*")
-          (+sidebar:visible-p))
-      (progn
-        ;; Close the sidebar
-        (+sidebar:close)
-        ;; Stop the mu server, freeing the lock on the files, and kill all associated buffers
-        (mu4e~stop))
-    ;; Start the mu server and open the inbox view
-    (mu4e~start (mu4e-headers-search "m:/Procore.com/INBOX"))
-    ;; Open the sidebar
-    (+sidebar:open)
-    ;; Switch back to the mu4e buffer
-    (switch-to-buffer "*mu4e-headers*")))
+  (let ((+sidebar-buffer-init-alist '(("\\*mu4e.*" . +mu4e-sidebar-init))))
+    (if (or (member major-mode '(+sidebar-mode mu4e-headers-mode mu4e:main-mode mu4e-view-mode))
+            (get-buffer "*mu4e-headers*")
+            (+sidebar:visible-p))
+        (progn
+          ;; Close the sidebar
+          (+sidebar:close)
+          ;; Stop the mu server, freeing the lock on the files, and kill all associated buffers
+          (mu4e~stop))
+      ;; Start the mu server and open the inbox view
+      (mu4e~start (mu4e-headers-search "m:/Procore.com/INBOX"))
+      ;; Open the sidebar
+      (+sidebar:open)
+      ;; Switch back to the mu4e buffer
+      (switch-to-buffer "*mu4e-headers*"))))
 
 ;;;
 ;;; Requires
