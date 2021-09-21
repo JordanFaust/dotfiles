@@ -1,9 +1,0 @@
-#!/bin/bash
-
-app=$1
-
-window=$(get-window $app)
-
-if [ $? -eq 0 ]; then
-    xdotool windowactivate $window
-fi

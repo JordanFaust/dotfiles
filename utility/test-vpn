@@ -1,4 +1,0 @@
-#!/bin/bash
-
-notify-send "testing vpn connection"
-vpn-connect

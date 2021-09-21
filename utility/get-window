@@ -1,7 +1,0 @@
-#!/bin/bash
-
-# Attempt to focus the specified window
-app=$1
-
-# Get the window ID
-xdotool search --onlyvisible --desktop 0 --class $app
