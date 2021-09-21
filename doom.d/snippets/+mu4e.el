@@ -6,26 +6,14 @@
 
 (use-package! mu4e-thread-folding
   :defer t
+  :hook (mu4e-headers-mode . mu4e-thread-folding-mode)
   :config
-  (add-to-list 'mu4e-header-info-custom
-               '(:empty . (:name "Empty"
-                           :shortname ""
-                           :function (lambda (msg) " "))))
-  (setq mu4e-headers-fields
-        '((:empty          . 2)
-          (:account-stripe . 1)
-          ;; (:flags          . 6) ; 3 icon flags
-          ;; (:mailing-list  .   20)
-          (:from-or-to     . 20)
-          (:human-date     . 12)
-          (:subject        . nil)))
-
-  (setq mu4e-headers-precise-alignment nil)
 
   ;; Remove the count for threads
   (setq mu4e-thread-folding-root-folded-prefix-string "▸")
   (setq mu4e-thread-folding-root-unfolded-prefix-string "▾")
 
+  (setq mu4e-headers-precise-alignment nil)
   (map! :map mu4e-headers-mode-map :nvg "<tab>"     'mu4e-headers-toggle-at-point)
   (map! :map mu4e-headers-mode-map :nvg "<left>"    'mu4e-headers-fold-at-point)
   (map! :map mu4e-headers-mode-map :nvg "<S-left>"  'mu4e-headers-fold-all)
@@ -35,18 +23,14 @@
   (map! :localleader (:map mu4e-headers-mode-map :nvg "<left>"    'mu4e-headers-fold-at-point))
   (map! :localleader (:map mu4e-headers-mode-map :nvg "<S-left>"  'mu4e-headers-fold-all))
   (map! :localleader (:map mu4e-headers-mode-map :nvg "<right>"   'mu4e-headers-unfold-at-point))
-  (map! :localleader (:map mu4e-headers-mode-map :nvg "<S-right>" 'mu4e-headers-unfold-all))
+  (map! :localleader (:map mu4e-headers-mode-map :nvg "<S-right>" 'mu4e-headers-unfold-all)))
 
-  (add-hook! 'mu4e-headers-found-hook :append #'mu4e-headers-fold-all)
-
-  (mu4e-thread-folding-mode))
 
 (use-package! mu4e-dashboard
   :defer t)
 
-;; Enable replying to iCal invites
 (use-package! mu4e-icalendar
-  :defer t
+  :after-call mu4e-thread-folding-mode
   :config
   (mu4e-icalendar-setup))
 
@@ -86,6 +70,22 @@
   ;; This might need to be turned off too
   (setq mu4e-index-lazy-check nil)
 
+  ;; Configure header columns
+  (add-to-list 'mu4e-header-info-custom
+               '(:empty . (:name "Empty"
+                           :shortname ""
+                           :function (lambda (msg) " "))))
+  (setq mu4e-headers-fields
+        '((:empty          . 2)
+          (:account-stripe . 1)
+          ;; (:flags          . 6) ; 3 icon flags
+          ;; (:mailing-list  .   20)
+          (:from-or-to     . 20)
+          (:human-date     . 12)
+          (:subject        . nil)))
+
+  (add-hook! 'mu4e-headers-found-hook :append #'mu4e-headers-fold-all)
+
   ;; Change the order of colors for account marking
   (setq +mu4e-header-colorized-faces
       '(all-the-icons-yellow
@@ -93,6 +93,7 @@
         all-the-icons-purple-alt
         all-the-icons-blue-alt
         all-the-icons-purple)))
+
 
 (defun +mu4e-sidebar-init ()
   "Buffer initialization function for the sidebar within mu4e views."

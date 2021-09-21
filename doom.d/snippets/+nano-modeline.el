@@ -1,103 +1,93 @@
 ;;; ~/.doom.d/snippets/+nano-modeline.el -*- lexical-binding: t -*-
 
-(use-package! nano-modeline
-  :config
-  ;; Set floating look to frames and the modeline
-  (setq default-frame-alist
-        (append (list
-                 '(min-height . 1)  '(height . 45)
-                 '(min-width  . 1)  '(width  . 81)
-                 '(vertical-scroll-bars . nil)
-                 '(internal-border-width . 32)
-                 '(left-fringe . 0)
-                 '(right-fringe . 0)
-                 '(tool-bar-lines . 0)
-                 '(menu-bar-lines . 0))))
-  ;; Add window dividers for keeping floating headline when using virtical splits
-  (setq window-divider-default-right-width 32)
-  (setq window-divider-default-places 'right-only)
-  (window-divider-mode 1)
+;;;
+;;; Packages
+;;;
 
   ;; Extensions
-  (use-package! anzu
-    :after-call isearch-mode
-    :config
-    ;; We manage our own modeline segments
-    (setq anzu-cons-mode-line-p nil)
-    ;; Ensure anzu state is cleared when searches & iedit are done
-    (add-hook 'iedit-mode-end-hook #'anzu--reset-status)
-    (advice-add #'evil-force-normal-state :before #'anzu--reset-status)
-    ;; Fix matches segment mirroring across all buffers
-    (mapc #'make-variable-buffer-local
-          '(anzu--total-matched
-            anzu--current-position
-            anzu--state
-            anzu--cached-count
-            anzu--cached-positions anzu--last-command
-            anzu--last-isearch-string anzu--overflow-p)))
+(use-package! anzu
+  :after-call isearch-mode
+  :config
+  ;; We manage our own modeline segments
+  (setq anzu-cons-mode-line-p nil)
+  ;; Ensure anzu state is cleared when searches & iedit are done
+  (add-hook 'iedit-mode-end-hook #'anzu--reset-status)
+  (advice-add #'evil-force-normal-state :before #'anzu--reset-status)
+  ;; Fix matches segment mirroring across all buffers
+  (mapc #'make-variable-buffer-local
+        '(anzu--total-matched
+          anzu--current-position
+          anzu--state
+          anzu--cached-count
+          anzu--cached-positions anzu--last-command
+          anzu--last-isearch-string anzu--overflow-p)))
 
-  (use-package! evil-anzu
-    :when (featurep! :editor evil)
-    :after-call evil-ex-start-search evil-ex-start-word-search evil-ex-search-activate-highlight
-    :config (global-anzu-mode +1)))
+(use-package! evil-anzu
+  :when (featurep! :editor evil)
+  :after-call evil-ex-start-search evil-ex-start-word-search evil-ex-search-activate-highlight
+  :config (global-anzu-mode +1))
 
-(defun hide-nano-modeline-h ()
-  "Add hook that extends hide-mode-line-mode to work for nano headerline."
-  (setq hide-mode-line-format " ")
-  (message "hide-mode-line-mode %s" hide-mode-line-mode)
-  (if (and hide-mode-line-mode
-           (eq nano-modeline-position 'top))
-      (progn
-        (add-hook 'after-change-major-mode-hook #'hide-mode-line-reset nil t)
-        (message "before header-line-format %s" header-line-format)
-        (setq hide-mode-line--old-format header-line-format
-              header-line-format hide-mode-line-format)
-        (message "hide-mode-line--old-format %s" hide-mode-line--old-format)
-        (message "header-line-format %s" header-line-format))
+(use-package! nano-modeline
+  ;; Hide both the header-line and mode-line for the dashboard mode
+  :hook (+doom-dashboard-mode . +doom-hide-nano-modeline-h)
+  ;; Don't explicitly require and start the modeline until we swap to a file
+  :hook (doom-first-file . +doom-nano-modeline-init-h)
+  :config
+  (defun +doom-hide-nano-modeline-h ()
+    "Add hook that extends hide-mode-line-mode to work for nano headerline."
+    (require 'hide-mode-line)
+    (setq hide-mode-line-format " ")
+    (message "hide-mode-line-mode %s" hide-mode-line-mode)
+    (if (and hide-mode-line-mode
+             (eq nano-modeline-position 'top))
+        (progn
+          (add-hook 'after-change-major-mode-hook #'hide-mode-line-reset nil t)
+          (message "before header-line-format %s" header-line-format)
+          (setq hide-mode-line--old-format header-line-format
+                header-line-format hide-mode-line-format)
+          (message "hide-mode-line--old-format %s" hide-mode-line--old-format)
+          (message "header-line-format %s" header-line-format))
 
-    (remove-hook 'after-change-major-mode-hook #'hide-mode-line-reset t)
-    (setq header-line-format hide-mode-line--old-format
-          hide-mode-line--old-format " "))
+      (remove-hook 'after-change-major-mode-hook #'hide-mode-line-reset t)
+      (setq header-line-format hide-mode-line--old-format
+            hide-mode-line--old-format " "))
 
-  (force-mode-line-update))
+    (force-mode-line-update))
+  (defun +doom-nano-modeline-init-h ()
+    (require 'nano-modeline)
+    (nano-modeline)))
 
-(defface nano-modeline-visual-bell '((t :inherit error))
-  "Face to use for the mode-line when `+nano-modeline-visual-bell-config' is used."
-  :group 'nano-modeline)
-
-(defun +nano-modeline-visual-bell-fn ()
-  "Blink the mode-line red briefly. Set `ring-bell-function' to this to use it."
-  (let ((nano-headline--active-cookie (face-remap-add-relative 'nano-modeline-active 'nano-modeline-visual-bell))
-        (nano-headline--active-name-cookie (face-remap-add-relative 'nano-modeline-active-name 'nano-modeline-visual-bell))
-        (nano-headline--active-primary-cookie (face-remap-add-relative 'nano-modeline-active-primary 'nano-modeline-visual-bell))
-        (nano-headline--active-secondary-cookie (face-remap-add-relative 'nano-modeline-active-secondary 'nano-modeline-visual-bell))
-        (nano-headline--active-status-RO (face-remap-add-relative 'nano-modeline-active-status-RO 'nano-modeline-visual-bell))
-        (nano-headline--active-status-RW (face-remap-add-relative 'nano-modeline-active-status-RW 'nano-modeline-visual-bell))
-        (nano-headline--active-status-** (face-remap-add-relative 'nano-modeline-active-status-** 'nano-modeline-visual-bell)))
-    (force-mode-line-update)
-    (run-with-timer 0.15 nil
-                    (lambda (cookies buf)
-                      (with-current-buffer buf
-                        (dolist (cookie cookies)
-                          (face-remap-remove-relative cookie))
-                        (force-mode-line-update)))
-                    (list nano-headline--active-cookie
-                          nano-headline--active-name-cookie
-                          nano-headline--active-primary-cookie
-                          nano-headline--active-secondary-cookie
-                          nano-headline--active-status-RO
-                          nano-headline--active-status-RW
-                          nano-headline--active-status-**)
-                    (current-buffer))))
-
-(defun +nano-modeline-visual-bell-config ()
-  "Enable flashing the mode-line on error."
-  (setq ring-bell-function #'+nano-modeline-visual-bell-fn
-        visible-bell t))
 
 (after! nano-modeline
+  (defun +nano-modeline-visual-bell-fn ()
+    "Blink the mode-line red briefly. Set `ring-bell-function' to this to use it."
+    (let ((nano-headline--active-cookie (face-remap-add-relative 'nano-modeline-active 'nano-modeline-visual-bell))
+          (nano-headline--active-name-cookie (face-remap-add-relative 'nano-modeline-active-name 'nano-modeline-visual-bell))
+          (nano-headline--active-primary-cookie (face-remap-add-relative 'nano-modeline-active-primary 'nano-modeline-visual-bell))
+          (nano-headline--active-secondary-cookie (face-remap-add-relative 'nano-modeline-active-secondary 'nano-modeline-visual-bell))
+          (nano-headline--active-status-RO (face-remap-add-relative 'nano-modeline-active-status-RO 'nano-modeline-visual-bell))
+          (nano-headline--active-status-RW (face-remap-add-relative 'nano-modeline-active-status-RW 'nano-modeline-visual-bell))
+          (nano-headline--active-status-** (face-remap-add-relative 'nano-modeline-active-status-** 'nano-modeline-visual-bell)))
+      (force-mode-line-update)
+      (run-with-timer 0.15 nil
+                      (lambda (cookies buf)
+                        (with-current-buffer buf
+                          (dolist (cookie cookies)
+                            (face-remap-remove-relative cookie))
+                          (force-mode-line-update)))
+                      (list nano-headline--active-cookie
+                            nano-headline--active-name-cookie
+                            nano-headline--active-primary-cookie
+                            nano-headline--active-secondary-cookie
+                            nano-headline--active-status-RO
+                            nano-headline--active-status-RW
+                            nano-headline--active-status-**)
+                      (current-buffer))))
 
-  (set-face-attribute 'header-line nil :height 1.45)
+  (defun +nano-modeline-visual-bell-config ()
+    "Enable flashing the mode-line on error."
+    (setq ring-bell-function #'+nano-modeline-visual-bell-fn
+          visible-bell t))
 
   (defun +nano-modeline--get-current-window (&optional frame)
     "Get the current window but should exclude the child windows."
@@ -125,26 +115,6 @@
   (defun +nano-modeline-unset-selected-window ()
     "Unset `doom-modeline-current-window' appropriately."
     (setq +nano-modeline-current-window nil))
-
-  (add-hook 'after-make-frame-functions #'+nano-modeline-set-selected-window)
-  (add-hook 'buffer-list-update-hook #'+nano-modeline-set-selected-window)
-  (add-hook 'window-configuration-change-hook #'+nano-modeline-set-selected-window)
-  (add-hook 'window-selection-change-functions #'+nano-modeline-set-selected-window)
-  (add-hook 'exwm-workspace-switch-hook #'+nano-modeline-set-selected-window)
-  (with-no-warnings
-    (if (boundp 'after-focus-change-function)
-        (progn
-          (defun +nano-modeline-refresh-frame ()
-            (setq +nano-modeline-current-window nil)
-            (cl-loop for frame in (frame-list)
-                     if (eq (frame-focus-state frame) t)
-                     return (setq +nano-modeline-current-window
-                                  (+nano-modeline--get-current-window frame)))
-            (force-mode-line-update))
-          (add-function :after after-focus-change-function #'+nano-modeline-refresh-frame))
-      (progn
-        (add-hook 'focus-in-hook #'+nano-modeline-set-selected-window)
-        (add-hook 'focus-out-hook #'+nano-modeline-unset-selected-window))))
 
   (defun nano-modeline-compose (status name primary secondary)
     "Compose a string with provided information"
@@ -232,7 +202,7 @@
           (mode-name   (nano-mode-name))
           (branch      (vc-branch))
           (position    (format-mode-line "%l:%c")))
-          
+
       ;; Use the term mode even when clocked in
       ;; TODO fix the check for
       (if (nano-modeline-vterm-mode-p)
@@ -282,6 +252,26 @@
                 (format " %s+ " total))
                (t
                 (format " %s/%d " here total)))))))
+
+  (add-hook 'after-make-frame-functions #'+nano-modeline-set-selected-window)
+  (add-hook 'buffer-list-update-hook #'+nano-modeline-set-selected-window)
+  (add-hook 'window-configuration-change-hook #'+nano-modeline-set-selected-window)
+  (add-hook 'window-selection-change-functions #'+nano-modeline-set-selected-window)
+  (add-hook 'exwm-workspace-switch-hook #'+nano-modeline-set-selected-window)
+  (with-no-warnings
+    (if (boundp 'after-focus-change-function)
+        (progn
+          (defun +nano-modeline-refresh-frame ()
+            (setq +nano-modeline-current-window nil)
+            (cl-loop for frame in (frame-list)
+                     if (eq (frame-focus-state frame) t)
+                     return (setq +nano-modeline-current-window
+                                  (+nano-modeline--get-current-window frame)))
+            (force-mode-line-update))
+          (add-function :after after-focus-change-function #'+nano-modeline-refresh-frame))
+      (progn
+        (add-hook 'focus-in-hook #'+nano-modeline-set-selected-window)
+        (add-hook 'focus-out-hook #'+nano-modeline-unset-selected-window))))
 
   ;; (add-hook 'neotree-mode-hook #'hide-nano-modeline-h)
   (+nano-modeline-visual-bell-config))

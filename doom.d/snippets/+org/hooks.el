@@ -13,9 +13,6 @@
 
 ;;; Agenda Specific Changes
 
-;; Lookup and assign all files that have the todo tag to the org-agenda-files
-(advice-add 'org-agenda :before #'+org-agenda-files-update-a)
-(advice-add 'org-todo-list :before #'+org-agenda-files-update-a)
 ;; Lookup and assign all files used in the refile workflows
 (advice-add 'org-refile :before #'+org-refile-agenda-files-update-a)
 (advice-add 'org-agenda-refile :before #'+org-refile-agenda-files-update-a)
@@ -89,6 +86,8 @@ that captures the duration of the meeting."
 ;;;
 
 ;; Archive daily files that are older then the specified configuration
-(run-with-timer 30 (* 24 60 60) '+org-roam-archive-dailies)
+;; (run-with-timer 30 (* 24 60 60) '+org-roam-archive-dailies)
 ;; Sync Google Calendar events
-(run-with-timer 60 (* 8 60 60) '+org-gcal-sync-calendar)
+(run-with-timer 60 +org-gcal-check-interval '+org-gcal-sync-calendar)
+
+(provide 'hooks)

@@ -25,15 +25,16 @@ todo files that have active clocks and tasks."
          (weekly (+org-roam-notes-with-tag-key +org-roam-todo-tag-key)))
     (dolist (daily dailies)
       (let* ((timestamp (+org-roam-daily-date-from-file daily))
-            (now (decode-time))
-            (start-of-week (copy-sequence now))
-            (day-of-week (string-to-number (format-time-string "%w"))))
+             (now (decode-time))
+             (start-of-week (copy-sequence now))
+             (day-of-week (string-to-number (format-time-string "%w"))))
+        (message ":file %s :timestamp %s" daily timestamp)
         (when timestamp
           ;; Set the date of start-of-week to the start of the week. This is done by
           ;; subtracting the current day by the day-of-week representation in format-time-string
           (cl-decf (nth 3 start-of-week) day-of-week)
           (let ((start-of-week-timestamp (format-time-string "%Y-%m-%d" (apply #'encode-time start-of-week))))
-            (when (or (string-greaterp timestamp start-of-week-timestamp )
+            (when (or (string-greaterp timestamp start-of-week-timestamp)
                       (string-equal start-of-week-timestamp timestamp))
               (setq weekly (cons daily weekly)))))))
     weekly))
@@ -48,15 +49,15 @@ todo files that have active clocks and tasks."
          (monthly (+org-roam-notes-with-tag-key +org-roam-todo-tag-key)))
     (dolist (daily dailies)
       (let* ((timestamp (+org-roam-daily-date-from-file daily))
-            (now (decode-time))
-            (start-of-month (copy-sequence now))
-            (day-of-month (string-to-number (format-time-string "%e"))))
+             (now (decode-time))
+             (start-of-month (copy-sequence now))
+             (day-of-month (string-to-number (format-time-string "%e"))))
         (when timestamp
           ;; Set the date of start-of-week to the start of the week. This is done by
           ;; subtracting the current day by the day-of-week representation in format-time-string
           (cl-decf (nth 3 start-of-month) day-of-month)
           (let ((start-of-month-timestamp (format-time-string "%Y-%m-%d" (apply #'encode-time start-of-month))))
-            (when (or (string-greaterp timestamp start-of-month-timestamp )
+            (when (or (string-greaterp timestamp start-of-month-timestamp)
                       (string-equal start-of-month-timestamp timestamp))
               (setq monthly (cons daily monthly)))))))
     monthly))
@@ -81,8 +82,8 @@ closes those buffers if they have not been modified"
 (defun +org-clockreport-sorter (ipos tables params)
   (let ((filtered-table '()))
     (dolist (table tables)
-      (let ((file (nth 0 table))
-            (total-time (nth 1 table))
+      (let ((_file (nth 0 table))
+            (_total-time (nth 1 table))
             (headlines (nth 2 table)))
         ;; Filter the first headline "Completed", "Today", etc
         (setf (nth 2 table) (cdr headlines))
@@ -156,3 +157,6 @@ TYPE specifies the kind of report to generate and can be 'weekly or 'monthly."
     (+org-clockreport-render-overlay-ui)
     (setq org-clock-clocktable-default-properties properties))
   (read-only-mode 1))
+
+
+(provide 'clock)

@@ -4,4 +4,5 @@
 ;;; Requires
 ;;;
 
-(load "+org/base")
+(require 'base "+org/base")
+(provide '+org)

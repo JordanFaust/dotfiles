@@ -4,12 +4,14 @@
 ;;; Packages
 ;;;
 
-(use-package! org-super-agenda
-  :defer t)
+(use-package! org-super-agenda :defer t)
 
 ;;;
 ;;; Config
 ;;;
+
+(defvar +org-current-effort "1:00"
+  "Current effort for agenda items.")
 
 (defun +org-agenda-format-date-aligned (date)
   "Format a DATE string for display in the daily/weekly agenda, or timeline.
@@ -17,12 +19,9 @@ This function makes sure that dates are aligned for easy reading."
   (require 'cal-iso)
   (let* ((dayname (calendar-day-name date 1 nil))
          (day (cadr date))
-         (day-of-week (calendar-day-of-week date))
          (month (car date))
          (monthname (calendar-month-name month 1))
-         (year (nth 2 date))
-         (iso-week (org-days-to-iso-week
-                    (calendar-absolute-from-gregorian date))))
+         (year (nth 2 date)))
         (format " %-2s. %2d %s, %s"
            dayname day monthname year)))
 
@@ -219,35 +218,4 @@ This function makes sure that dates are aligned for easy reading."
           (forward-line -1))))
     (goto-char (point-min))))
 
-(defun +org-agenda-set-effort (effort)
-  "Set the effort property for the current headline"
-  (interactive
-   (list (read-string (format "Effort [%s]: " +org-current-effort) nil nil +org-current-effort)))
-  (setq +org-current-effort effort)
-  (org-agenda-check-no-diary)
-  (let* ((hdmarker (or (org-get-at-bol 'org-hd-marker)
-                       (org-agenda-error)))
-         (buffer (marker-buffer hdmarker))
-         (pos (marker-position hdmarker))
-         (inhibit-read-only t)
-         newhead)
-    (org-with-remote-undo buffer
-      (with-current-buffer buffer
-        (widen)
-        (goto-char pos)
-        (org-show-context 'agenda)
-        (funcall-interactively 'org-set-effort nil +org-current-effort)
-        (end-of-line 1)
-        (setq newhead (org-get-heading)))
-      (org-agenda-change-all-lines newhead hdmarker))))
-
-(defun +org-agenda-process-inbox-item ()
-  "Process a single item in the org-agenda"
-  (interactive)
-  (org-with-wide-buffer
-   (org-agenda-set-tags)
-   (org-agenda-priority 'set)
-   (call-interactively '+org-agenda-set-effort)
-   (org-agenda-refile nil nil t)))
-
-(map! :localleader (:map org-agenda-mode-map :nvg "r" '+org-agenda-process-inbox-item))
+(provide 'agenda)

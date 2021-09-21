@@ -52,7 +52,7 @@
 
 (package! enh-ruby-mode)
 
-(package! tree-sitter-langs)
+(package! tree-sitter-langs :pin "e73eba6b2fbe")
 (package! tree-sitter)
 
 ;; Org and Org Roam Dependencies

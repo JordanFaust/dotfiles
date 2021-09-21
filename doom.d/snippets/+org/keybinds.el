@@ -1,85 +1,23 @@
 ;;; ~/.doom.d/snippets/+org/keybinds.el -*- lexical-binding: t -*-
 
-;;;
-;;; Packages
-;;;
+(after! org-agenda
+  (map!
+   :leader
+   (:prefix ("n" . "+notes")
+    :desc "My Agenda"            :nvg "a" #'+org-my-agenda
+    :desc "Capture to Inbox"     :nvg "i" #'+org-roam-capture-to-inbox
+    :desc "Goto Inbox"           :nvg "I" #'+org-roam-go-to-inbox
+    :desc "Weekly Clock Report"  :nvg "W" #'+org-weekly-clock-report
+    :desc "Monthly Clock Report" :nvg "M" #'+org-monthly-clock-report))
 
+  (map! :localleader (:map org-agenda-mode-map :nvg "r" '+org-agenda-process-inbox-item)))
 
-;;;
-;;; Config
-;;;
+(after! org
+  (map!
+   :localleader
+   :map org-mode-map
+   :nvg "h" #'+org-toggle-properties
+   :nvg "H" #'+org-toggle-heading
+   :nvg "ac" #'+org-donload-screenshot))
 
-
-(defvar +org-current-effort "1:00"
-  "Current effort for agenda items.")
-
-(defvar +org-screenshot-width "600"
-  "Desired width of the captured screenshot.")
-
-(defun +org-my-agenda (&rest _)
-  "Iteractive command to navigate to My Agenda"
-  (interactive "P")
-  (org-agenda nil "a"))
-
-(defun +org-roam-capture-to-inbox ()
-  "Interactive command to start inbox capture workflow"
-  (interactive)
-  (org-roam-capture- :keys "i"
-                     :node (org-roam-node-create)
-                     :templates org-roam-dailies-capture-templates))
-
-(defun +org-roam-go-to-inbox ()
-  "Interactive command to go to the roam inbox"
-  (interactive)
-  (find-file "~/notes/roam/inbox/work.org"))
-
-(defun +org-hide-properties ()
-  "Hide all org-mode headline property drawers in buffer. Could be slow if it has a lot of overlays."
-  (interactive)
-  (save-excursion
-    (goto-char (point-min))
-    (while (re-search-forward
-            "^ *:properties:\n\\( *:.+?:.*\n\\)+ *:end:\n" nil t)
-      (let ((ov_this (make-overlay (match-beginning 0) (match-end 0))))
-        (overlay-put ov_this 'display "")
-        (overlay-put ov_this 'hidden-prop-drawer t))))
-  (put 'org-toggle-properties-hide-state 'state 'hidden))
-
-(defun +org-show-properties ()
-  "Show all org-mode property drawers hidden by org-hide-properties."
-  (interactive)
-  (remove-overlays (point-min) (point-max) 'hidden-prop-drawer t)
-  (put 'org-toggle-properties-hide-state 'state 'shown))
-
-(defun +org-toggle-properties ()
-  "Toggle visibility of property drawers."
-  (interactive)
-  (if (eq (get 'org-toggle-properties-hide-state 'state) 'hidden)
-      (+org-show-properties)
-    (+org-hide-properties)))
-
-(defun +org-download-screenshot (width)
-  "Capture a screen shot and specify the desired image width in the capture."
-  (interactive
-   (list (read-string (format "Width [%s]: " +org-screenshot-width) nil nil +org-screenshot-width)))
-  (setq org-image-actual-width (string-to-number width))
-  (funcall-interactively 'org-download-screenshot nil))
-
-(defun +org-weekly-clock-report ()
-  "Open the weekly clock report"
-  (interactive)
-  (+org-clockreport-render-ui 'weekly))
-
-(defun +org-monthly-clock-report ()
-  "Open the monthly clock report."
-  (interactive)
-  (+org-clockreport-render-ui 'monthly))
-
-(map! :leader :desc "My Agenda"        :nvg "na" '+org-my-agenda)
-(map! :leader :desc "Capture to Inbox" :nvg "ni" '+org-roam-capture-to-inbox)
-(map! :leader :desc "Goto Inbox"       :nvg "nI" '+org-roam-go-to-inbox)
-(map! :leader :desc "Weekly Clock Report" :nvg "nW" '+org-weekly-clock-report)
-(map! :leader :desc "Monthly Clock Report" :nvg "nM" '+org-monthly-clock-report)
-(map! :localleader (:map org-mode-map :nvg "h" '+org-toggle-properties))
-(map! :localleader (:map org-mode-map :nvg "H" 'org-toggle-heading))
-(map! :localleader (:map org-mode-map :nvg "ac" '+org-download-screenshot))
+(provide 'keybinds)

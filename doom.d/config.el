@@ -26,10 +26,6 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-;; (load! "themes/doom-lena-theme.el")
-(load! "themes/doom-vilebloom-theme.el")
-(load! "themes/doom-vilebloom-light-theme.el")
-;; (load! "themes/doom-valley-theme.el")
 (setq doom-theme 'doom-vilebloom)
 
 ;; If you use `org' and don't want your org files in the default location below,
@@ -58,31 +54,61 @@
 ;; they are implemented.
 
 ;;
-;; Theme Config
+;; Startup Optimizations
 ;;
+
+;; Lots of packages depend on these libraries so load them as soon as we can
+(use-package! dash :defer t)
+(use-package! s :defer t)
+(use-package! f :defer t)
+(use-package! cl-lib :defer t)
+
+;; Use the doom-incremental-package loading to load these packaged
+(dolist (package '(org-roam dash s f cl-lib))
+  (prependq! package doom-incremental-packages))
+;; Update Load Path
+;;
+
+(add-load-path! "snippets")
+(add-load-path! "themes")
+
+;;
+;; UI Settings
+;;
+
+;; Set floating look to frames and the modeline
+(setq default-frame-alist
+      (append (list
+               '(min-height . 1)  '(height . 50)
+               '(min-width  . 1)  '(width  . 130)
+               '(vertical-scroll-bars . nil)
+               '(internal-border-width . 32)
+               '(left-fringe . 0)
+               '(right-fringe . 0)
+               '(tool-bar-lines . 0)
+               '(menu-bar-lines . 0))))
+;; Add window dividers for keeping floating headline when using virtical splits
+(setq window-divider-default-right-width 32)
+(setq window-divider-default-places 'right-only)
+
+;; Remove the header and mode line from the initial splash screen
+(add-hook! 'doom-init-ui-hook
+  (defun +doom-reset-modelines-h ()
+    (setq header-line-format nil)
+    (setq mode-line-format nil)))
+
+;; Define custom face for nano modeline visual bell
+(defface nano-modeline-visual-bell '((t :inherit error))
+  "Face to use for the mode-line when `+nano-modeline-visual-bell-config' is used."
+  :group 'nano-modeline)
+
+;; Bar cursor
+(setq-default cursor-type '(hbar . 2))
+(setq evil-normal-state-cursor '(hbar . 2))
 
 (after! doom-themes
-  :config
   (doom-themes-treemacs-config)
   (doom-themes-org-config))
-
-;; (after! doom-modeline
-;;   (setq doom-modeline-bar-width 10
-;;         doom-modeline-height 40
-;;         doom-modeline-buffer-file-name-style 'relative-to-project)
-;;   (doom-modeline-def-modeline 'jfaust
-;;     '(bar matches buffer-info buffer-position word-count selection-info)
-;;     '(misc-info persp-name grip gnus github debug lsp minor-modes input-method indent-info buffer-encoding major-mode process vcs checker "  "))
-;;   (defun setup-custom-doom-modeline ()
-;;     (doom-modeline-set-modeline 'jfaust 'default))
-;;   (add-hook 'doom-modeline-mode-hook 'setup-custom-doom-modeline))
-
-;;
-;; Theme Customization
-;;
-
-(custom-theme-set-faces! 'doom-rouge
-  `(ivy-posframe :background ,(doom-darken "#0E131D"  0.1)))
 
 ;;
 ;; LSP Configuration
@@ -135,7 +161,14 @@
   ;; * ~/.rustup/ - Rust project dependencies (code navigation jumps)
   ;; * ~/.gems/ - Ruby project dependencies (code navigation jumps)
   ;; * ~/.emacs.d/.local
-  (setq projectile-ignored-projects '("/tmp" "~/.rustup/" "~/.cargo/registry/" "~/.gem/" "~/ws/go/pkg/" "~/.emacs.d/.local/" "~/notes/roam"))
+  (setq projectile-ignored-projects
+        '("/tmp"
+          "~/.rustup/"
+          "~/.cargo/registry/"
+          "~/.gem/"
+          "~/ws/go/pkg/"
+          "~/.emacs.d/.local/"
+          "~/notes/roam"))
   (defun projectile-ignored-project-regexp-function (project-root)
     (cl-loop for project in projectile-ignored-projects
              ;; Ignore the home directory
@@ -152,12 +185,11 @@
   ;; Force project and symbol search to a the top posframe
   ;; Explicitly set the width of the posframe to prevent possibly violent
   ;; resizing as it async processes results and displays them
-  (setf (alist-get t ivy-posframe-display-functions-alist)
-        #'ivy-posframe-display-at-frame-top-center)
-  (setf (alist-get 'swiper ivy-posframe-display-functions-alist)
-        #'ivy-posframe-display-at-frame-top-center)
-  (setf (alist-get 'counsel-rg ivy-posframe-display-functions-alist)
-        #'ivy-posframe-display-at-frame-top-center)
+  (let ((ivy-frame-top-functions '(t swiper counsel-rg)))
+    (dolist (ivy-function-display ivy-posframe-display-functions-alist)
+      (when (member (car ivy-function-display) ivy-frame-top-functions)
+        (setf (alist-get (car ivy-function-display) ivy-posframe-display-functions-alist)
+              #'ivy-posframe-display-at-frame-top-center))))
   (setq ivy-posframe-width 120)
   (setq posframe-arghandler
         (lambda (buffer-or-name key value)
@@ -177,50 +209,16 @@
   ;; Fix improper handling of error codes from ripgrep on Linux
   (setq counsel-rg-base-command "rg -M 240 --with-filename --no-heading --line-number --color never %s || true"))
 
-;;
-;; Neotree Configuration
-;;
-
-(after! neotree
-  :config
-  (defun doom-neo--longest-line ()
-    "Calculates the longest line in the neotree buffer"
-    (with-current-buffer (neo-global--get-buffer)
-      (let ((longest-line 0))
-        (save-excursion
-          (goto-char (point-min))
-          (while (not(eobp))
-            (setq longest-line (max longest-line (- (line-end-position) (line-beginning-position))))
-            (forward-line)))
-        longest-line)))
-
-  (defun neo-window-size-change-function (_)
-    "Dynamically set the width of the NEOTREE buffer within the configured bounds"
-    (let ((neo-window (neo-global--get-window)))
-      (unless (null neo-window)
-        ;; Dynamically set the window width within the allowed bounds
-        (neo-global--set-window-width
-         (let ((width (doom-neo--longest-line)))
-           ;; Add 10 to the total width to account for difference in ligature width
-           ;; in the calculation
-           (pcase width
-             ;; Don't allow the window width to be smaller than 30
-             ((guard (< width 25)) 25)
-             ;; Don't allow the window width to be greater than 55
-             ((guard (> width 55)) 55)
-             ;; Return the current width if within bounds
-             (_ (+ width 1))))))))
-
-  (add-to-list 'window-size-change-functions #'neo-window-size-change-function))
-
 ;;;
 ;;; Tree Sitter Configuration
 ;;;
 
+(use-package! tree-sitter-langs
+  :defer t)
+
 (use-package! tree-sitter
-  :defer t
+  :defer-incrementally (tree-sitter-langs)
   :config
-  (require 'tree-sitter-langs)
   (global-tree-sitter-mode)
   (setq tree-sitter-hl-use-font-lock-keywords nil)
   (pushnew! tree-sitter-major-mode-language-alist '(enh-ruby-mode . ruby))
@@ -254,14 +252,9 @@
 
      ;; Highlight all other variables
      (variable_expr (identifier) @variable)])
-     
   (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
+     
 
-; Turn off font lock keywords inplace of tree sitter
-; TODO: This is needed since font face text properties from font
-; lock are prefixed before the tree-sitter properties. This is overriding
-; the highlighting from tree sitter with font lock properties. Ideally this
-; would be reveresed
 (use-package! enh-ruby-mode
   :defer t
   :config
@@ -269,29 +262,10 @@
   (setq enh-ruby-font-names nil)
   (setq ruby-font-lock-keywords nil))
 
-;;;
-;;; Performance Tweaks
-;;;
-
-(use-package! hl-line+
-  :defer t
-  :load-path "3rd"
-  :config
-  (hl-line-when-idle-interval 0.3)
-  (toggle-hl-line-when-idle 1))
-
-(use-package! display-line-numbers
-  :ensure nil
-  :defer t
-  :init
-  (setq display-line-numbers-width-start t)
-  :config
-  (display-line-numbers-mode -1))
-
 (use-package! treemacs
   :defer t
   :config
-  (setq treemacs-user-header-line-format header-line-format)
+  ;; (setq treemacs-user-header-line-format header-line-format)
   ;; (setq treemacs-window-background-color `(,(doom-color 'fg) . ,(doom-color 'base0)))
 
   (treemacs-fringe-indicator-mode 'always)
@@ -321,8 +295,8 @@
 ;;;
 ;;; Better Lisp Editing
 ;;;
-(setq lisp-indent-function 'common-lisp-indent-function)
 
+(setq lisp-indent-function 'common-lisp-indent-function)
 (after! parinfer-rust-mode
   (setq parinfer-rust-preferred-mode "indent"))
 
@@ -330,12 +304,11 @@
 ;;; Extensions
 ;;;
 
-(add-load-path! "snippets")
 
 (load! "snippets/+nano-modeline")
 (load! "snippets/+ruby")
 (load! "snippets/+functions")
 (load! "snippets/+bindings")
-(load! "snippets/+org")
+(require '+org)
 (require '+sidebar)
 (load! "snippets/+mu4e")

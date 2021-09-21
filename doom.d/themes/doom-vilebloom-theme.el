@@ -203,7 +203,7 @@ determine the exact padding."
 
    ;;;; ivy-posframe
    (ivy-posframe :background bg-alt)
-   (ivy-posframe-border :background highlight)
+   (ivy-posframe-border :background yellow)
 
 
    ;;;; magit

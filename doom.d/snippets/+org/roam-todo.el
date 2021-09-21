@@ -1,20 +1,4 @@
-;;; ~/.doom.d/snippets/+org/ui.el -*- lexical-binding: t -*-
-
-;;;
-;;; Packages
-;;;
-
-;; Vulpea provides a set of utilities for digging deeper into the content
-;; of notes in org-roam. All Todos and other information is quickly filtered
-;; and operated on in an efficent manner using filetags to only process
-;; items in the files we need. This make building more complex rollups
-;; and views into the data, todos, and content of all my roam notes.
-
-(use-package! vulpea)
-
-;;;
-;;; Config
-;;;
+;;; ~/.doom.d/snippets/+org/roam-todo.el -*- lexical-binding: t -*-
 
 ;; Tags are dynamically added to notes based on their content. This allows
 ;; narrowing and widening the files included in various queries or org
@@ -57,8 +41,8 @@
   "Extract the date of the daily form the filename."
   (when (string-match
          (concat
-          org-roam-directory
-          "daily"
+          (expand-file-name org-roam-directory)
+          "/daily"
           "/[[:digit:]]\\{4\\}"
           "/[[:word:]]*/"
           "\\(?1:[[:digit:]]\\{4\\}\-[[:digit:]]\\{2\\}\-[[:digit:]]\\{2\\}\\).org")
@@ -88,71 +72,6 @@
                :where (like tag $r1)] tag-filter)))))
 
 ;;;
-;;; Update Roam Filetags
-;;;
-;; Whenever a file is loaded into a buffer or saved we update the set
-;; of filetags it has. This process only operates on files that are
-;; created or visited and does not handle updating files that have not
-;; been visited in a long time.
-
-(defun +org-roam-note-has-todos-p ()
-  "Return non-nil if current buffer has any todo entry.
-
-TODO entries marked as done are ignored, meaning the this
-function returns nil if current buffer contains only completed
-tasks."
-  (seq-find                                 ; (3)
-   (lambda (type)
-     (eq type 'todo))
-   (org-element-map (org-element-parse-buffer 'headline) 'headline
-     (lambda (h)
-       (org-element-property :todo-type h)))))
-
-(defun +org-roam-note-has-completed-todos-p ()
-  "Return non-nil if current buffer has completed/terminated todo entry.
-
-TODO entries still in TODO state are ignored, meaning this
-function returns nil if the current buffer contains only uncompleted
-tasks."
-  (seq-find
-   (lambda (type)
-     (member type '(done kill)))
-   (org-element-map
-       (org-element-parse-buffer 'greater-element)
-       'headline
-     (lambda (h)
-       (org-element-property :todo-type h)))))
-
-(defun +org-roam-note-p ()
-  "Return non-nil if the currently visited buffer is a note."
-  (and buffer-file-name
-       (string-prefix-p
-        (expand-file-name (file-name-as-directory org-roam-directory))
-        (file-name-directory buffer-file-name))))
-
-(defun +org-roam-update-todo-tag-h ()
-    "Update PROJECT tag in the current buffer."
-    (when (and (not (active-minibuffer-window))
-               (+org-roam-note-p))
-      (message "updating roam note tags %s" (buffer-name))
-      (save-excursion
-        (goto-char (point-min))
-        (let* ((tags (seq-uniq (vulpea-buffer-tags-get)))
-               (original-tags tags))
-          ;; Add the todo tag key if the note has any top level todos
-          (message "Evaluating tags on note")
-          (if (+org-roam-note-has-todos-p)
-              (setq tags (seq-uniq (cons +org-roam-todo-tag-key tags)))
-            (setq tags (remove +org-roam-todo-tag-key tags)))
-          ;; Add the completed tag key if the notes has any completed todos
-          (if (+org-roam-note-has-completed-todos-p)
-              (setq tags (seq-uniq (cons +org-roam-completed-todo-tag-key tags)))
-            (setq tags (remove +org-roam-completed-todo-tag-key tags)))
-          (unless (cl-equalp original-tags tags)
-            (message "original %s updated %s" original-tags tags)
-            (apply #'vulpea-buffer-tags-set (seq-uniq tags)))))))
-
-;;;
 ;;; Add Archive Tag
 ;;;
 ;; Certain file types will stop being relevant after a window of time.
@@ -160,6 +79,13 @@ tasks."
 ;; performance of querying the roam files add an archive tag to files
 ;; that are no longer needed in other org workflows. This tag replaces
 ;; the daily tag that was previously used.
+
+(defun +org-roam-note-past-archive-date-p ()
+  (let* ((archive-date (decode-time))
+         (timestamp (vulpea-buffer-prop-get +org-roam-note-created-keyword)))
+    (cl-decf (nth 3 archive-date) +org-roam-daily-archive-after)
+    (when (string-lessp timestamp (format-time-string "%Y-%m-%d" (apply #'encode-time archive-date)))
+      t)))
 
 (defun +org-roam-archive-dailies ()
   "Query all non-archived dailies and mark any that are past the archive date as archived.
@@ -194,16 +120,12 @@ as archived.
               (setq tags (cons "Archived" (remove "Daily" tags)))
               (apply #'vulpea-buffer-tags-set (seq-uniq tags)))))))))
 
-(defun +org-agenda-files-update-a (&rest _)
-  "Update the value of `org-agenda-files' used in the Org Agenda views."
-  (setq org-agenda-files
-        (cons "~/notes/roam/todos/schedule.org"
-              (+org-roam-notes-with-tag-key +org-roam-todo-tag-key))))
-
+;;;###autoload
 (defun +org-refile-agenda-files-update-a (&rest _)
   "Update the value of `org-agenda-files' used in the org refile workflow."
   (setq org-agenda-files (+org-roam-notes-with-tag-key +org-roam-todo-tag-key)))
 
+;;;###autoload
 (defun +org-agenda-refile-targets-update-a (&rest _)
   "Update the targets for a refiling."
   (setq org-refile-targets '(
@@ -240,3 +162,5 @@ as archived.
   (interactive)
   (when (eq (+org-is-todo-capture-p) 't)
     (org-set-property +org-roam-note-created-keyword (format-time-string "%F"))))
+
+(provide 'roam-todo)

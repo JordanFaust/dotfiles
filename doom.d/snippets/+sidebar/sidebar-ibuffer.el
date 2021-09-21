@@ -38,7 +38,8 @@
                      "\n"))))))))
 
 
-(setq ibuffer-saved-filter-groups
+(defun +ibuffer-sidebar-configure ()
+  (setq ibuffer-saved-filter-groups
        '(("home"
           ("Configuration" (or (filename . ".emacs.d")
                                (filename . "doom.d")))
@@ -50,15 +51,20 @@
           ("Help" (or (name . "\*Help\*")
                       (name . "\*Apropos\*")
                       (name . "\*info\*"))))))
-(setq ibuffer-show-empty-filter-groups nil)
-(setq ibuffer-display-summary nil)
-(setq ibuffer-use-header-line nil)
-(setq ibuffer-eliding-string (propertize "..." 'face `(:foreground ,(doom-color 'fg))))
-(setq ibuffer-formats
-       '(("  " mark " " (name 24 24 :left :elide) "  " modified)
-         (mark " " (name 16 -1) " " filename)))
-(setq ibuffer-fontification-alist
-      '((1 t all-the-icons-dblue)))
+
+  (setq ibuffer-display-summary nil)
+  (setq ibuffer-show-empty-filter-groups nil)
+  (setq ibuffer-use-header-line nil)
+  (setq ibuffer-eliding-string (propertize "..." 'face `(:foreground ,(doom-color 'fg))))
+  (setq ibuffer-formats
+        '(("  " mark " " (name 24 24 :left :elide) "  " modified)
+          (mark " " (name 16 -1) " " filename)))
+  (setq ibuffer-fontification-alist
+        '((1 t all-the-icons-dblue))))
+
+
+(after! ibuffer
+  (+ibuffer-sidebar-configure))
 
 (defun +ibuffer-sidebar-init ()
   (erase-buffer)
