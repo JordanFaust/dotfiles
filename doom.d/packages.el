@@ -62,6 +62,7 @@
 
 ;; Performace improvements
 (package! hl-line+)
+(package! benchmark-init)
 
 ;; Nano
 (package! nano-modeline :recipe '(:type git :host github :repo "rougier/nano-modeline"))

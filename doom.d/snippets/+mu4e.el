@@ -5,6 +5,7 @@
 ;;;
 
 (use-package! mu4e-thread-folding
+  :defer t
   :config
   (add-to-list 'mu4e-header-info-custom
                '(:empty . (:name "Empty"
@@ -40,7 +41,14 @@
 
   (mu4e-thread-folding-mode))
 
-(use-package! mu4e-dashboard)
+(use-package! mu4e-dashboard
+  :defer t)
+
+;; Enable replying to iCal invites
+(use-package! mu4e-icalendar
+  :defer t
+  :config
+  (mu4e-icalendar-setup))
 
 ;;;
 ;;; Config
@@ -86,11 +94,6 @@
         all-the-icons-blue-alt
         all-the-icons-purple)))
 
-;; Enable replying to iCal invites
-(use-package! mu4e-icalendar
-  :config
-  (mu4e-icalendar-setup))
-
 (defun +mu4e-sidebar-init ()
   "Buffer initialization function for the sidebar within mu4e views."
   (insert-file-contents "~/.doom.d/snippets/+sidebar/sidebar-dashboard.org" nil nil nil t)
@@ -101,6 +104,7 @@
 (defun +mu4e-open-inbox ()
   "Launch a view of the mu4e inbox with the sidebar dashboard."
   (interactive)
+  (require 'mu4e)
   (let ((+sidebar-buffer-init-alist '(("\\*mu4e.*" . +mu4e-sidebar-init))))
     (if (or (member major-mode '(+sidebar-mode mu4e-headers-mode mu4e:main-mode mu4e-view-mode))
             (get-buffer "*mu4e-headers*")

@@ -10,8 +10,7 @@
 ;; items in the files we need. This make building more complex rollups
 ;; and views into the data, todos, and content of all my roam notes.
 
-(use-package! vulpea
-  :ensure t)
+(use-package! vulpea)
 
 ;;;
 ;;; Config

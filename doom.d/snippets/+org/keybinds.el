@@ -33,37 +33,6 @@
   (interactive)
   (find-file "~/notes/roam/inbox/work.org"))
 
-(defun +org-agenda-set-effort (effort)
-  "Set the effort property for the current headline"
-  (interactive
-   (list (read-string (format "Effort [%s]: " +org-current-effort) nil nil +org-current-effort)))
-  (setq +org-current-effort effort)
-  (org-agenda-check-no-diary)
-  (let* ((hdmarker (or (org-get-at-bol 'org-hd-marker)
-                       (org-agenda-error)))
-         (buffer (marker-buffer hdmarker))
-         (pos (marker-position hdmarker))
-         (inhibit-read-only t)
-         newhead)
-    (org-with-remote-undo buffer
-      (with-current-buffer buffer
-        (widen)
-        (goto-char pos)
-        (org-show-context 'agenda)
-        (funcall-interactively 'org-set-effort nil +org-current-effort)
-        (end-of-line 1)
-        (setq newhead (org-get-heading)))
-      (org-agenda-change-all-lines newhead hdmarker))))
-
-(defun +org-agenda-process-inbox-item ()
-  "Process a single item in the org-agenda"
-  (interactive)
-  (org-with-wide-buffer
-   (org-agenda-set-tags)
-   (org-agenda-priority 'set)
-   (call-interactively '+org-agenda-set-effort)
-   (org-agenda-refile nil nil t)))
-
 (defun +org-hide-properties ()
   "Hide all org-mode headline property drawers in buffer. Could be slow if it has a lot of overlays."
   (interactive)
@@ -114,4 +83,3 @@
 (map! :localleader (:map org-mode-map :nvg "h" '+org-toggle-properties))
 (map! :localleader (:map org-mode-map :nvg "H" 'org-toggle-heading))
 (map! :localleader (:map org-mode-map :nvg "ac" '+org-download-screenshot))
-(map! :localleader (:map org-agenda-mode-map :nvg "r" '+org-agenda-process-inbox-item))

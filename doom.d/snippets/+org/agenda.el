@@ -4,7 +4,8 @@
 ;;; Packages
 ;;;
 
-(use-package! org-super-agenda)
+(use-package! org-super-agenda
+  :defer t)
 
 ;;;
 ;;; Config
@@ -22,8 +23,8 @@ This function makes sure that dates are aligned for easy reading."
          (year (nth 2 date))
          (iso-week (org-days-to-iso-week
                     (calendar-absolute-from-gregorian date))))
-         (format " %-2s. %2d %s, %s"
-            dayname day monthname year)))
+        (format " %-2s. %2d %s, %s"
+           dayname day monthname year)))
 
 ;; Update breadcrumbs separator
 (setq org-agenda-breadcrumbs-separator " ❱ ")
@@ -53,21 +54,21 @@ This function makes sure that dates are aligned for easy reading."
                       (org-agenda-sorting-strategy '(priority-down))
                       (org-agenda-remove-tags t)
                       (org-agenda-prefix-format "  %-2i %-8b [%-4e]")
-                      (org-agenda-todo-keyword-format "")
-                   ))
+                      (org-agenda-todo-keyword-format "")))
+                   
 
           ;; The Inbox
           ;; This section contains all of my unfilled todos or tasks
           ;; that need further rework to more managable tasks.
           (tags-todo "+@inbox" (
-                      (org-agenda-overriding-header
-                       (format "%s Inbox:\n"
-                               (all-the-icons-material "mail" :height 1.2 :v-adjust -0.1)))
-                      (org-agenda-sorting-strategy '(priority-down))
-                      (org-agenda-remove-tags t)
-                      (org-agenda-todo-ignore-scheduled 'all)
-                      (org-agenda-prefix-format "  %-2i %-8b")
-                      (org-agenda-todo-keyword-format "")))
+                                (org-agenda-overriding-header
+                                 (format "%s Inbox:\n"
+                                         (all-the-icons-material "mail" :height 1.2 :v-adjust -0.1)))
+                                (org-agenda-sorting-strategy '(priority-down))
+                                (org-agenda-remove-tags t)
+                                (org-agenda-todo-ignore-scheduled 'all)
+                                (org-agenda-prefix-format "  %-2i %-8b")
+                                (org-agenda-todo-keyword-format "")))
 
           ;; The Schedule Things
           ;; This contains a brief look that the next few days and
@@ -117,9 +118,9 @@ This function makes sure that dates are aligned for easy reading."
           :effort (list :text (match-string 3 line) :start (match-beginning 3) :end (match-end 3))
           :todo-category (list :text (match-string 4 line) :start (match-beginning 4) :end (match-end 4))
           :priority (list :text (match-string 5 line) :start (match-beginning 5) :end (match-end 5))
-          :todo (list :text (match-string 6 line) :start (match-beginning 6) :end (match-end 6)))
-    )
-  )
+          :todo (list :text (match-string 6 line) :start (match-beginning 6) :end (match-end 6)))))
+    
+  
 
 (defun +org-agenda-create-overlay (start end color)
   "Create an overlay for the given positions with the provided foreground color"
@@ -217,3 +218,36 @@ This function makes sure that dates are aligned for easy reading."
               (+org-agenda-scan-finalized-agenda--breadcrumb-overlays line line-beginning breadcrumbs)))
           (forward-line -1))))
     (goto-char (point-min))))
+
+(defun +org-agenda-set-effort (effort)
+  "Set the effort property for the current headline"
+  (interactive
+   (list (read-string (format "Effort [%s]: " +org-current-effort) nil nil +org-current-effort)))
+  (setq +org-current-effort effort)
+  (org-agenda-check-no-diary)
+  (let* ((hdmarker (or (org-get-at-bol 'org-hd-marker)
+                       (org-agenda-error)))
+         (buffer (marker-buffer hdmarker))
+         (pos (marker-position hdmarker))
+         (inhibit-read-only t)
+         newhead)
+    (org-with-remote-undo buffer
+      (with-current-buffer buffer
+        (widen)
+        (goto-char pos)
+        (org-show-context 'agenda)
+        (funcall-interactively 'org-set-effort nil +org-current-effort)
+        (end-of-line 1)
+        (setq newhead (org-get-heading)))
+      (org-agenda-change-all-lines newhead hdmarker))))
+
+(defun +org-agenda-process-inbox-item ()
+  "Process a single item in the org-agenda"
+  (interactive)
+  (org-with-wide-buffer
+   (org-agenda-set-tags)
+   (org-agenda-priority 'set)
+   (call-interactively '+org-agenda-set-effort)
+   (org-agenda-refile nil nil t)))
+
+(map! :localleader (:map org-agenda-mode-map :nvg "r" '+org-agenda-process-inbox-item))

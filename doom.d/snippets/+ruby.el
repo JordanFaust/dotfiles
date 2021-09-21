@@ -3,6 +3,7 @@
 ;;
 
 (use-package! enh-ruby-mode
+  :defer t
   :when (executable-find "ruby")
   :after ruby-mode
   :config
@@ -18,6 +19,7 @@
   (set-electric! 'enh-ruby-mode :words '("else" "end" "elsif" "module" "end" "class" "end")))
 
 (use-package! rubocop
+  :defer t
   :hook (enh-ruby-mode . rubocop-mode)
   :config
   (map! :after ruby-mode
@@ -30,6 +32,7 @@
         "P" #'rubocop-autocorrect-project))
 
 (use-package! rspec-mode
+  :defer t
   :mode ("/\\.rspec\\'" . text-mode)
   :init
   (setq rspec-use-spring-when-possible nil)

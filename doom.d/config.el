@@ -26,10 +26,10 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(load! "themes/doom-lena-theme.el")
+;; (load! "themes/doom-lena-theme.el")
 (load! "themes/doom-vilebloom-theme.el")
 (load! "themes/doom-vilebloom-light-theme.el")
-(load! "themes/doom-valley-theme.el")
+;; (load! "themes/doom-valley-theme.el")
 (setq doom-theme 'doom-vilebloom)
 
 ;; If you use `org' and don't want your org files in the default location below,
@@ -76,26 +76,6 @@
 ;;   (defun setup-custom-doom-modeline ()
 ;;     (doom-modeline-set-modeline 'jfaust 'default))
 ;;   (add-hook 'doom-modeline-mode-hook 'setup-custom-doom-modeline))
-
-;; (after! centaur-tabs
-;;   :config
-;;   (setq centaur-tabs-height 48
-;;         ;; highlight bar
-;;         centaur-tabs-set-bar 'under
-;;         x-underline-at-descent-line t
-;;         ;; close/modified overrides
-;;         centaur-tabs-left-edge-margin nil
-;;         centaur-tabs-set-modified-marker t
-;;         centaur-tabs-close-button "✕"
-;;         centaur-tabs-modified-marker "⬤"
-;;         ;; icon config
-;;         centaur-tabs-set-icons t
-;;         centaur-tabs-gray-out-icons 'buffer
-;;         all-the-icons-color-icons nil
-;;         centaur-tabs-plain-icons t
-;;         centaur-tabs-icon-scale-factor 0.8)
-;;   (centaur-tabs-headline-match)
-;;   (centaur-tabs-group-by-projectile-project))
 
 ;;
 ;; Theme Customization
@@ -238,6 +218,7 @@
 ;;;
 
 (use-package! tree-sitter
+  :defer t
   :config
   (require 'tree-sitter-langs)
   (global-tree-sitter-mode)
@@ -282,6 +263,7 @@
 ; the highlighting from tree sitter with font lock properties. Ideally this
 ; would be reveresed
 (use-package! enh-ruby-mode
+  :defer t
   :config
   (setq enh-ruby-font-lock-keywords nil)
   (setq enh-ruby-font-names nil)
@@ -292,6 +274,7 @@
 ;;;
 
 (use-package! hl-line+
+  :defer t
   :load-path "3rd"
   :config
   (hl-line-when-idle-interval 0.3)
@@ -299,12 +282,14 @@
 
 (use-package! display-line-numbers
   :ensure nil
+  :defer t
   :init
   (setq display-line-numbers-width-start t)
   :config
   (display-line-numbers-mode -1))
 
 (use-package! treemacs
+  :defer t
   :config
   (setq treemacs-user-header-line-format header-line-format)
   ;; (setq treemacs-window-background-color `(,(doom-color 'fg) . ,(doom-color 'base0)))
@@ -339,18 +324,18 @@
 (setq lisp-indent-function 'common-lisp-indent-function)
 
 (after! parinfer-rust-mode
-  (setq parinfer-rust-preferred-mode 'indent))
+  (setq parinfer-rust-preferred-mode "indent"))
 
 ;;;
 ;;; Extensions
 ;;;
 
-(add-to-list 'load-path "~/.doom.d/snippets")
+(add-load-path! "snippets")
 
 (load! "snippets/+nano-modeline")
 (load! "snippets/+ruby")
 (load! "snippets/+functions")
 (load! "snippets/+bindings")
 (load! "snippets/+org")
-(load! "snippets/+sidebar")
+(require '+sidebar)
 (load! "snippets/+mu4e")

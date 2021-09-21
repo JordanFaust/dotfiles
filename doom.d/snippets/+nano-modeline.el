@@ -97,6 +97,8 @@
 
 (after! nano-modeline
 
+  (set-face-attribute 'header-line nil :height 1.45)
+
   (defun +nano-modeline--get-current-window (&optional frame)
     "Get the current window but should exclude the child windows."
     (if (and (fboundp 'frame-parent) (frame-parent frame))

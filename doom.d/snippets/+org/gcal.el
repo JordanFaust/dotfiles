@@ -5,6 +5,7 @@
 ;;;
 
 (use-package! org-gcal
+  :defer t
   :init
   (setq org-gcal-client-id "880506599293-ok0t1jlcvv202dkp2f0jffr2a2250t9q.apps.googleusercontent.com")
   (setq org-gcal-fetch-file-alist '(("jordan.faust@procore.com" . "~/notes/roam/todos/schedule.org")))
@@ -78,14 +79,14 @@
       (insert "--")
       (org-insert-time-stamp end t t)
       ;; (setq org-clock-total-time (org-clock-sum-current-item (org-clock-get-sum-start)))
-      (insert (format " =>  5:00" ))
+      (insert (format " =>  5:00"))
       (insert "\n")
       (move-marker org-clock-marker (point) (buffer-base-buffer))
       (move-marker org-clock-hd-marker
                    (save-excursion (org-back-to-heading t) (point))
-                   (buffer-base-buffer))
+                   (buffer-base-buffer)))))
       ;; (org-clock-out)
-      )))
+      
 
 ;; After each calendar sync build a cache of the meetings for the
 ;; day. Possible bucketed by their start and end time. Then every minute
