@@ -77,7 +77,7 @@ marking the selected line."
   "Non-nil only in buffers meant to show sidebar.
 Used to show an error message if someone mistakenly activates `sidebar-mode'.")
 
-(defvar +sidebar:debug t)
+(defvar +sidebar:debug nil)
 ;;;
 ;;; Utility
 ;;;
@@ -369,4 +369,4 @@ sidebar buffer for this frame."
   (add-hook 'window-configuration-change-hook #'+sidebar:on-window-config-change)
   (add-hook 'kill-buffer-hook #'+sidebar:on-buffer-kill nil t))
 
-(provide '+sidebar-mode)
+(provide 'sidebar-core)
