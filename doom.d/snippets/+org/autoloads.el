@@ -224,12 +224,11 @@ Stripping the entry-id will prevent org-gcal from considering the file a calenda
   (require 'org-gcal)
   ;; Check to see if the the TTL has expired on the last run. This is
   ;; persisted across emacs restarts to reduce the number of times it runs.
-  (when (not (doom-store-member-p 'org-gcal-last-run))
+  (when (or (not (doom-store-member-p 'org-gcal-last-run)))
     (quiet!
      (+org-gcal-load-secrets)
      (org-gcal-fetch))
-    ;; Update the store setting the last time it ran and the TTL to our desired
-    ;; sync interval
-    (doom-store-put 'org-gcal-last-run (decode-time) +org-gcal-sync-interval)))
+    ;; Update the store setting the last time it ran and the TTL to our desired sync interval
+    (doom-store-put 'org-gcal-last-run (ts-unix (ts-now)) +org-gcal-sync-interval)))
 
-(provide 'autoloads)
+(provide '+org-autoloads)

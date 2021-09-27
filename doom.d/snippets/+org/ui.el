@@ -32,13 +32,18 @@
     (when (string-equal (buffer-name) "*Org Agenda*")
       (+org-agenda-scan-finalized-agenda))))
 
+(defun +org-agenda-or-clock-buffer-visible-p ()
+  "Returns the first buffer belonging to Org in the current visible frame."
+  (declare (side-effect-free error-free))
+  (->> (window-list (selected-frame))
+       (--first (->> it
+                     (window-buffer)
+                     (buffer-name)
+                     (s-starts-with? "*Org")))))
+
 (defun +org-undo-window-changes-h ()
   "Reset headline changes when leaving the org agenda or org clock report buffer"
-  ;; TODO figure out why this is needed instead of using the popup-rule
-  (when (string-equal (buffer-name) " *Org tags*")
-    (window-resize (get-buffer-window (current-buffer)) 3))
-  (unless (or (string-equal (buffer-name) "*Org Agenda*")
-              (string-equal (buffer-name) "*Org Clock Report*"))
+  (unless (+org-agenda-or-clock-buffer-visible-p)
     (fringe-mode)
     (set-face-attribute 'header-line nil :height 1.45)
     (setq mode-line-format nil)
@@ -46,8 +51,7 @@
 
 (defun +org-reset-margins-after-window-change-h ()
   "Reset the margins after window configuration has changed for the agenda or org clock buffer."
-  (when (or (string-equal (buffer-name) "*Org Agenda*")
-            (string-equal (buffer-name) "*Org Clock Report*"))
+  (when (+org-agenda-or-clock-buffer-visible-p)
     (+org-set-window-clean-h 'minimal)))
 
 ;;;
@@ -112,4 +116,4 @@ ACCENT is the background for the icon."
         (overlay-put overlay 'face `(:background ,primary :foreground ,(doom-color 'bg) :height ,text-height))
         (add-text-properties (plist-get timestamp :start) (plist-get timestamp :end) '(display '(raise 0.15)))))))
 
-(provide 'ui)
+(provide '+org-ui)

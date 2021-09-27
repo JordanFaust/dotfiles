@@ -1,5 +1,8 @@
 ;;; ~/.doom.d/snippets/+org/clock.el -*- lexical-binding: t -*-
 
+;;; Requires
+(require 'ts)
+
 ;;;
 ;;; Packages
 ;;;
@@ -24,19 +27,14 @@ todo files that have active clocks and tasks."
   (let* ((dailies (+org-roam-notes-with-tag-key +org-roam-daily-note-tag-key))
          (weekly (+org-roam-notes-with-tag-key +org-roam-todo-tag-key)))
     (dolist (daily dailies)
-      (let* ((timestamp (+org-roam-daily-date-from-file daily))
-             (now (decode-time))
-             (start-of-week (copy-sequence now))
-             (day-of-week (string-to-number (format-time-string "%w"))))
-        (message ":file %s :timestamp %s" daily timestamp)
-        (when timestamp
-          ;; Set the date of start-of-week to the start of the week. This is done by
-          ;; subtracting the current day by the day-of-week representation in format-time-string
-          (cl-decf (nth 3 start-of-week) day-of-week)
-          (let ((start-of-week-timestamp (format-time-string "%Y-%m-%d" (apply #'encode-time start-of-week))))
-            (when (or (string-greaterp timestamp start-of-week-timestamp)
-                      (string-equal start-of-week-timestamp timestamp))
-              (setq weekly (cons daily weekly)))))))
+      (let* ((now (ts-now))
+             (day-of-week (ts-day-of-week-num now))
+             (start-of-week (ts-unix (ts-adjust 'day (- day-of-week) now)))
+             (timestamp (ts-unix (ts-parse (or (+org-roam-daily-date-from-file daily) "")))))
+        ;; If the note doesn't have a timestamp ts-parse and ts-unix will return a negative number
+        (when (> timestamp 0)
+          (when (>= timestamp start-of-week)
+            (push daily weekly)))))
     weekly))
 
 
@@ -48,18 +46,14 @@ todo files that have active clocks and tasks."
   (let* ((dailies (+org-roam-notes-with-tag-key +org-roam-daily-note-tag-key))
          (monthly (+org-roam-notes-with-tag-key +org-roam-todo-tag-key)))
     (dolist (daily dailies)
-      (let* ((timestamp (+org-roam-daily-date-from-file daily))
-             (now (decode-time))
-             (start-of-month (copy-sequence now))
-             (day-of-month (string-to-number (format-time-string "%e"))))
-        (when timestamp
-          ;; Set the date of start-of-week to the start of the week. This is done by
-          ;; subtracting the current day by the day-of-week representation in format-time-string
-          (cl-decf (nth 3 start-of-month) day-of-month)
-          (let ((start-of-month-timestamp (format-time-string "%Y-%m-%d" (apply #'encode-time start-of-month))))
-            (when (or (string-greaterp timestamp start-of-month-timestamp)
-                      (string-equal start-of-month-timestamp timestamp))
-              (setq monthly (cons daily monthly)))))))
+      (let* ((now (ts-now))
+             (day-of-month (ts-day-of-month-num now))
+             (start-of-month (ts-unix (ts-adjust 'day (- day-of-month) now)))
+             (timestamp (ts-unix (ts-parse (or (+org-roam-daily-date-from-file daily) "")))))
+        ;; If the note doesn't have a timestamp ts-parse and ts-unix will return a negative number
+        (when (> timestamp 0)
+          (when (>= timestamp start-of-month)
+            (push daily monthly)))))
     monthly))
 
 (defun +org-clock-report-close-file-buffers ()
@@ -159,4 +153,4 @@ TYPE specifies the kind of report to generate and can be 'weekly or 'monthly."
   (read-only-mode 1))
 
 
-(provide 'clock)
+(provide '+org-clock)

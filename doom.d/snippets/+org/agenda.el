@@ -9,6 +9,7 @@
 ;;;
 ;;; Config
 ;;;
+;;;
 
 (defvar +org-current-effort "1:00"
   "Current effort for agenda items.")
@@ -133,8 +134,8 @@ This function makes sure that dates are aligned for easy reading."
   (let* ((start (+ line-beginning (plist-get properties :start)))
          (end (+ line-beginning (plist-get properties :end)))
          (overlays (overlays-at start))
-         (existing-overlay 'f)
-         (color (doom-color 'yellow)))
+         (color (doom-color 'yellow))
+         existing-overlay)
     (when (car overlays)
       (dolist (overlay overlays)
         ;; If there is an existing overlay and it is not the org-agenda-clocking
@@ -145,8 +146,8 @@ This function makes sure that dates are aligned for easy reading."
         ;; If the todo overlay exists record it so we don't double generate
         ;; overlays.
         (when (eq (overlay-get overlay 'category) 'custom-agenda-overlay)
-          (setq existing-overlay 't))))
-    (when (eq existing-overlay 'f)
+          (setq existing-overlay t))))
+    (unless existing-overlay
       (+org-agenda-create-overlay start end color))))
 
 (defun +org-agenda-scan-finalized-agenda--effort-overlays (line line-beginning properties)
@@ -154,8 +155,8 @@ This function makes sure that dates are aligned for easy reading."
   (let* ((start (+ line-beginning (plist-get properties :start)))
          (end (+ line-beginning (plist-get properties :end)))
          (overlays (overlays-at start))
-         (existing-overlay 'f)
-         (color (doom-color 'grey)))
+         (color (doom-color 'grey))
+         existing-overlay)
     (when (car overlays)
       (dolist (overlay overlays)
         ;; If the org-agenda-clocking overlay exists change the color
@@ -165,29 +166,30 @@ This function makes sure that dates are aligned for easy reading."
         ;; If the effort overlay exists record it so we don't double generate
         ;; overlays.
         (when (eq (overlay-get overlay 'category) 'custom-agenda-overlay)
-          (setq existing-overlay 't))))
+          (setq existing-overlay t))))
     ;; Create the overlay for the effort text with the given color if
     ;; it doesn't exist
-    (when (eq existing-overlay 'f)
+    (unless existing-overlay
       (+org-agenda-create-overlay start end color))))
 
 
+;; TODO Attempt to replace the text with an svg image from svg-lib
 (defun +org-agenda-scan-finalized-agenda--breadcrumb-overlays (line line-beginning properties)
   "Add overlays to the given line containing the breadcrumbs of the agenda item."
   ;; Subtract 3 from the start to capture the icon prefixed before the breadcrumbs
   (let* ((start (+ line-beginning (plist-get properties :start) -3))
          (end (+ line-beginning (plist-get properties :end)))
          (overlays (overlays-at start))
-         (existing-overlay 'f)
-         (color (doom-color 'blue)))
+         (color (doom-color 'blue))
+         existing-overlay)
     (when (car overlays)
       (dolist (overlay overlays)
         ;; If the effort overlay exists record it so we don't double generate
         ;; overlays.
-        (when (eq (overlay-get overlay 'category) 'ccustom-agenda-overlay)
-          (setq existing-overlay 't))))
+        (when (eq (overlay-get overlay 'category) 'custom-agenda-overlay)
+          (setq existing-overlay t))))
     ;; Create the overlay for the breadcrumbs if it doesn't exist
-    (when (eq existing-overlay 'f)
+    (unless existing-overlay
       (+org-agenda-create-overlay start end color))))
 
 (defun +org-agenda-scan-finalized-agenda ()
@@ -218,4 +220,4 @@ This function makes sure that dates are aligned for easy reading."
           (forward-line -1))))
     (goto-char (point-min))))
 
-(provide 'agenda)
+(provide '+org-agenda)

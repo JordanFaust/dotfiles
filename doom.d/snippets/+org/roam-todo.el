@@ -42,7 +42,7 @@
   (when (string-match
          (concat
           (expand-file-name org-roam-directory)
-          "/daily"
+          "daily"
           "/[[:digit:]]\\{4\\}"
           "/[[:word:]]*/"
           "\\(?1:[[:digit:]]\\{4\\}\-[[:digit:]]\\{2\\}\-[[:digit:]]\\{2\\}\\).org")
@@ -163,4 +163,4 @@ as archived.
   (when (eq (+org-is-todo-capture-p) 't)
     (org-set-property +org-roam-note-created-keyword (format-time-string "%F"))))
 
-(provide 'roam-todo)
+(provide '+org-roam-todo)

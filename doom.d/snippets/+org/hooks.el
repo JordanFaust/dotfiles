@@ -5,24 +5,33 @@
 ;;;
 
 ;;; Org Roam TODOs tag management
-
 ;; Update the tags on files when performing a lookup for a node
 ;; and before saving the buffer of a new note.
-(add-hook 'find-file-hook #'+org-roam-update-todo-tag-h)
-(add-hook 'before-save-hook #'+org-roam-update-todo-tag-h)
+(add-hook! '(find-file-hook before-save-hook) #'+org-roam-update-todo-tag-h)
 
 ;;; Agenda Specific Changes
-
 ;; Lookup and assign all files used in the refile workflows
-(advice-add 'org-refile :before #'+org-refile-agenda-files-update-a)
-(advice-add 'org-agenda-refile :before #'+org-refile-agenda-files-update-a)
 ;; Update the list of org-refile-targets to those at the appropriate headline
-(advice-add 'org-agenda-refile :before #'+org-agenda-refile-targets-update-a)
-;; Refresh the agenda after refiling a task
-(advice-add 'org-agenda-refile :after #'+org-my-agenda)
-;; Refresh the agenda after clocking in/out of a task
-(advice-add 'org-agenda-clock-in :after #'+org-my-agenda)
-(advice-add 'org-agenda-clock-out :after #'+org-my-agenda)
+(defadvice! +org-refile-agenda-files-advice (fn &rest args)
+  "Temporarily redefine and configure the refile target files."
+  :around 'org-refile
+  :around 'org-agenda-refile
+  (let ((org-agenda-files (+org-roam-notes-with-tag-key +org-roam-todo-tag-key))
+        (org-refile-targets '((org-agenda-files :maxlevel . 1)
+                              (org-agenda-files :level . 1)
+                              (org-agenda-files :tag . "@refile"))))
+    (apply fn args)))
+
+;; Refresh the agenda after actions have been taken that change it
+(defadvice! +org-redisplay-org-agenda-after-change-a (&rest args)
+  "Refresh and update the agenda after changes have been made."
+  ;; Refresh the agenda after refiling a task
+  :after 'org-agenda-refile
+  ;; Refresh the agenda after clocking in/out of a task
+  :after 'org-agenda-clock-in
+  :after 'org-agenda-clock-out
+  (+org-my-agenda))
+
 ;; UI adjustments for Org Agenda buffer
 (add-hook 'org-agenda-finalize-hook #'+org-set-window-clean-h 100)
 ;; Change back the headline settings when moving to a different buffer
@@ -51,10 +60,11 @@
 ;;;
 
 ;; UI adjustments for Org Clock buffer
-(advice-add '+org-weekly-clock-report :after #'+org-set-window-clean-h)
-(advice-add '+org-weekly-clock-report :after #'+org-clock-report-close-file-buffers)
-(advice-add '+org-monthly-clock-report :after #'+org-set-window-clean-h)
-(advice-add '+org-monthly-clock-report :after #'+org-clock-report-close-file-buffers)
+(defadvice! +org-clock-report-ui-update-a (&rest _args)
+  :after 'org-weekly-clock-report
+  :after 'org-monthly-clock-report
+  (+org-set-window-clean-h)
+  (+org-clock-report-close-file-buffers))
 
 ;;;
 ;;; Org GCal Advice/Hooks
@@ -90,4 +100,4 @@ that captures the duration of the meeting."
 ;; Sync Google Calendar events
 (run-with-timer 60 +org-gcal-check-interval '+org-gcal-sync-calendar)
 
-(provide 'hooks)
+(provide '+org-hooks)

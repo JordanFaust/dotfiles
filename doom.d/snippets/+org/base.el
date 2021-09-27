@@ -145,7 +145,13 @@
 
   ;; nano-modeline does not play well with this
   (remove-hook! 'org-capture-mode-hook '+org-show-target-in-capture-header-h)
-  (set-popup-rule! "^ \\*Org tags*" :height 0.4 :side 'bottom :vslot 1)
+
+  (defadvice! +org-switch-to-buffer-other-window-a (fn &rest args)
+    "Force the window resize of buffers opened with `org-switch-to-buffer-other-window'."
+    :around #'org-switch-to-buffer-other-window
+    (apply fn args)
+    (window-resize (get-buffer-window (car-safe args)) 5))
+  (set-popup-rule! " \\*Org tags*" :height 0.4 :side 'bottom :vslot 1)
 
   ;; Add additional templates for capturing thoughts
   (setq org-roam-capture-templates
@@ -212,14 +218,14 @@
 ;;;
 
 (after! (:or org org-agenda org-roam)
-  (require 'autoloads "+org/autoloads")
-  (require 'ui "+org/ui.el")
-  (require 'agenda "+org/agenda")
-  (require 'roam-todo "+org/roam-todo")
-  (require 'hooks "+org/hooks")
-  (require 'clock "+org/clock")
-  (require 'keybinds "+org/keybinds"))
+  (require '+org-autoloads "+org/autoloads")
+  (require '+org-ui "+org/ui.el")
+  (require '+org-agenda "+org/agenda")
+  (require '+org-roam-todo "+org/roam-todo")
+  (require '+org-hooks "+org/hooks")
+  (require '+org-clock "+org/clock")
+  (require '+org-keybinds "+org/keybinds"))
 
-(require 'gcal "+org/gcal")
+(require '+org-gcal "+org/gcal")
 
-(provide 'base)
+(provide '+org-base)

@@ -84,6 +84,9 @@
           (:human-date     . 12)
           (:subject        . nil)))
 
+  (setq mu4e-headers-thread-child-prefix '("├>" . "├>"))
+  (setq mu4e-headers-thread-last-child-prefix '("└>" . "└>"))
+
   (add-hook! 'mu4e-headers-found-hook :append #'mu4e-headers-fold-all)
 
   ;; Change the order of colors for account marking
@@ -93,7 +96,6 @@
         all-the-icons-purple-alt
         all-the-icons-blue-alt
         all-the-icons-purple)))
-
 
 (defun +mu4e-sidebar-init ()
   "Buffer initialization function for the sidebar within mu4e views."

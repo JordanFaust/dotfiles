@@ -57,7 +57,6 @@
     (require 'nano-modeline)
     (nano-modeline)))
 
-
 (after! nano-modeline
   (defun +nano-modeline-visual-bell-fn ()
     "Blink the mode-line red briefly. Set `ring-bell-function' to this to use it."

@@ -26,8 +26,8 @@
 ;; ;;; Config
 ;; ;;;
 
-(defvar +org-gcal-sync-interval (* 80 60 60)
-  "The interval at which to run the gcal sync.")
+(defvar +org-gcal-sync-interval (* 8 60 60)
+  "The interval, in minutes, at which to run the gcal sync.")
 (defvar +org-gcal-check-interval (* 30 60)
   "How frequently to check if calendar needs to be synced.")
 
@@ -132,4 +132,4 @@
                    (cl-pushnew details +org-gcal--meetings-today :test #'equal-including-properties)))))))
         +org-gcal--meetings-today))))
 
-(provide 'gcal)
+(provide '+org-gcal)

@@ -20,4 +20,4 @@
    :nvg "H" #'+org-toggle-heading
    :nvg "ac" #'+org-donload-screenshot))
 
-(provide 'keybinds)
+(provide '+org-keybinds)

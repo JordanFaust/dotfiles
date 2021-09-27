@@ -19,9 +19,7 @@
 ;;
 ;; They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
 ;; font string. You generally only need these two:
-;; (setq doom-font (font-spec :family "JetBrainsMonoMedium Nerd Font Mono" :size 18 :weight 'bold))
-;; (setq doom-big-font (font-spec :family "JetBrainsMonoExtraBold Nerd Font Mono" :size 18 :weight 'bold))
-(setq doom-font (font-spec :family "FiraCode Nerd Font Mono" :size 18 :weight 'medium))
+(setq doom-font (font-spec :family "JetBrainsMono Nerd Font Mono" :size 18 :weight 'medium))
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
@@ -30,7 +28,7 @@
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/org/")
+(setq org-directory "~/notes/roam/todos")
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -62,13 +60,13 @@
 (use-package! s :defer t)
 (use-package! f :defer t)
 (use-package! cl-lib :defer t)
+(use-package! ts :defer t)
 
 ;; Use the doom-incremental-package loading to load these packaged
-(dolist (package '(org-roam dash s f cl-lib))
-  (prependq! package doom-incremental-packages))
-;; Update Load Path
-;;
+(dolist (package '(org-roam ts dash cl-lib s f))
+  (push package doom-incremental-packages))
 
+;; Update Load Path
 (add-load-path! "snippets")
 (add-load-path! "themes")
 
@@ -91,8 +89,8 @@
 (setq window-divider-default-right-width 32)
 (setq window-divider-default-places 'right-only)
 
-;; Remove the header and mode line from the initial splash screen
 (add-hook! 'doom-init-ui-hook
+  ;; Remove the header and mode line from the initial splash screen
   (defun +doom-reset-modelines-h ()
     (setq header-line-format nil)
     (setq mode-line-format nil)))
@@ -307,7 +305,6 @@
 
 (load! "snippets/+nano-modeline")
 (load! "snippets/+ruby")
-(load! "snippets/+functions")
 (load! "snippets/+bindings")
 (require '+org)
 (require '+sidebar)
