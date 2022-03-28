@@ -19,9 +19,11 @@
        (company           ; the ultimate code completion backend
         +auto
         +childframe)
-       (ivy               ; a search engine for love and life
-        +childframe
-        +icons)
+       ;; (ivy               ; a search engine for love and life
+       ;;  +childframe
+       ;;  +icons)
+       ;; (vertico
+       ;;  +icons)
 
        :ui
        doom              ; what makes DOOM look the way it does
@@ -87,6 +89,8 @@
        terraform           ; infrastructure as code
 
        :lang
+       (cc
+        +lsp)
        data                ; config/data formats
        emacs-lisp          ; drown in parentheses
        (go                 ; the hipster dialect

@@ -70,6 +70,15 @@
 (when (featurep! :editor evil)
   (package! evil-anzu :pin "d3f6ed4773b48767bd5f4708c7f083336a8a8a86"))
 
+;; Nano Minibuffer
+(package! mini-frame :recipe '(:type git :host github :repo "muffinmad/emacs-mini-frame"))
+
+;; Vertico
+(package! vertico)
+;; (package! vertico-posframe)
+(package! orderless)
+(package! marginalia)
+
 ;; mu4e
 (package! mu4e-thread-folding :recipe '(:type git :host github :repo "rougier/mu4e-thread-folding"))
 (package! mu4e-dashboard :recipe '(:type git :host github :repo "rougier/mu4e-dashboard"))

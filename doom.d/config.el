@@ -19,7 +19,7 @@
 ;;
 ;; They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
 ;; font string. You generally only need these two:
-(setq doom-font (font-spec :family "JetBrainsMono Nerd Font Mono" :size 18 :weight 'medium))
+(setq doom-font (font-spec :family "JetBrainsMono Nerd Font Mono" :size 16 :weight 'medium))
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
@@ -32,7 +32,8 @@
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
-(setq display-line-numbers-type nil)
+(setq display-line-numbers-type t)
+(setq-hook! 'org-mode-hook display-line-numbers nil)
 
 ;; Here are some additional functions/macros that could help you configure Doom:
 ;;
@@ -120,8 +121,27 @@
   (setq lsp-idle-delay 0.500)
   (setq lsp-lens-enable nil)
   (setq lsp-ui-sideline-enable nil)
+
+  ;; This causes significant performance impacts when using rls for rust. This may
+  ;; be less of an issue once using emacs 28 with better json serialization support
+  (setq lsp-ui-doc-enable nil)
   (setq lsp-modeline-code-actions-enable nil)
-  (setq lsp-keep-workspace-alive nil))
+  (setq lsp-keep-workspace-alive nil)
+
+  ;; Turn off showing signature details in the modeline. This causes significant
+  ;; performance problems when attempting to navigate a buffer. This is particularly
+  ;; a problem within buffers for rust projects
+  (setq lsp-signature-auto-activate nil)
+  (setq lsp-signature-render-documentation nil)
+  (setq lsp-eldoc-hook nil))
+
+
+;; Attempt to improve performance in rustic mode
+;;   set to nil if performance becomes an issues again
+;; https://github.com/hlissner/doom-emacs/issues/4153#issuecomment-718405849
+(setq-hook! 'rustic-mode-hook company-idle-delay 0.2)
+;; Increase the time in look ups when writing in org mode
+(setq-hook! 'org-mode-hook company-idle-delay 0.8)
 
 ;;
 ;; Company Configuration
@@ -152,7 +172,7 @@
 ;; Project Configuration
 ;;
 
-(after! projectile
+(after! (f projectile)
   :config
   ;; Prevent projects within the following directory from becoming projectile projects
   ;; * ~/ws/go/pkg/ - Go project dependencies (code navigation jumps)
@@ -308,4 +328,5 @@
 (load! "snippets/+bindings")
 (require '+org)
 (require '+sidebar)
+(require '+nano-minibuffer)
 (load! "snippets/+mu4e")
