@@ -102,6 +102,8 @@
   (insert-file-contents "~/.doom.d/snippets/+sidebar/sidebar-dashboard.org" nil nil nil t)
   ;; The order here matters
   (+sidebar-mode)
+  (nano-modeline-mode 1)
+  (setq header-line-format " ")
   (mu4e-dashboard-mode 1))
 
 (defun +mu4e-open-inbox ()

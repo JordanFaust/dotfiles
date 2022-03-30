@@ -26,7 +26,7 @@
 ;; ;;; Config
 ;; ;;;
 
-(defvar +org-gcal-sync-interval (* 8 60 60)
+(defvar +org-gcal-sync-interval (* 8 60)
   "The interval, in minutes, at which to run the gcal sync.")
 (defvar +org-gcal-check-interval (* 30 60)
   "How frequently to check if calendar needs to be synced.")

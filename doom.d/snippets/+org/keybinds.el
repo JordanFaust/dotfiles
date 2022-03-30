@@ -18,6 +18,6 @@
    :map org-mode-map
    :nvg "h" #'+org-toggle-properties
    :nvg "H" #'+org-toggle-heading
-   :nvg "ac" #'+org-donload-screenshot))
+   :nvg "ac" #'+org-download-screenshot))
 
 (provide '+org-keybinds)

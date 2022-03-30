@@ -45,7 +45,8 @@
   "Reset headline changes when leaving the org agenda or org clock report buffer"
   (unless (+org-agenda-or-clock-buffer-visible-p)
     (fringe-mode)
-    (set-face-attribute 'header-line nil :height 1.45)
+    (set-face-attribute 'header-line nil :height 1.2)
+    (set-face-background 'header-line (if nano-modeline--selected-window (doom-color 'yellow) (doom-color 'fg)))
     (setq mode-line-format nil)
     (setq mouse-highlight 't)))
 

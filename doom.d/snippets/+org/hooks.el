@@ -16,7 +16,7 @@
   "Temporarily redefine and configure the refile target files."
   :around 'org-refile
   :around 'org-agenda-refile
-  (let ((org-agenda-files (+org-roam-notes-with-tag-key +org-roam-todo-tag-key))
+  (let ((org-agenda-files (append +org-capture-work-todo-file (+org-roam-notes-with-tag-key +org-roam-todo-tag-key)))
         (org-refile-targets '((org-agenda-files :maxlevel . 1)
                               (org-agenda-files :level . 1)
                               (org-agenda-files :tag . "@refile"))))
@@ -98,6 +98,6 @@ that captures the duration of the meeting."
 ;; Archive daily files that are older then the specified configuration
 ;; (run-with-timer 30 (* 24 60 60) '+org-roam-archive-dailies)
 ;; Sync Google Calendar events
-(run-with-timer 60 +org-gcal-check-interval '+org-gcal-sync-calendar)
+;; (run-with-timer 60 +org-gcal-check-interval '+org-gcal-sync-calendar)
 
 (provide '+org-hooks)

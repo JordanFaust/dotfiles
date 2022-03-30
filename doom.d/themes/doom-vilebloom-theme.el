@@ -133,21 +133,30 @@ determine the exact padding."
    (centaur-tabs-modified-marker-unselected :inherit 'centaur-tabs-unselected :foreground tabs-marker)
 
    ;;; nano-modeline
+   (header-line :foreground fg :background yellow)
    (nano-modeline-active :foreground fg :background yellow)
    (nano-modeline-active-name :foreground bg :background yellow :weight 'bold)
    (nano-modeline-active-primary :foreground bg :background yellow)
-   (nano-modeline-active-secondary :foreground fg :background yellow)
+   (nano-modeline-active-spacer :foreground bg :background yellow)
+   (nano-modeline-active-secondary :foreground bg :background yellow)
    (nano-modeline-active-status-RO :foreground bg :background red :weight 'bold)
    (nano-modeline-active-status-RW :foreground bg :background red :weight 'bold)
    (nano-modeline-active-status-** :foreground bg :background red :weight 'bold)
    (nano-modeline-inactive :foreground bg :background fg)
    (nano-modeline-inactive-name :foreground bg :background fg :weight 'bold)
    (nano-modeline-inactive-primary :foreground bg :background fg)
+   (nano-modeline-inactive-spacer :foreground bg :background fg)
    (nano-modeline-inactive-secondary :foreground fg :background fg)
    (nano-modeline-inactive-status-RO :foreground bg :background red :weight 'bold)
    (nano-modeline-inactive-status-RW :foreground bg :background red :weight 'bold)
    (nano-modeline-inactive-status-** :foreground bg :background red :weight 'bold)
    (nano-modeline-visual-bell :background red :foreground bg)
+
+   ;;; nano-minibuffer + vertico + marginalia
+   (vertico-current :foreground bg :background red)
+   (completions-first-difference :foreground yellow)
+   (completions-common-part :foreground blue)
+   (minibuffer-prompt :foreground red :background bg)
 
    (window-divider :background bg :foreground bg)
 

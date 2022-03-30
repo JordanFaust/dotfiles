@@ -86,6 +86,11 @@
                '(right-fringe . 0)
                '(tool-bar-lines . 0)
                '(menu-bar-lines . 0))))
+
+;; Turn off truncation indicators within the fringe. This provides a more conistent look and
+;; feel particularly within the mini-frame drop downs.
+(setq-default fringe-indicator-alist (assq-delete-all 'truncation fringe-indicator-alist))
+
 ;; Add window dividers for keeping floating headline when using virtical splits
 (setq window-divider-default-right-width 32)
 (setq window-divider-default-places 'right-only)

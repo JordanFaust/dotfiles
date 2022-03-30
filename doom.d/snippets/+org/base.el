@@ -5,9 +5,13 @@
 ;;;
 
 (use-package! org-roam
+  :defer-incrementally org-roam-dailies
   :after
   ;; TODO figure out why this is needed
   (org-id-update-id-locations))
+
+(use-package! org-roam-dailies
+  :defer t)
 
 ;; Vulpea provides a set of utilities for digging deeper into the content
 ;; of notes in org-roam. All Todos and other information is quickly filtered
@@ -21,6 +25,12 @@
 ;; Used for icons
 (use-package! all-the-icons
   :defer t)
+
+(defvar +org-capture-inbox "~/notes/roam/inbox/work.org"
+  "The file containing the work inbox.")
+
+(defvar +org-capture-work-todo-file "~/notes/roam/todos/work_todos.org"
+  "The work todo file")
 
 ;;;
 ;;; Config
@@ -150,7 +160,9 @@
     "Force the window resize of buffers opened with `org-switch-to-buffer-other-window'."
     :around #'org-switch-to-buffer-other-window
     (apply fn args)
-    (window-resize (get-buffer-window (car-safe args)) 5))
+    ;; TODO: Fix hack to prevent issues with org-roam
+    (unless (member (car args) '("*Org Select*"))
+      (window-resize (get-buffer-window (car-safe args)) 5)))
   (set-popup-rule! " \\*Org tags*" :height 0.4 :side 'bottom :vslot 1)
 
   ;; Add additional templates for capturing thoughts
@@ -192,7 +204,6 @@
            :if-new (file "~/notes/roam/inbox/work.org")
            :immediate-finish)))
 
-
   ;; Update the title and filetags for daily entries
   (setq org-roam-dailies-capture-templates
         '(("d" "default" entry
@@ -211,7 +222,13 @@
            ;; (file "~/notes/roam/templates/daily-template.org")
            :if-new (file+head "%<%Y-%m-%d>.org" "#+title: Daily - %<%Y-%m-%d>\n#+filetags: Daily")
            :unnarowed t
-           :immediate-finish t))))
+           :immediate-finish t)))
+
+  (setq org-capture-templates
+        `(("i" "inbox" entry (file+olp +org-capture-inbox "Inbox")
+           "** TODO %?"
+           :unnarowed t))))
+
 
 ;;;
 ;;; Requires

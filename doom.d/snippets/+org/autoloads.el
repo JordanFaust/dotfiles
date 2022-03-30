@@ -13,9 +13,11 @@
 (defun +org-roam-capture-to-inbox ()
   "Interactive command to start inbox capture workflow"
   (interactive)
+  (message "starting capture")
   (org-roam-capture- :keys "i"
                      :node (org-roam-node-create)
-                     :templates org-roam-dailies-capture-templates))
+                     :templates org-roam-dailies-capture-templates)
+  (message "out of roam capture"))
 
 ;;;###autoload
 (defun +org-roam-go-to-inbox ()
@@ -104,7 +106,9 @@
    (org-agenda-set-tags)
    (org-agenda-priority 'set)
    (call-interactively '+org-agenda-set-effort)
-   (org-agenda-refile nil nil t)))
+   (message "effort set attempting to refile")
+   (org-agenda-refile nil nil t)
+   (message "refiled successfully")))
 
 ;;;###autoload
 (defun +org-my-agenda (&rest _)
@@ -129,7 +133,7 @@
 (defun +org-roam-go-to-inbox ()
   "Interactive command to go to the roam inbox"
   (interactive)
-  (find-file "~/notes/roam/inbox/work.org"))
+  (find-file +org-capture-inbox))
 
 ;;; Update Roam Filetags
 ;; Whenever a file is loaded into a buffer or saved we update the set
@@ -222,13 +226,24 @@ Stripping the entry-id will prevent org-gcal from considering the file a calenda
 (defun +org-gcal-sync-calendar ()
   (interactive)
   (require 'org-gcal)
-  ;; Check to see if the the TTL has expired on the last run. This is
-  ;; persisted across emacs restarts to reduce the number of times it runs.
-  (when (or (not (doom-store-member-p 'org-gcal-last-run)))
+  ;; This is a broken function reference in the current implementation
+  (defalias 'doom--store-rem #'doom-store-rem)
+  ;; Only run the sync after the sync period has passed or the item in the store has
+  ;; been removed by its TTL.
+  (when (or (null (doom-store-get 'org-gcal-last-run))
+            (ts<= (ts-adjust 'minute +org-gcal-sync-interval (doom-store-get 'org-gcal-last-run)) (ts-now)))
     (quiet!
      (+org-gcal-load-secrets)
      (org-gcal-fetch))
     ;; Update the store setting the last time it ran and the TTL to our desired sync interval
-    (doom-store-put 'org-gcal-last-run (ts-unix (ts-now)) +org-gcal-sync-interval)))
+    (doom-store-put 'org-gcal-last-run (ts-now) (* 60 +org-gcal-sync-interval))))
+
+;; (dolist (buffer (+org-roam-notes-with-tag-key +org-roam-todo-tag-key))
+;;   (message ":buffer %s" buffer)
+;;   (with-current-buffer (find-file-noselect buffer)
+;;     (org-map-entries
+;;      (lambda ()
+;;        (message ":entry %s" (org-element-at-point))))))
+
 
 (provide '+org-autoloads)

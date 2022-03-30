@@ -1,33 +1,33 @@
-// /[[mu:flag:unread][Unread]]/ /.................../ [[mu:flag:unread|%4d][   0]]
-// /[[mu:m:/Procore.com/INBOX][Inbox]]/ /....................../ /[[mu:m:/Procore.com/INBOX|%2d][96]]/
-// /[[mu:flag:flagged][Important]]/ /................../ /[[mu:flag:flagged|%2d][ 0]]/
-// [[mu:m:"/Procore.com/Sent\ Mail"][Sent]] /...................../ /[[mu:m:"/Procore.com/Sent\ Mail"|%4d][  82]]/
-// [[mu:m:"/Procore.com/All\ Mail"][Archive]] /................../ /[[mu:m:"/Procore.com/All\ Mail"|%4d][   0]]/
+// [[mu:flag:unread][Unread]] /.................../ [[mu:flag:unread|%4d][  28]]
+// [[mu:m:/Procore.com/INBOX][Inbox]] /....................../ [[mu:m:/Procore.com/INBOX|%2d][ 6]]
+// [[mu:flag:flagged][Important]] /................../ [[mu:flag:flagged|%2d][ 6]]
+// [[mu:m:"\/Procore.com\/Sent\ Mail"][Sent]] /...................../ [[mu:m:"\/Procore.com\/Sent\ Mail"|%4d][ 166]]
+// [[mu:m:"\/Procore.com\/All\ Mail"][Archive]] /................./ [[mu:m:"\/Procore.com\/All\ Mail"|%4d][48540]]
 
-// [[mu:date:today..now][Today]] /...................../ /[[mu:date:today..now|%3d][  0]]/
-// [[mu:date:2d..today and not date:today..now][Yesterday]] /................./ /[[mu:date:2d..today and not date:today..now|%3d][458]]/
-// [[mu:date:1w..now][Last week]] /................ /[[mu:date:7d..now|%4d][ 861]]/
-// [[mu:date:4w..now][Last month]] /.............../ /[[mu:date:4w..|%4d][2935]]/
+// [[mu:date:today..now][Today]] /...................../ [[mu:date:today..now|%3d][ 45]]
+// [[mu:date:2d..today and not date:today..now][Yesterday]] /................./ [[mu:date:2d..today and not date:today..now|%3d][102]]
+// [[mu:date:1w..now][Last week]] /................/ [[mu:date:7d..now|%4d][ 344]]
+// [[mu:date:4w..now][Last month]] /.............../ [[mu:date:4w..|%4d][1868]]
 
-// [[mu:flag:attach][Attachments]] /............../ /[[mu:flag:attach|%4d][ 333]]/
+// [[mu:flag:attach][Attachments]] /............../ [[mu:flag:attach|%4d][ 508]]
 
 // *People* /------------------------/
 
-// [[mu:from:"Cody Zampino"][Cody Zampino]] /............./ /[[mu:from:"Cody Zampino"|%4d][ 333]]/
-// [[mu:from:"Dustin Withrow"][Dustin Withrow]] /.........../ /[[mu:from:"Dustin Withrow"|%4d][ 333]]/
-// [[mu:from:"Lam Chan"][Lam Chan]] /................./ /[[mu:from:"Lam Chan"|%4d][ 333]]/
-// [[mu:from:"Ernesto Cojulun"][Ernesto Cojulun]] /........../ /[[mu:from:"Ernesto Cojulun"|%4d][ 333]]/
-// [[mu:from:"Rachel Arkebauer"][Rachel Arkebauer]] /........./ /[[mu:from:"Rachel Arkebauer"|%4d][ 333]]/
-// [[mu:from:"Brian Bagdzinski"][Brian Bagdzinski]] /........./ /[[mu:from:"Brian Bagdzinski"|%4d][ 333]]/
-// [[mu:'from:"Brandon Pollard" or from:"brandonpollard"'][Brandon Pollard]] /........../ /[[mu:'from:"Brandon Pollard" or from:"brandonpollard"'|%4d][ 333]]/
-// [[mu:'from:"Avinash*" or from:"Avinash Reddy"'][Avinash Reddy]] /............/ /[[mu:'from:"Avinash*" or from:"Avinash Reddy"'|%4d][ 333]]/
-// [[mu:from:"Mike Feuerborn" or ][Mike Feuerborn]] /.........../ /[[mu:'from:"Mike Feuerborn" or from:"Michael Feuerborn"'|%4d][ 333]]/
+// [[mu:from:"Cody Zampino"][Cody Zampino]] /............./ [[mu:from:"Cody Zampino"|%4d][  29]]
+// [[mu:from:"Dustin Withrow"][Dustin Withrow]] /.........../ [[mu:from:"Dustin Withrow"|%4d][   6]]
+// [[mu:from:"Lam Chan"][Lam Chan]] /................./ [[mu:from:"Lam Chan"|%4d][  20]]
+// [[mu:from:"Ernesto Cojulun"][Ernesto Cojulun]] /........../ [[mu:from:"Ernesto Cojulun"|%4d][ 355]]
+// [[mu:from:"Rachel Arkebauer"][Rachel Arkebauer]] /........./ [[mu:from:"Rachel Arkebauer"|%4d][ 279]]
+// [[mu:from:"Brian Bagdzinski"][Brian Bagdzinski]] /........./ [[mu:from:"Brian Bagdzinski"|%4d][ 365]]
+// [[mu:'from:"Brandon Pollard" or from:"brandonpollard"'][Brandon Pollard]] /........../ [[mu:'from:"Brandon Pollard" or from:"brandonpollard"'|%4d][ 257]]
+// [[mu:'from:"Avinash*" or from:"Avinash Reddy"'][Avinash Reddy]] /............/ [[mu:'from:"Avinash*" or from:"Avinash Reddy"'|%4d][ 166]]
+// [[mu:from:"Mike Feuerborn" or ][Mike Feuerborn]] /.........../ [[mu:'from:"Mike Feuerborn" or from:"Michael Feuerborn"'|%4d][ 108]]
 
 // *Lists* /-------------------------/
 
-[[mu:list:"terraform-infra.procore.github.com"][terraform-infra]] /............./ /[[mu:list:"terraform-infra.procore.github.com"|%4d][   0]]/
-[[mu:list:"terraform-kubernetes.procore.github.com"][terraform-kubernetes]] /......../ /[[mu:list:"terraform-kubernetes.procore.github.com"|%4d][   0]]/
-[[mu:list:"terraform-aws-modules.procore.github.com"][terraform-aws-modules]] /......./ /[[mu:list:"terraform-aws-modules.procore.github.com"|%4d][   0]]/
+[[mu:list:"terraform-infra.procore.github.com"][terraform-infra]] /............./ [[mu:list:"terraform-infra.procore.github.com"|%4d][3848]]
+[[mu:list:"terraform-kubernetes.procore.github.com"][terraform-kubernetes]] /......../ [[mu:list:"terraform-kubernetes.procore.github.com"|%4d][  48]]
+[[mu:list:"terraform-aws-modules.procore.github.com"][terraform-aws-modules]] /......./ [[mu:list:"terraform-aws-modules.procore.github.com"|%4d][  26]]
 
 
 ** /Configuration/
