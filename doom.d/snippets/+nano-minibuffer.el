@@ -107,7 +107,8 @@
   (setq mini-frame-ignore-commands
         '("edebug-eval-expression"
           debugger-eval-expression
-          evil-ex))
+          evil-ex
+          evil-ex-search-forward))
   (setq mini-frame-internal-border-color (doom-color 'yellow))
   (setq mini-frame-resize t)
   (setq mini-frame-resize-min-height 3)
@@ -152,12 +153,15 @@
 
   (defadvice! +nano-minibuffer--disable-overlay-evil-ex (&rest _)
     :before 'evil-ex
+    :before 'evil-ex-search-forward
     (setq +nano-minibuffer--disable-overlay t))
 
   (defadvice! +nano-minibuffer--enable-overlay-after-evil-ex (&rest _)
     "Re-enable the minibuffer overlay after an evil ex command has completed or has been aborted."
     :after 'evil-ex-execute
     :after 'evil-ex-abort
+    :after 'evil-ex-start-search
+    :after 'evil-ex-search-full-pattern
     (setq +nano-minibuffer--disable-overlay nil)))
 
 (vertico-mode)

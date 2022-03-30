@@ -245,135 +245,85 @@
            (right-len (length (format-mode-line right))))
       (concat
         left
-        (propertize " " 'display `(space :align-to (- right ,(- right-len 1)))
+        (propertize " " 'display `(space :align-to (- right ,(- right-len 0)))
                     'face (if active 'nano-modeline-active-spacer
                             'nano-modeline-inactive-spacer))
-        right))))
-    ;;-----------------------------------------------------------------------
+        right)))
+
+  ;;
+  ;; Anzu Completions
+  ;;
+
+  (defun +nano-modeline-anzu-mode-p ()
+    (and (bound-and-true-p anzu--state)
+         (not (bound-and-true-p iedit-mode))))
+
+  (defun +nano-modeline--anzu-secondary ()
+    "Show the match index and total number thereof.
+  Requires `anzu', also `evil-anzu' if using `evil-mode' for compatibility with
+  `evil-search'."
+    (propertize
+     (let ((here anzu--current-position)
+           (total anzu--total-matched))
+       (cond ((eq anzu--state 'replace-query)
+              (format " %d replace " anzu--cached-count))
+             ((eq anzu--state 'replace)
+              (format " %d/%d " here total))
+             (anzu--overflow-p
+              (format " %s+ " total))
+             (t
+              (format " %s/%d " here total))))))
+
+  (defun +nano-modeline-anzu-mode ()
+    (let ((buffer-name (format-mode-line "%b"))
+          (branch      (nano-modeline-vc-branch))
+          (matches     (+nano-modeline--anzu-secondary)))
+      (nano-modeline-render nil
+                            buffer-name
+                            (if branch (concat "(" branch ")") "")
+                            matches)))
 
 
-    ;; (defun nano-modeline-compose (status name primary secondary)
-    ;;   "Compose a string with provided information"
-    ;;   (let* ((char-width    (window-font-width nil 'header-line))
-    ;;          (window        (get-buffer-window (current-buffer)))
-    ;;          (active        (eq window nano-modeline--selected-window))
-    ;;          (space-up       +0.20)
-    ;;          (space-down     -0.25)
-    ;;          (prefix (cond ((string= status "RO")
-    ;;                         (propertize (if (window-dedicated-p)"•RO " " RO ")
-    ;;                                     'face (if active
-    ;;                                               'nano-modeline-active-status-RO
-    ;;                                             'nano-modeline-inactive-status-RO)))
-    ;;                        ((string= status "**")
-    ;;                         (propertize (if (window-dedicated-p)"•** " " ** ")
-    ;;                                     'face (if active
-    ;;                                               'nano-modeline-active-status-**
-    ;;                                             'nano-modeline-inactive-status-**)))
-    ;;                        ((string= status "RW")
-    ;;                         (propertize (if (window-dedicated-p) "•RW " " RW ")
-    ;;                                     'face (if active 'nano-modeline-active-status-RW
-    ;;                                             'nano-modeline-inactive-status-RW)))
-    ;;                        (t (propertize status
-    ;;                                       'face (if active 'nano-modeline-active-status-**
-    ;;                                               'nano-modeline-inactive-status-**)))))
-    ;;          (left (concat
-    ;;                 (propertize " "  'face (if active 'nano-modeline-active
-    ;;                                          'nano-modeline-inactive)
-    ;;                             'display `(raise ,space-up))
-    ;;                 (propertize name 'face (if active 'nano-modeline-active-name
-    ;;                                          'nano-modeline-inactive-name))
-    ;;                 (propertize " "  'face (if active 'nano-modeline-active
-    ;;                                          'nano-modeline-inactive)
-    ;;                             'display `(raise ,space-down))
-    ;;                 (propertize primary 'face (if active 'nano-modeline-active-primary
-    ;;                                             'nano-modeline-inactive-primary))))
-    ;;          (right (concat secondary " "))
-    ;;          (header-line-height (face-attribute 'header-line :height))
-    ;;          (used-space (+ (length prefix) (length left) (length right)))
-    ;;          (unused-space (- (window-total-width) used-space))
-    ;;          ;; Get the width difference between the default font width and the header-line font width
-    ;;          (char-width-delta (/ (float char-width) (float (window-font-width))))
-    ;;          ;; Get the adjusted window width based on the header-line font width
-    ;;          (window-total-width-adjusted (/ (window-total-width) char-width-delta))
-    ;;          ;; Calculate the available center padding space, rounding up
-    ;;          (available-width (ceiling (- window-total-width-adjusted (float used-space))))
-    ;;          ;; Ensure available width is a positive number
-    ;;          (available-width (max 1 available-width)))
-    ;;     (concat prefix
-    ;;             left
-    ;;             (propertize (make-string available-width ?\ )
-    ;;                         'face (if active 'nano-modeline-active
-    ;;                                 'nano-modeline-inactive))
-    ;;             (propertize right 'face (if active 'nano-modeline-active-secondary
-    ;;                                       'nano-modeline-inactive-secondary)))))
+  (pushnew! nano-modeline-mode-formats
+            (list 'anzu-mode
+                  :mode-p '+nano-modeline-anzu-mode-p
+                  :format '+nano-modeline-anzu-mode))
 
-    ;; ;; Keep the org clock info in the modeline
-    ;; (defun nano-modeline-default-mode ()
-    ;;   (let* ((buffer-name (format-mode-line "%b"))
-    ;;          (mode-name   (nano-modeline-mode-name))
-    ;;          (branch      (nano-modeline-vc-branch))
-    ;;          (position (format-mode-line "%l:%c")))
-    ;;     (let ((secondary position))
-    ;;       ;; Handle setting the secondary
-    ;;       (when (and (boundp 'org-mode-ling-string) org-mode-line-string (not (string-empty-p org-mode-line-string)))
-    ;;         (setq secondary org-mode-line-string))
-    ;;       (when (+nano-modeline-anzu)
-    ;;         (setq secondary (+nano-modeline-anzu)))
-    ;;       (when (+nano-modeline-evil-substitute-p)
-    ;;         (setq secondary (+nano-modeline-evil-substitute)))
-    ;;       ;; Handle setting the buffer name
-    ;;       (when (string-match " \\*Sidebar\\*" buffer-name)
-    ;;         (setq buffer-name "Dashboard"))
-    ;;       (if (string-match " \\*NeoTree\\*" buffer-name)
-    ;;           (nano-modeline-compose (nano-modeline-status) buffer-name "" "")
-    ;;         (nano-modeline-compose (nano-modeline-status)
-    ;;                                buffer-name
-    ;;                                (concat "(" mode-name
-    ;;                                        (if branch (concat ", "
-    ;;                                                           (propertize branch 'face 'italic)))
-    ;;                                        ")")
-    ;;                                secondary)))))
+  ;;
+  ;; Evil Substitution
+  ;;
 
-    ;; (defun nano-modeline-org-clock-mode-p ()
-    ;;   (and (boundp 'org-mode-line-string)
-    ;;        org-mode-line-string))
+  (defun +nano-modeline-evil-substitute-mode-p ()
+    "Return non-nil when an evil substitution is performed"
+    (when (and (bound-and-true-p evil-local-mode)
+               (or (assq 'evil-ex-substitute evil-ex-active-highlights-alist)
+                   (assq 'evil-ex-global-match evil-ex-active-highlights-alist)
+                   (assq 'evil-ex-buffer-match evil-ex-active-highlights-alist)))
+      't))
 
-    ;; ;;----------------------------------------------------------------------------
-    ;; (defun +nano-modeline-evil-substitute-p ()
-    ;;   "Return non-nil when an evil substitution is performed"
-    ;;   (when (and (bound-and-true-p evil-local-mode)
-    ;;              (or (assq 'evil-ex-substitute evil-ex-active-highlights-alist)
-    ;;                  (assq 'evil-ex-global-match evil-ex-active-highlights-alist)
-    ;;                  (assq 'evil-ex-buffer-match evil-ex-active-highlights-alist)))
-    ;;     't))
+  (defun +nano-modeline--evil-substitute-secondary ()
+    "Show number of matches for evil-ex substitutions and highlights in real time."
+    (propertize
+     (let ((range (if evil-ex-range
+                      (cons (car evil-ex-range) (cadr evil-ex-range))
+                    (cons (line-beginning-position) (line-end-position))))
+           (pattern (car-safe (evil-delimited-arguments evil-ex-argument 2))))
+       (if pattern
+           (format " %s matches " (how-many pattern (car range) (cdr range)))
+         " - "))))
 
-    ;; (defun +nano-modeline-evil-substitute ()
-    ;;   "Show number of matches for evil-ex substitutions and highlights in real time."
-    ;;   (when (+nano-modeline-evil-substitute-p)
-    ;;     (propertize
-    ;;      (let ((range (if evil-ex-range
-    ;;                       (cons (car evil-ex-range) (cadr evil-ex-range))
-    ;;                     (cons (line-beginning-position) (line-end-position))))
-    ;;            (pattern (car-safe (evil-delimited-arguments evil-ex-argument 2))))
-    ;;        (if pattern
-    ;;            (format " %s matches " (how-many pattern (car range) (cdr range)))
-    ;;          " - ")))))
+  (defun +nano-modeline-evil-substitute-mode ()
+    "Format for the modeline in evil substitute mode."
+    (let ((buffer-name (format-mode-line "%b"))
+          (branch      (nano-modeline-vc-branch))
+          (matches     (+nano-modeline--evil-substitute-secondary)))
+      (message "rendering evil substitute")
+      (nano-modeline-render nil
+                            buffer-name
+                            (if branch (concat "(" branch ")") "")
+                            matches)))
 
-    ;; (defun +nano-modeline-anzu ()
-    ;;   "Show the match index and total number thereof.
-    ;; Requires `anzu', also `evil-anzu' if using `evil-mode' for compatibility with
-    ;; `evil-search'."
-    ;;   (when (and (bound-and-true-p anzu--state)
-    ;;              (not (bound-and-true-p iedit-mode)))
-    ;;     (propertize
-    ;;      (let ((here anzu--current-position)
-    ;;            (total anzu--total-matched))
-    ;;        (cond ((eq anzu--state 'replace-query)
-    ;;               (format " %d replace " anzu--cached-count))
-    ;;              ((eq anzu--state 'replace)
-    ;;               (format " %d/%d " here total))
-    ;;              (anzu--overflow-p
-    ;;               (format " %s+ " total))
-    ;;              (t
-    ;;               (format " %s/%d " here total)))))))
-
+  (pushnew! nano-modeline-mode-formats
+            (list 'evil-substitute
+                  :mode-p '+nano-modeline-evil-substitute-mode-p
+                  :format '+nano-modeline-evil-substitute-mode)))
