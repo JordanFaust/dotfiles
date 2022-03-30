@@ -22,8 +22,8 @@
        ;; (ivy               ; a search engine for love and life
        ;;  +childframe
        ;;  +icons)
-       ;; (vertico
-       ;;  +icons)
+       (vertico
+        +icons)
 
        :ui
        doom              ; what makes DOOM look the way it does

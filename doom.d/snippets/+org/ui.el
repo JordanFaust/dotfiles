@@ -7,12 +7,8 @@
 
 (defun +org-set-window-clean-h (&optional changes)
   "Make the agenda and clock report buffer look better by adjusting faces and disable modes."
-  ;; Remove the headline formatting
-  (setq header-line-format " ")
   ;; Remove mode line formatting
   (setq mode-line-format nil)
-  ;; Increase the height of the modeline
-  (set-face-attribute 'header-line nil :background (doom-color 'bg) :height 500)
   ;; Turn off mouse highlighting
   (setq mouse-highlight nil)
   ;; Add side margin padding
@@ -45,8 +41,6 @@
   "Reset headline changes when leaving the org agenda or org clock report buffer"
   (unless (+org-agenda-or-clock-buffer-visible-p)
     (fringe-mode)
-    (set-face-attribute 'header-line nil :height 1.2)
-    (set-face-background 'header-line (if nano-modeline--selected-window (doom-color 'yellow) (doom-color 'fg)))
     (setq mode-line-format nil)
     (setq mouse-highlight 't)))
 

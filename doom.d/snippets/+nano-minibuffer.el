@@ -107,8 +107,11 @@
   (setq mini-frame-ignore-commands
         '("edebug-eval-expression"
           debugger-eval-expression
+          ;; Evil Commands
           evil-ex
-          evil-ex-search-forward))
+          evil-ex-search-forward
+          ;; Org Refiling
+          +org-agenda-set-effort))
   (setq mini-frame-internal-border-color (doom-color 'yellow))
   (setq mini-frame-resize t)
   (setq mini-frame-resize-min-height 3)

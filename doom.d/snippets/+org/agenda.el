@@ -36,6 +36,17 @@ This function makes sure that dates are aligned for easy reading."
 (setq org-agenda-custom-commands
       '(("a" "My Agenda"
          (
+          (tags-todo "+@notfound|+@empty"
+                     (
+                      ;; TODO Utilize vulpea to generate counts based
+                      ;; on the filters used in this section
+                      (org-agenda-overriding-header
+                       (format " "))
+                      ;; (org-agenda-overriding-header "⚡ Do Today:")
+                      (org-agenda-sorting-strategy '(priority-down))
+                      (org-agenda-remove-tags t)
+                      (org-agenda-prefix-format "  %-2i %-8b [%-4e]")
+                      (org-agenda-todo-keyword-format "")))
           ;; This section contains the set of tasks I am commiting
           ;; to working on today, with a few thrown in that I may
           ;; optionally work on if time allows. This should not
@@ -194,6 +205,7 @@ This function makes sure that dates are aligned for easy reading."
 
 (defun +org-agenda-scan-finalized-agenda ()
   "Scan each line of the finalized agenda and add highlighting to the TODOs lines"
+  (set-face-attribute 'header-line nil :height 1.2)
   (let ((inhibit-read-only t)
         (buffer-invisibility-spec '(org-link)))
     (save-excursion

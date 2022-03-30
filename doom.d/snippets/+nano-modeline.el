@@ -58,6 +58,10 @@
     (nano-modeline)))
 
 (after! nano-modeline
+
+  ;; Increase the height of the header line
+  (set-face-attribute 'header-line nil :height 1.2)
+
   (defun +nano-modeline-visual-bell-fn ()
     "Blink the mode-line red briefly. Set `ring-bell-function' to this to use it."
     (let ((nano-headline--active-cookie (face-remap-add-relative 'nano-modeline-active 'nano-modeline-visual-bell))
@@ -317,7 +321,6 @@
     (let ((buffer-name (format-mode-line "%b"))
           (branch      (nano-modeline-vc-branch))
           (matches     (+nano-modeline--evil-substitute-secondary)))
-      (message "rendering evil substitute")
       (nano-modeline-render nil
                             buffer-name
                             (if branch (concat "(" branch ")") "")

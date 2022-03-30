@@ -204,33 +204,9 @@
   (add-to-list 'projectile-globally-ignored-directories ".bundle")
   (add-to-list 'projectile-globally-ignored-directories ".yardoc"))
 
-(after! ivy-posframe
-  ;; Force project and symbol search to a the top posframe
-  ;; Explicitly set the width of the posframe to prevent possibly violent
-  ;; resizing as it async processes results and displays them
-  (let ((ivy-frame-top-functions '(t swiper counsel-rg)))
-    (dolist (ivy-function-display ivy-posframe-display-functions-alist)
-      (when (member (car ivy-function-display) ivy-frame-top-functions)
-        (setf (alist-get (car ivy-function-display) ivy-posframe-display-functions-alist)
-              #'ivy-posframe-display-at-frame-top-center))))
-  (setq ivy-posframe-width 120)
-  (setq posframe-arghandler
-        (lambda (buffer-or-name key value)
-          (or (and (eq key :lines-truncate)
-                   (string-match-p
-                    "ivy\\|counsel"
-                    (if (stringp buffer-or-name)
-                        buffer-or-name
-                      (buffer-name (get-buffer buffer-or-name))))
-                   t)
-              value)))
-  (setq ivy-posframe-border-width 5
-        ivy-posframe-parameters (append ivy-posframe-parameters '((left-fringe . 5)
-                                                                  (right-fringe . 5)))))
-
-(after! counsel
-  ;; Fix improper handling of error codes from ripgrep on Linux
-  (setq counsel-rg-base-command "rg -M 240 --with-filename --no-heading --line-number --color never %s || true"))
+;; (after! counsel
+;;   ;; Fix improper handling of error codes from ripgrep on Linux
+;;   (setq counsel-rg-base-command "rg -M 240 --with-filename --no-heading --line-number --color never %s || true"))
 
 ;;;
 ;;; Tree Sitter Configuration

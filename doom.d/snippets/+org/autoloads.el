@@ -13,11 +13,9 @@
 (defun +org-roam-capture-to-inbox ()
   "Interactive command to start inbox capture workflow"
   (interactive)
-  (message "starting capture")
   (org-roam-capture- :keys "i"
                      :node (org-roam-node-create)
-                     :templates org-roam-dailies-capture-templates)
-  (message "out of roam capture"))
+                     :templates org-roam-dailies-capture-templates))
 
 ;;;###autoload
 (defun +org-roam-go-to-inbox ()
@@ -106,9 +104,7 @@
    (org-agenda-set-tags)
    (org-agenda-priority 'set)
    (call-interactively '+org-agenda-set-effort)
-   (message "effort set attempting to refile")
-   (org-agenda-refile nil nil t)
-   (message "refiled successfully")))
+   (org-agenda-refile nil nil t)))
 
 ;;;###autoload
 (defun +org-my-agenda (&rest _)
@@ -192,7 +188,6 @@ tasks."
       (let* ((tags (seq-uniq (vulpea-buffer-tags-get)))
              (original-tags tags))
         ;; Add the todo tag key if the note has any top level todos
-        (message "note has tags %s original %s" tags original-tags)
         (if (+org-roam-note-has-todos-p)
             (setq tags (seq-uniq (cons +org-roam-todo-tag-key tags)))
           (setq tags (remove +org-roam-todo-tag-key tags))
@@ -201,7 +196,6 @@ tasks."
               (setq tags (seq-uniq (cons +org-roam-completed-todo-tag-key tags)))
             (setq tags (remove +org-roam-completed-todo-tag-key tags)))
           (unless (cl-equalp original-tags tags)
-            (message "original %s updated %s" original-tags tags)
             (apply #'vulpea-buffer-tags-set (seq-uniq tags))))))))
 
 ;;; Org Gcal
