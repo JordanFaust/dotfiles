@@ -83,7 +83,21 @@
   (setq truncate-string-ellipsis "…")
   (setq marginalia--ellipsis "…")
   (setq marginalia-align 'right)
-  (setq marginalia-align-offset -1))
+  (setq marginalia-align-offset -1)
+
+  (pushnew! marginalia-command-categories
+            '(+default/find-file-under-here . file)
+            '(doom/find-file-in-emacsd . project-file)
+            '(doom/find-file-in-other-project . project-file)
+            '(doom/find-file-in-private-config . file)
+            '(doom/describe-active-minor-mode . minor-mode)
+            '(flycheck-error-list-set-filter . builtin)
+            '(persp-switch-to-buffer . buffer)
+            '(projectile-find-file . project-file)
+            '(projectile-recentf . project-file)
+            '(projectile-switch-to-buffer . buffer)
+            '(projectile-switch-project . project-file)))
+
 
 (after! mini-frame
   (set-face-background 'child-frame-border (doom-color 'bg))
