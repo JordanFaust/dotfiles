@@ -1,50 +1,55 @@
+;;; ~/.doom.d/snippets/+nano-minibuffer.el -*- lexical-binding: t -*-
 ;; Nicolas .P Rougier emacs configuration - mini-frame configuration
 ;; ---------------------------------------------------------------------
 (require 'vertico)
 (require 'marginalia)
 (require 'mini-frame)
 
+;; Used to indicate the overlay should be disabled
+(defvar +nano-minibuffer--disable-overlay nil)
+
 (defun minibuffer-setup ()
   ;; This prevents the header line to spill over second line
   ;; (let ((inhibit-message t))
   ;;   (toggle-truncate-lines 1))
 
-  (setq enable-recursive-minibuffers t)
+  (unless +nano-minibuffer--disable-overlay
+    (setq enable-recursive-minibuffers t)
 
-  ;; This allows to have a consistent full width (fake) header like
-  (setq display-table (make-display-table))
-  (set-display-table-slot display-table 'truncation (make-glyph-code ?\ ))
-  (set-display-table-slot display-table 'wrap (make-glyph-code ?\ ))
-  (setq buffer-display-table display-table)
+    ;; This allows to have a consistent full width (fake) header like
+    (setq display-table (make-display-table))
+    (set-display-table-slot display-table 'truncation (make-glyph-code ?\ ))
+    (set-display-table-slot display-table 'wrap (make-glyph-code ?\ ))
+    (setq buffer-display-table display-table)
 
-  (cursor-intangible-mode)
-  (let* ((left  (concat (propertize " "
-                                    ;; 'face '(nano-modeline-active-status-**)
-                                    'face 'nano-modeline-active-status-**
-                                    'display '(raise +0.20))
-                        (propertize " M-x "
-                                    'face 'nano-modeline-active-status-**)
-                        (propertize " "
-                                    'face 'nano-modeline-active-primary
-                                    'display '(raise -0.30))))
-         (right (propertize "C-g: abort "
-                            'face '(:inherit (nano-modeline-active-primary)
-                                    :weight light)))
-         (spacer (propertize (make-string (- (window-width)
-                                             (length left)
-                                             (length right)
-                                             1) ?\ )
-                             'face 'nano-modeline-active))
-         (header (concat left spacer right))
-         (overlay (make-overlay (+ (point-min) 0) (+ (point-min) 0))))
-    (overlay-put overlay 'before-string
-        (concat
-         (propertize " " 'display header)
-         "\n"
-         ;; This provides a vertical gap (half a line) above the prompt.
-         (propertize " " 'face `(:extend t)
-                     'display '(raise .33)
-                     'read-only t 'cursor-intangible t)))))
+    (cursor-intangible-mode)
+    (let* ((left  (concat (propertize " "
+                                      ;; 'face '(nano-modeline-active-status-**)
+                                      'face 'nano-modeline-active-status-**
+                                      'display '(raise +0.20))
+                          (propertize " M-x "
+                                      'face 'nano-modeline-active-status-**)
+                          (propertize " "
+                                      'face 'nano-modeline-active-primary
+                                      'display '(raise -0.30))))
+           (right (propertize "C-g: abort "
+                              'face '(:inherit (nano-modeline-active-primary)
+                                      :weight light)))
+           (spacer (propertize (make-string (- (window-width)
+                                               (length left)
+                                               (length right)
+                                               1) ?\ )
+                               'face 'nano-modeline-active))
+           (header (concat left spacer right))
+           (overlay (make-overlay (+ (point-min) 0) (+ (point-min) 0))))
+      (overlay-put overlay 'before-string
+          (concat
+           (propertize " " 'display header)
+           "\n"
+           ;; This provides a vertical gap (half a line) above the prompt.
+           (propertize " " 'face `(:extend t)
+                       'display '(raise .33)
+                       'read-only t 'cursor-intangible t))))))
 
 (add-hook 'minibuffer-setup-hook #'minibuffer-setup)
 
@@ -80,30 +85,16 @@
   (setq marginalia-align 'right)
   (setq marginalia-align-offset -1))
 
-(after! (vertico marginalia mini-frame)
-  (set-face-attribute 'vertico-current nil
-                      :foreground (doom-color 'bg)
-                      :background (doom-color 'red))
-  (set-face-attribute 'completions-first-difference nil
-                      :foreground (doom-color 'yellow))
-  (set-face-attribute 'completions-common-part nil
-                      :foreground (doom-color 'green))
-  (set-face-attribute 'minibuffer-prompt nil
-                      :background (doom-color 'bg)
-                      :foreground (doom-color 'red)))
-
 (after! mini-frame
   (set-face-background 'child-frame-border (doom-color 'bg))
   (setq mini-frame-default-height vertico-count)
   (setq mini-frame-create-lazy t)
   (setq mini-frame-show-parameters 'mini-frame-dynamic-parameters)
-  (setq mini-frame-completions-show-parameters 'mini-frame-dynamic-completion-parameters)
   (setq mini-frame-ignore-commands
-        '("edebug-eval-expression" debugger-eval-expression))
+        '("edebug-eval-expression"
+          debugger-eval-expression
+          evil-ex))
   (setq mini-frame-internal-border-color (doom-color 'yellow))
-  ;; (setq mini-frame-resize 'grow-only) ;; -> buggy as of 01/05/2021
-  ;; (setq mini-frame-resize 'not-set)
-  ;; (setq mini-frame-resize nil)
   (setq mini-frame-resize t)
   (setq mini-frame-resize-min-height 3)
 
@@ -140,13 +131,20 @@
         (border-color . ,(doom-color 'red))
         (foreground-color . ,(doom-color 'yellow))
         (background-color . ,(doom-color 'bg)))))
-  (defun mini-frame-dynamic-completion-parameters ()
-    `((height . 0.25)
-      (width . 1.0)
-      (left . 0.5)
-      (background-color . ,(doom-lighten (doom-color 'yellow) 0.2)))))
-          ;; From https://gist.github.com/minad/bc68d0b01c8056b45e58da93196ca6bb
-          ;; (no-other-frame . t)))))
+
+  ;;;
+  ;;; Disable overlay for evil ex commands
+  ;;;
+
+  (defadvice! +nano-minibuffer--disable-overlay-evil-ex (&rest _)
+    :before 'evil-ex
+    (setq +nano-minibuffer--disable-overlay t))
+
+  (defadvice! +nano-minibuffer--enable-overlay-after-evil-ex (&rest _)
+    "Re-enable the minibuffer overlay after an evil ex command has completed or has been aborted."
+    :after 'evil-ex-execute
+    :after 'evil-ex-abort
+    (setq +nano-minibuffer--disable-overlay nil)))
 
 (vertico-mode)
 (marginalia-mode)
