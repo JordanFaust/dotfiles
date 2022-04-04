@@ -12,15 +12,19 @@
 ;;; Agenda Specific Changes
 ;; Lookup and assign all files used in the refile workflows
 ;; Update the list of org-refile-targets to those at the appropriate headline
+;; TODO: Handle defaulting to the work todos better
 (defadvice! +org-refile-agenda-files-advice (fn &rest args)
   "Temporarily redefine and configure the refile target files."
   :around 'org-refile
   :around 'org-agenda-refile
-  (let ((org-agenda-files (+org-roam-notes-with-tag-key +org-roam-todo-tag-key))
+  (let ((org-agenda-files (seq-uniq
+                           (append (+org-roam-notes-with-tag-key +org-roam-todo-tag-key)
+                                   (list (expand-file-name "~/notes/roam/todos/work_todos.org")))))
         (org-refile-targets '((org-agenda-files :maxlevel . 1)
                               (org-agenda-files :level . 1)
                               (org-agenda-files :tag . "@refile"))))
     (apply fn args)))
+
 
 ;; Refresh the agenda after actions have been taken that change it
 (defadvice! +org-redisplay-org-agenda-after-change-a (&rest args)

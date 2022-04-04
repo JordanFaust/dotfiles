@@ -107,15 +107,19 @@
    (org-agenda-refile nil nil t)))
 
 ;;;###autoload
+;; TODO: Handle defaulting to the work todos better
 (defun +org-my-agenda (&rest _)
   "Iteractive command to navigate to My Agenda"
   (interactive "P")
   ;; TODO fix issue with roam db queries for HasTodo
-  (let* ((schedule "~/notes/roam/todos/schedule.org")
-         (active-todos (+org-roam-notes-with-tag-key +org-roam-todo-tag-key))
+  (let* ((schedule      "~/notes/roam/todos/schedule.org")
+         (default-todos (list (expand-file-name "~/notes/roam/todos/work_todos.org")))
+         ;; Default to the work todos when there are no active todo items
+         (active-todos  (seq-uniq
+                         (append default-todos
+                                 (+org-roam-notes-with-tag-key +org-roam-todo-tag-key))))
          (org-agenda-files (cons schedule active-todos)))
     (org-agenda nil "a")))
-
 
 ;;;###autoload
 (defun +org-roam-capture-to-inbox ()
