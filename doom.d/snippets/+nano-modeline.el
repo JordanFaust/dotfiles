@@ -243,15 +243,22 @@
                                                      'nano-modeline-inactive-primary))))
            (right (concat (propertize secondary 'face (if active 'nano-modeline-active-secondary
                                                         'nano-modeline-inactive-secondary))
-                          (propertize " " 'display `(raise ,nano-modeline-space-bottom)
-                                      'face (if active 'nano-modeline-active-spacer
-                                              'nano-modeline-inactive-spacer))))
+                          (propertize " " 'face (if active 'nano-modeline-active-spacer
+                                                  'nano-modeline-inactive-spacer)
+                                          'display `(raise ,nano-modeline-space-bottom))))
+           ;; TODO This is still not placing it precisely for different sized strings
+           (center-right-len (- (/ (window-max-chars-per-line) 2)
+                                (length (format-mode-line right))))
            (right-len (length (format-mode-line right))))
       (concat
         left
+        ;; spacer
         (propertize " " 'display `(space :align-to (- right ,(- right-len 0)))
                     'face (if active 'nano-modeline-active-spacer
                             'nano-modeline-inactive-spacer))
+        ;; (propertize " " 'display `(space :align-to (+ center ,(+ center-right-len 0)))
+        ;;             'face (if active 'nano-modeline-active-spacer
+        ;;                     'nano-modeline-inactive-spacer))
         right)))
 
   ;;
@@ -286,7 +293,6 @@
                             buffer-name
                             (if branch (concat "(" branch ")") "")
                             matches)))
-
 
   (pushnew! nano-modeline-mode-formats
             (list 'anzu-mode
@@ -329,4 +335,27 @@
   (pushnew! nano-modeline-mode-formats
             (list 'evil-substitute
                   :mode-p '+nano-modeline-evil-substitute-mode-p
-                  :format '+nano-modeline-evil-substitute-mode)))
+                  :format '+nano-modeline-evil-substitute-mode))
+
+  ;;
+  ;; Org Capture Mode Fix
+  ;;
+
+  ;; At some point the header line is overridden. This resets the header line
+  ;; to the nano-modeline org capture mode header line
+  (add-hook! 'org-capture-mode-hook
+    (defun +nano-modeline-fix-org-capture-header-line-h ()
+      ;; Increase the height of the header line
+      (set-face-attribute 'header-line nil :height 1.2)
+      (setq header-line-format '((:eval (funcall #'nano-modeline-org-capture-mode))))))
+
+  ;;
+  ;; Org/Org Roam Mode Fix
+  ;;
+
+  (add-hook! 'org-roam-mode-hook
+    (defun +nano-modeline-fix-org-roam-header-line-h ()
+      "Force the header line height and format in org/org roam mode."
+      ;; Increase the height of the header line
+      ;; (set-face-attribute 'header-line nil :height 1.2)
+      (setq header-line-format '((:eval (funcall #'nano-modeline-default-mode)))))))

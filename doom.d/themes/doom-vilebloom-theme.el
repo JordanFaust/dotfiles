@@ -153,7 +153,7 @@ determine the exact padding."
    (nano-modeline-visual-bell :background red :foreground bg)
 
    ;;; nano-minibuffer + vertico + marginalia
-   (vertico-current :foreground bg :background red)
+   ((vertico-current &override) :foreground bg :background red)
    (completions-first-difference :foreground yellow)
    (completions-common-part :foreground blue)
    (minibuffer-prompt :foreground red :background bg)

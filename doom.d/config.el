@@ -204,9 +204,9 @@
   (add-to-list 'projectile-globally-ignored-directories ".bundle")
   (add-to-list 'projectile-globally-ignored-directories ".yardoc"))
 
-;; (after! counsel
-;;   ;; Fix improper handling of error codes from ripgrep on Linux
-;;   (setq counsel-rg-base-command "rg -M 240 --with-filename --no-heading --line-number --color never %s || true"))
+(after! counsel
+  ;; Fix improper handling of error codes from ripgrep on Linux
+  (setq counsel-rg-base-command "rg -M 240 --with-filename --no-heading --line-number --color never %s || true"))
 
 ;;;
 ;;; Tree Sitter Configuration

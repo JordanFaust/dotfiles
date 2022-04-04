@@ -1,12 +1,21 @@
 ;;; ~/.doom.d/snippets/+nano-minibuffer.el -*- lexical-binding: t -*-
 ;; Nicolas .P Rougier emacs configuration - mini-frame configuration
 ;; ---------------------------------------------------------------------
+
+;; See https://gist.github.com/rougier/126e358464e12aa28fac5b4f3dd5eb9c
+
+
 (require 'vertico)
 (require 'marginalia)
 (require 'mini-frame)
 
 ;; Used to indicate the overlay should be disabled
-(defvar +nano-minibuffer--disable-overlay nil)
+(defvar +nano-minibuffer--disable-overlay nil
+  "Used to disable the mini buffer overlay.")
+
+(defvar +nano-minibuffer-prefix "Minibuffer")
+
+;; Setup the Minibuffer
 
 (defun minibuffer-setup ()
   ;; This prevents the header line to spill over second line
@@ -23,15 +32,15 @@
     (setq buffer-display-table display-table)
 
     (cursor-intangible-mode)
-    (let* ((left  (concat (propertize " "
-                                      ;; 'face '(nano-modeline-active-status-**)
-                                      'face 'nano-modeline-active-status-**
-                                      'display '(raise +0.20))
-                          (propertize " M-x "
-                                      'face 'nano-modeline-active-status-**)
-                          (propertize " "
-                                      'face 'nano-modeline-active-primary
-                                      'display '(raise -0.30))))
+    (let* ((left  (concat
+                   (propertize " "
+                               'face 'nano-modeline-active-status-**
+                               'display '(raise +0.20))
+                   (propertize (format " %s " +nano-minibuffer-prefix)
+                               'face 'nano-modeline-active-status-**)
+                   (propertize " "
+                               'face 'nano-modeline-active-primary
+                               'display '(raise -0.30))))
            (right (propertize "C-g: abort "
                               'face '(:inherit (nano-modeline-active-primary)
                                       :weight light)))
@@ -53,12 +62,50 @@
 
 (add-hook 'minibuffer-setup-hook #'minibuffer-setup)
 
+;;;
+;;; Update the prefix string based on the commands ran
+;;;
+
+(defadvice! +nano-minibuffer--helpful-prompt-prefix (fn &rest args)
+  "Set the minibuffer prefix to the thing being described."
+  :around 'helpful--read-symbol
+  (when-let* ((helpful-prompt (nth 0 args))
+              (match-index (string-match "\\(?1:[[:word:]]*\\)" helpful-prompt))
+              (+nano-minibuffer-prefix (match-string match-index helpful-prompt)))
+    (apply fn args)))
+
+(defadvice! +nano-minibuffer--describe-face-prefix (fn &rest args)
+  "Set the minibuffer prefix when describing faces."
+  :around 'read-face-name
+  (let ((+nano-minibuffer-prefix "Face"))
+    (apply fn args)))
+
+(defadvice! +nano-minibuffer--find-file-prefix (fn &rest args)
+  "Set the minibuffer prefix when finding files."
+  :around 'projectile-find-file
+  :around 'find-file-read-args
+  (let ((+nano-minibuffer-prefix "File"))
+    (apply fn args)))
+
+(defadvice! +nano-minibuffer--projectile-switch-project-prefix (fn &rest args)
+  "Set the minibuffer prefix when switching projects."
+  :around 'projectile-switch-project
+  (let ((+nano-minibuffer-prefix "Project"))
+    (apply fn args)))
+
+(defadvice! +nano-minibuffer--switch-buffer-prefix (fn &rest args)
+  "Set the minibuffer prefix when switching buffers."
+  :around 'projectile-switch-to-buffer
+  :around '+vertico/switch-workspace-buffer
+  (let ((+nano-minibuffer-prefix "Buffer"))
+    (apply fn args)))
+
 ;; Prefix/Affix the current candidate. From
 ;; https://github.com/minad/vertico/wiki#prefix-current-candidate-with-arrow
-(defun minibuffer-format-candidate (orig cand prefix suffix index _start)
+(defun minibuffer-format-candidate (orig cand prefix suffix index start)
   (let ((prefix (if (= vertico--index index)
                     "  " "   ")))
-    (funcall orig cand prefix suffix index _start)))
+    (funcall orig cand prefix suffix index start)))
 
 (advice-add #'vertico--format-candidate
             :around #'minibuffer-format-candidate)
@@ -77,26 +124,13 @@
     "Highlight the prompt"
     (let ((inhibit-modification-hooks t))
       (set-text-properties (minibuffer-prompt-end) (point-max)
-                           '(face (highlight bold))))))
+                           '(face (completions-first-difference bold))))))
 
 (after! marginalia
   (setq truncate-string-ellipsis "…")
   (setq marginalia--ellipsis "…")
   (setq marginalia-align 'right)
-  (setq marginalia-align-offset -1)
-
-  (pushnew! marginalia-command-categories
-            '(+default/find-file-under-here . file)
-            '(doom/find-file-in-emacsd . project-file)
-            '(doom/find-file-in-other-project . project-file)
-            '(doom/find-file-in-private-config . file)
-            '(doom/describe-active-minor-mode . minor-mode)
-            '(flycheck-error-list-set-filter . builtin)
-            '(persp-switch-to-buffer . buffer)
-            '(projectile-find-file . project-file)
-            '(projectile-recentf . project-file)
-            '(projectile-switch-to-buffer . buffer)
-            '(projectile-switch-project . project-file)))
+  (setq marginalia-align-offset -1))
 
 
 (after! mini-frame
