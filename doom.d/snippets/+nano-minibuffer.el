@@ -100,6 +100,18 @@
   (let ((+nano-minibuffer-prefix "Buffer"))
     (apply fn args)))
 
+(defadvice! +nano-minibuffer--org-roam-find-prefix (fn &rest args)
+  "Set the minibuffer prefix when looking up org roam files."
+  :around 'org-roam-node-find
+  (let ((+nano-minibuffer-prefix "Roam (Find)"))
+    (apply fn args)))
+
+(defadvice! +nano-minibuffer--org-roam-capture-prefix (fn &rest args)
+  "Set the minibuffer prefix when creating a new org roam file."
+  :around 'org-roam-capture
+  (let ((+nano-minibuffer-prefix "Roam (New)"))
+    (apply fn args)))
+
 ;; Prefix/Affix the current candidate. From
 ;; https://github.com/minad/vertico/wiki#prefix-current-candidate-with-arrow
 (defun minibuffer-format-candidate (orig cand prefix suffix index start)
