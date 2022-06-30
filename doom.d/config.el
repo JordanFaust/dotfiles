@@ -75,40 +75,42 @@
 ;; UI Settings
 ;;
 
-;; Set floating look to frames and the modeline
-(setq default-frame-alist
-      (append (list
-               '(min-height . 1)  '(height . 50)
-               '(min-width  . 1)  '(width  . 130)
-               '(vertical-scroll-bars . nil)
-               '(internal-border-width . 32)
-               '(left-fringe . 0)
-               '(right-fringe . 0)
-               '(tool-bar-lines . 0)
-               '(menu-bar-lines . 0))))
+(use-package frame
+  :config
+  ;; Set floating look to frames and the modeline
+  (setq default-frame-alist
+        (append (list
+                 '(min-height . 1)  '(height . 50)
+                 '(min-width  . 1)  '(width  . 130)
+                 '(vertical-scroll-bars . nil)
+                 '(internal-border-width . 32)
+                 '(left-fringe . 0)
+                 '(right-fringe . 0)
+                 '(tool-bar-lines . 0)
+                 '(menu-bar-lines . 0))))
 
-;; Turn off truncation indicators within the fringe. This provides a more conistent look and
-;; feel particularly within the mini-frame drop downs.
-(setq-default fringe-indicator-alist (assq-delete-all 'truncation fringe-indicator-alist))
+  ;; Turn off truncation indicators within the fringe. This provides a more conistent look and
+  ;; feel particularly within the mini-frame drop downs.
+  (setq-default fringe-indicator-alist (assq-delete-all 'truncation fringe-indicator-alist))
 
-;; Add window dividers for keeping floating headline when using virtical splits
-(setq window-divider-default-right-width 32)
-(setq window-divider-default-places 'right-only)
+  ;; Add window dividers for keeping floating headline when using virtical splits
+  (setq window-divider-default-right-width 32)
+  (setq window-divider-default-places 'right-only)
 
-(add-hook! 'doom-init-ui-hook
-  ;; Remove the header and mode line from the initial splash screen
-  (defun +doom-reset-modelines-h ()
-    (setq header-line-format nil)
-    (setq mode-line-format nil)))
+  (add-hook! 'doom-init-ui-hook
+    ;; Remove the header and mode line from the initial splash screen
+    (defun +doom-reset-modelines-h ()
+      (setq header-line-format nil)
+      (setq mode-line-format nil)))
 
-;; Define custom face for nano modeline visual bell
-(defface nano-modeline-visual-bell '((t :inherit error))
-  "Face to use for the mode-line when `+nano-modeline-visual-bell-config' is used."
-  :group 'nano-modeline)
+  ;; Define custom face for nano modeline visual bell
+  (defface nano-modeline-visual-bell '((t :inherit error))
+    "Face to use for the mode-line when `+nano-modeline-visual-bell-config' is used."
+    :group 'nano-modeline)
 
-;; Bar cursor
-(setq-default cursor-type '(hbar . 2))
-(setq evil-normal-state-cursor '(hbar . 2))
+  ;; Bar cursor
+  (setq-default cursor-type '(hbar . 2))
+  (setq evil-normal-state-cursor '(hbar . 2)))
 
 (after! doom-themes
   (doom-themes-treemacs-config)
@@ -252,7 +254,11 @@
      ;; Highlight all other variables
      (variable_expr (identifier) @variable)])
   (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
-     
+
+(use-package! terraform-mode
+  :defer t
+  :config
+  (add-hook 'terraform-mode-hook #'tree-sitter-mode))
 
 (use-package! enh-ruby-mode
   :defer t
@@ -309,5 +315,5 @@
 (load! "snippets/+bindings")
 (require '+org)
 (require '+sidebar)
-(require '+nano-minibuffer)
+(require '+nano-vertico-buffer)
 (load! "snippets/+mu4e")

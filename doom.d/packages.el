@@ -71,7 +71,7 @@
   (package! evil-anzu :pin "d3f6ed4773b48767bd5f4708c7f083336a8a8a86"))
 
 ;; Nano Minibuffer
-(package! mini-frame :recipe '(:type git :host github :repo "muffinmad/emacs-mini-frame"))
+;; (package! mini-frame :recipe '(:type git :host github :repo "muffinmad/emacs-mini-frame"))
 
 ;; Vertico
 (package! vertico)

@@ -53,6 +53,8 @@
 
     (force-mode-line-update))
 
+  (setq nano-modeline-prefix 'status)
+  (setq nano-modeline-prefix-padding 't)
   (defun +doom-nano-modeline-init-h ()
     (require 'nano-modeline)
     (nano-modeline)))
@@ -60,7 +62,8 @@
 (after! nano-modeline
 
   ;; Increase the height of the header line
-  (set-face-attribute 'header-line nil :height 1.2)
+  ;; (set-face-attribute 'header-line nil :height 1.2)
+  ;; (set-face-attribute 'header-line nil :height 1.0)
 
   (defun +nano-modeline-visual-bell-fn ()
     "Blink the mode-line red briefly. Set `ring-bell-function' to this to use it."
@@ -178,88 +181,84 @@
   ;; ---------------------------- PATCH ------------------------------------
   ;; See https://github.com/rougier/nano-modeline/pull/23/files
 
-  (defface nano-modeline-active-spacer
-    '((t (:inherit nano-modeline-active)))
-    "Modeline face for active modeline spacing element"
-    :group 'nano-modeline-active)
+  ;; (defface nano-modeline-active-spacer
+  ;;   '((t (:inherit nano-modeline-active)))
+  ;;   "Modeline face for active modeline spacing element"
+  ;;   :group 'nano-modeline-active)
 
-  (defface nano-modeline-inactive-spacer
-    '((t (:inherit nano-modeline-inactive)))
-    "Modeline face for inactive spacing element"
-    :group 'nano-modeline-inactive)
+  ;; (defface nano-modeline-inactive-spacer
+  ;;   '((t (:inherit nano-modeline-inactive)))
+  ;;   "Modeline face for inactive spacing element"
+  ;;   :group 'nano-modeline-inactive)
 
-  (defun nano-modeline-render (prefix name primary secondary &optional status)
-    "Compose a string with provided information"
-    (let* ((window (get-buffer-window (current-buffer)))
-           (name-max-width (- (window-body-width)
-                              1
-                              (length prefix)
-                              1
-                              (length primary)
-                              5
-                              (length secondary)
-                              1))
-           (name (if (and (stringp name) (> (length name) name-max-width))
-                     (format "%s…" (substring name 0 (- name-max-width 1)))
-                   name))
-           (status (or status (nano-modeline-status)))
-           (active (eq window nano-modeline--selected-window))
-           (prefix (or prefix (cond ((eq status 'read-only)  "RO")
-                                    ((eq status 'read-write) "RW")
-                                    ((eq status 'modified)   "**")
-                                    (t                       "--"))))
+  ;; (defun nano-modeline-render (prefix name primary secondary &optional status)
+  ;;   "Compose a string with provided information"
+  ;;   (let* ((window (get-buffer-window (current-buffer)))
+  ;;          (name-max-width (- (window-body-width)
+  ;;                             1
+  ;;                             (length prefix)
+  ;;                             1
+  ;;                             (length primary)
+  ;;                             5
+  ;;                             (length secondary)
+  ;;                             1))
+  ;;          (name (if (and (stringp name) (> (length name) name-max-width))
+  ;;                    (format "%s…" (substring name 0 (- name-max-width 1)))
+  ;;                  name))
+  ;;          (status (or status (nano-modeline-status)))
+  ;;          (active (eq window nano-modeline--selected-window))
+  ;;          (prefix (or prefix (cond ((eq status 'read-only)  "RO")
+  ;;                                   ((eq status 'read-write) "RW")
+  ;;                                   ((eq status 'modified)   "**")
+  ;;                                   (t                       "--"))))
 
-           (prefix-face (cond ((eq status 'read-only) (if active
-                                                          'nano-modeline-active-status-RO
-                                                        'nano-modeline-inactive-status-RO))
-                              ((eq status 'modified) (if active
-                                                         'nano-modeline-active-status-**
-                                                       'nano-modeline-inactive-status-**))
-                              ((eq status 'read-write) (if active
-                                                           'nano-modeline-active-status-RW
-                                                         'nano-modeline-inactive-status-RW))
-                              ((facep status) status)
-                              ((listp status) (if active (car status)
-                                                (cadr status)))
-                              (t (if active 'nano-modeline-active
-                                   'nano-modeline-inactive))))
-           (left (concat (if (stringp prefix)
-                             (concat
-                              (propertize (if (window-dedicated-p) "[" " ")
-                                          'face `(:inherit ,prefix-face))
-                              (propertize (format "%s" prefix)
-                                          'face `(:inherit ,prefix-face))
-                              (propertize (if (window-dedicated-p) "]" " ")
-                                          'face `(:inherit ,prefix-face))))
-                         (propertize " " 'display `(raise ,nano-modeline-space-top)
-                                     'face (if active 'nano-modeline-active-spacer
-                                             'nano-modeline-inactive-spacer))
-                         (propertize name 'face (if active 'nano-modeline-active-name
-                                                  'nano-modeline-inactive-name))
-                         (when (length name)
-                           (propertize " " 'face (if active 'nano-modeline-active-spacer
-                                                   'nano-modeline-inactive-spacer)))
-                         (propertize primary 'face (if active 'nano-modeline-active-primary
-                                                     'nano-modeline-inactive-primary))))
-           (right (concat (propertize secondary 'face (if active 'nano-modeline-active-secondary
-                                                        'nano-modeline-inactive-secondary))
-                          (propertize " " 'face (if active 'nano-modeline-active-spacer
-                                                  'nano-modeline-inactive-spacer)
-                                          'display `(raise ,nano-modeline-space-bottom))))
-           ;; TODO This is still not placing it precisely for different sized strings
-           (center-right-len (- (/ (window-max-chars-per-line) 2)
-                                (length (format-mode-line right))))
-           (right-len (length (format-mode-line right))))
-      (concat
-        left
-        ;; spacer
-        (propertize " " 'display `(space :align-to (- right ,(- right-len 0)))
-                    'face (if active 'nano-modeline-active-spacer
-                            'nano-modeline-inactive-spacer))
-        ;; (propertize " " 'display `(space :align-to (+ center ,(+ center-right-len 0)))
-        ;;             'face (if active 'nano-modeline-active-spacer
-        ;;                     'nano-modeline-inactive-spacer))
-        right)))
+  ;;          (prefix-face (cond ((eq status 'read-only) (if active
+  ;;                                                         'nano-modeline-active-status-RO
+  ;;                                                       'nano-modeline-inactive-status-RO))
+  ;;                             ((eq status 'modified) (if active
+  ;;                                                        'nano-modeline-active-status-**
+  ;;                                                      'nano-modeline-inactive-status-**))
+  ;;                             ((eq status 'read-write) (if active
+  ;;                                                          'nano-modeline-active-status-RW
+  ;;                                                        'nano-modeline-inactive-status-RW))
+  ;;                             ((facep status) status)
+  ;;                             ((listp status) (if active (car status)
+  ;;                                               (cadr status)))
+  ;;                             (t (if active 'nano-modeline-active
+  ;;                                  'nano-modeline-inactive))))
+  ;;          (left (concat (if (stringp prefix)
+  ;;                            (concat
+  ;;                             (propertize (if (window-dedicated-p) "[" " ")
+  ;;                                         'face `(:inherit ,prefix-face))
+  ;;                             (propertize (format "%s" prefix)
+  ;;                                         'face `(:inherit ,prefix-face))
+  ;;                             (propertize (if (window-dedicated-p) "]" " ")
+  ;;                                         'face `(:inherit ,prefix-face))))
+  ;;                        (propertize " " 'display `(raise ,nano-modeline-space-top)
+  ;;                                    'face (if active 'nano-modeline-active-spacer
+  ;;                                            'nano-modeline-inactive-spacer))
+  ;;                        (propertize name 'face (if active 'nano-modeline-active-name
+  ;;                                                 'nano-modeline-inactive-name))
+  ;;                        (when (length name)
+  ;;                          (propertize " " 'face (if active 'nano-modeline-active-spacer
+  ;;                                                  'nano-modeline-inactive-spacer)))
+  ;;                        (propertize primary 'face (if active 'nano-modeline-active-primary
+  ;;                                                    'nano-modeline-inactive-primary))))
+  ;;          (right (concat (propertize secondary 'face (if active 'nano-modeline-active-secondary
+  ;;                                                       'nano-modeline-inactive-secondary))
+  ;;                         (propertize " " 'face (if active 'nano-modeline-active-spacer
+  ;;                                                 'nano-modeline-inactive-spacer)
+  ;;                                         'display `(raise ,nano-modeline-space-bottom))))
+  ;;          (right-len (length (format-mode-line right)))
+  ;;          ;; TODO figure out why this is needed
+  ;;          (right-margin-padding (/ right-len 10)))
+  ;;     (concat
+  ;;       left
+  ;;       ;; spacer
+  ;;       (propertize " " 'display `(space :align-to (- right ,(+ right-len right-margin-padding)))
+  ;;                   'face (if active 'nano-modeline-active-spacer
+  ;;                           'nano-modeline-inactive-spacer))
+  ;;       right)))
 
   ;;
   ;; Anzu Completions
@@ -277,13 +276,13 @@
      (let ((here anzu--current-position)
            (total anzu--total-matched))
        (cond ((eq anzu--state 'replace-query)
-              (format " %d replace " anzu--cached-count))
+              (format " %d replace" anzu--cached-count))
              ((eq anzu--state 'replace)
-              (format " %d/%d " here total))
+              (format " %d/%d" here total))
              (anzu--overflow-p
-              (format " %s+ " total))
+              (format " %s+" total))
              (t
-              (format " %s/%d " here total))))))
+              (format " %s/%d" here total))))))
 
   (defun +nano-modeline-anzu-mode ()
     (let ((buffer-name (format-mode-line "%b"))
@@ -319,7 +318,7 @@
                     (cons (line-beginning-position) (line-end-position))))
            (pattern (car-safe (evil-delimited-arguments evil-ex-argument 2))))
        (if pattern
-           (format " %s matches " (how-many pattern (car range) (cdr range)))
+           (format " %s matches" (how-many pattern (car range) (cdr range)))
          " - "))))
 
   (defun +nano-modeline-evil-substitute-mode ()
@@ -337,6 +336,42 @@
                   :mode-p '+nano-modeline-evil-substitute-mode-p
                   :format '+nano-modeline-evil-substitute-mode))
 
+
+  ;;
+  ;; Vertico Buffer Modeline
+  ;;
+
+  (defun +nano-modeline-vertico-buffer-mode-p ()
+    "Return non-nil when an evil substitution is performed"
+    (when (window-parameter (get-buffer-window (current-buffer)) '+nano-vertico-buffer)
+      't))
+
+  (defun +nano-modeline--vertico-buffer-secondary ()
+    "Show number of matches for evil-ex substitutions and highlights in real time."
+    (propertize
+     (let ((range (if evil-ex-range
+                      (cons (car evil-ex-range) (cadr evil-ex-range))
+                    (cons (line-beginning-position) (line-end-position))))
+           (pattern (car-safe (evil-delimited-arguments evil-ex-argument 2))))
+       (if pattern
+           (format " %s matches" (how-many pattern (car range) (cdr range)))
+         " - "))))
+
+  (defun +nano-modeline-vertico-buffer-mode ()
+    "Format for the modeline in evil substitute mode."
+    (let ((buffer-name (format-mode-line "%b"))
+          (branch      (nano-modeline-vc-branch))
+          (matches     (format "%s" vertico--total)))
+      (nano-modeline-render nil
+                            buffer-name
+                            (if branch (concat "(" branch ")") "")
+                            matches)))
+
+  (pushnew! nano-modeline-mode-formats
+            (list 'vertico-buffer
+                  :mode-p '+nano-modeline-vertico-buffer-mode-p
+                  :format '+nano-modeline-vertico-buffer-mode))
+
   ;;
   ;; Org Capture Mode Fix
   ;;
@@ -346,7 +381,7 @@
   (add-hook! 'org-capture-mode-hook
     (defun +nano-modeline-fix-org-capture-header-line-h ()
       ;; Increase the height of the header line
-      (set-face-attribute 'header-line nil :height 1.2)
+      ;; (set-face-attribute 'header-line nil :height 1.2)
       (setq header-line-format '((:eval (funcall #'nano-modeline-org-capture-mode))))))
 
   ;;

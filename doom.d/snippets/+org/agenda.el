@@ -205,7 +205,7 @@ This function makes sure that dates are aligned for easy reading."
 
 (defun +org-agenda-scan-finalized-agenda ()
   "Scan each line of the finalized agenda and add highlighting to the TODOs lines"
-  (set-face-attribute 'header-line nil :height 1.2)
+  ;; (set-face-attribute 'header-line nil :height 1.0)
   (let ((inhibit-read-only t)
         (buffer-invisibility-spec '(org-link)))
     (save-excursion

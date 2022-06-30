@@ -96,9 +96,9 @@
           (66 . ( :foreground ,(doom-color 'yellow) :weight bold))
           (67 . ( :foreground ,(doom-color 'blue) :weight bold))))
     (setq org-fancy-priorities-list
-        `((?A . ,(propertize (format "%s [ SEVERE ]" (all-the-icons-faicon "exclamation-circle" :v-adjust -0.01))))
-          (?B . ,(propertize (format "%s [ MEDIUM ]" (all-the-icons-faicon "arrow-circle-up" :v-adjust -0.01))))
-          (?C . ,(propertize (format "%s [ NORMAL ]" (all-the-icons-faicon "arrow-circle-down" :v-adjust -0.01)))))))
+        `((?A . ,(propertize (format " %s [ SEVERE ]" (all-the-icons-faicon "exclamation-circle" :v-adjust -0.01))))
+          (?B . ,(propertize (format " %s [ MEDIUM ]" (all-the-icons-faicon "arrow-circle-up" :v-adjust -0.01))))
+          (?C . ,(propertize (format " %s [ NORMAL ]" (all-the-icons-faicon "arrow-circle-down" :v-adjust -0.01)))))))
 
   ;; Define the icons associated with the category of each headline
   ;; a todo was filed to. Use all the icons where available for each
@@ -164,6 +164,7 @@
     (unless (member (car args) '("*Org Select*"))
       (window-resize (get-buffer-window (car-safe args)) 5)))
   (set-popup-rule! " \\*Org tags*" :height 0.4 :side 'bottom :vslot 1)
+  (set-popup-rule! "CAPTURE-work.org" :height 0.25 :side 'bottom :vslot 1)
 
   ;; Add additional templates for capturing thoughts
   (setq org-roam-capture-templates
