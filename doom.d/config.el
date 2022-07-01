@@ -228,31 +228,11 @@
   ;; Add terraform specific highlights
   (tree-sitter-hl-add-patterns 'hcl
     [
-     ([
-       "in"]
-      @keyword)
-
-     ;; Resource syntax does not need types to be strings.
-     ;; Mark them as something other then types
-     ;;
-     ;; Mark the first identifier in a block as a type
-     (block \. (identifier) @type)
-     ;; Mark the proceding identifiers in a block definition as keywords
-     (block ((identifier) \. (identifier)\*) @keyword)
-     ;; Mark the first identifier in a one line block as a type
-     (one_line_block \. (identifier) @type)
-     ;; Mark the proceding identifiers in a one line block definition as keywords
-     (one_line_block ((identifier) \. (identifier)\*) @keyword)
-
+     ;; Mark function calls as a call
+     (function_call (identifier) @function.call)
      ;; Mark use of var, data, and local as keywords
      ((identifier) @keyword
-      (.match? @keyword "^(var|data|local)$"))
-
-     ;; Highlight variables in for loops
-     (for_expr (for_intro (identifier) @variable))
-
-     ;; Highlight all other variables
-     (variable_expr (identifier) @variable)])
+      (.match? @keyword "^(var|data|local)$"))])
   (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
 
 (use-package! terraform-mode
@@ -302,13 +282,16 @@
 ;;;
 
 (setq lisp-indent-function 'common-lisp-indent-function)
+(setq parinfer-rust-auto-download 't)
 (after! parinfer-rust-mode
-  (setq parinfer-rust-preferred-mode "indent"))
+ (setq parinfer-rust-preferred-mode "paren"))
+
+(after! elisp-mode
+  (setq tab-width 2))
 
 ;;;
 ;;; Extensions
 ;;;
-
 
 (load! "snippets/+nano-modeline")
 (load! "snippets/+ruby")

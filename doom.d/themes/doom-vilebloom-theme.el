@@ -255,6 +255,12 @@ determine the exact padding."
    (treemacs-directory-face :foreground highlight)
    (treemacs-fringe-indicator-face :background red)
 
+   ;;;; tree-sitter
+   (tree-sitter-hl-face:function.call :inherit 'font-lock-function-name-face)
+
+   ;; (+workspace-tab-face :height 1.2 :background yellow)
+   ;; (+workspace-tab-selected-face :height 1.2 :background red)
+
    ;;;; vimish-fold
    ((vimish-fold-overlay &override) :inherit 'font-lock-comment-face :background base3 :weight 'light)
    ((vimish-fold-fringe &override)  :foreground teal))
