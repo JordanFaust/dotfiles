@@ -11,6 +11,11 @@
   '((+nano-vertico-buffer . t))
   "The default list of window parameters to add to the vertico buffer window.")
 
+(defvar +nano-vertico-buffer-filtered-prompt-prefixes
+  '("Callable" "Variable" "Face" "File" "Project" "Buffer"
+    "Roam (Find)" "Roam (New)" "Search (Project)" "Search (Buffer)")
+  "The named minibuffer prompts that have the minibuffer prompt filtered.")
+
 ;;;
 ;;; Update the prefix string based on the commands ran
 ;;;
@@ -111,14 +116,23 @@
     :vslot 1
     :parameters +nano-vertico-buffer-window-parameters)
 
+  (defun +nano-vertico-buffer--hide-minibuffer-prompt ()
+    (let ((overlay (make-overlay (point-min) (minibuffer-prompt-end))))
+      (overlay-put overlay 'invisible 't)))
+
   (defun +nano-vertico-buffer--setup ()
     ;; Rename the buffer to indicate what the completion is for
     (rename-buffer (format "%s" +nano-vertico-buffer-prefix))
+
     ;; The minibuffer is not 'focused', make it appear like it is
     (face-remap-add-relative 'nano-modeline-inactive :background (doom-color 'yellow))
     (face-remap-add-relative 'nano-modeline-inactive-primary :background (doom-color 'yellow))
     (face-remap-add-relative 'nano-modeline-inactive-secondary :background (doom-color 'yellow))
     (face-remap-add-relative 'nano-modeline-inactive-name :background (doom-color 'yellow))
+
+    ;; Hide the minibuffer prompt for the filtered prefixes
+    (when (-contains? +nano-vertico-buffer-filtered-prompt-prefixes +nano-vertico-buffer-prefix)
+      (+nano-vertico-buffer--hide-minibuffer-prompt))
 
     ;; Make cursor behave as expected
     (setq enable-recursive-minibuffers t)
@@ -131,6 +145,8 @@
      left-margin-width 1
      right-margin-width 1
      fringes-outside-margins t))
+
+  ;; Decorate the buffer after initial setup
   (advice-add #'vertico-buffer--setup :after #'+nano-vertico-buffer--setup))
 
 (after! marginalia
