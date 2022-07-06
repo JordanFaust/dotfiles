@@ -284,7 +284,7 @@
 (setq lisp-indent-function 'common-lisp-indent-function)
 (setq parinfer-rust-auto-download 't)
 (after! parinfer-rust-mode
- (setq parinfer-rust-preferred-mode "paren"))
+ (setq parinfer-rust-preferred-mode "smart"))
 
 (after! elisp-mode
   (setq tab-width 2))
