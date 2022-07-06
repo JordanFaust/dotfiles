@@ -52,4 +52,57 @@ LightDM background is overriden by AccountServices. Edit the /var/lib/AccountSer
 
 ## Firefox
 
-Theme from mut-ex found at https://github.com/mut-ex/minimal-functional-fox
+The firefox theme is taken from FlyingFox. For installation details see 
+https://github.com/akshat46/FlyingFox/wiki/%23-Installation
+
+The repo is not actively maintained. My modifications have been copied out into
+the firefox directory within this repo. Some of the features are limited or broken
+from the original repo with the release of the proton UI for firefox.
+
+### Update about:config settings
+
+From https://support.mozilla.org/en-US/questions/1325862
+
+  > By default, userChrome.css modifications are disabled in Firefox. You need to make sure that on the about:config page in Firefox, the toolkit.legacyUserProfileCustomizations.stylesheets preference is set to true and then restart the browser. 
+  
+To make the FlyingFox UI work there are a few setting that will need to be changes:
+
+```
+toolkit.legacyUserProfileCustomizations.stylesheets = true
+browser.proton.enable = false
+```
+
+These settings disable the proton UI and allow configuring firefox via the userChrome file
+  
+### Finding Profile Location
+  
+The userChrome config will need to be placed in the appropriate folder for the firefox profile.
+The easiest way to discover this path is to open the 'about:profiles' page after installing Firefox.
+
+### Copying files to firefox profile
+
+Replace the {{CHROME_PROFILE}} below with the value you get from the about:profiles page described above
+
+``` bash
+export CHROME_PROFILE={{CHROME_PROFILE}}
+cp ~/.dotfiles/firefox/user.js ${CHROME_PROFILE}/user.js
+cp -R ~/.dotfiles/firefox/chrome ${CHROME_PROFILE}/chrome
+```
+
+### Configure UI For Tree Style Tabs
+
+Follow these instructions to configrue the look of treestyle tabs:
+https://github.com/akshat46/FlyingFox/wiki/%23-Installation#treestyletab-css
+
+This is done from the extenstion page for the Tree Style Tab extension
+
+### Extensions
+
+- Facebook container
+- Firefox Multi-Account Containers
+- Hacker News Enhancement suite
+- nightTab
+- Okta Browser Plugin
+- OneTab
+- Privacy Badger
+- Tree Style Tab
