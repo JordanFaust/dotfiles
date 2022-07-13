@@ -1,127 +1,221 @@
-# Dotfiles (Jordan Faust)
+[![Made with Doom Emacs](https://img.shields.io/badge/Made_with-Doom_Emacs-blueviolet.svg?style=flat-square&logo=GNU%20Emacs&logoColor=white)](https://github.com/hlissner/doom-emacs)
+[![NixOS Unstable](https://img.shields.io/badge/NixOS-unstable-blue.svg?style=flat-square&logo=NixOS&logoColor=white)](https://nixos.org)
 
-My Linux dotfiles.
+> **NOTE** Shameless copy of [hlissner's](https://github.com/hlissner/dotfiles)
+> is slowly being warped into my own
 
-Focused on Linux Mint XFCE with Openbox as the WM
+**Hey,** you. You're finally awake. You were trying to configure your OS
+declaratively, right? Walked right into that NixOS ambush, same as us, and those
+dotfiles over there.
 
-## How to install
+> **Disclaimer:** _This is not a community framework or distribution._ It's a
+> private configuration and an ongoing experiment to feel out NixOS. I make no
+> guarantees that it will work out of the box for anyone but myself. It may also
+> change drastically and without warning. 
+> 
+> Until I can bend spoons with my nix-fu, please don't treat me like an
+> authority or expert in the NixOS space. Seek help on [the NixOS
+> discourse](https://discourse.nixos.org) instead.
+
+<img src="/../screenshots/alucard/fakebusy.png" width="100%" />
+
+<p align="center">
+<span><img src="/../screenshots/alucard/desktop.png" height="178" /></span>
+<span><img src="/../screenshots/alucard/rofi.png" height="178" /></span>
+<span><img src="/../screenshots/alucard/tiling.png" height="178" /></span>
+</p>
+
+------
+
+|                |                                                          |
+|----------------|----------------------------------------------------------|
+| **Shell:**     | zsh + zgenom                                             |
+| **DM:**        | lightdm + lightdm-mini-greeter                           |
+| **WM:**        | bspwm + polybar                                          |
+| **Editor:**    | [Doom Emacs][doom-emacs]                                 |
+| **Terminal:**  | st                                                       |
+| **Launcher:**  | rofi                                                     |
+| **Browser:**   | firefox                                                  |
+| **GTK Theme:** | [Ant Dracula](https://github.com/EliverLara/Ant-Dracula) |
+
+-----
+
+## Quick start
+
+1. Acquire NixOS 21.11 or newer:
+   ```sh
+   # Yoink nixos-unstable
+   wget -O nixos.iso https://channels.nixos.org/nixos-unstable/latest-nixos-minimal-x86_64-linux.iso
+   
+   # Write it to a flash drive
+   cp nixos.iso /dev/sdX
+   ```
+
+2. Boot into the installer.
+
+3. Switch to root user: `sudo su -`
+
+4. Do your partitions and mount your root to `/mnt` ([for
+   example](hosts/kuro/README.org)).
+
+5. Install these dotfiles:
+   ```sh
+   nix-shell -p git nixFlakes
+
+   # Set HOST to the desired hostname of this system
+   HOST=...
+   # Set USER to your desired username (defaults to hlissner)
+   USER=...
+
+   git clone https://github.com/JordanFaust/dotfiles /etc/dotfiles
+   git checkout nixos
+   cd /etc/dotfiles
+   
+   # Create a host config in `hosts/` and add it to the repo:
+   mkdir -p hosts/$HOST
+   nixos-generate-config --root /mnt --dir /etc/dotfiles/hosts/$HOST
+   rm -f hosts/$HOST/configuration.nix
+   cp hosts/kuro/default.nix hosts/$HOST/default.nix
+   vim hosts/$HOST/default.nix  # configure this for your system; don't use it verbatim!
+   git add hosts/$HOST
+   
+   # Install nixOS
+   USER=$USER nixos-install --root /mnt --impure --flake .#$HOST
+   
+   # If you get 'unrecognized option: --impure', replace '--impure' with 
+   # `--option pure-eval no`.
+   
+   # Remember to commit your changes!!
+   git commit -m "Create new host: $HOST"
+
+   # Then move the dotfiles to the mounted drive!
+   mv /etc/dotfiles /mnt/etc/dotfiles
+   ```
+
+6. Then reboot and you're good to go!
+
+> :warning: **Don't forget to change your `root` and `$USER` passwords!** They
+> are set to `nixos` by default.
 
 
-```bash
-$ bash -c "$(curl -fsSL raw.github.com/JordanFaust/dotfiles/master/bin/install) --all"
+## Management
+
+And I say, `bin/hey`, [what's going on?](http://hemansings.com/)
+
 ```
+Usage: hey [global-options] [command] [sub-options]
 
-Run the dotfiles command:
-
-```bash
-$ install --dependencies --software --credentials --dotfiles
-```
+Available Commands:
+  check                  Run 'nix flake check' on your dotfiles
+  gc                     Garbage collect & optimize nix store
+  generations            Explore, manage, diff across generations
+  help [SUBCOMMAND]      Show usage information for this script or a subcommand
+  rebuild                Rebuild the current system's flake
+  repl                   Open a nix-repl with nixpkgs and dotfiles preloaded
+  rollback               Roll back to last generation
+  search                 Search nixpkgs for a package
+  show                   [ARGS...]
+  ssh HOST [COMMAND]     Run a bin/hey command on a remote NixOS system
+  swap PATH [PATH...]    Recursively swap nix-store symlinks with copies (and back).
+  test                   Quickly rebuild, for quick iteration
+  theme THEME_NAME       Quickly swap to another theme module
+  update [INPUT...]      Update specific flakes or all of them
+  upgrade                Update all flakes and rebuild system
 
 Options:
-
-<table>
-    <tr>
-        <td><code>--all</code></td>
-        <td>Installs all dotfiles, dependencies, additional software, and prompts for credentials to store in the keyring</td>
-    </tr>
-    <tr>
-        <td><code>--dotfiles</code></td>
-        <td>Create symlinks to all configuration files</td>
-    </tr>
-    <tr>
-        <td><code>--dependencies</code></td>
-        <td>Installs all apt dependencies</td>
-    </tr>
-    <tr>
-        <td><code>--software</code></td>
-        <td>Installs all software not managed by apt</td>
-    </tr>
-    <tr>
-        <td><code>--credentials</code></td>
-        <td>Prompts for credentials used by various systems. All credentials store in gnome-keyring or another compatible keyring store</td>
-    </tr>
-</table>
-
-## Openbox
-
-## Lightdm
-
-See https://www.reddit.com/r/unixporn/comments/6xdbo6/lightdm_showing_my_login_some_love/
-
-LightDM background is overriden by AccountServices. Edit the /var/lib/AccountService/users/jfaust file to set the login background
-
-## Vagrant Testing
-
-Testing changes within this repo can be done with the Vagrant nixos image
-
-### Building the Base Image
-
-The base image is built using nixos-generator command
-
-``` bash
-nixos-generate --format vagrant-virtualbox --system x86_64-linux
+    -d, --dryrun                     Don't change anything; perform dry run
+    -D, --debug                      Show trace on nix errors
+    -f, --flake URI                  Change target flake to URI
+    -h, --help                       Display this help, or help for a specific command
+    -i, -A, -q, -e, -p               Forward to nix-env
 ```
 
-### Starting the base image
+## Frequently asked questions
 
-``` bash
-vagrant init nixos/nixos-18.09-x86_64
-```
++ **Why NixOS?**
 
-
-## Firefox
-
-The firefox theme is taken from FlyingFox. For installation details see 
-https://github.com/akshat46/FlyingFox/wiki/%23-Installation
-
-The repo is not actively maintained. My modifications have been copied out into
-the firefox directory within this repo. Some of the features are limited or broken
-from the original repo with the release of the proton UI for firefox.
-
-### Update about:config settings
-
-From https://support.mozilla.org/en-US/questions/1325862
-
-  > By default, userChrome.css modifications are disabled in Firefox. You need to make sure that on the about:config page in Firefox, the toolkit.legacyUserProfileCustomizations.stylesheets preference is set to true and then restart the browser. 
+  Because managing hundreds of servers is the tenth circle of hell without a
+  declarative, generational, and immutable single-source-of-truth configuration
+  framework like NixOS.
   
-To make the FlyingFox UI work there are a few setting that will need to be changes:
+  Sure beats the nightmare of capistrano/chef/puppet/ansible + brittle shell
+  scripts I left behind.
 
-```
-toolkit.legacyUserProfileCustomizations.stylesheets = true
-browser.proton.enable = false
-```
++ **Should I use NixOS?**
 
-These settings disable the proton UI and allow configuring firefox via the userChrome file
+  **Short answer:** no.
   
-### Finding Profile Location
+  **Long answer:** no really. Don't.
   
-The userChrome config will need to be placed in the appropriate folder for the firefox profile.
-The easiest way to discover this path is to open the 'about:profiles' page after installing Firefox.
+  **Long long answer:** I'm not kidding. Don't.
+  
+  **Unsigned long long answer:** Alright alright. Here's why not:
 
-### Copying files to firefox profile
+  - Its learning curve is steep.
+  - You _will_ trial and error your way to enlightenment, if you survive long
+    enough.
+  - NixOS is unlike other Linux distros. Your issues will be unique and
+    difficult to google.
+  - If the words "declarative", "generational", and "immutable" don't make you
+    _fully_ erect, you're considering NixOS for the wrong reasons.
+  - The overhead of managing a NixOS config will rarely pay for itself with
+    fewer than 3 systems (perhaps another distro with nix on top would suit you
+    better?).
+  - Official documentation for Nix(OS) is vast, but shallow.
+  - Unofficial resources and example configs are sparse and tend to be either
+    too simple or too complex (or outdated).
+  - The Nix language is obtuse and its toolchain is unintuitive. This is made
+    infinitely worse if you've never touched the shell or a functional language
+    before, but you'll _need_ to learn it to do even a fraction of what makes
+    NixOS worth all the trouble.
+  - A decent grasp of Linux and its ecosystem is a must, if only to distinguish
+    Nix(OS) issues from Linux (or upstream) issues -- as well as to debug them
+    or report them to the correct authority (and coherently).
+  - If you need somebody else to tell you whether or not you need NixOS, you
+    don't need NixOS.
 
-Replace the {{CHROME_PROFILE}} below with the value you get from the about:profiles page described above
+  If none of this has deterred you, then you didn't need my advice in the first
+  place. Stop procrastinating and try NixOS!
+  
++ **How do you manage secrets?**
 
-``` bash
-export CHROME_PROFILE={{CHROME_PROFILE}}
-cp ~/.dotfiles/firefox/user.js ${CHROME_PROFILE}/user.js
-cp -R ~/.dotfiles/firefox/chrome ${CHROME_PROFILE}/chrome
-```
+  With [agenix].
 
-### Configure UI For Tree Style Tabs
++ **Why did you write bin/hey?**
 
-Follow these instructions to configrue the look of treestyle tabs:
-https://github.com/akshat46/FlyingFox/wiki/%23-Installation#treestyletab-css
+  I envy Guix's CLI and want similar for NixOS, whose toolchain is spread across
+  many commands, none of which are as intuitive: `nix`, `nix-collect-garbage`,
+  `nixos-rebuild`, `nix-env`, `nix-shell`.
+  
+  I don't claim `hey` is the answer, but everybody likes their own brew.
+ 
++ **How 2 flakes?**
 
-This is done from the extenstion page for the Tree Style Tab extension
+  Would it be the NixOS experience if I gave you all the answers in one,
+  convenient place?
+  
+  No. Suffer my pain:
+  
+  + [A three-part tweag article that everyone's read.](https://www.tweag.io/blog/2020-05-25-flakes/)
+  + [An overengineered config to scare off beginners.](https://github.com/divnix/devos)
+  + [A minimalistic config for scared beginners.](https://github.com/colemickens/nixos-flake-example)
+  + [A nixos wiki page that spells out the format of flake.nix.](https://nixos.wiki/wiki/Flakes)
+  + [Official documentation that nobody reads.](https://nixos.org/learn.html)
+  + [Some great videos on general nixOS tooling and hackery.](https://www.youtube.com/channel/UC-cY3DcYladGdFQWIKL90SQ)
+  + A couple flake configs that I 
+    [may](https://github.com/LEXUGE/nixos) 
+    [have](https://github.com/bqv/nixrc)
+    [shamelessly](https://git.sr.ht/~dunklecat/nixos-config/tree)
+    [rummaged](https://github.com/utdemir/dotfiles)
+    [through](https://github.com/purcell/dotfiles).
+  + [Some notes about using Nix](https://github.com/justinwoo/nix-shorts)
+  + [What helped me figure out generators (for npm, yarn, python and haskell)](https://myme.no/posts/2020-01-26-nixos-for-development.html)
+  + [Learn from someone else's descent into madness; this journals his
+    experience digging into the NixOS
+    ecosystem](https://www.ianthehenry.com/posts/how-to-learn-nix/introduction/)
+  + [What y'all will need when Nix drives you to drink.](https://www.youtube.com/watch?v=Eni9PPPPBpg)
 
-### Extensions
 
-- Facebook container
-- Firefox Multi-Account Containers
-- Hacker News Enhancement suite
-- nightTab
-- Okta Browser Plugin
-- OneTab
-- Privacy Badger
-- Tree Style Tab
+[doom-emacs]: https://github.com/hlissner/doom-emacs
+[nixos]: https://releases.nixos.org/?prefix=nixos/unstable/
+[agenix]: https://github.com/ryantm/agenix
