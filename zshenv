@@ -50,7 +50,7 @@ fi
 # export kubebuilder
 export PATH=$PATH:/usr/local/kubebuilder/bin
 # krew
-# export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 
 # export istio
 # export PATH=$PATH:/usr/local/istio-1.6/bin

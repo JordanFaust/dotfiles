@@ -54,17 +54,17 @@
   (let ((+nano-vertico-buffer-prefix "Buffer"))
     (apply fn args)))
 
-(defadvice! +nano-vertico-buffer--org-roam-find-prefix (fn &rest args)
-  "Set the minibuffer prefix when looking up org roam files."
-  :around 'org-roam-node-find
-  (let ((+nano-vertico-buffer-prefix "Roam (Find)"))
-    (apply fn args)))
+;; (defadvice! +nano-vertico-buffer--org-roam-find-prefix (fn &rest args)
+;;   "Set the minibuffer prefix when looking up org roam files."
+;;   :around 'org-roam-node-find
+;;   (let ((+nano-vertico-buffer-prefix "Roam (Find)"))
+;;     (apply fn args)))
 
-(defadvice! +nano-vertico-buffer--org-roam-capture-prefix (fn &rest args)
-  "Set the minibuffer prefix when creating a new org roam file."
-  :around 'org-roam-capture
-  (let ((+nano-vertico-buffer-prefix "Roam (New)"))
-    (apply fn args)))
+;; (defadvice! +nano-vertico-buffer--org-roam-capture-prefix (fn &rest args)
+;;   "Set the minibuffer prefix when creating a new org roam file."
+;;   :around 'org-roam-capture
+;;   (let ((+nano-vertico-buffer-prefix "Roam (New)"))
+;;     (apply fn args)))
 
 (defadvice! +nano-vertico-buffer--project-search-prefix (fn &rest args)
   "Set the minibuffer prefix when searching within a project."

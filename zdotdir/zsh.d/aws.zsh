@@ -14,6 +14,13 @@ awsa() {
         | xclip -selection clipboard
 }
 
+aws-sso() {
+    selected_profile=$(grep profile ${HOME}/.aws/config \
+        | awk '{print $2}' | sed 's,],,g' \
+        | fzf --layout reverse --height=10% --border)
+    aws sso login --profile ${selected_profile}
+}
+
 # SSH to instance via instance ID
 sshi() {
     ssh ec2-user@$(aws ec2 describe-instances --instance-ids ${1:-$INSTANCEID} --query 'Reservations[].Instances[].NetworkInterfaces[].PrivateIpAddress' --output text)

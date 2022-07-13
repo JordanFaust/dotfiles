@@ -8,7 +8,8 @@ export TERM=screen-256color
 #######################
 # If not starting a shell in emacs and not currently in TMUX, create or attach to a TMUX session
 if [[ "$INSIDE_EMACS" = "false" && -z "$TMUX" ]]; then
-    tmux -2 attach -t TMUX || tmuxinator start TMUX -n TMUX -p ~/.dotfiles/config/tmuxinator/session.yaml
+    # tmux -2 attach -t TMUX || tmuxinator start TMUX -n TMUX -p ~/.dotfiles/config/tmuxinator/session.yaml
+    tmux
 fi
 
 #######################
@@ -55,7 +56,7 @@ SPACESHIP_PROMPT_ORDER=(
   swift         # Swift section
   golang        # Go section
   php           # PHP section
-  rust          # Rust section
+  # rust          # Rust section
   haskell       # Haskell Stack section
   julia         # Julia section
   docker        # Docker section

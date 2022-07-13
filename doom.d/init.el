@@ -99,6 +99,7 @@
        ;;  +lsp)
        lua                 ; one-based indices? one-based indices
        markdown            ; writing docs for people to ignore
+       nix
        (org                ; organize your plain life in plain text
         +dragndrop         ; drag & drop files/images into org buffers
         +pretty

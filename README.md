@@ -50,6 +50,25 @@ See https://www.reddit.com/r/unixporn/comments/6xdbo6/lightdm_showing_my_login_s
 
 LightDM background is overriden by AccountServices. Edit the /var/lib/AccountService/users/jfaust file to set the login background
 
+## Vagrant Testing
+
+Testing changes within this repo can be done with the Vagrant nixos image
+
+### Building the Base Image
+
+The base image is built using nixos-generator command
+
+``` bash
+nixos-generate --format vagrant-virtualbox --system x86_64-linux
+```
+
+### Starting the base image
+
+``` bash
+vagrant init nixos/nixos-18.09-x86_64
+```
+
+
 ## Firefox
 
 The firefox theme is taken from FlyingFox. For installation details see 
