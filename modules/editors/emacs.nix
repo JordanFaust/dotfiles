@@ -1,7 +1,3 @@
-# Emacs is my main driver. I'm the author of Doom Emacs
-# https://github.com/hlissner/doom-emacs. This module sets it up to meet my
-# particular Doomy needs.
-
 { config, lib, pkgs, inputs, ... }:
 
 with lib;
@@ -15,6 +11,7 @@ in {
       enable = mkBoolOpt false;
       forgeUrl = mkOpt types.str "https://github.com";
       repoUrl = mkOpt types.str "${forgeUrl}/doomemacs/doomemacs";
+      configRepoUrl = mkOpt types.str "${forgeUrl}/hlissner/doom-emacs-private";
     };
   };
 
