@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+##!/usr/bin/env cached-nix-shell
+##! nix-shell -i zsh -p jshon wmutils-core
+
+# saner programming env: these switches turn some bugs into errors
+set -o errexit -o pipefail -o noclobber -o nounset
+
+# TODO handle inputs to the script
+
+VM="nixos-graphical-22.05"
+BASEFOLDER="$HOME/virtualbox/images"
+VDI="$BASEFOLDER/$VM/$VM.vdi"
+ISO="$HOME/Downloads/nixos-gnome-22.05.1543.71d7a4c037d-x86_64-linux.iso"
+VBoxManage createvm \
+    --name $VM \
+    --ostype "Ubuntu_64" \
+    --basefolder $BASEFOLDER \
+    --register
+VBoxManage modifyvm $VM --ioapic on --memory 4096 --vram 64 --cpus 3 --firmware efi
+VBoxManage modifyvm $VM \
+  --nic1 nat \
+  --nictype1 virtio \
+  --cableconnected1 on
+VBoxManage modifyvm $VM --graphicscontroller vmsvga
+VBoxManage modifyvm $VM --usb on --usbehci on --mouse usbtablet
+VBoxManage createmedium disk \
+    --filename  "$VDI" \
+    --size 50000 \
+    --format VDI
+VBoxManage storagectl $VM --name "SATA Controller" --add sata --controller IntelAhci
+VBoxManage storageattach $VM \
+    --storagectl "SATA Controller" --port 0 --device 0 --type hdd \
+    --medium $VDI
+VBoxManage storagectl $VM --name "IDE Controller" --add ide --controller PIIX4
+VBoxManage storageattach $VM \
+    --storagectl "IDE Controller" --port 1 --device 0 --type dvddrive \
+    --medium "$ISO"
+VBoxManage modifyvm $VM --boot1 dvd --boot2 disk --boot3 none --boot4 none

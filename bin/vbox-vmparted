@@ -1,0 +1,17 @@
+#!/usr/bin/env cached-nix-shell
+#! nix-shell -i zsh -p parted
+
+parted /dev/sda -- mklabel gpt
+parted /dev/sda -- mkpart ESP fat32 1MiB 512MiB
+parted /dev/sda -- set 1 esp on
+parted /dev/sda -- mkpart primary 512MiB 30GiB
+parted /dev/sda -- mkpart primary 30GiB 100%
+
+mkfs.fat -F32 -n BOOT /dev/sda1
+mkfs.ext4 -L nixos /dev/sda2
+mkfs.ext4 -L home /dev/sda3
+
+mount /dev/disk/by-label/nixos /mnt
+mkdir -p /mnt/{home,boot}
+mount /dev/disk/by-label/BOOT /mnt/boot
+mount /dev/disk/by-label/home /mnt/home
