@@ -52,7 +52,6 @@
     };
     editors = {
       default = "nvim";
-      emacs.enable = true;
       emacs = {
         enable = true;
         doom.enable = true;
