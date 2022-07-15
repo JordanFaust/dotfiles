@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+VM="nixos-graphical-22.05"
+BASEFOLDER="$HOME/virtualbox/images"
+VDI="$BASEFOLDER/$VM/$VM.vdi"
+
+VBoxManage closemedium disk "$VDI" --delete
