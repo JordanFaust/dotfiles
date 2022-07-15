@@ -9,9 +9,7 @@ in {
     enable = mkBoolOpt false;
     doom = rec {
       enable = mkBoolOpt false;
-      forgeUrl = mkOpt types.str "https://github.com";
-      repoUrl = mkOpt types.str "${forgeUrl}/doomemacs/doomemacs";
-      configRepoUrl = mkOpt types.str "${forgeUrl}/hlissner/doom-emacs-private";
+      repoUrl = mkOpt types.str "https://github.com/doomemacs/doomemacs";
     };
   };
 
@@ -62,7 +60,7 @@ in {
 
     home.configFile = {
       # TODO move doom into the config directory
-      "doom" = { source = "doom.d"; recursive = true; };
+      "doom" = { source = "${configDir}/doom"; recursive = true; };
     };
 
     system.userActivationScripts = mkIf cfg.doom.enable {

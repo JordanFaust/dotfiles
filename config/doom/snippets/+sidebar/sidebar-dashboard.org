@@ -1,0 +1,64 @@
+// [[mu:flag:unread][Unread]] /.................../ [[mu:flag:unread|%4d][  28]]
+// [[mu:m:/Procore.com/INBOX][Inbox]] /....................../ [[mu:m:/Procore.com/INBOX|%2d][ 6]]
+// [[mu:flag:flagged][Important]] /................../ [[mu:flag:flagged|%2d][ 6]]
+// [[mu:m:"\/Procore.com\/Sent\ Mail"][Sent]] /...................../ [[mu:m:"\/Procore.com\/Sent\ Mail"|%4d][ 166]]
+// [[mu:m:"\/Procore.com\/All\ Mail"][Archive]] /................./ [[mu:m:"\/Procore.com\/All\ Mail"|%4d][48540]]
+
+// [[mu:date:today..now][Today]] /...................../ [[mu:date:today..now|%3d][ 45]]
+// [[mu:date:2d..today and not date:today..now][Yesterday]] /................./ [[mu:date:2d..today and not date:today..now|%3d][102]]
+// [[mu:date:1w..now][Last week]] /................/ [[mu:date:7d..now|%4d][ 344]]
+// [[mu:date:4w..now][Last month]] /.............../ [[mu:date:4w..|%4d][1868]]
+
+// [[mu:flag:attach][Attachments]] /............../ [[mu:flag:attach|%4d][ 508]]
+
+// *People* /------------------------/
+
+// [[mu:from:"Cody Zampino"][Cody Zampino]] /............./ [[mu:from:"Cody Zampino"|%4d][  29]]
+// [[mu:from:"Dustin Withrow"][Dustin Withrow]] /.........../ [[mu:from:"Dustin Withrow"|%4d][   6]]
+// [[mu:from:"Lam Chan"][Lam Chan]] /................./ [[mu:from:"Lam Chan"|%4d][  20]]
+// [[mu:from:"Ernesto Cojulun"][Ernesto Cojulun]] /........../ [[mu:from:"Ernesto Cojulun"|%4d][ 355]]
+// [[mu:from:"Rachel Arkebauer"][Rachel Arkebauer]] /........./ [[mu:from:"Rachel Arkebauer"|%4d][ 279]]
+// [[mu:from:"Brian Bagdzinski"][Brian Bagdzinski]] /........./ [[mu:from:"Brian Bagdzinski"|%4d][ 365]]
+// [[mu:'from:"Brandon Pollard" or from:"brandonpollard"'][Brandon Pollard]] /........../ [[mu:'from:"Brandon Pollard" or from:"brandonpollard"'|%4d][ 257]]
+// [[mu:'from:"Avinash*" or from:"Avinash Reddy"'][Avinash Reddy]] /............/ [[mu:'from:"Avinash*" or from:"Avinash Reddy"'|%4d][ 166]]
+// [[mu:from:"Mike Feuerborn" or ][Mike Feuerborn]] /.........../ [[mu:'from:"Mike Feuerborn" or from:"Michael Feuerborn"'|%4d][ 108]]
+
+// *Lists* /-------------------------/
+
+[[mu:list:"terraform-infra.procore.github.com"][terraform-infra]] /............./ [[mu:list:"terraform-infra.procore.github.com"|%4d][3848]]
+[[mu:list:"terraform-kubernetes.procore.github.com"][terraform-kubernetes]] /......../ [[mu:list:"terraform-kubernetes.procore.github.com"|%4d][  48]]
+[[mu:list:"terraform-aws-modules.procore.github.com"][terraform-aws-modules]] /......./ [[mu:list:"terraform-aws-modules.procore.github.com"|%4d][  26]]
+
+
+** /Configuration/
+:PROPERTIES:
+:VISIBILITY: hideall
+:END:
+
+#+STARTUP: showall showstars indent
+
+#+NAME: query
+#+BEGIN_SRC shell :results list raw :var query="flag:unread count=5
+export LANG="en_US.UTF-8"; export LC_ALL="en_US.UTF-8";
+mu find --sortfield=date --reverse --fields "f s" $query  | head -$count
+#+END_SRC
+
+#+KEYMAP: u | mu4e-headers-search "flag:unread"
+#+KEYMAP: i | mu4e-headers-search "m:/inria/inbox or m:/gmail/inbox or m:/univ/inbox"
+#+KEYMAP: d | mu4e-headers-search "m:/inria/drafts or m:/gmail/drafts or m:/univ/drafts"
+#+KEYMAP: s | mu4e-headers-search "m:/inria/sent or m:/gmail/sent or m:/univ/sent"
+#+KEYMAP: f | mu4e-headers-search "flag:flagged"
+
+#+KEYMAP: t | mu4e-headers-search "date:today..now"
+#+KEYMAP: y | mu4e-headers-search "date:2d..today and not date:today..now"
+#+KEYMAP: w | mu4e-headers-search "date:7d..now"
+#+KEYMAP: m | mu4e-headers-search "date:4w..now"
+
+#+KEYMAP: C | mu4e-compose-new
+#+KEYMAP: U | mu4e-dashboard-update
+#+KEYMAP: ; | mu4e-context-switch
+#+KEYMAP: q | mu4e-dashboard-quit
+#+KEYMAP: W | mu4e-headers-toggle-include-related
+#+KEYMAP: O | mu4e-headers-change-sorting
+#+KEYMAP: x | mu4e-mark-execute-all t
+#+KEYMAP: <return> | org-open-at-point
