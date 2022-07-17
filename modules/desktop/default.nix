@@ -38,6 +38,9 @@ in {
       })
       qgnomeplatform        # QPlatformTheme for a better Qt application inclusion in GNOME
       libsForQt5.qtstyleplugin-kvantum # SVG-based Qt5 theme engine plus a config tool and extra theme
+
+      # Patch favorite fonts with NerdFonts
+      (nerdfonts.override { fonts = [ "JetBrainsMono" "FiraCode"]; })
     ];
 
     fonts = {
@@ -47,6 +50,7 @@ in {
         ubuntu_font_family
         dejavu_fonts
         symbola
+        (nerdfonts.override { fonts = [ "JetBrainsMono" "FiraCode" "DroidSansMono" ]; })
       ];
     };
 

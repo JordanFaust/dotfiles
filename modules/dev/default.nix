@@ -8,7 +8,29 @@ in {
     xdg.enable = mkBoolOpt true;
   };
 
-  config = mkIf cfg.xdg.enable {
-    # TODO
-  };
+  config = mkMerge [
+    # These are some common dev tools that are required
+    ({
+      user.packages = with pkgs; [
+        # Add AWS V2 CLI
+        awscli2
+
+        # Kubernetes
+        kubectx
+        kubectl
+        kind
+        krew
+
+        # Istio
+        istioctl
+      ];
+
+      environment.shellAliases = {
+        k      = "kubectl";
+      };
+    })
+
+    (mkIf cfg.xdg.enable {
+    })
+  ];
 }
