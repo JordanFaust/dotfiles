@@ -82,7 +82,10 @@ in {
   config = mkIf (cfg.active != null) (mkMerge [
     # Read xresources files in ~/.config/xtheme/* to allow modular configuration
     # of Xresources.
-    (let xrdb = ''cat "$XDG_CONFIG_HOME"/xtheme/* | ${pkgs.xorg.xrdb}/bin/xrdb -load'';
+    (let xrdb = ''
+       echo "Reloading xrdb"
+       ${pkgs.coreutils-full}/bin/cat "$XDG_CONFIG_HOME"/xtheme/* | ${pkgs.xorg.xrdb}/bin/xrdb -load
+       echo "Reloading xrdb complete"'';
      in {
        home.configFile."xtheme.init" = {
          text = xrdb;
@@ -206,11 +209,20 @@ in {
       services.xserver.displayManager.lightdm.background = cfg.loginWallpaper;
     })
 
+    # Create a reload script that has access to the necessary environment to reload
+    # the theme for the various components of system. This builds the path manually
+    # to include the necessary executables.
     (mkIf (cfg.onReload != {})
       (let reloadTheme =
              with pkgs; (writeScriptBin "reloadTheme" ''
                #!${stdenv.shell}
                echo "Reloading current theme: ${cfg.active}"
+               PATH="$PATH:${coreutils}/bin:${coreutils}/sbin"
+               PATH="$PATH:${coreutils-full}/bin:${coreutils-full}/sbin"
+               PATH="$PATH:${bspwm}/bin:${bspwm}/sbin"
+               PATH="$PATH:${procps}/bin:${procps}/sbin"
+               PATH="$PATH:${xorg.xrandr}/bin:${xorg.xrandr}/sbin"
+               PATH="$PATH:${gnugrep}/bin:${gnugrep}/sbin"
                ${concatStringsSep "\n"
                  (mapAttrsToList (name: script: ''
                    echo "[${name}]"
