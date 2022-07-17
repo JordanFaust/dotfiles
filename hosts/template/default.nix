@@ -39,7 +39,8 @@
         spotify.enable = true;
       };
       term = {
-        default = "xst";
+        default = "alacritty";
+        alacritty.enable = true;
         st.enable = true;
       };
       vm = {
@@ -78,7 +79,7 @@
     hardware = {
       ergodox.enable = true;
     };
-    theme.active = "alucard";
+    theme.active = "vilebloom";
   };
 
 

@@ -19,11 +19,12 @@ in {
           };
           fonts = {
             sans.name = "Fira Sans";
-            mono.name = "Fira Code";
+            mono.name = "JetBrains Mono";
+            mono.size = 16;
           };
           colors = {
             black         = "#24455b";
-            red           = "#ff7771";
+            red           = "#ff777a"; #ff777a?
             green         = "#d97a9b";
             yellow        = "#ffba95";
             blue          = "#4684ae";
@@ -40,6 +41,7 @@ in {
             white         = "#ded8d7";
 
             types.fg      = "#ded8d7";
+            types.bg      = "#152733";
             types.panelbg = "#152733";
             types.border  = "#ffba95";
           };
@@ -112,6 +114,9 @@ in {
         })
         (mkIf desktop.apps.rofi.enable {
           "rofi/theme" = { source = ./config/rofi; recursive = true; };
+        })
+        (mkIf desktop.term.alacritty.enable {
+          "alacritty/alacritty.yml".text = import ./config/alacritty/alacritty.yml cfg;
         })
         (mkIf (desktop.bspwm.enable || desktop.stumpwm.enable) {
           "polybar" = { source = ./config/polybar; recursive = true; };
