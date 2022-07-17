@@ -12,6 +12,7 @@
       bspwm.enable = true;
       apps = {
         rofi.enable = true;
+        slack.enable = true;
         # godot.enable = true;
       };
       browsers = {
@@ -48,7 +49,8 @@
     dev = {
       node.enable = true;
       rust.enable = true;
-      # python.enable = true;
+      shell.enable = true;
+      python.enable = true;
     };
     editors = {
       default = "nvim";
