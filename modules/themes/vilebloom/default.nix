@@ -14,7 +14,7 @@ in {
           wallpaper = mkDefault ./config/wallpaper.jpg;
           gtk = {
             theme = "Dracula";
-            iconTheme = "Paper";
+            iconTheme = "Papirus";
             cursorTheme = "Paper";
           };
           fonts = {
@@ -61,7 +61,10 @@ in {
     (mkIf config.services.xserver.enable {
       user.packages = with pkgs; [
         unstable.dracula-theme
+        # TODO replace this with papirus
         paper-icon-theme # for rofi
+        papirus-icon-theme # dunst
+        gnome.adwaita-icon-theme
       ];
       fonts = {
         fonts = with pkgs; [
@@ -120,7 +123,7 @@ in {
         })
         (mkIf (desktop.bspwm.enable || desktop.stumpwm.enable) {
           "polybar" = { source = ./config/polybar; recursive = true; };
-          "dunst/dunstrc".text = import ./config/dunstrc cfg;
+          "dunst/dunstrc".text = import ./config/dunstrc { theme = cfg; pkgs = pkgs; };
           "Dracula-purple-solid-kvantum" = {
             recursive = true;
             source = "${pkgs.unstable.dracula-theme}/share/themes/Dracula/kde/kvantum/Dracula-purple-solid";
