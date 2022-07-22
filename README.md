@@ -85,9 +85,6 @@ dotfiles over there.
    # If you get 'unrecognized option: --impure', replace '--impure' with 
    # `--option pure-eval no`.
    
-   # Remember to commit your changes!!
-   git commit -m "Create new host: $HOST"
-
    # Then move the dotfiles to the mounted drive!
    mv /etc/dotfiles /mnt/etc/dotfiles
    ```
@@ -97,6 +94,34 @@ dotfiles over there.
 > :warning: **Don't forget to change your `root` and `$USER` passwords!** They
 > are set to `nixos` by default.
 
+7. Installing Doom Packages
+
+The installation setup Doom Emacs and its personal configuration. Next you have to
+install all of the packages
+
+``` sh
+doom install
+```
+
+
+8. Setting Up Firefox
+
+Not everything was setup for my firefox theme via the install. I use the following extensions:
+
+* Tree Style Tab
+* Facebook container
+* Firefox Multi-Account Containers
+* nightTab
+* Hacker News Enhancement Suite
+* Okta Browser Plugin
+* Privacy Badger
+
+Additionally Tree Style Tab must be updated with my specific configuration.
+
+1. Go to preferences and go to Advanced > Extra Styles
+2. Copy the content of ./firefox/treestyletab/custom.css and save it
+3. Go to Appearance and check "No Decoration"
+4. Go to Drag and Drop and set Drag to "Don nothing"
 
 ## Management
 
