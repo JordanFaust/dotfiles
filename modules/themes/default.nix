@@ -220,6 +220,7 @@ in {
                PATH="$PATH:${coreutils}/bin:${coreutils}/sbin"
                PATH="$PATH:${coreutils-full}/bin:${coreutils-full}/sbin"
                PATH="$PATH:${bspwm}/bin:${bspwm}/sbin"
+               PATH="$PATH:${bsp-layout}/bin:${bsp-layout}/sbin"
                PATH="$PATH:${procps}/bin:${procps}/sbin"
                PATH="$PATH:${xorg.xrandr}/bin:${xorg.xrandr}/sbin"
                PATH="$PATH:${gnugrep}/bin:${gnugrep}/sbin"
@@ -228,6 +229,7 @@ in {
                    echo "[${name}]"
                    ${script}
                  '') cfg.onReload)}
+               bspc wm -r
              '');
        in {
          user.packages = [ reloadTheme ];

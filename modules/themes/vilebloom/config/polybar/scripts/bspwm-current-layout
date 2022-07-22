@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+
+# Arguments:
+# $1 the window number
+
+# Returns the text symbol for the current windows layout
+
+# Get the current layout
+CURRENT=$(bsp-layout get $1)
+
+# Tiled
+if [[ $CURRENT == "even" ]]; then
+    echo "[~]"
+fi
+
+# Monocle
+if [[ $CURRENT == "tiled" ]]; then
+    echo "[=]"
+fi
+
+# Grid
+if [[ $CURRENT == "monocle" ]]; then
+    echo "[M]"
+fi
+
+# Wide
+if [[ $CURRENT == "grid" ]]; then
+    echo "[|]"
+fi
+
+# Even
+if [[ $CURRENT == "wide" ]]; then
+    echo "[_]"
+fi
