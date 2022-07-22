@@ -1,5 +1,6 @@
-super + t
-	bspc desktop -l next
+# TODO Remap this key binding
+# super + t
+# 	bspc desktop -l next
 
 super + w; super + b
 	bspc window -s last

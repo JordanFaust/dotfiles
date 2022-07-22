@@ -49,11 +49,11 @@ in {
 
         shell.zsh.rcFiles  = [ ./config/zsh/prompt.zsh ];
         shell.tmux.rcFiles = [ ./config/tmux.conf ];
-        desktop.browsers = {
-          firefox.userChrome = concatMapStringsSep "\n" readFile [
-            ./config/firefox/userChrome.css
-          ];
-        };
+        # desktop.browsers = {
+        #   firefox.userChrome = concatMapStringsSep "\n" readFile [
+        #     ./config/firefox/userChrome.css
+        #   ];
+        # };
       };
     }
 
@@ -104,6 +104,11 @@ in {
         window-color = "${cfg.colors.types.border}"
         border-color = "${cfg.colors.types.border}"
       '';
+
+      # Firefox configuration
+      home.file = {
+        ".mozilla/firefox/jordan.default" = { source = ./config/firefox; recursive = true; };
+      };
 
       # Other dotfiles
       home.configFile = with config.modules; mkMerge [

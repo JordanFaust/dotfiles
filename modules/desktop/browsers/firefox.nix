@@ -149,6 +149,8 @@ in {
         # Don't try to guess domain names when entering an invalid domain name in URL bar
         # http://www-archive.mozilla.org/docs/end-user/domain-guessing.html
         "browser.fixup.alternate.enabled" = false;
+        # SVG context setting
+        "svg.context-properties.content.enabled" = true;
         # Disable telemetry
         # https://wiki.mozilla.org/Platform/Features/Telemetry
         # https://wiki.mozilla.org/Privacy/Reviews/Telemetry
