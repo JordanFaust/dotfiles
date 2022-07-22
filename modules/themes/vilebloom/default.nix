@@ -65,15 +65,24 @@ in {
         paper-icon-theme # for rofi
         papirus-icon-theme # dunst
         gnome.adwaita-icon-theme
+        # Polybar Dependencies
+        lsof
+        zscroll
+        pamixer
+        playerctl
       ];
       fonts = {
         fonts = with pkgs; [
+          # General Coding Fonts
+          jetbrains-mono
           fira-code
           fira-code-symbols
+          # General Sans Fonts
           open-sans
-          jetbrains-mono
           siji
+          # Icon Fonts
           font-awesome
+          material-design-icons
         ];
       };
 
@@ -127,7 +136,11 @@ in {
           "alacritty/alacritty.yml".text = import ./config/alacritty/alacritty.yml cfg;
         })
         (mkIf (desktop.bspwm.enable || desktop.stumpwm.enable) {
-          "polybar" = { source = ./config/polybar; recursive = true; };
+          # "polybar" = { source = ./config/polybar; recursive = true; };
+          "polybar/config.ini".text = import ./config/polybar/config.ini { theme = cfg; pkgs = pkgs; };
+          "polybar/glyphs.ini".source = ./config/polybar/glyphs.ini;
+          "polybar/modules.ini".source = ./config/polybar/modules.ini;
+          "polybar/scripts" = { source = ./config/polybar/scripts; recursive = true; };
           "dunst/dunstrc".text = import ./config/dunstrc { theme = cfg; pkgs = pkgs; };
           "Dracula-purple-solid-kvantum" = {
             recursive = true;

@@ -12,10 +12,12 @@ in {
   config = mkIf cfg.enable {
     modules.theme.onReload.bspwm = ''
       ${pkgs.bspwm}/bin/bspc wm -r
+      ${pkgs.bsp-layout}/bin/bsp-layout set even
       source $XDG_CONFIG_HOME/bspwm/bspwmrc
     '';
 
     environment.systemPackages = with pkgs; [
+      bsp-layout
       lightdm
       dunst
       libnotify
