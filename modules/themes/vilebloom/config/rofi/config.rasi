@@ -1,6 +1,6 @@
 /* -*- mode: css; -*- */
 configuration {
-  icon-theme:       "Paper";
+  icon-theme:       "Papirus";
   cycle:            true;
   disable-history:  false;
   monitor:          "-4";
@@ -13,11 +13,11 @@ configuration {
 }
 
 * {
-  accent:   #bd93f9;
+  accent:   #ff777a;
   bg:       #152733;
-  bg-light: #1c1c1c;
-  bg-focus: #282a36;
-  bg-dark:  #181a23;
+  bg-light: #24455b;
+  bg-focus: #24455b;
+  bg-dark:  #152733;
   fg:       #ded8d7;
   fg-list:  #ded8d7;
   on:       #8BD49C;
@@ -114,7 +114,8 @@ prompt, entry {
   background-color: @bg-focus;
 }
 textbox-icon, prompt {
-  background-color: #2f313d;
+  /* background-color: #2f313d; */
+  background-color: @bg-dark;
 }
 prompt {
   background-color: @bg-focus;
@@ -132,6 +133,6 @@ element {
   text-color: @fg;
 }
 element selected {
-  background-color: @bg-dark;
+  background-color: @accent;
   text-color: @accent;
 }
