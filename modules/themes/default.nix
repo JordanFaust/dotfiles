@@ -212,15 +212,21 @@ in {
     # Create a reload script that has access to the necessary environment to reload
     # the theme for the various components of system. This builds the path manually
     # to include the necessary executables.
+    #
+    # TODO find a better alternative than the sleep currently used. It appears that
+    # this script is executing before all configuration files are rendered and landed
+    # This causes the various systems to restart with stale config.
     (mkIf (cfg.onReload != {})
       (let reloadTheme =
              with pkgs; (writeScriptBin "reloadTheme" ''
                #!${stdenv.shell}
                echo "Reloading current theme: ${cfg.active}"
+               sleep 5
                PATH="$PATH:${coreutils}/bin:${coreutils}/sbin"
                PATH="$PATH:${coreutils-full}/bin:${coreutils-full}/sbin"
                PATH="$PATH:${bspwm}/bin:${bspwm}/sbin"
                PATH="$PATH:${bsp-layout}/bin:${bsp-layout}/sbin"
+               PATH="$PATH:${bc}/bin:${bc}/sbin"
                PATH="$PATH:${procps}/bin:${procps}/sbin"
                PATH="$PATH:${xorg.xrandr}/bin:${xorg.xrandr}/sbin"
                PATH="$PATH:${gnugrep}/bin:${gnugrep}/sbin"
@@ -229,7 +235,6 @@ in {
                    echo "[${name}]"
                    ${script}
                  '') cfg.onReload)}
-               bspc wm -r
              '');
        in {
          user.packages = [ reloadTheme ];

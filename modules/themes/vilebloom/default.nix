@@ -127,7 +127,7 @@ in {
         }
         (mkIf desktop.bspwm.enable {
           "bspwm/rc.d/00-theme".source = ./config/bspwmrc;
-          "bspwm/rc.d/95-polybar".source = ./config/polybar/run.sh;
+          # "bspwm/rc.d/95-polybar".source = ./config/polybar/run.sh;
         })
         (mkIf desktop.apps.rofi.enable {
           "rofi/theme" = { source = ./config/rofi; recursive = true; };
