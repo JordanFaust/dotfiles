@@ -13,6 +13,7 @@
       apps = {
         rofi.enable = true;
         slack.enable = true;
+        zoom.enable = true;
         # godot.enable = true;
       };
       browsers = {
