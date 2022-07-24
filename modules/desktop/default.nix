@@ -41,6 +41,31 @@ in {
 
       # Patch favorite fonts with NerdFonts
       (nerdfonts.override { fonts = [ "JetBrainsMono" "FiraCode"]; })
+
+
+      ##
+      ## Ricing Packages
+      ##
+
+      # Widgets
+      unstable.eww
+      # System76
+      # TODO move all system76 related packages to its own module
+      linuxPackages.system76-power
+      # Audio
+      pavucontrol
+      # Battery
+      acpi # battery
+      # Bluetooth
+      bluez # bluetoothctl
+      # Brightness
+      brightnessctl
+      # Wireless
+      wirelesstools
+      # Networking
+      # TODO should I stick with dmenu or switch to the gnome applet
+      dmenu
+      networkmanager_dmenu
     ];
 
     fonts = {

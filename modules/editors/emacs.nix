@@ -21,7 +21,7 @@ in {
       ## Emacs itself
       binutils       # native-comp needs 'as', provided by this
       # 29 + pgtk + native-comp
-      ((emacsPackagesFor emacsPgtkGcc).emacsWithPackages (epkgs: [
+      ((emacsPackagesFor emacsPgtkNativeComp).emacsWithPackages (epkgs: [
         epkgs.vterm
       ]))
 

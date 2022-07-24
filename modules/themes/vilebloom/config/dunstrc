@@ -453,13 +453,13 @@
 #    appname = "some_volume_notifiers"
 #    set_stack_tag = "volume"
 #
-# [logger]
-# summary = "*"
-# script = "~/.config/eww/Main/scripts/logger.zsh"
+[logger]
+summary = "*"
+script = "~/.config/eww/Main/scripts/logger.zsh"
 
-# [spotify]
-# summary = "*"
-# script = "~/.scripts/music-art"
+[spotify]
+summary = "*"
+script = "~/.scripts/music-art"
 
 # [spotify-icon]
 # appname = "Spotify"

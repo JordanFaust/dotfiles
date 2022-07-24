@@ -12,10 +12,12 @@
 
   inputs = 
     {
-      # Core dependencies.
-      nixpkgs.url = "nixpkgs/nixos-unstable";             # primary nixpkgs
-      nixpkgs-unstable.url = "nixpkgs/nixpkgs-unstable";  # for packages on the edge
-      home-manager.url = "github:rycee/home-manager/master";
+      # Default to using packages within the stable 22.05 release
+      nixpkgs.url = "nixpkgs/nixos-22.05";
+      # Provide a means to install cutting edge packages where necessary
+      nixpkgs-unstable.url = "nixpkgs/nixpkgs-unstable";
+      # Use the stable 22.05 release of home-manager packages
+      home-manager.url = "github:rycee/home-manager/release-22.05";
       home-manager.inputs.nixpkgs.follows = "nixpkgs";
       agenix.url = "github:ryantm/agenix";
       agenix.inputs.nixpkgs.follows = "nixpkgs";
