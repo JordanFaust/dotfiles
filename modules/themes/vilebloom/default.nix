@@ -68,8 +68,17 @@ in {
         # Polybar Dependencies
         lsof
         zscroll
+        # TODO replace pamixer with amixer
         pamixer
+        alsa-utils
         playerctl
+        # misc
+        gpick
+        neofetch
+        # Dunst + EWW
+        recode
+        # Added utilities used in rice scripts
+        moreutils
       ];
       fonts = {
         fonts = with pkgs; [
@@ -114,10 +123,13 @@ in {
         border-color = "${cfg.colors.types.border}"
       '';
 
-      # Firefox configuration
       home.file = {
+        # Firefox configuration
         ".mozilla/firefox/jordan.default" = { source = ./config/firefox; recursive = true; };
+        # General Scripts
+        ".scripts" = { source = ./config/scripts; recursive = true; };
       };
+
 
       # Other dotfiles
       home.configFile = with config.modules; mkMerge [
@@ -136,12 +148,21 @@ in {
           "alacritty/alacritty.yml".text = import ./config/alacritty/alacritty.yml cfg;
         })
         (mkIf (desktop.bspwm.enable || desktop.stumpwm.enable) {
-          # "polybar" = { source = ./config/polybar; recursive = true; };
+          # Status Bar
           "polybar/config.ini".text = import ./config/polybar/config.ini { theme = cfg; pkgs = pkgs; };
           "polybar/glyphs.ini".source = ./config/polybar/glyphs.ini;
           "polybar/modules.ini".source = ./config/polybar/modules.ini;
           "polybar/scripts" = { source = ./config/polybar/scripts; recursive = true; };
+          # Notifications
           "dunst/dunstrc".text = import ./config/dunstrc { theme = cfg; pkgs = pkgs; };
+          # Widgets
+          "eww/eww.scss".text = import ./config/eww/eww.scss cfg;
+          "eww/eww.yuck".source = ./config/eww/eww.yuck;
+          "eww/Main" = { source = ./config/eww/Main; recursive = true;  };
+          "eww/Misc" = { source = ./config/eww/Misc; recursive = true;  };
+          # "eww/Player" = { source = ./config/eww/Player; recursive = true;  };
+          "eww/System-Menu" = { source = ./config/eww/System-Menu; recursive = true;  };
+          # GTK Theme
           "Dracula-purple-solid-kvantum" = {
             recursive = true;
             source = "${pkgs.unstable.dracula-theme}/share/themes/Dracula/kde/kvantum/Dracula-purple-solid";

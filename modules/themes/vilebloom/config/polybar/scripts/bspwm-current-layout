@@ -8,6 +8,11 @@
 # Get the current layout
 CURRENT=$(bsp-layout get $1)
 
+if [[ -z CURRENT ]]; then
+    bsp-layout set even $1
+    CURRENT=$(bsp-layout get $1)
+fi
+
 # Tiled
 if [[ $CURRENT == "even" ]]; then
     echo "[~]"
