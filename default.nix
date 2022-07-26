@@ -59,6 +59,11 @@ with lib.my;
       systemd-boot.configurationLimit = 10;
       systemd-boot.enable = mkDefault true;
     };
+    # TODO pull in better themes:
+    # http://blog.sidhartharya.com/using-custom-plymouth-theme-on-nixos/
+    plymouth = {
+      enable = true;
+    };
   };
 
   # Just the bear necessities...
