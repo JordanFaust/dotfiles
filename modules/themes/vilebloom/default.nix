@@ -123,13 +123,105 @@ in {
         border-color = "${cfg.colors.types.border}"
       '';
 
+      # Autorandr Hooks
+      #
+      # The hooks here will be ran after autorandr detects a change in display configuration.
+      # This can be used to ensure other systems are aware of the changes and make changes
+      # or reload as needed.
+
+      ## Global Hooks
+      ##
+      ## The Global hooks will be ran before/after every profile change. This is needed
+      ## to make sure that the polybar instances ran on the none primary monitor are reaped
+      ## when switch from the "workstation" and "travel" profiles.
+      services.autorandr.hooks.preswitch = {
+        "kill-polybar" = ''
+          ${pkgs.procps}/bin/pkill -u $UID -x polybar
+          while ${pkgs.procps}/bin/pgrep -u $UID -x polybar >/dev/null; do ${pkgs.coreutils}/bin/sleep 1; ${pkgs.procps}/bin/pkill -u $UID -x polybar; done
+        '';
+      };
+
+      ## Autorander Workstation Hooks
+      # services.autorandr.profiles.workstation.hooks.postswitch = builtins.readFile ./config/autorandr/workstation/postswitch.sh;
+      services.autorandr.profiles.workstation.hooks.postswitch = {
+        # This needs to better handle moving windows over to the workspaces on the new displays
+        "notify-bspwm" = ''
+          echo "[autorandr] profile=workstation type=postswitch hook=polybar Notifying BSPWM"
+          ${pkgs.bspwm}/bin/bspc wm -r
+          source $XDG_CONFIG_HOME/bspwm/bspwmrc
+        '';
+      };
+
+      # This service won't be restarted as part of a nixos-rebuild switch,
+      # the process must be killed to allow the systemd unit to restart it
+      # with any changes added as part of a theme.
+      modules.theme.onReload.polybar = ''
+        while ${pkgs.procps}/bin/pgrep -u $UID -x polybar >/dev/null; do ${pkgs.coreutils}/bin/sleep 1; ${pkgs.procps}/bin/pkill -u $UID -x polybar; done
+      '';
+
+      systemd.user.services."polybar" = {
+        enable = true;
+
+        description = "Status Bar";
+        documentation = [ "man:polybar(1)" ];
+        wantedBy = [ "graphical-session.target" ];
+        partOf = [ "graphical-session.target" ];
+
+        serviceConfig = {
+          Type="forking";
+          # Expand the path of the unit to include system and user packages
+          # * System packages can be found within /run/current-system/sw/bin
+          # * User (home-manager) packages can be found within /etc/profiles/per-user/$USER/bin
+          Environment = "PATH=/run/current-system/sw/bin:/etc/profiles/per-user/${config.user.name}/bin";
+          ExecStart = let scriptPkg = pkgs.writeShellScriptBin "polybar-start" ''
+            echo "Starting primary monitor bar"
+            polybar bar -c $XDG_CONFIG_HOME/polybar/config.ini -r &
+            echo "Primary monitor bar started"
+          ''; in "${scriptPkg}/bin/polybar-start";
+
+          Restart = "always";
+          RestartSec = 2;
+        };
+      };
+
+      # This service won't be restarted as part of a nixos-rebuild switch,
+      # the process must be killed to allow the systemd unit to restart it
+      # with any changes added as part of a theme.
+      modules.theme.onReload.eww = ''
+        while ${pkgs.procps}/bin/pgrep -u $UID -x eww >/dev/null; do sleep 1; ${pkgs.procps}/bin/pkill -u $UID -x eww; done
+      '';
+
+      systemd.user.services."eww" = {
+        enable = true;
+
+        description = "Elkowar Wacky Widgets";
+        documentation = [ "man:eww(1)" ];
+        wantedBy = [ "graphical-session.target" ];
+        partOf = [ "graphical-session.target" ];
+
+        serviceConfig = {
+          Type="forking";
+          # Expand the path of the unit to include system and user packages
+          # * System packages can be found within /run/current-system/sw/bin
+          # * User (home-manager) packages can be found within /etc/profiles/per-user/$USER/bin
+          Environment = "PATH=/run/current-system/sw/bin:/etc/profiles/per-user/${config.user.name}/bin";
+          ExecStart = let scriptPkg = pkgs.writeShellScriptBin "eww-start" ''
+            echo "Starting eww daemon"
+            eww daemon &
+            echo "Started eww daemon"
+          ''; in "${scriptPkg}/bin/eww-start";
+
+          Restart = "always";
+          RestartSec = 5;
+        };
+      };
+
       home.file = {
         # Firefox configuration
         ".mozilla/firefox/jordan.default" = { source = ./config/firefox; recursive = true; };
         # General Scripts
         ".scripts" = { source = ./config/scripts; recursive = true; };
       };
-
 
       # Other dotfiles
       home.configFile = with config.modules; mkMerge [
