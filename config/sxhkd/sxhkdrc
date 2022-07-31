@@ -8,12 +8,12 @@ super + w; super + b
 # Attach to a detached session. If none is available create a new one, rather
 # than attach to one that is already attached to elsewhere.
 super + Return
-	xst -e bash -c "(tmux ls | grep -qEv 'attached|scratch' && tmux at) || tmux"
+	alacritty -e bash -c "(tmux ls | grep -qEv 'attached|scratch' && tmux at) || tmux"
 # Start a plain ol' terminal
 super + ctrl + Return
-	xst
+	alacritty
 super + ctrl + alt + Return
-	xterm
+	xst
 
 # Open a disposable, floating terminal window, for quick shell commands.
 super + grave
@@ -94,7 +94,7 @@ super + {1-9,0}
 	bspc desktop -f {1-9,10};
 
 # On shift = move current node to numbered desktop
-super + shift + {1-9,0}
+super + ctrl + {1-9,0}
 	bspc node -d {1-9,10};
 
 #

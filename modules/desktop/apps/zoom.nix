@@ -11,15 +11,8 @@ in {
   config = mkIf cfg.enable {
     user.packages = with pkgs; [
       zoom-us
-      noisetorch
-      (makeDesktopItem {
-        name = "noisetorch";
-        desktopName = "NoiseTorch";
-        genericName = "Noise Suppression";
-        icon = "microphone";
-        exec = "${noisetorch}/bin/noisetorch";
-        categories = [ "Audio" "AudioVideo" ];
-      })
     ];
+
+    programs.noisetorch.enable = true;
   };
 }

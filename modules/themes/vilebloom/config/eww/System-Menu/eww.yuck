@@ -59,7 +59,8 @@
           (label :class "wifi-status-button ${network-class == "󰤨" ? "wifi-status-button-on" : "wifi-status-button-off"}" :limit-width "10" :text "${network-status}"))
         (box :class "wifi-buttons-box" :orientation "h" :space-evenly "false"
           (label :class "seperator" :text "")
-          (button :class "arrow" :onclick "System-Menu/scripts/launch wifi" "")))
+         ;; (button :class "arrow" :onclick "System-Menu/scripts/launch wifi" "")))
+          (button :class "arrow" :onclick "System-Menu/scripts/launch wifi" " 󰥭")))
       (box :orientation "h" :class "main-bluetooth-box ${bluetooth-class == "󰂯" ? "main-bluetooth-box-on" : "main-bluetooth-box-off"}" :space-evenly "false"
         (button :tooltip bluetooth-battery :class "main-bluetooth-button ${bluetooth-class == "󰂯" ? "main-bluetooth-button-on" : "main-bluetooth-button-off"}" :onclick "System-Menu/scripts/bluetooth --toggle" "${bluetooth-icon}")
         (box :class "bluetooth-labels-box" :orientation "v" :space-evenly "false" :spacing 5
@@ -67,7 +68,7 @@
           (label :halign "start" :tooltip bluetooth-battery :class "bluetooth-status-button ${bluetooth-class == "󰂯" ? "bluetooth-state-button-on" : "bluetooth-state-button-off"}" :limit-width "8" :text "${bluetooth-status}"))
         (box :class "bluetooth-buttons-box" :orientation "h" :space-evenly "false"
           (label :class "seperator" :text "")
-          (button :class "arrow" :onclick "blueberry" "")))
+          (button :class "arrow" :onclick "blueberry" " 󰥭")))
       (box :orientation "h" :class "main-airplane-box ${airplane-icon == "󰀝" ? "main-airplane-box-on" : "main-airplane-box-off"}" :space-evenly "false"
         (button :class "main-airplane-button ${airplane-icon == "󰀝" ? "main-airplane-button-on" : "main-airplane-button-off"}" :onclick "System-Menu/scripts/airplane --toggle" "${airplane-icon}")
         (box :class "airplane-labels-box" :orientation "v" :space-evenly "false" :spacing 5
@@ -81,7 +82,7 @@
           (button :halign "start" :class "volume-status-button ${volume-icon == "󰕾" ? "volume-status-button-on" : "volume-status-button-off"}" :onclick "System-Menu/scripts/volume --toggle" "${volume-status}"))
         (box :class "volume-buttons-box" :orientation "h" :space-evenly "false"
           (label :class "seperator" :text "")
-          (button :class "arrow" :onclick "System-Menu/scripts/launch volume" "")))
+          (button :class "arrow" :onclick "System-Menu/scripts/launch volume" " 󰥭")))
       (box :orientation "h" :class "main-dnd-box ${dnd-icon == "󰍶" ? "main-dnd-box-on" : "main-dnd-box-off"}" :space-evenly "false"
         (button :class "main-dnd-button ${dnd-icon == "󰍶" ? "main-dnd-button-on" : "main-dnd-button-off"}" :onclick "System-Menu/scripts/dnd --toggle" "${dnd-icon}")
         (box :class "dnd-labels-box" :orientation "v" :space-evenly "false" :spacing 5
@@ -94,7 +95,7 @@
           (button :halign "start" :class "redshift-status-button ${redshift-icon == "󰛨" ? "redshift-status-button-on" : "redshift-status-button-off"}" :onclick "System-Menu/scripts/night-light --toggle" "${redshift-status}"))
         (box :class "redshift-buttons-box" :orientation "h" :space-evenly "false"
           (label :class "seperator" :text "")
-          (button :class "arrow" :onclick "redshiftgui" ""))))
+          (button :class "arrow" :onclick "redshiftgui" " 󰥭"))))
     (box :orientation "v" :class "sliders-system" :hexpand "false" :vexpand "false" :spacing 30
       (box :orientation "h" :class "volume-slider-stuff" :space-evenly "false"
         (button :onclick "amixer set Master toggle" :class "volume-slider-icon" "${volume-slider-indicator}")
@@ -106,7 +107,7 @@
           :min 0
           :marks true
         :onchange "amixer set Master {}% --quiet")
-        (button :onclick "System-Menu/scripts/launch volume" :class "volume-slider-button" ""))
+        (button :onclick "System-Menu/scripts/launch volume" :class "volume-slider-button" "󰥭"))
       (box :orientation "h" :class "brightness-slider-stuff" :space-evenly "false"
         (button :class "brightness-slider-icon" "${brightness-slider-indicator}")
         (scale :class "brightness-slider"
@@ -116,7 +117,7 @@
           :value {brightness == "" ? 0 : brightness}
           :width 663
         :onchange "brightnessctl --quiet s {}%")
-        (button :onclick "System-Menu/scripts/launch display" :class "brightness-slider-button" "")))
+        (button :onclick "System-Menu/scripts/launch display" :class "brightness-slider-button" "󰥭")))
     (box :orientation "h" :space-evenly "true" :class "bottom-items-box"
       (box :orientation "h" :space-evenly "false" :class "battery-box" :halign "start"
         (label :class "battery-icon ${battery-class == "" ? "battery-icon-charging" : "battery-icon-discharging"}" :text "${battery-icon}")
@@ -134,12 +135,12 @@
   :windowtype "normal"
   :wm-ignore true
   :monitor 0
-  :geometry (geometry :x 76 :width 300 :height 300 :y 80 :x 1050)
+  :geometry (geometry :x -30 :width 300 :height 300 :y 80 :anchor "top right")
   (system))
 
 (defwindow tips
   :windowtype "normal"
   :wm-ignore true
   :monitor 0
-  :geometry (geometry :x 76 :width 810 :height 100 :y 580 :x 1050)
+  :geometry (geometry :x -30 :width 810 :height 100 :y 580 :anchor "top right")
   (tips))
