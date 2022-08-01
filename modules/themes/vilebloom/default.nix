@@ -159,6 +159,7 @@ in {
         while ${pkgs.procps}/bin/pgrep -u $UID -x polybar >/dev/null; do ${pkgs.coreutils}/bin/sleep 1; ${pkgs.procps}/bin/pkill -u $UID -x polybar; done
       '';
 
+      # Polybar systemd service
       systemd.user.services."polybar" = {
         enable = true;
 
@@ -191,6 +192,7 @@ in {
         while ${pkgs.procps}/bin/pgrep -u $UID -x eww >/dev/null; do sleep 1; ${pkgs.procps}/bin/pkill -u $UID -x eww; done
       '';
 
+      # EWW systemd  service
       systemd.user.services."eww" = {
         enable = true;
 
