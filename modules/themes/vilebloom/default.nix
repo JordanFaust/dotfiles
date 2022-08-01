@@ -241,7 +241,7 @@ in {
         (mkIf desktop.term.alacritty.enable {
           "alacritty/alacritty.yml".text = import ./config/alacritty/alacritty.yml cfg;
         })
-        (mkIf (desktop.bspwm.enable || desktop.stumpwm.enable) {
+        (mkIf desktop.bspwm.enable {
           # Status Bar
           "polybar/config.ini".text = import ./config/polybar/config.ini { theme = cfg; pkgs = pkgs; };
           "polybar/glyphs.ini".source = ./config/polybar/glyphs.ini;
@@ -269,9 +269,6 @@ in {
         })
         (mkIf desktop.media.graphics.vector.enable {
           "inkscape/templates/default.svg".source = ./config/inkscape/default-template.svg;
-        })
-        (mkIf desktop.browsers.qutebrowser.enable {
-          "qutebrowser/extra/theme.py".source = ./config/qutebrowser/theme.py;
         })
       ];
     })
