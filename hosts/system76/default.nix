@@ -14,21 +14,12 @@
         rofi.enable = true;
         slack.enable = true;
         zoom.enable = true;
-        # godot.enable = true;
       };
       browsers = {
         default = "firefox";
         firefox.enable = true;
-        # brave.enable = true;
-        # qutebrowser.enable = true;
-      };
-      gaming = {
-        # steam.enable = true;
-        # emulators.enable = true;
-        # emulators.psx.enable = true;
       };
       media = {
-        # daw.enable = true;
         documents.enable = true;
         graphics = {
           enable = true;
@@ -63,7 +54,6 @@
       vim.enable = true;
     };
     shell = {
-      # adl.enable = true;
       # vaultwarden.enable = true;
       direnv.enable = true;
       git.enable    = true;
@@ -74,16 +64,9 @@
     services = {
       ssh.enable = true;
       docker.enable = true;
-      # Needed occasionally to help the parental units with PC problems
-      # teamviewer.enable = true;
     };
     theme.active = "vilebloom";
   };
-
-  # nixpkgs.config.allowUnfree = true;
-  # hardware.opengl.enable = true;
-  # hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.stable;
-  #
 
   programs.ssh.startAgent = true;
   services.openssh.startWhenNeeded = true;
