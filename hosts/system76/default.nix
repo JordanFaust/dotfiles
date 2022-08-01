@@ -14,7 +14,6 @@
         rofi.enable = true;
         slack.enable = true;
         zoom.enable = true;
-        keybase.enable = true;
         # godot.enable = true;
       };
       browsers = {

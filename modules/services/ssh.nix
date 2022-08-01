@@ -3,6 +3,7 @@
 with lib;
 with lib.my;
 let cfg = config.modules.services.ssh;
+    configDir = config.dotfiles.configDir;
 in {
   options.modules.services.ssh = {
     enable = mkBoolOpt false;
@@ -13,6 +14,10 @@ in {
       enable = true;
       kbdInteractiveAuthentication = false;
       passwordAuthentication = false;
+    };
+
+    home.file = {
+      ".ssh/config".source = "${configDir}/ssh/config";
     };
 
     user.openssh.authorizedKeys.keys =

@@ -27,5 +27,16 @@ in {
     };
 
     modules.shell.zsh.rcFiles = [ "${configDir}/git/aliases.zsh" ];
+
+    modules.security.copySensitive.git = ''
+      if [[ ! -f $HOME/.ssh/github ]]; then
+        echo "[sensitive] copying github private key"
+        ${pkgs.coreutils}/bin/cp /etc/sensitive/github $HOME/.ssh/github
+      fi
+      if [[ ! -f $HOME/.ssh/github.pub ]]; then
+        echo "[sensitive] copying github public key"
+        ${pkgs.coreutils}/bin/cp /etc/sensitive/github.pub $HOME/.ssh/github.pub
+      fi
+    '';
   };
 }
