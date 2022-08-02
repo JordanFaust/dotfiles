@@ -10,7 +10,12 @@
   modules = {
     desktop = {
       bspwm.enable = true;
+      cursor = {
+        enable = true;
+        theme = "Dracula";
+      };
       apps = {
+        globalprotect.enable = true;
         rofi.enable = true;
         slack.enable = true;
         zoom.enable = true;

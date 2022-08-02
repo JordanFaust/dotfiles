@@ -126,5 +126,5 @@
   :windowtype "normal"
   :wm-ignore true
   :monitor 0
-  :geometry (geometry :x 76 :width 1150 :height 810 :y 80 :anchor "top center")
+  :geometry (geometry :width 1150 :height 810 :y 80 :anchor "top center")
   (main))

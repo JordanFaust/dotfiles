@@ -15,7 +15,7 @@ in {
           gtk = {
             theme = "Dracula";
             iconTheme = "Papirus";
-            cursorTheme = "Paper";
+            cursorTheme = "Dracula";
           };
           fonts = {
             sans.name = "Fira Sans";
@@ -79,6 +79,8 @@ in {
         recode
         # Added utilities used in rice scripts
         moreutils
+        # Lock Screen
+        i3lock-color
       ];
       fonts = {
         fonts = with pkgs; [
@@ -223,6 +225,8 @@ in {
         ".mozilla/firefox/jordan.default" = { source = ./config/firefox; recursive = true; };
         # General Scripts
         ".scripts" = { source = ./config/scripts; recursive = true; };
+        # Wallpaper (used by i3lock)
+        ".wallpaper".source = ./config/wallpaper.jpg;
       };
 
       # Other dotfiles
