@@ -42,6 +42,9 @@ in {
       # Patch favorite fonts with NerdFonts
       (nerdfonts.override { fonts = [ "JetBrainsMono" "FiraCode"]; })
 
+      # Performance Monitoring
+      btop
+      htop
 
       ##
       ## Ricing Packages
@@ -49,9 +52,6 @@ in {
 
       # Widgets
       unstable.eww
-      # System76
-      # TODO move all system76 related packages to its own module
-      linuxPackages.system76-power
       # Audio
       pavucontrol
       # Battery
