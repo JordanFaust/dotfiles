@@ -61,9 +61,9 @@ with lib.my;
     };
     # TODO pull in better themes:
     # http://blog.sidhartharya.com/using-custom-plymouth-theme-on-nixos/
-    plymouth = {
-      enable = true;
-    };
+    # plymouth = {
+    #   enable = true;
+    # };
   };
 
   # Just the bear necessities...

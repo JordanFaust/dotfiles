@@ -226,7 +226,7 @@ in {
         # General Scripts
         ".scripts" = { source = ./config/scripts; recursive = true; };
         # Wallpaper (used by i3lock)
-        ".wallpaper".source = ./config/wallpaper.jpg;
+        ".wallpapers/lock.jpg".source = ./config/vilebloom.jpg;
       };
 
       # Other dotfiles
