@@ -62,6 +62,7 @@ in {
       user.packages = with pkgs; [
         unstable.dracula-theme
         # TODO replace this with papirus
+        dracula-theme
         paper-icon-theme # for rofi
         papirus-icon-theme # dunst
         gnome.adwaita-icon-theme
@@ -260,6 +261,8 @@ in {
           "eww/Misc" = { source = ./config/eww/Misc; recursive = true;  };
           # "eww/Player" = { source = ./config/eww/Player; recursive = true;  };
           "eww/System-Menu" = { source = ./config/eww/System-Menu; recursive = true;  };
+          # X11 Menu
+          "jgmenu" = { source = ./config/jgmenu; recursive = true; };
           # GTK Theme
           "Dracula-purple-solid-kvantum" = {
             recursive = true;
