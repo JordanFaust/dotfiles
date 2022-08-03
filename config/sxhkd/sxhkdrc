@@ -103,6 +103,11 @@ super + shift + r
     bspc wm -r && dunstify "bspwn" "Reloaded"
 
 #
+# Mouse
+~button3
+    bspc query -D -d .focused && cd $HOME/.config/jgmenu && echo -e "$(cat ~/.config/jgmenu/menu.txt)" | jgmenu --simple
+
+#
 ## Media keys
 
 # screenshot region

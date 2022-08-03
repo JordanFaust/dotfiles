@@ -46,6 +46,7 @@ alias y='xclip -selection clipboard -in'
 alias p='xclip -selection clipboard -out'
 
 alias jc='journalctl -xe'
+alias jcu='journalctl --user -xe'
 alias sc=systemctl
 alias ssc='sudo systemctl'
 
@@ -82,3 +83,12 @@ function r {
   local time=$1; shift
   sched "$time" "notify-send --urgency=critical 'Reminder' '$@'; ding";
 }; compdef r=sched
+
+# AWS CLI
+function awsp {
+  selected_profile=$(grep profile ${HOME}/.aws/config \
+      | awk '{print $2}' | sed 's,],,g' \
+      | fzf --layout reverse --height 10% --border)
+  export AWS_PROFILE=${selected_profile}
+  aws sso login --profile ${selected_profile}
+}

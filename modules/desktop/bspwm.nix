@@ -30,8 +30,9 @@ in {
         pulseSupport = true;
         nlSupport = true;
       })
+      # Desktop Menu
+      jgmenu
       # # General Dependencies
-      jq
       # XFCE GTK Setting Applications
       # Pull in a few GUI settings managers for general settings,
       # display, and power management.
