@@ -105,7 +105,7 @@ super + shift + r
 #
 # Mouse
 ~button3
-    bspc query -D -d .focused && cd $HOME/.config/jgmenu && echo -e "$(cat ~/.config/jgmenu/menu.txt)" | jgmenu --simple
+    bspc query -D -d .focused.!occupied && cd $HOME/.config/jgmenu && echo -e "$(cat ~/.config/jgmenu/menu.txt)" | jgmenu --simple
 
 #
 ## Media keys
