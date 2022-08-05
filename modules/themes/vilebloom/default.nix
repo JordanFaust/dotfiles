@@ -149,9 +149,11 @@ in {
       services.autorandr.profiles.workstation.hooks.postswitch = {
         # This needs to better handle moving windows over to the workspaces on the new displays
         "notify-bspwm" = ''
-          echo "[autorandr] profile=workstation type=postswitch hook=polybar Notifying BSPWM"
-          ${pkgs.bspwm}/bin/bspc wm -r
-          source $XDG_CONFIG_HOME/bspwm/bspwmrc
+          if [[ ! -z $DISPLAY ]]; then
+            echo "[autorandr] profile=workstation type=postswitch hook=polybar Notifying BSPWM"
+            ${pkgs.bspwm}/bin/bspc wm -r
+            source $XDG_CONFIG_HOME/bspwm/bspwmrc
+          fi
         '';
       };
 

@@ -82,6 +82,17 @@ in {
     ## Apps/Services
     services.xserver.displayManager.lightdm.greeters.mini.user = config.user.name;
 
+    # Ensure that a display profile is chosen before presenting the greeter
+    # services.xserver.displayManager.setupCommands = ''
+    #   ${pkgs.xorg.xrandr}/bin/xrandr --setprovideroutputsource "modesetting" NVIDIA-0
+    #   ${pkgs.autorandr}/bin/autorandr -c
+    # '';
+
+    # Ensure that displays are correctly configured when creating a new session
+    services.xserver.displayManager.lightdm.extraSeatDefaults = ''
+      session-setup-script=${pkgs.autorandr}/bin/autorandr -c
+    '';
+
     services.picom = {
       backend = "glx";
       vSync = true;
