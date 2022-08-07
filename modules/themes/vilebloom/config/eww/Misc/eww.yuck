@@ -14,7 +14,7 @@
       (button :tooltip "Shutdown your PC." :class "shutdown" :onclick "shutdown now" "󰐥")
       (button :tooltip "Reboot your PC." :class "reboot" :onclick "reboot" "󰜉")
       (button :tooltip "Exit BSPWM." :class "exit" :onclick "bspc quit" "󰍃")
-      (button :tooltip "Lock" :class "lock" :onclick "$HOME/.scripts/lock" "󰌾"))))
+      (button :tooltip "Lock" :class "lock" :onclick "eww close powermenu; lockscreen" "󰌾"))))
 
 (defwidget volume-indicator[]
   (box :class "volume-window"

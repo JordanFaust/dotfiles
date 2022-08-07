@@ -38,4 +38,3 @@ quote_msg = ['See you later, alligator!',
 
 quote = random.choice(quote_msg)
 print(quote)
-Footer
