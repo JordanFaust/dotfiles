@@ -5,6 +5,28 @@
 with lib;
 with lib.my;
 let cfg = config.modules.theme;
+
+    # Script used to lock the computer
+    lockscreen = pkgs.writeScriptBin "lockscreen" ''
+      fg=152733
+      wrong=ffba95
+      highlight=ffba95
+      date=24455b
+      verify=ffba95
+
+      # pkill -u "$USER" -USR1 dunst
+      # slowfade start
+      ${pkgs.i3lock-color}/bin/i3lock-color --force-clock -i $HOME/.wallpapers/lock.jpg -e --indicator --radius=20 --ring-width=40 \
+        --inside-color=$fg --ring-color=$fg --insidever-color=$verify --ringver-color=$verify \
+        --insidewrong-color=$wrong --ringwrong-color=$wrong --keyhl-color=$verify --separator-color=$verify \
+        --bshl-color=$verify  --date-color=$date --time-color=$date --greeter-color=$fg --wrong-color=$wrong --verif-color=$verify\
+        --verif-text="Verifying Password..." --wrong-text="Wrong Password!" --noinput-text="" --greeter-text="Type the password to Unlock" \
+        --time-font="JetBrainsMono Nerd Font:style=Bold" --date-font="JetBrainsMono Nerd Font" --verif-font="JetBrainsMono Nerd Font" \
+        --greeter-font="JetBrainsMono Nerd Font" --wrong-font="JetBrainsMono Nerd Font" --time-str="%H:%M" --time-size=140 \
+        --date-str="%a, %d %b" --date-size=45 --verif-size=23 --greeter-size=23 --wrong-size=23 \
+        --ind-pos="2690:2120" --time-pos="2690:1900" --date-pos="2690:1690" --greeter-pos="2690:2290" --wrong-pos="2690:2320" --verif-pos="2690:2320" \
+        --pointer=default --refresh-rate=0 --pass-media-keys --pass-volume-keys --line-uses-inside --fill
+    '';
 in {
   config = mkIf (cfg.active == "vilebloom") (mkMerge [
     # Desktop-agnostic configuration
@@ -82,6 +104,8 @@ in {
         moreutils
         # Lock Screen
         i3lock-color
+        # User provided lockscreen script
+        lockscreen
       ];
       fonts = {
         fonts = with pkgs; [
@@ -156,6 +180,23 @@ in {
           fi
         '';
       };
+
+      ##
+      ## Autolock
+      ##
+
+      # Enable autolocking
+      services.xserver.xautolock.enable = true;
+      # Enable notifications warning about the computer being locked
+      services.xserver.xautolock.enableNotifier = true;
+      # Idle time (in minutes) to wait until autolock locks the computer
+      services.xserver.xautolock.time = 15;
+      # Time in seconds before the actual lock when the notification about the lock will be sent
+      services.xserver.xautolock.notify = 30;
+      # The notification sent before locking the computer
+      services.xserver.xautolock.notifier = "${pkgs.dunst}/bin/dunstify -i \"gnome-lockscreen\" \"System\" \"Locking in 30 seconds\"";
+      # The script to run to lock the computer
+      services.xserver.xautolock.locker = "${lockscreen}/bin/lockscreen";
 
       # This service won't be restarted as part of a nixos-rebuild switch,
       # the process must be killed to allow the systemd unit to restart it

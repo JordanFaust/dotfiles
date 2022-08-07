@@ -135,12 +135,12 @@
   :windowtype "normal"
   :wm-ignore true
   :monitor 0
-  :geometry (geometry :x -30 :width 300 :height 300 :y 80 :anchor "top right")
+  :geometry (geometry :x -25 :y 90 :width 300 :height 300 :anchor "top right")
   (system))
 
 (defwindow tips
   :windowtype "normal"
   :wm-ignore true
   :monitor 0
-  :geometry (geometry :x -30 :width 810 :height 100 :y 580 :anchor "top right")
+  :geometry (geometry :x -25 :y 590 :width 810 :height 100 :anchor "top right")
   (tips))

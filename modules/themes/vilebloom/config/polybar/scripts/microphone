@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-PID=$(lsof /dev/snd/pcm*c | wc -c)
+VOLUME=$(pamixer --source alsa_input.usb-Kingston_HyperX_Quadcast_4110-00.analog-stereo --get-volume-human)
 
-if [[ $PID -eq 0 ]]
+if [[ $VOLUME == "muted" ]]
 then
   echo ""
 else
