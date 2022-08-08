@@ -45,6 +45,7 @@
       };
     };
     dev = {
+      cc.enable = true;
       node.enable = true;
       rust.enable = true;
       shell.enable = true;

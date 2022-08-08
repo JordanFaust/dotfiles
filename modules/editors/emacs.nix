@@ -24,6 +24,13 @@ in {
       ((emacsPackagesFor emacsPgtkNativeComp).emacsWithPackages (epkgs: [
         epkgs.vterm
       ]))
+      (makeDesktopItem {
+        name = "Doom Emacs";
+        desktopName = "Doom Emacs";
+        icon = "emacs";
+        exec = "${emacsPgtkNativeComp}/bin/emacs --name doom";
+        categories = [ "Development" "TextEditor" ];
+      })
 
       ## Doom dependencies
       git
@@ -49,6 +56,8 @@ in {
       terraform
       # :tools lookup & :lang org +roam
       sqlite
+      # needed to compile sqlite for org roam
+      gcc
 
       # :lang latex & :lang org (latex previews)
       texlive.combined.scheme-medium
