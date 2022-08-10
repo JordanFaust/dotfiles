@@ -10,9 +10,13 @@ in {
 
   config = mkIf cfg.enable {
     user.packages = with pkgs; [
-      globalprotect-openconnect
+      unstable.globalprotect-openconnect
+      unstable.openconnect
     ];
 
-    services.globalprotect.enable = true;
+    services.globalprotect = {
+      enable = true;
+      csdWrapper = "${pkgs.unstable.openconnect}/libexec/openconnect/hipreport.sh";
+    };
   };
 }
