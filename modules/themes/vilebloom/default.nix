@@ -124,21 +124,51 @@ in {
 
       # Compositor
       services.picom = {
+        # Fade
         fade = true;
-        fadeDelta = 1;
-        fadeSteps = [ 0.01 0.012 ];
+        fadeDelta = 4;
+        fadeSteps = [ 0.03 0.03 ];
+        # Opacity
+        inactiveOpacity = 1.0;
+        # Shadow
         shadow = true;
-        shadowOffsets = [ (-10) (-10) ];
-        shadowOpacity = 0.22;
-        # activeOpacity = "1.00";
-        # inactiveOpacity = "0.92";
+        shadowOffsets = [ (-25) (-25) ];
+        shadowOpacity = 0.50;
+        shadowExclude = [
+          "! name~='(rofi|scratch|Dunst)$'"
+          "window_type = 'menu'"
+          "class_g = 'Plank'"
+          "class_g = 'Cairo-dock'"
+          "class_g = 'activate-linux'"
+          "class_g = 'firefox'"
+          "class_g = 'eww-background-closer'"
+          "class_g = 'GLava'"
+          "class_g = 'eww-visualizer'"
+          "class_g = 'eww-lyrics'"
+          "class_g = 'eww-volume-indicator'"
+          "class_g = 'eww-brightness-indicator'"
+        ];
+        wintypes = {
+          tooltip = { fade = true; shadow = false; opacity = 1.0; focus = true; full-shadow = false; };
+          dock = { shadow = true; };
+          dnd = { shadow = true; };
+          popup_menu = { opacity = 1.0; };
+          dropdown_menu = { opacity = 1.0; };
+        };
         settings = {
-          shadow-radius = 12;
-          # blur-background = true;
-          # blur-background-frame = true;
-          # blur-background-fixed = true;
-          blur-kern = "7x7box";
-          blur-strength = 320;
+          shadow-radius = 25;
+          frame-opacity = 1.0;
+          corner-radius = 15;
+
+          # General Settings
+          mark-wmwin-focused = true;
+          mark-ovredir-focused = true;
+          detect-rounded-corners = true;
+          detect-client-opacity = true;
+          detect-transient = true;
+          use-damage = true;
+          # blur-kern = "7x7box";
+          # blur-strength = 320;
         };
       };
 
