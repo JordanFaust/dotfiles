@@ -47,6 +47,7 @@
     dev = {
       cc.enable = true;
       node.enable = true;
+      ruby.enable = true;
       rust.enable = true;
       shell.enable = true;
       python.enable = true;
