@@ -23,8 +23,6 @@ bspc rule -r '*'
 
 bspc rule -a Pinentry state=floating center=on
 bspc rule -a feh state=fullscreen
-bspc rule -a 'Emacs:doom' state=tiled
-bspc rule -a 'Emacs:emacs' state=floating sticky=on
 bspc rule -a '*:scratch' state=floating sticky=on border=off rectangle=1000x460+480+1660
 
 #

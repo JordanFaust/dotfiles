@@ -21,12 +21,14 @@ super + BackSpace
 
 # Open a disposable scratch buffer in a floating Emacs window, to run arbitrary
 # code or quickly note something down.
-super + shift + grave
-    emacsclient --eval "(open-scratch-frame)"
+super + i
+    bspc rule -a 'Emacs:doom' --one-shot state=floating sticky=on border=off; emacsclient --eval "(open-scratch-frame)"; \
+    bspc rule -r 'Emacs:doom'
 
 # Invoke emacs-everywhere at point.
 super + e
-    emacsclient --eval "(emacs-everywhere)"
+    bspc rule -a 'Emacs:doom' --one-shot state=floating sticky=on border=off; emacsclient --eval "(emacs-everywhere)"; \
+    bspc rule -r 'Emacs:doom'
 
 super + space
     $DOTFILES_BIN/rofi/appmenu
@@ -44,7 +46,7 @@ super + slash
     $DOTFILES_BIN/rofi/filemenu -x
 
 super + Escape
-    pkill -USR1 -x sxhkd
+    pkill -USR1 -x sxhkd; dunstify "System" "Reloaded sxhkd"
 
 super + alt + Escape
     bspc quit
