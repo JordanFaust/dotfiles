@@ -18,6 +18,7 @@ in {
     (mkIf cfg.enable {
       user.packages = with pkgs; [
         clojure
+        clojure-lsp
         joker
         leiningen
       ];

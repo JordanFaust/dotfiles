@@ -46,6 +46,7 @@
     };
     dev = {
       cc.enable = true;
+      clojure.enable = true;
       node.enable = true;
       ruby.enable = true;
       rust.enable = true;
