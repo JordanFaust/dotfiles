@@ -21,14 +21,24 @@ in {
       ## Emacs itself
       binutils       # native-comp needs 'as', provided by this
       # 29 + pgtk + native-comp
-      ((emacsPackagesFor emacsPgtkNativeComp).emacsWithPackages (epkgs: [
+      # ((emacsPackagesFor emacsPgtkNativeComp).emacsWithPackages (epkgs: [
+      #   epkgs.vterm
+      # ]))
+      # (makeDesktopItem {
+      #   name = "Doom Emacs";
+      #   desktopName = "Doom Emacs";
+      #   icon = "emacs";
+      #   exec = "${emacsPgtkNativeComp}/bin/emacs --name doom";
+      #   categories = [ "Development" "TextEditor" ];
+      # })
+      ((emacsPackagesFor emacsNativeComp).emacsWithPackages (epkgs: [
         epkgs.vterm
       ]))
       (makeDesktopItem {
         name = "Doom Emacs";
         desktopName = "Doom Emacs";
         icon = "emacs";
-        exec = "${emacsPgtkNativeComp}/bin/emacs --name doom";
+        exec = "${emacsNativeComp}/bin/emacs --name doom";
         categories = [ "Development" "TextEditor" ];
       })
 
