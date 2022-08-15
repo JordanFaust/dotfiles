@@ -113,7 +113,7 @@ super + shift + r
 ## Media keys
 
 # screenshot region
-Print
+Home
     scrcap
 # screencast region to mp4
 super + Print
