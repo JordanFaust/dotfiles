@@ -43,6 +43,7 @@ in {
       (nerdfonts.override { fonts = [ "JetBrainsMono" "FiraCode"]; })
 
       # Performance Monitoring
+      bmon
       btop
       htop
 
