@@ -14,6 +14,7 @@ in {
       user.packages = with pkgs; [
         # Add AWS V2 CLI
         awscli2
+        aws-vault
 
         # Kubernetes
         kubectx
