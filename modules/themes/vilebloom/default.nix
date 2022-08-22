@@ -14,9 +14,12 @@ let cfg = config.modules.theme;
       date=24455b
       verify=ffba95
 
-      # pkill -u "$USER" -USR1 dunst
-      # slowfade start
-      ${pkgs.i3lock-color}/bin/i3lock-color --force-clock -i $HOME/.wallpapers/lock.jpg -e --indicator --radius=20 --ring-width=40 \
+      # Force the displays to go to sleep
+      ${pkgs.xorg.xset}/bin/xset dpms force off
+      # Pause notifications until the screen is unlocked
+      ${pkgs.dunst}/bin/dunstctl set-paused true
+      # Lock the screen and block until unlocked
+      ${pkgs.i3lock-color}/bin/i3lock-color --nofork --force-clock -i $HOME/.wallpapers/lock.jpg -e --indicator --radius=20 --ring-width=40 \
         --inside-color=$fg --ring-color=$fg --insidever-color=$verify --ringver-color=$verify \
         --insidewrong-color=$wrong --ringwrong-color=$wrong --keyhl-color=$verify --separator-color=$verify \
         --bshl-color=$verify  --date-color=$date --time-color=$date --greeter-color=$fg --wrong-color=$wrong --verif-color=$verify\
@@ -26,6 +29,8 @@ let cfg = config.modules.theme;
         --date-str="%a, %d %b" --date-size=45 --verif-size=23 --greeter-size=23 --wrong-size=23 \
         --ind-pos="2690:2120" --time-pos="2690:1900" --date-pos="2690:1690" --greeter-pos="2690:2290" --wrong-pos="2690:2320" --verif-pos="2690:2320" \
         --pointer=default --refresh-rate=0 --pass-media-keys --pass-volume-keys --line-uses-inside --fill
+      # Turn notifactions back on
+      ${pkgs.dunst}/bin/dunstctl set-paused false
     '';
 in {
   config = mkIf (cfg.active == "vilebloom") (mkMerge [
