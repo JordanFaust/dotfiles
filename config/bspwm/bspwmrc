@@ -31,3 +31,5 @@ bspc rule -a '*:*:Zoom Meeting' state=floating
 for file in $XDG_CONFIG_HOME/bspwm/rc.d/*; do
   source "$file"
 done
+
+bsp-layout set even
