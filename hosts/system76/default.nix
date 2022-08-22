@@ -47,6 +47,7 @@
     dev = {
       cc.enable = true;
       clojure.enable = true;
+      golang.enable = true;
       node.enable = true;
       ruby.enable = true;
       rust.enable = true;
