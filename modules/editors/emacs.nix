@@ -15,32 +15,56 @@ in {
   };
 
   config = mkIf cfg.enable {
-    nixpkgs.overlays = [ inputs.emacs-overlay.overlay ];
+    # Configure the overlay for emacs
+    nixpkgs.overlays = [
+      inputs.emacs-overlay.overlay
+      (self: super: {
+        emacsPgtkNativeComp = super.emacsPgtkNativeComp.override {
+          # Enable Xwidget support
+          withXwidgets = true;
+          # Enable GTK3 support for webkit
+          withGTK3 = true;
+        };
+        emacsNativeComp = super.emacsNativeComp.override {
+          # Enable Xwidget support
+          withXwidgets = true;
+          # Enable GTK3 support for webkit
+          withGTK3 = true;
+          # Enable SQLite3 integration
+          withSQLite3 = true;
+          # Enable native-comp
+          nativeComp = true;
+        };
+      })
+    ];
 
     user.packages = with pkgs; [
       ## Emacs itself
       binutils       # native-comp needs 'as', provided by this
       # 29 + pgtk + native-comp
-      # ((emacsPackagesFor emacsPgtkNativeComp).emacsWithPackages (epkgs: [
+      ((emacsPackagesFor emacsPgtkNativeComp).emacsWithPackages (epkgs: [
+        epkgs.vterm
+      ]))
+      webkitgtk
+      (makeDesktopItem {
+        name = "Doom Emacs";
+        desktopName = "Doom Emacs";
+        icon = "emacs";
+        exec = "${emacsPgtkNativeComp}/bin/emacs --name doom";
+        categories = [ "Development" "TextEditor" ];
+      })
+      # 28.1 + sql + gtk3 + webkit + webp + native-comp
+      # xdg-desktop-portal
+      # ((emacsPackagesFor emacsNativeComp).emacsWithPackages (epkgs: [
       #   epkgs.vterm
       # ]))
       # (makeDesktopItem {
       #   name = "Doom Emacs";
       #   desktopName = "Doom Emacs";
       #   icon = "emacs";
-      #   exec = "${emacsPgtkNativeComp}/bin/emacs --name doom";
+      #   exec = "${emacsNativeComp}/bin/emacs --name doom";
       #   categories = [ "Development" "TextEditor" ];
       # })
-      ((emacsPackagesFor emacsNativeComp).emacsWithPackages (epkgs: [
-        epkgs.vterm
-      ]))
-      (makeDesktopItem {
-        name = "Doom Emacs";
-        desktopName = "Doom Emacs";
-        icon = "emacs";
-        exec = "${emacsNativeComp}/bin/emacs --name doom";
-        categories = [ "Development" "TextEditor" ];
-      })
 
       ## Doom dependencies
       git
