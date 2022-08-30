@@ -22,6 +22,10 @@ in {
         kind
         krew
 
+        # Local Dev
+        kubernetes-helm
+        skaffold
+
         # Istio
         istioctl
       ];
