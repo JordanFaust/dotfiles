@@ -26,6 +26,10 @@ in {
         kubernetes-helm
         skaffold
 
+        # Terraform
+        terraform
+        terraform-docs
+
         # Istio
         istioctl
       ];

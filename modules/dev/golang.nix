@@ -18,6 +18,9 @@ in {
         go
         # Global gems
         gopls
+        # protoc
+        protobuf
+        protobufc
       ];
     })
   ];
