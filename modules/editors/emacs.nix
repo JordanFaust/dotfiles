@@ -65,6 +65,7 @@ in {
       #   exec = "${emacsNativeComp}/bin/emacs --name doom";
       #   categories = [ "Development" "TextEditor" ];
       # })
+      emacs-all-the-icons-fonts
 
       ## Doom dependencies
       git
@@ -99,6 +100,7 @@ in {
       beancount
       unstable.fava  # HACK Momentarily broken on nixos-unstable
       # :lang markdown
+      pandoc
       # TODO
       # :lang org
       maim

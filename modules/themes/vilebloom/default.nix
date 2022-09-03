@@ -163,7 +163,7 @@ in {
         settings = {
           shadow-radius = 25;
           frame-opacity = 1.0;
-          corner-radius = 15;
+          corner-radius = 12;
 
           # General Settings
           mark-wmwin-focused = true;
