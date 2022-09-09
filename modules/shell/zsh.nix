@@ -43,7 +43,7 @@ in {
       exa
       fasd
       fd
-      fzf
+      unstable.fzf
       jq
       ripgrep
       tldr
