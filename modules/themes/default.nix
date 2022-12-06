@@ -238,8 +238,16 @@ in {
                    ${script}
                  '') cfg.onReload)}
              '');
+           wallpaperCommand = with pkgs; (writeScriptBin "wallpaper" ''
+             if [ -e "$XDG_DATA_HOME/wallpaper" ]; then
+               ${feh}/bin/feh --bg-${config.services.xserver.desktopManager.wallpaper.mode} \
+                 ${optionalString config.services.xserver.desktopManager.wallpaper.combineScreens "--no-xinerama"} \
+                 --no-fehbg \
+                 $XDG_DATA_HOME/wallpaper
+             fi
+           '');
        in {
-         user.packages = [ reloadTheme ];
+         user.packages = [ reloadTheme wallpaperCommand ];
          system.userActivationScripts.reloadTheme = ''
            [ -z "$NORELOAD" ] && ${reloadTheme}/bin/reloadTheme
          '';

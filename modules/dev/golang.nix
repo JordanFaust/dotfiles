@@ -15,13 +15,19 @@ in {
     (mkIf cfg.enable {
       user.packages = with pkgs; [
         # The specific language version
-        go
-        # Global gems
+        go_1_18
+        # LSP
         gopls
         # protoc
         protobuf
         protobufc
+        # Buf CLI
+        buf
       ];
+      environment.variables = {
+        BUF_USER = "jordanfaust";
+        GOPRIVATE = "github.com/procore,$GOPRIVATE";
+      };
     })
   ];
 }

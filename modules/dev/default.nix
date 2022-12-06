@@ -15,6 +15,8 @@ in {
         # Add AWS V2 CLI
         awscli2
         aws-vault
+        ssm-agent
+        ssm-session-manager-plugin
 
         # Kubernetes
         kubectx

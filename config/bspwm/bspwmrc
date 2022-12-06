@@ -23,10 +23,13 @@ bspc rule -r '*'
 
 bspc rule -a Pinentry state=floating center=on
 bspc rule -a feh state=fullscreen
-bspc rule -a 'Emacs:*' state=tiled
-bspc rule -a '*:scratch' state=floating sticky=on border=off rectangle=1000x460+480+1660
+# bspc rule -a '*:scratch' state=floating sticky=on border=off rectangle=1000x460+480+1660
 bspc rule -a '*:*:Zoom Meeting' state=floating
 
+bspc rule -a firefox desktop='^3' follow=off
+bspc rule -a 'Emacs:*' state=tiled desktop='^3' follow=off
+bspc rule -a slack state=tiled desktop='^4' follow=off
+bspc rule -a spotify state=tiled desktop='^4' follow=off
 #
 for file in $XDG_CONFIG_HOME/bspwm/rc.d/*; do
   source "$file"

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-VOLUME=$(pamixer --source alsa_input.usb-Kingston_HyperX_Quadcast_4110-00.analog-stereo --get-volume-human)
+VOLUME=$(pamixer --source alsa_input.usb-Kingston_HyperX_Quadcast_4110-00.analog-stereo.2 --get-volume-human)
 
 if [[ $VOLUME == "muted" ]]
 then
