@@ -4,9 +4,9 @@ last_modified_epoch=$(cat /etc/dotfiles/flake.lock | jq .nodes.nixpkgs_2.locked.
 human_date=$(date -d @"${last_modified_epoch}")
 current_epoch=$(date +%s)
 time_since_last_update=$((current_epoch-last_modified_epoch))
-one_week_ago_epoch=604800
+two_week_ago_epoch=1209600
 
-if [ "$time_since_last_update" -gt "$one_week_ago_epoch" ]; then
+if [ "$time_since_last_update" -gt "$two_week_ago_epoch" ]; then
     dunstify --appname=Updates --icon=update-notifier "Updates Available" "The system was last updated '$human_date'. Please update your system."
     echo "Please Update!"
 else

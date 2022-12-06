@@ -42,7 +42,20 @@ in {
       ## Emacs itself
       binutils       # native-comp needs 'as', provided by this
       # 29 + pgtk + native-comp
-      ((emacsPackagesFor emacsPgtkNativeComp).emacsWithPackages (epkgs: [
+      # ((emacsPackagesFor emacsPgtkNativeComp).emacsWithPackages (epkgs: [
+      #   epkgs.vterm
+      # ]))
+      # webkitgtk
+      # (makeDesktopItem {
+      #   name = "Doom Emacs";
+      #   desktopName = "Doom Emacs";
+      #   icon = "emacs";
+      #   exec = "${emacsPgtkNativeComp}/bin/emacs --name doom";
+      #   categories = [ "Development" "TextEditor" ];
+      # })
+      # 28.1 + sql + gtk3 + webkit + webp + native-comp
+      xdg-desktop-portal
+      ((emacsPackagesFor emacsNativeComp).emacsWithPackages (epkgs: [
         epkgs.vterm
       ]))
       webkitgtk
@@ -50,21 +63,9 @@ in {
         name = "Doom Emacs";
         desktopName = "Doom Emacs";
         icon = "emacs";
-        exec = "${emacsPgtkNativeComp}/bin/emacs --name doom";
+        exec = "${emacsNativeComp}/bin/emacs --name doom";
         categories = [ "Development" "TextEditor" ];
       })
-      # 28.1 + sql + gtk3 + webkit + webp + native-comp
-      # xdg-desktop-portal
-      # ((emacsPackagesFor emacsNativeComp).emacsWithPackages (epkgs: [
-      #   epkgs.vterm
-      # ]))
-      # (makeDesktopItem {
-      #   name = "Doom Emacs";
-      #   desktopName = "Doom Emacs";
-      #   icon = "emacs";
-      #   exec = "${emacsNativeComp}/bin/emacs --name doom";
-      #   categories = [ "Development" "TextEditor" ];
-      # })
       emacs-all-the-icons-fonts
 
       ## Doom dependencies
