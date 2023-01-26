@@ -32,7 +32,8 @@
           models.enable = false;
         };
         mpv.enable = true;
-        recording.enable = true;
+        # Disable until ffmpeg is fixed
+        recording.enable = false;
         spotify.enable = true;
       };
       term = {
