@@ -97,9 +97,6 @@ in {
 
       # :lang latex & :lang org (latex previews)
       texlive.combined.scheme-medium
-      # :lang beancount
-      beancount
-      unstable.fava  # HACK Momentarily broken on nixos-unstable
       # :lang markdown
       pandoc
       # TODO
