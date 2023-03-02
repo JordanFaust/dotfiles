@@ -14,13 +14,13 @@ let
   pythonPackages = python3Packages;
 in python3Packages.buildPythonApplication rec {
   pname   = "gp-saml-gui";
-  version = "1.0.8";
+  version = "1.0.9";
 
   src = fetchFromGitHub {
     owner = "dlenski";
     repo = "gp-saml-gui";
-    rev = "e73026c85b42cbfed0a7a074e4f4b5c4d471aeb8";
-    sha256 = "jrbDU0FJz6r33MP3vZFS6iFrf9xIe7jLwJkEUkNy374=";
+    rev = "f1fafba32e06a86308aab03abaaa1b076e1e1096";
+    sha256 = "7gIHShtpRhuYeADGz5EdhUcmnI7nUgtaHFYRS4uFvHI=";
   };
 
   # wrapGAppsHook is required to make sure GTK is properly loaded and

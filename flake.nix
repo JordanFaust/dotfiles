@@ -13,11 +13,11 @@
   inputs = 
     {
       # Default to using packages within the stable 22.05 release
-      nixpkgs.url = "nixpkgs/nixos-22.05";
+      nixpkgs.url = "nixpkgs/nixos-22.11";
       # Provide a means to install cutting edge packages where necessary
       nixpkgs-unstable.url = "nixpkgs/nixpkgs-unstable";
       # Use the stable 22.05 release of home-manager packages
-      home-manager.url = "github:rycee/home-manager/release-22.05";
+      home-manager.url = "github:rycee/home-manager/release-22.11";
       home-manager.inputs.nixpkgs.follows = "nixpkgs";
       agenix.url = "github:ryantm/agenix";
       agenix.inputs.nixpkgs.follows = "nixpkgs";

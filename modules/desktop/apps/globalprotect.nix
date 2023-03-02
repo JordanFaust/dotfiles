@@ -32,7 +32,7 @@ let
                 exit 1
             fi
             echo "Starting the VPN" | ${pkgs.coreutils}/bin/tee -a $log >/dev/null
-            ${pkgs.my.gp-saml-gui}/bin/gp-saml-gui -S -v --clientos=Linux $vpn_portal -- --authgroup="$vpn_gateway" &> $log &
+            ${pkgs.my.gp-saml-gui}/bin/gp-saml-gui --allow-insecure-crypto -S -v --clientos=Linux $vpn_portal -- --authgroup="$vpn_gateway" &> $log &
             vpn_pid=$!
             touch $pid_file
             echo $vpn_pid > $pid_file

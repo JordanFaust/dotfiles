@@ -28,6 +28,7 @@ bspc rule -a '*:*:Zoom Meeting' state=floating
 
 bspc rule -a firefox desktop='^3' follow=off
 bspc rule -a doom state=tiled desktop='^3' follow=off
+bspc rule -a 'Emacs:*' state=tiled desktop='^3' follow=off
 bspc rule -a slack state=tiled desktop='^4' follow=off
 bspc rule -a spotify state=tiled desktop='^4' follow=off
 #

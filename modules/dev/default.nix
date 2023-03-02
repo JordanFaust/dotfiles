@@ -23,6 +23,7 @@ in {
         kubectl
         kind
         krew
+        argocd
 
         # Local Dev
         kubernetes-helm
