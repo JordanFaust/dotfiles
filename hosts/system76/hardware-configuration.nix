@@ -9,7 +9,7 @@
   boot.initrd.availableKernelModules = [ "xhci_pci" "thunderbolt" "nvme" "usb_storage" "sd_mod" "sdhci_pci" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" ];
-  boot.kernelPackages = pkgs.unstable.linuxKernel.packages.linux_6_0;
+  boot.kernelPackages = pkgs.unstable.linuxKernel.packages.linux_6_1;
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =

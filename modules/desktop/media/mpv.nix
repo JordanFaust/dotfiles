@@ -10,7 +10,8 @@ in {
 
   config = mkIf cfg.enable {
     user.packages = with pkgs; [
-      mpv-with-scripts
+      # mpv-with-scripts
+      mpv
       mpvc  # CLI controller for mpv
     ];
   };

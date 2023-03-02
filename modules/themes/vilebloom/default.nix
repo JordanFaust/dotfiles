@@ -118,6 +118,7 @@ in {
           jetbrains-mono
           fira-code
           fira-code-symbols
+          cascadia-code
           # General Sans Fonts
           open-sans
           siji

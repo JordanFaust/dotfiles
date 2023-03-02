@@ -93,6 +93,7 @@ in {
       # Setup Keybase for use of storing sensitive credentials
       user.packages = with pkgs; [
         kbfs
+        openssl
       ];
       services.keybase.enable = true;
     }
