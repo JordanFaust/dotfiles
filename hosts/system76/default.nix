@@ -39,6 +39,7 @@
       term = {
         default = "alacritty";
         alacritty.enable = true;
+        kitty.enable = true;
         st.enable = true;
       };
       vm = {

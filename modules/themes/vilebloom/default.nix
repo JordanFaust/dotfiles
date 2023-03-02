@@ -325,6 +325,9 @@ in {
         (mkIf desktop.term.alacritty.enable {
           "alacritty/alacritty.yml".text = import ./config/alacritty/alacritty.yml cfg;
         })
+        (mkIf desktop.term.kitty.enable {
+          "kitty" = { source = ./config/kitty; recursive = true; };
+        })
         (mkIf desktop.bspwm.enable {
           # Status Bar
           "polybar/config.ini".text = import ./config/polybar/config.ini { theme = cfg; pkgs = pkgs; };
