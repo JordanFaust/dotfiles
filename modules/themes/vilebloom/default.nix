@@ -327,6 +327,7 @@ in {
         })
         (mkIf desktop.term.kitty.enable {
           "kitty" = { source = ./config/kitty; recursive = true; };
+          "kitty/themes/monokai-pro.conf".source = ./config/kitty/themes/monokai-pro.conf;
         })
         (mkIf desktop.bspwm.enable {
           # Status Bar
