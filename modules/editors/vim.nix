@@ -43,6 +43,9 @@ in {
       # deno-webkit
       neovim-nightly
 
+      # Neovim Addon Dependencies
+      ranger 
+
       # Image preview
       chafa
     ];

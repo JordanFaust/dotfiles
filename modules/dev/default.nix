@@ -27,6 +27,7 @@ in {
 
         # Local Dev
         kubernetes-helm
+        kustomize
         skaffold
 
         # Terraform
@@ -35,6 +36,9 @@ in {
 
         # Istio
         istioctl
+
+        # Linkerd 
+        linkerd
       ];
 
       environment.shellAliases = {
