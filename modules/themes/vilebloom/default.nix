@@ -14,12 +14,12 @@ let cfg = config.modules.theme;
       date=24455b
       verify=ffba95
 
-      # Force the displays to go to sleep
-      ${pkgs.xorg.xset}/bin/xset dpms force off
       # Pause notifications until the screen is unlocked
       ${pkgs.dunst}/bin/dunstctl set-paused true
+      # Force the displays to go to sleep
+      ${pkgs.xorg.xset}/bin/xset dpms force off
       # Lock the screen and block until unlocked
-      ${pkgs.i3lock-color}/bin/i3lock-color --nofork --force-clock -i $HOME/.wallpapers/lock.jpg -e --indicator --radius=20 --ring-width=40 \
+      ${pkgs.i3lock-color}/bin/i3lock-color --nofork --force-clock -i $XDG_DATA_HOME/wallpaper -e --indicator --radius=20 --ring-width=40 \
         --inside-color=$fg --ring-color=$fg --insidever-color=$verify --ringver-color=$verify \
         --insidewrong-color=$wrong --ringwrong-color=$wrong --keyhl-color=$verify --separator-color=$verify \
         --bshl-color=$verify  --date-color=$date --time-color=$date --greeter-color=$fg --wrong-color=$wrong --verif-color=$verify\
@@ -27,7 +27,7 @@ let cfg = config.modules.theme;
         --time-font="JetBrainsMono Nerd Font:style=Bold" --date-font="JetBrainsMono Nerd Font" --verif-font="JetBrainsMono Nerd Font" \
         --greeter-font="JetBrainsMono Nerd Font" --wrong-font="JetBrainsMono Nerd Font" --time-str="%H:%M" --time-size=140 \
         --date-str="%a, %d %b" --date-size=45 --verif-size=23 --greeter-size=23 --wrong-size=23 \
-        --ind-pos="2690:2120" --time-pos="2690:1900" --date-pos="2690:1690" --greeter-pos="2690:2290" --wrong-pos="2690:2320" --verif-pos="2690:2320" \
+        --ind-pos="2690:1060" --time-pos="2690:800" --date-pos="2690:845" --greeter-pos="2690:1145" --wrong-pos="2690:1160" --verif-pos="2690:1160" \
         --pointer=default --refresh-rate=0 --pass-media-keys --pass-volume-keys --line-uses-inside --fill
       # Turn notifactions back on
       ${pkgs.dunst}/bin/dunstctl set-paused false
@@ -210,7 +210,7 @@ in {
         # This needs to better handle moving windows over to the workspaces on the new displays
         "notify-bspwm" = ''
           if [[ ! -z $DISPLAY ]]; then
-            echo "[autorandr] profile=workstation type=postswitch hook=polybar Notifying BSPWM"
+            echo "[autorandr] profile=office_plus_laptop type=postswitch hook=polybar Notifying BSPWM"
             ${pkgs.bspwm}/bin/bspc wm -r
             source $XDG_CONFIG_HOME/bspwm/bspwmrc
           fi
@@ -276,7 +276,7 @@ in {
 
       # EWW systemd  service
       systemd.user.services."eww" = {
-        enable = true;
+        enable = false;
 
         description = "Elkowar Wacky Widgets";
         documentation = [ "man:eww(1)" ];

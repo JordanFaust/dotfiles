@@ -15,15 +15,18 @@ in {
   options.modules.dev.lua = {
     enable = mkBoolOpt false;
     xdg.enable = mkBoolOpt devCfg.enableXDG;
-    love2D.enable = mkBoolOpt false;
+    # love2D.enable = mkBoolOpt false;
   };
 
   config = mkMerge [
     (mkIf cfg.enable {
       user.packages = with pkgs; [
         lua
-        luaPackages.moonscript
-        (mkIf cfg.love2D.enable love2d)
+        luajit
+        luaformatter
+        sumneko-lua-language-server
+        # luaPackages.moonscript
+        # (mkIf cfg.love2D.enable love2d)
       ];
     })
 

@@ -13,6 +13,9 @@ in {
     hardware.system76.firmware-daemon.enable = true;
     hardware.system76.power-daemon.enable = true;
 
+    # Prevent laptop from sleeping when lid is closed
+    services.logind.lidSwitch = "ignore";
+
     environment.systemPackages = with pkgs; [
       # Respect XDG conventions, damn it!
       # (writeScriptBin "nvidia-settings" ''

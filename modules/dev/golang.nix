@@ -18,6 +18,7 @@ in {
         go_1_18
         # LSP
         gopls
+        gotools
         # protoc
         protobuf
         protobufc

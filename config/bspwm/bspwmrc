@@ -9,14 +9,24 @@ export MONITOR=$(xrandr -q | grep primary | cut -d' ' -f1)
 export MONITORS=( $(xrandr -q | grep ' connected' | cut -d' ' -f1) )
 MONITOR=${MONITOR:-${MONITORS[0]}}
 
-# Only have workspaces for primary monitor
-for monitor in $MONITORS; do
-  bspc monitor $monitor -d 0
-done
-bspc monitor $MONITOR -d {1,2,3,4,5}
+# Only manage monitors when booting bspwm for the first time. Any reloads off
+# bspwm will not change monitor settings
+# if [ ${#EXISTING_DESKTOPS[@]} -eq 2 ]; then
+  # Only have workspaces for primary monitor
+if [[ "$1" = 0 ]]; then
+  for monitor in $MONITORS; do
+    bspc monitor "$monitor" -d 0
+  done
+  bspc monitor "$MONITOR" -d {1,2,3,4,5}
 
-bspc config remove_disabled_monitors true
-bspc config remove_unplugged_monitors true
+  bspc config remove_disabled_monitors true
+  bspc config remove_unplugged_monitors true
+fi
+# else
+#   echo "Monitors already exist"
+# fi
+
+# bspc config external_rules_command "external_rules.sh"
 
 # Rules
 bspc rule -r '*'
@@ -26,11 +36,12 @@ bspc rule -a feh state=fullscreen
 # bspc rule -a '*:scratch' state=floating sticky=on border=off rectangle=1000x460+480+1660
 bspc rule -a '*:*:Zoom Meeting' state=floating
 
-bspc rule -a firefox desktop='^3' follow=off
-bspc rule -a doom state=tiled desktop='^3' follow=off
-bspc rule -a 'Emacs:*' state=tiled desktop='^3' follow=off
-bspc rule -a slack state=tiled desktop='^4' follow=off
-bspc rule -a spotify state=tiled desktop='^4' follow=off
+bspc rule -a kitty follow=off desktop="^2"
+bspc rule -a firefox desktop="^2" follow=off
+# bspc rule -a doom state=tiled desktop='^3' follow=off
+# bspc rule -a 'Emacs:*' state=tiled desktop='^3' follow=off
+bspc rule -a Slack desktop="^3" follow=off
+bspc rule -a spotify desktop="^3" follow=off
 #
 for file in $XDG_CONFIG_HOME/bspwm/rc.d/*; do
   source "$file"

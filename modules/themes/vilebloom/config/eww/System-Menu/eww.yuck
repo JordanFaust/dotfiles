@@ -26,9 +26,9 @@
 (defpoll profiles-mode :interval "1s" "System-Menu/scripts/power-profile --mode")
 
 ;; for sliders
-(deflisten volume "System-Menu/scripts/sliders/volume-slider --value")
+;; (deflisten volume "System-Menu/scripts/sliders/volume-slider --value")
 (defpoll volume-slider-indicator :interval "1s" "System-Menu/scripts/sliders/volume-slider --icon")
-(deflisten brightness "System-Menu/scripts/sliders/brightness-slider --value")
+;; (deflisten brightness "System-Menu/scripts/sliders/brightness-slider --value")
 (defpoll brightness-slider-indicator :interval "1s" "System-Menu/scripts/sliders/brightness-slider --icon")
 
 ;; widget
