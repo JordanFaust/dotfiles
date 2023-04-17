@@ -70,6 +70,8 @@ module Hey
     end
   end
   def self.rebuild(*args, sudo: false)
+    # puts @@opts.inspect
+    # puts args.inspect
     sh ["nixos-rebuild",
         "--flake", "#{@@opts[:flake]}##{@@opts[:host]}",
         "--option", "pure-eval", "no",

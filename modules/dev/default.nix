@@ -39,6 +39,9 @@ in {
 
         # Linkerd 
         linkerd
+
+        # Consul 
+        consul
       ];
 
       environment.shellAliases = {

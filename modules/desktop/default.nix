@@ -27,6 +27,7 @@ in {
       feh       # image viewer
       xclip
       xdotool
+      xdo
       xorg.xwininfo
       libqalculate  # calculator cli w/ currency conversion
       (makeDesktopItem {
@@ -67,6 +68,9 @@ in {
       # TODO should I stick with dmenu or switch to the gnome applet
       dmenu
       networkmanager_dmenu
+
+      # Misc
+      pdftk
     ];
 
     fonts = {

@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+
+fg=152733
+wrong=ffba95
+highlight=ffba95
+date=24455b
+verify=ffba95
+
+slowfade () {
+    dis=$(echo -n "$DISPLAY" | tr -c '[:alnum:]' _)
+    ifc='com.github.chjj.compton'
+    obj='/com/github/chjj/compton'
+    if [[ "$1" == "start" ]]; then
+        dbus-send --dest=$ifc.$dis \
+            $obj $ifc.opts_set string:fade_in_step double:0.02
+        dbus-send --dest=$ifc.$dis \
+            $obj $ifc.opts_set string:fade_out_step double:0.02
+    else
+        dbus-send --dest=$ifc.$dis \
+            $obj $ifc.opts_set string:fade_in_step double:0.1
+        dbus-send --dest=$ifc.$dis \
+            $obj $ifc.opts_set string:fade_out_step double:0.1
+    fi
+}
+
+pkill -u "$USER" -USR1 dunst
+# slowfade start
+i3lock-color -n --force-clock -i ~/.wallpapers/lock.jpg -e --indicator --radius=20 --ring-width=40 \
+  --inside-color=$fg --ring-color=$fg --insidever-color=$verify --ringver-color=$verify \
+  --insidewrong-color=$wrong --ringwrong-color=$wrong --keyhl-color=$verify --separator-color=$verify \
+  --bshl-color=$verify  --date-color=$date --time-color=$date --greeter-color=$fg --wrong-color=$wrong --verif-color=$verify\
+  --verif-text="Verifying Password..." --wrong-text="Wrong Password!" --noinput-text="" --greeter-text="Type the password to Unlock" \
+  --time-font="JetBrainsMono Nerd Font:style=Bold" --date-font="JetBrainsMono Nerd Font" --verif-font="JetBrainsMono Nerd Font" \
+  --greeter-font="JetBrainsMono Nerd Font" --wrong-font="JetBrainsMono Nerd Font" --time-str="%H:%M" --time-size=140 \
+  --date-str="%a, %d %b" --date-size=45 --verif-size=23 --greeter-size=23 --wrong-size=23 \
+  --ind-pos="2690:2120" --time-pos="2690:1900" --date-pos="2690:1690" --greeter-pos="2690:2290" --wrong-pos="2690:2320" --verif-pos="2690:2320" \
+  --pointer=default --refresh-rate=0 --pass-media-keys --pass-volume-keys --line-uses-inside --fill
+# slowfade end

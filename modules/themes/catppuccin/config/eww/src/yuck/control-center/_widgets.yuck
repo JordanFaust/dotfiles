@@ -1,0 +1,134 @@
+(defwidget control-center []
+	(box :class "control-center-window" :space-evenly "false" :orientation "v"
+		(eventbox :onclick "sh ./scripts/openControlCenter.sh &"
+			(box :class "control-center-spacer" :style {ccenter ? "padding-bottom: 0em;" : "padding-bottom: calc(43em - 1px);"})
+			;; (box :class "control-center-spacer" :style {ccenter ? "padding-bottom: 40em;" : "padding-bottom: 40em;"})
+		)
+		(revealer :class "mp-revealer" :reveal mp :transition "crossfade" :duration "600ms"
+      (box :class "music-player" :orientation "h" :space-evenly "false"
+        (box :class "song-details" :orientation "v" :space-evenly "false"
+          (box :class "song-art" :orientation "v" :hexpand "false" :vexpand "false" :style "background-image: url('${art}')"
+            (box :class "music-info" :orientation "v" :space-evenly "false" :hexpand "false" :vexpand "false"
+              ;; (label :class "now-playing" :halign "start" :text player_status_text)
+              (label :class "song-title" :halign "start"
+                :text song_title
+                :limit-width 27)
+              (label :class "song-artist" :halign "start"
+                :text song_artist
+                :limit-width 35)
+              ;; (box :orientation "h"
+              ;;   (label :class "song-position" :halign "start"
+              ;;     :text song_position)
+              ;;   ;; song_art
+              ;; )
+            )
+          )
+          (box :class "song-progress-slider" :orientation "h" :space-evenly "false"
+            (scale :min 0
+              :max 101
+              :value song_percent
+              :orientation "h"
+              ;; :tooltip "Volume: 80%"
+              ;; :onchange "amixer -D pulse sset Master {}%"
+            )
+            (label :class "song-position" :text song_position)
+          )
+        )
+        (box :class "song-controls" :orientation "v"
+          (button :onclick "playerctl previous" "")
+          (button :onclick "playerctl play-pause" player_status)
+          (button :onclick "playerctl next" "")
+        )
+      )
+		)
+		(box :class "mp-separator" :style "margin-top: 1em;")
+		(box :class "control-center" :orientation "v" :space-evenly "false"
+			;; Too lazy to change the name of the class. :P
+			;; Please make a PR if you want to change it. ;)
+			(box :class "third-row" :orientation "h" :space-evenly "true"
+				(box :class "user-info" :orientation "h" :halign "start" :space-evenly "false"
+					(box :class "user-info-avatar"
+            (label :text "" :class "user-info-avatar-icon" :limit-width 2))
+					(box :orientation "v" :space-evenly "false" :style "margin-top: .25em;"
+						(label :class "user-info-label" :halign "start" :text "${fullname}")
+						(label :class "user-info-hostname" :halign "start" :text "@${hostname}")
+					)
+				)
+				(box :class "system-btn" :halign "end" :orientation "h" :space-evenly "false"
+					(button :class "exit-btn" :onclick "sh $HOME/.local/bin/lck &" "")
+					(button :class "lock-btn" :onclick "bspc quit &" "")
+				)
+			)
+      (box :class "forth-row" :orientation "v" :space-evenly "false"
+        (box :class "system_stats" :orientation "h" 
+          (box :class "system_nixos_box" :orientation "h" :space-evenly "false" :hexpand "false" :vexpand "false"
+            (circular-progress :value {EWW_DISK['/'].used_perc} :class "system_nixos" :thickness 11 :start-at 25 :clockwise true
+              (label :text "" :class "system_icon_nixos" :limit-width 2 :show_truncated false :wrap false)))
+          (box :class "system_cpu_box" :orientation "h" :space-evenly "false" :hexpand "false" :vexpand "false"
+            ;; (circular-progress :value ${jq(EWW_CPU, "[.cores[].freq] | add / length")} :class "system_cpu" :thickness 11 :start-at 25 :clockwise true
+            (circular-progress :value {100 - cpu_usage} :class "system_cpu" :thickness 11 :start-at 25 :clockwise true
+              (label :text "﬙" :class "system_icon_cpu" :limit-width 2 :show_truncated false :wrap false)))
+          (box :class "system_memory_box" :orientation "h" :space-evenly "false" :hexpand "false" :vexpand "false"
+            (circular-progress :value {EWW_RAM['used_mem_perc']} :class "system_memory" :thickness 11 :start-at 25 :clockwise true
+              (label :text "" :class "system_icon_memory" :limit-width 2 :show_truncated false :wrap false)))))
+			(box :class "first-row" :orientation "v" :space-evenly "false"
+				(box :orientation "h"
+					(cc_button :class "wifi" :title {strlength(network_name) >= 13 ? network_name_truncated : network_name} :icon network_icon
+						:is_active {network_name != "Wi-Fi"} :onclick "iwgtk &"
+						:tooltip "Connected to ${network_name}"
+					)
+					(cc_button :class "night-light" :title "Night Light" :icon ""
+						:is_active {redshift_status == "#1c2325"} :onclick "sh ./scripts/getRedshift.sh toggle"
+						:tooltip "Status: ${redshift_status == '#1c2325' ? 'On' : 'Off'}"
+					)
+					(cc_button :class "do-not-disturb" :title "Do Not Disturb" :icon ""
+						:is_active {dnd_status == "#1c2325"} :onclick "sh ./scripts/dashActions.sh dnd"
+						:tooltip "Status: ${dnd_status == '#1c2325' ? 'On' : 'Off'}"
+					)
+				)
+				;; (box :orientation "h" :style "margin-top: -1.5em;"
+				;; 	(cc_button :class "night-light" :title "Night Light" :icon ""
+				;; 		:is_active {redshift_status == "#1c2325"} :onclick "sh ./scripts/getRedshift.sh toggle"
+				;; 		:tooltip "Status: ${redshift_status == '#1c2325' ? 'On' : 'Off'}"
+				;; 	)
+				;; 	(cc_button :class "do-not-disturb" :title "Do Not Disturb" :icon ""
+				;; 		:is_active {dnd_status == "#1c2325"} :onclick "sh ./scripts/dashActions.sh dnd"
+				;; 		:tooltip "Status: ${dnd_status == '#1c2325' ? 'On' : 'Off'}"
+				;; 	)
+				;; 	(cc_button :class "disabled" :disabled "true")
+				;; )
+			)
+			(box :class "second-row" :orientation "v"
+				(box :class "volume-slider" :orientation "h" :space-evenly "false"
+					(label :class "volume-icon" :text {volume_muted ? "" : 
+						volume <= 30 ? "" : volume <= 60 ? "" : ""
+					})
+					(scale :min 0
+						:max 101
+						:value volume
+						:orientation "h"
+						:tooltip "Volume: ${volume}%"
+						:onchange "amixer -D default sset Master {}%"
+					)
+					(label :class "volume-text" :text "${volume}%")
+				)
+				(box :class "brightness-slider" :orientation "h" :space-evenly "false"
+					(label :class "brightness-icon" :text {
+						brightness <= 30 ? "" : brightness <= 60 ? "" : ""
+					})
+					(scale :min 0
+						:max 101
+						:value brightness
+						:orientation "h"
+						:tooltip "Brightness: ${brightness}%"
+						:onchange "brightnessctl set {}%"
+					)
+					(label :class "brightness-text" :text "${brightness}%")
+				)
+			)
+		)
+		(box :class "mp-separator" :style "margin-top: .5em;")
+	)
+)
+(defvar ccenter false)
+(defvar mp false)

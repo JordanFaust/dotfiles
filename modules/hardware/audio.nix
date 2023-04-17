@@ -20,6 +20,7 @@ in {
 
     environment.systemPackages = with pkgs; [
       easyeffects
+      # pulseaudio
       # pacmd
     ];
 

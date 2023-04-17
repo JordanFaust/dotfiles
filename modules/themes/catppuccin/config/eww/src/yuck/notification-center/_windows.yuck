@@ -1,0 +1,9 @@
+(defwindow notification-center
+	:geometry (geometry :x "480px"
+						:y "20px" 
+						:width "10%" 
+						:height "40%"
+						:anchor "top right")
+	:windowtype "dock"
+	:wm-ignore false
+	(notification-center))

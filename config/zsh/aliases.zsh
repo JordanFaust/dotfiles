@@ -90,5 +90,11 @@ function awsp {
       | awk '{print $2}' | sed 's,],,g' \
       | fzf --layout reverse --height 10% --border)
   export AWS_PROFILE=${selected_profile}
-  aws sso login --profile ${selected_profile}
+
+  aws sts get-caller-identity --query "Account" &> /dev/null
+  exit_code="$?"
+  if [[ "$exit_code" -ne 0 ]]; then
+    echo "Logging in via AWS SSO"
+    aws sso login --profile ${selected_profile}
+  fi
 }
