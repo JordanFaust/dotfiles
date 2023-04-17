@@ -30,7 +30,11 @@ in {
   config = mkIf cfg.enable {
     nixpkgs.overlays = [
       inputs.neovim-nightly-overlay.overlay
-      denoOverlay
+      # (self: super: {
+      #   neovim-nightly = super.neovim-nightly.overrideAttrs {
+      #
+      #   };
+      # })
     ];
 
     environment.systemPackages = with pkgs; [
@@ -48,6 +52,15 @@ in {
 
       # Image preview
       chafa
+
+      (makeDesktopItem {
+        name = "Neovim";
+        desktopName = "Neovim";
+        genericName = "Text Editor";
+        icon = "nvim";
+        exec = "${kitty}/bin/kitty --title Neovim --class neovim -e nvim %F";
+        categories = [ "Utility" "TextEditor" ];
+      })
     ];
 
     # This is for non-neovim, so it loads my nvim config

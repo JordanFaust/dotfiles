@@ -97,7 +97,7 @@ in {
         # * User (home-manager) packages can be found within /etc/profiles/per-user/$USER/bin
         Environment = "PATH=/run/current-system/sw/bin:/etc/profiles/per-user/${config.user.name}/bin";
         BusName = "org.freedesktop.Notifications";
-        ExecStart = "${pkgs.dunst}/bin/dunst";
+        ExecStart = "${pkgs.unstable.dunst}/bin/dunst";
         Restart = "always";
         RestartSec = 2;
       };

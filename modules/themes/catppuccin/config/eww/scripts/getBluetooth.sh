@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+case $1 in
+	"icon")
+		# [[ $(bluetoothctl show | grep "Powered: yes" | wc -c) -eq 0 ]] && echo "" || echo ""
+		echo ""
+		;;
+	"status")
+		# [[ $(bluetoothctl show | grep "Powered: yes" | wc -c) -eq 0 ]] && echo "Off" || echo "On"
+		echo "Off" 
+		;;
+	"supported")
+		[[ ! -z $(lsusb | grep "Bluetooth") ]] && echo true || echo false
+		;;
+esac

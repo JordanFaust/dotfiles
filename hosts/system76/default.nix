@@ -37,10 +37,10 @@
         spotify.enable = true;
       };
       term = {
-        default = "alacritty";
-        alacritty.enable = true;
+        default = "kitty";
+        alacritty.enable = false;
         kitty.enable = true;
-        st.enable = true;
+        st.enable = false;
       };
       vm = {
         qemu.enable = true;
@@ -77,7 +77,7 @@
       ssh.enable = true;
       docker.enable = true;
     };
-    theme.active = "vilebloom";
+    theme.active = "catppuccin";
   };
 
   programs.ssh.startAgent = true;

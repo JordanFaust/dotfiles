@@ -1,0 +1,21 @@
+Web Browser,firefox,firefox
+File Manager,thunar,org.xfce.thunar
+Favorites,^checkout(favorites),bookmarks
+^sep()
+Launch Terminal,tabbed -n "term" alacritty -t "term" --embed,utilities-terminal
+Lock Screen,~/.scripts/lock,gnome-lockscreen
+^sep()
+Control Center,~/.config/eww/System-Menu/launch,applications-system
+Notification Center,~/.config/eww/Main/launch,bell
+^sep()
+Exit,~/.config/eww/Misc/launch,./assets/system-shutdown.svg
+
+^tag(favorites)
+Slack,slack,slack
+Emacs,emacs,emacs
+Spotify,spotify,spotify-client
+
+^tag(exit)
+Log Out,bspc quit,./assets/system-logout.svg
+Reboot,systemctl -i reboot,./assets/system-reboot.svg
+Shutdown,systemctl -i poweroff,./assets/system-shutdown.svg

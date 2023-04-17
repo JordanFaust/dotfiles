@@ -40,7 +40,7 @@
         spotify.enable = true;
       };
       term = {
-        default = "alacritty";
+        default = "kitty";
         alacritty.enable = true;
         st.enable = true;
       };
