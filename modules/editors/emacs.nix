@@ -25,7 +25,7 @@ in {
           # Enable GTK3 support for webkit
           withGTK3 = true;
         };
-        emacsNativeComp = super.emacsNativeComp.override {
+        emacsUnstable = super.emacsUnstable.override {
           # Enable Xwidget support
           withXwidgets = true;
           # Enable GTK3 support for webkit
@@ -55,7 +55,7 @@ in {
       # })
       # 28.1 + sql + gtk3 + webkit + webp + native-comp
       xdg-desktop-portal
-      ((emacsPackagesFor emacsNativeComp).emacsWithPackages (epkgs: [
+      ((emacsPackagesFor emacsUnstable).emacsWithPackages (epkgs: [
         epkgs.vterm
       ]))
       webkitgtk
@@ -63,7 +63,7 @@ in {
         name = "Doom Emacs";
         desktopName = "Doom Emacs";
         icon = "emacs";
-        exec = "${emacsNativeComp}/bin/emacs --name doom";
+        exec = "${emacsUnstable}/bin/emacs --name doom";
         categories = [ "Development" "TextEditor" ];
       })
       emacs-all-the-icons-fonts

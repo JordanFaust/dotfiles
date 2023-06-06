@@ -42,6 +42,9 @@ in {
 
         # Consul 
         consul
+
+        # Devbox
+        unstable.devbox
       ];
 
       environment.shellAliases = {
