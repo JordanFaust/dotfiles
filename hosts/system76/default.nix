@@ -60,7 +60,7 @@
     editors = {
       default = "nvim";
       emacs = {
-        enable = true;
+        enable = false;
         doom.enable = true;
       };
       vim.enable = true;
