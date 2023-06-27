@@ -113,21 +113,21 @@ in {
         # User provided lockscreen script
         lockscreen
       ];
-      fonts = {
-        fonts = with pkgs; [
-          # General Coding Fonts
-          jetbrains-mono
-          fira-code
-          fira-code-symbols
-          cascadia-code
-          # General Sans Fonts
-          open-sans
-          siji
-          # Icon Fonts
-          font-awesome
-          material-design-icons
-        ];
-      };
+      fonts.fonts = with pkgs; [
+        # General Coding Fonts
+        jetbrains-mono
+        fira-code
+        fira-code-symbols
+        cascadia-code
+        # General Sans Fonts
+        open-sans
+        siji
+        # Icon Fonts
+        # font-awesome
+        # material-icons
+        # material-design-icons
+        (nerdfonts.override { fonts = [ "CascadiaCode" ]; })
+      ];
 
       # Compositor
       services.picom = {

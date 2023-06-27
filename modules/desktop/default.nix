@@ -53,7 +53,8 @@ in {
       ##
 
       # Widgets
-      unstable.eww
+      # unstable.eww
+      eww
       # Audio
       pavucontrol
       # Battery

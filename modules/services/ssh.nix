@@ -12,8 +12,10 @@ in {
   config = mkIf cfg.enable {
     services.openssh = {
       enable = true;
-      kbdInteractiveAuthentication = false;
-      passwordAuthentication = false;
+      settings = {
+        KbdInteractiveAuthentication = false;
+        PasswordAuthentication = false;
+      };
     };
 
     home.file = {

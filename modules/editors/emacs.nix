@@ -16,27 +16,27 @@ in {
 
   config = mkIf cfg.enable {
     # Configure the overlay for emacs
-    nixpkgs.overlays = [
-      inputs.emacs-overlay.overlay
-      (self: super: {
-        emacsPgtkNativeComp = super.emacsPgtkNativeComp.override {
-          # Enable Xwidget support
-          withXwidgets = true;
-          # Enable GTK3 support for webkit
-          withGTK3 = true;
-        };
-        emacsUnstable = super.emacsUnstable.override {
-          # Enable Xwidget support
-          withXwidgets = true;
-          # Enable GTK3 support for webkit
-          withGTK3 = true;
-          # Enable SQLite3 integration
-          withSQLite3 = true;
-          # Enable native-comp
-          nativeComp = true;
-        };
-      })
-    ];
+    # nixpkgs.overlays = [
+    #   inputs.emacs-overlay.overlay
+    #   (self: super: {
+    #     emacsPgtkNativeComp = super.emacsPgtkNativeComp.override {
+    #       # Enable Xwidget support
+    #       withXwidgets = true;
+    #       # Enable GTK3 support for webkit
+    #       withGTK3 = true;
+    #     };
+    #     emacs-unstable = super.emacs-unstable.override {
+    #       # Enable Xwidget support
+    #       withXwidgets = true;
+    #       # Enable GTK3 support for webkit
+    #       withGTK3 = true;
+    #       # Enable SQLite3 integration
+    #       withSQLite3 = true;
+    #       # Enable native-comp
+    #       withNativeCompilation = true;
+    #     };
+    #   })
+    # ];
 
     user.packages = with pkgs; [
       ## Emacs itself
@@ -55,17 +55,18 @@ in {
       # })
       # 28.1 + sql + gtk3 + webkit + webp + native-comp
       xdg-desktop-portal
-      ((emacsPackagesFor emacsUnstable).emacsWithPackages (epkgs: [
-        epkgs.vterm
-      ]))
+      # ((emacsPackagesFor emacsUnstable).emacsWithPackages (epkgs: [
+      #   epkgs.vterm
+      # ]))
+      # emacsUnstable
       webkitgtk
-      (makeDesktopItem {
-        name = "Doom Emacs";
-        desktopName = "Doom Emacs";
-        icon = "emacs";
-        exec = "${emacsUnstable}/bin/emacs --name doom";
-        categories = [ "Development" "TextEditor" ];
-      })
+      # (makeDesktopItem {
+      #   name = "Doom Emacs";
+      #   desktopName = "Doom Emacs";
+      #   icon = "emacs";
+      #   exec = "${emacs-unstable}/bin/emacs --name doom";
+      #   categories = [ "Development" "TextEditor" ];
+      # })
       emacs-all-the-icons-fonts
 
       ## Doom dependencies

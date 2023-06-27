@@ -28,14 +28,14 @@ in {
   };
 
   config = mkIf cfg.enable {
-    nixpkgs.overlays = [
-      inputs.neovim-nightly-overlay.overlay
-      # (self: super: {
-      #   neovim-nightly = super.neovim-nightly.overrideAttrs {
-      #
-      #   };
-      # })
-    ];
+    # nixpkgs.overlays = [
+    #   inputs.neovim-nightly-overlay.overlay
+    #   # (self: super: {
+    #   #   neovim-nightly = super.neovim-nightly.overrideAttrs {
+    #   #
+    #   #   };
+    #   # })
+    # ];
 
     environment.systemPackages = with pkgs; [
       webkitgtk
@@ -45,7 +45,8 @@ in {
       editorconfig-core-c
       # unstable.neovim
       # deno-webkit
-      neovim-nightly
+      # neovim-nightly
+      neovim
 
       # Neovim Addon Dependencies
       ranger 
