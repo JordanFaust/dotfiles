@@ -26,10 +26,10 @@ in {
       unstable.dunst
       libnotify
       # Status bar
-      (polybar.override {
-        pulseSupport = true;
-        nlSupport = true;
-      })
+      # (polybar.override {
+      #   pulseSupport = true;
+      #   nlSupport = true;
+      # })
       # Desktop Menu
       jgmenu
       # # General Dependencies

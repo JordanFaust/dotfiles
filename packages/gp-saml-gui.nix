@@ -14,12 +14,13 @@ let
   pythonPackages = python3Packages;
 in python3Packages.buildPythonApplication rec {
   pname   = "gp-saml-gui";
-  version = "1.0.9";
+  version = "1.0.10";
 
   src = fetchFromGitHub {
     owner = "dlenski";
     repo = "gp-saml-gui";
-    rev = "f1fafba32e06a86308aab03abaaa1b076e1e1096";
+    # rev = "f1fafba32e06a86308aab03abaaa1b076e1e1096";
+    rev = "258f47cdc4a8ed57a1eef16667f6cad0d1cb49b1";
     sha256 = "7gIHShtpRhuYeADGz5EdhUcmnI7nUgtaHFYRS4uFvHI=";
   };
 

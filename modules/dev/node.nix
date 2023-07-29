@@ -21,6 +21,7 @@ in {
       user.packages = [
         node
         pkgs.yarn
+        pkgs.nodePackages.pnpm
       ];
 
       # Run locally installed bin-script, e.g. n coffee file.coffee
