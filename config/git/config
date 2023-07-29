@@ -1,7 +1,6 @@
 [user]
 	name = Jordan Faust
-	email = jfaust47@gmail.com
-	# signingKey = FA1FADD9440B688CAA75A057B60957CA074D39A3
+	email = jordan.faust@procore.com
 [commit]
 	gpgSign = false
 [tag]

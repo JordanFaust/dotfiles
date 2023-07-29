@@ -25,6 +25,7 @@ in {
         luajit
         luaformatter
         sumneko-lua-language-server
+        stylua
         # luaPackages.moonscript
         # (mkIf cfg.love2D.enable love2d)
       ];

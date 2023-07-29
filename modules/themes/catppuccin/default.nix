@@ -112,6 +112,8 @@ in {
         i3lock-color
         # User provided lockscreen script
         lockscreen
+        # Fix broken nerd fonts 
+        nerdfix
       ];
       fonts.fonts = with pkgs; [
         # General Coding Fonts
