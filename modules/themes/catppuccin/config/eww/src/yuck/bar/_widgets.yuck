@@ -5,7 +5,7 @@
 		:halign "center"
 		(button :class "launcher-btn"
 				:onclick "/etc/dotfiles/bin/rofi/appmenu"
-				""
+				"󰀻"
 		)
 	)
 )
@@ -60,7 +60,7 @@
 			:onclick "sh ./scripts/openNotificationCenter.sh &"
 			:tooltip "Notification Center"
 			:style "margin: 0em .25em 0em .75em;"
-			"${dunst_count != 0 ? '' : ''}"
+			"${dunst_count != 0 ? '󰍡' : ''}"
 		)
 	)
 )

@@ -67,10 +67,10 @@
           (box :class "system_cpu_box" :orientation "h" :space-evenly "false" :hexpand "false" :vexpand "false"
             ;; (circular-progress :value ${jq(EWW_CPU, "[.cores[].freq] | add / length")} :class "system_cpu" :thickness 11 :start-at 25 :clockwise true
             (circular-progress :value {100 - cpu_usage} :class "system_cpu" :thickness 11 :start-at 25 :clockwise true
-              (label :text "﬙" :class "system_icon_cpu" :limit-width 2 :show_truncated false :wrap false)))
+              (label :text "󰘚" :class "system_icon_cpu" :limit-width 2 :show_truncated false :wrap false)))
           (box :class "system_memory_box" :orientation "h" :space-evenly "false" :hexpand "false" :vexpand "false"
             (circular-progress :value {EWW_RAM['used_mem_perc']} :class "system_memory" :thickness 11 :start-at 25 :clockwise true
-              (label :text "" :class "system_icon_memory" :limit-width 2 :show_truncated false :wrap false)))))
+              (label :text "󰍛" :class "system_icon_memory" :limit-width 2 :show_truncated false :wrap false)))))
 			(box :class "first-row" :orientation "v" :space-evenly "false"
 				(box :orientation "h"
 					(cc_button :class "wifi" :title {strlength(network_name) >= 13 ? network_name_truncated : network_name} :icon network_icon
