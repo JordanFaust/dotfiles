@@ -16,12 +16,15 @@ in {
   };
 
   config = mkMerge [
-    (let node = pkgs.nodejs_latest;
+    (let node = pkgs.nodejs_18;
      in mkIf cfg.enable {
       user.packages = [
         node
         pkgs.yarn
         pkgs.nodePackages.pnpm
+        pkgs.unstable.nodePackages_latest.wrangler
+        pkgs.nodePackages.typescript
+        pkgs.unstable.turbo
       ];
 
       # Run locally installed bin-script, e.g. n coffee file.coffee
@@ -40,10 +43,11 @@ in {
       env.NPM_CONFIG_PREFIX     = "$XDG_CACHE_HOME/npm";
       env.NODE_REPL_HISTORY     = "$XDG_CACHE_HOME/node/repl_history";
 
-      home.configFile."npm/config".text = ''
-        cache=$XDG_CACHE_HOME/npm
-        prefix=$XDG_DATA_HOME/npm
-      '';
+      # home.configFile."npm/config".text = ''
+      #   cache=$XDG_CACHE_HOME/npm
+      #   prefix=$XDG_DATA_HOME/npm
+      #   //artifacts.procoretech.com/artifactory/api/npm/npm/:_auth=$(${pkgs.coreutils-full}/bin/coreutils --coreutils-prog=cat /etc/sensitive/procore-npm)
+      # '';
     })
   ];
 }
