@@ -1,0 +1,22 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    language_server-protocol (3.17.0.3)
+    ruby-lsp (0.11.2)
+      language_server-protocol (~> 3.17.0)
+      sorbet-runtime (>= 0.5.5685)
+      yarp (>= 0.12, < 0.13)
+    sorbet-runtime (0.5.11074)
+    yarp (0.12.0)
+
+PLATFORMS
+  x86_64-linux
+
+DEPENDENCIES
+  ruby-lsp
+
+RUBY VERSION
+   ruby 3.2.2p53
+
+BUNDLED WITH
+   2.4.13

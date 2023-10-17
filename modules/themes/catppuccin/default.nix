@@ -112,7 +112,7 @@ in {
         i3lock-color
         # User provided lockscreen script
         lockscreen
-        # Fix broken nerd fonts 
+        # Fix broken nerd fonts
         nerdfix
       ];
       fonts.fonts = with pkgs; [
@@ -121,6 +121,7 @@ in {
         fira-code
         fira-code-symbols
         cascadia-code
+        victor-mono
         # General Sans Fonts
         open-sans
         siji

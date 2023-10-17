@@ -1,6 +1,6 @@
 # modules/dev/ruby.nix
 #
-{ config, options, lib, pkgs, my, ... }:
+{ config, options, lib, pkgs, ... }:
 
 with lib;
 with lib.my;
@@ -9,19 +9,32 @@ let devCfg = config.modules.dev;
 in {
   options.modules.dev.ruby = {
     enable = mkBoolOpt false;
+    xdg.enable = mkBoolOpt devCfg.xdg.enable;
   };
 
   config = mkMerge [
     (mkIf cfg.enable {
       user.packages = with pkgs; [
         # The specific language version
-        ruby
+        ruby_3_2
         # Global gems
         rubyPackages.pry
         rubyPackages.pry-doc
-        rubyPackages.solargraph
-        rubyPackages.rubocop
+        rubyPackages_3_2.solargraph
+        rubyPackages_3_2.rubocop
+        # RE2 regular expression library used for a few Ruby depependnecies
+        re2
+        # needed for YAML c dependnecies
+        libtool
+        libyaml
+        bundix
+        my.ruby-lsp
       ];
+      env.GEM_PATH = [ "${pkgs.ruby_3_2}/lib/ruby/gems/3.2.0" ];
+      env.PATH = [ "${pkgs.ruby_3_2}/lib/ruby/gems/3.2.0" ];
+    })
+
+    (mkIf cfg.xdg.enable {
     })
   ];
 }

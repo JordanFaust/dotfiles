@@ -21,6 +21,7 @@ in {
       user.packages = with pkgs; [
         python39
         python39Packages.pip
+        yamllint
         # python37Packages.pylint
       ];
 

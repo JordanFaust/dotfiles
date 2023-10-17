@@ -26,9 +26,9 @@ in {
         argocd
 
         # Local Dev
-        kubernetes-helm
+        unstable.kubernetes-helm
         kustomize
-        skaffold
+        unstable.skaffold
 
         # Terraform
         terraform
@@ -37,14 +37,20 @@ in {
         # Istio
         istioctl
 
-        # Linkerd 
+        # Linkerd
         linkerd
 
-        # Consul 
+        # Consul
         consul
 
         # Devbox
         unstable.devbox
+
+        # Load Testing Tooling
+        k6
+
+        # Security
+        unstable.jfrog-cli
       ];
 
       environment.shellAliases = {

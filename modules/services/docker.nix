@@ -11,8 +11,8 @@ in {
 
   config = mkIf cfg.enable {
     user.packages = with pkgs; [
-      docker
-      docker-compose
+      unstable.docker
+      unstable.docker-compose
     ];
 
     env.DOCKER_CONFIG = "$XDG_CONFIG_HOME/docker";

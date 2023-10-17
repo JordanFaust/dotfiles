@@ -15,10 +15,9 @@ in {
     (mkIf cfg.enable {
       user.packages = with pkgs; [
         # The specific language version
-        go_1_18
+        go
         # LSP
         gopls
-        gotools
         # protoc
         protobuf
         protobufc
