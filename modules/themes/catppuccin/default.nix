@@ -130,6 +130,7 @@ in {
         # material-icons
         # material-design-icons
         (nerdfonts.override { fonts = [ "CascadiaCode" ]; })
+        my.nonicons
       ];
 
       # Compositor
