@@ -70,8 +70,10 @@ module Hey
     end
   end
   def self.rebuild(*args, sudo: false)
-    # puts @@opts.inspect
-    # puts args.inspect
+    puts ["nixos-rebuild",
+        "--flake", "#{@@opts[:flake]}##{@@opts[:host]}",
+        "--option", "pure-eval", "no",
+        *args].join(' ')
     sh ["nixos-rebuild",
         "--flake", "#{@@opts[:flake]}##{@@opts[:host]}",
         "--option", "pure-eval", "no",
@@ -169,6 +171,7 @@ module Hey
     lambda do |args|
       if args.empty?
         puts "Updating all flakes.."
+        puts ["nix", "flake", "update", @@opts[:flake], "--impure"].join(' ')
         sh ["nix", "flake", "update", @@opts[:flake], "--impure"]
       else
         puts "Trying to update flakes: #{args.join ' '}"
