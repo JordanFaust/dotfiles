@@ -32,8 +32,8 @@ let
                 exit 1
             fi
             echo "Starting the VPN" | ${pkgs.coreutils}/bin/tee -a $log >/dev/null
-            echo "${pkgs.my.gp-saml-gui}/bin/gp-saml-gui --allow-insecure-crypto -S -v --clientos=Linux $vpn_portal -- --usergroup=portal:prelogin-cookie--authgroup=\"$vpn_gateway\" --csd-wrapper=${pkgs.openconnect}/libexec/openconnect/hipreport.sh &> $log &"
-            ${pkgs.my.gp-saml-gui}/bin/gp-saml-gui --allow-insecure-crypto -S -vvv --clientos=Linux $vpn_portal -- -v --timestamp --usergroup=portal:prelogin-cookie --authgroup="$vpn_gateway" --csd-wrapper=${pkgs.openconnect}/libexec/openconnect/hipreport.sh &> $log &
+            echo "${pkgs.gp-saml-gui}/bin/gp-saml-gui --allow-insecure-crypto -S -v --clientos=Linux $vpn_portal -- --usergroup=portal:prelogin-cookie --authgroup=\"$vpn_gateway\" --csd-wrapper=${pkgs.openconnect}/libexec/openconnect/hipreport.sh &> $log &"
+            ${pkgs.gp-saml-gui}/bin/gp-saml-gui -vvv --clientos=Linux -S $vpn_portal -- -v --timestamp --usergroup=portal:prelogin-cookie --authgroup="$vpn_gateway" --csd-wrapper=${pkgs.openconnect}/libexec/openconnect/hipreport.sh &> $log &
             vpn_pid=$!
             touch $pid_file
             echo $vpn_pid > $pid_file
@@ -102,8 +102,14 @@ in {
       unstable.openconnect
       my.gp-saml-gui
       vpn
+      globalprotect-openconnect
     ];
 
     services.gnome.at-spi2-core.enable = true;
+    services.globalprotect = {
+      enable = true;
+      # if you need a Host Integrity Protection report
+      csdWrapper = "${pkgs.openconnect}/libexec/openconnect/hipreport.sh";
+    };
   };
 }

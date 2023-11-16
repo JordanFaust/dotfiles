@@ -45,6 +45,7 @@ in {
       fd
       unstable.fzf
       jq
+      yq
       ripgrep
       tldr
     ];

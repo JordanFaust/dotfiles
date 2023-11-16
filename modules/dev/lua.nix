@@ -26,6 +26,7 @@ in {
         luaformatter
         sumneko-lua-language-server
         stylua
+        lua54Packages.luarocks
         # luaPackages.moonscript
         # (mkIf cfg.love2D.enable love2d)
       ];

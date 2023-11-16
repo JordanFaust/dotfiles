@@ -22,9 +22,9 @@ in {
         node
         pkgs.yarn
         pkgs.nodePackages.pnpm
-        pkgs.unstable.nodePackages_latest.wrangler
+        pkgs.unstable.nodePackages.wrangler
         pkgs.nodePackages.typescript
-        pkgs.unstable.turbo
+        pkgs.turbo
       ];
 
       # Run locally installed bin-script, e.g. n coffee file.coffee
