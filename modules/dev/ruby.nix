@@ -26,6 +26,8 @@ in {
         re2
         # needed for YAML c dependnecies
         libtool
+        # Use the following to configure the local bundle config to find the libyaml headers
+        #  bundle config build.psych --with-yaml-0.1-dir=$(nix eval nixpkgs#libyaml.outPath --raw)
         libyaml
         bundix
         my.ruby-lsp
