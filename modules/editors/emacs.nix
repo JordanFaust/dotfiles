@@ -109,7 +109,7 @@ in {
 
     modules.shell.zsh.rcFiles = [ "${configDir}/emacs/aliases.zsh" ];
 
-    fonts.fonts = [ pkgs.emacs-all-the-icons-fonts ];
+    fonts.packages = [ pkgs.emacs-all-the-icons-fonts ];
 
     # Leaving this for historical reference. Allowing Nix to own my emacs
     # configuration allows it to be rolled into the rebuild process. It does this

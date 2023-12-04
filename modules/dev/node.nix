@@ -16,15 +16,20 @@ in {
   };
 
   config = mkMerge [
-    (let node = pkgs.nodejs_18;
+    # (let node = pkgs.nodejs_18;
+    (let node = pkgs.nodejs_20;
      in mkIf cfg.enable {
       user.packages = [
         node
         pkgs.yarn
         pkgs.nodePackages.pnpm
-        pkgs.unstable.nodePackages.wrangler
+        # pkgs.unstable.nodePackages.wrangler
+        # pkgs.wrangler
+        (builtins.getFlake "github:NixOS/nixpkgs/8dfad603247387df1df4826b8bea58efc5d012d8").legacyPackages.${pkgs.system}.nodePackages.wrangler
+        # my.wrangler
         pkgs.nodePackages.typescript
-        pkgs.turbo
+        # pkgs.turbo
+        # (builtins.getFlake "github:NixOS/nixpkgs/8dfad603247387df1df4826b8bea58efc5d012d8").legacyPackages.${pkgs.system}.turbo
       ];
 
       # Run locally installed bin-script, e.g. n coffee file.coffee
