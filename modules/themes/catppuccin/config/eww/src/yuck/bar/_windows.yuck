@@ -1,12 +1,12 @@
 (defwindow bar
-	:monitor 0
-	:geometry (geometry :x "0%"
-						:y "0%" 
-						:height "3%" 
-						:width "100%"
-						:anchor "center bottom")
-	:stacking "bg"
-	:windowtype "dock"
+  :monitor 0
+  :geometry (geometry :x "0%"
+            :y "0%"
+            :height "3%"
+            :width "100%"
+            :anchor "center bottom")
+  :stacking "bg"
+  :windowtype "dock"
   :reserve (struts :distance "40px" :side "bottom")
-	:wm-ignore false
-	(bar))
+  :wm-ignore false
+  (bar))

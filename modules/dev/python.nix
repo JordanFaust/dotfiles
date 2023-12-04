@@ -19,8 +19,8 @@ in {
   config = mkMerge [
     (mkIf cfg.enable {
       user.packages = with pkgs; [
-        python39
-        python39Packages.pip
+        python3
+        python3Packages.pip
         yamllint
         # python37Packages.pylint
       ];

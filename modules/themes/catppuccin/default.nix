@@ -115,7 +115,7 @@ in {
         # Fix broken nerd fonts
         nerdfix
       ];
-      fonts.fonts = with pkgs; [
+      fonts.packages = with pkgs; [
         # General Coding Fonts
         jetbrains-mono
         fira-code

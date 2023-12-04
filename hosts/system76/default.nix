@@ -53,7 +53,7 @@
       lua.enable = true;
       node.enable = true;
       ruby.enable = true;
-      rust.enable = true;
+      rust.enable = false;
       shell.enable = true;
       python.enable = true;
     };

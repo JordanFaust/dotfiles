@@ -14,12 +14,12 @@ in {
 
   config = {
     user.packages = with pkgs; [
-      (mkIf cfg.psx.enable epsxe)
-      (mkIf cfg.ds.enable desmume)
-      (mkIf (cfg.gba.enable ||
-             cfg.gb.enable  ||
-             cfg.snes.enable)
-        higan)
+      # (mkIf cfg.psx.enable epsxe)
+      # (mkIf cfg.ds.enable desmume)
+      # (mkIf (cfg.gba.enable ||
+      #        cfg.gb.enable  ||
+      #        cfg.snes.enable)
+      #   higan)
     ];
   };
 }

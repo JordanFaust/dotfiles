@@ -87,7 +87,7 @@ module Hey
       tempfile = '/tmp/dotfiles-repl.nix'
       File.write('/tmp/dotfiles-repl.nix', "(builtins.getFlake \"#{@@opts[:flake]}\")")
       begin
-        sh ["nix", "repl", "<nixpkgs>", tempfile, *args]
+        sh ["nix", "repl", "--extra-experimental-features", "'flakes repl-flake'", "nixpkgs", "--file", tempfile, *args]
       ensure
         File.delete tempfile
       end
