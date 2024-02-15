@@ -81,6 +81,7 @@
   };
 
   programs.ssh.startAgent = true;
+  programs.dconf.enable = true;
   services.openssh.startWhenNeeded = true;
 
   networking.networkmanager.enable = true;

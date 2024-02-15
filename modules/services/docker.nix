@@ -13,6 +13,8 @@ in {
     user.packages = with pkgs; [
       unstable.docker-buildx
       unstable.docker-compose
+      # Inspect Docker Images
+      dive
     ];
 
     env.DOCKER_CONFIG = "$XDG_CONFIG_HOME/docker";
