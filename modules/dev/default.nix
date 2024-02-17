@@ -23,6 +23,7 @@ in {
         kubectl
         kind
         krew
+        argo
         argocd
 
         # Local Dev
