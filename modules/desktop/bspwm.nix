@@ -82,11 +82,10 @@ in {
         enable = true;
         displayManager = {
           defaultSession = "none+bspwm";
-          sddm.enable = true;
+          # sddm.enable = true;
           # sddm.theme = "catppuccin";
-          sddm.theme = "catppuccin";
-          # lightdm.enable = true;
-          # lightdm.greeters.pantheon.enable = true;
+          lightdm.enable = true;
+          lightdm.greeters.pantheon.enable = true;
         };
         windowManager.bspwm.enable = true;
       };

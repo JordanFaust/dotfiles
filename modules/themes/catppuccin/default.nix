@@ -432,7 +432,7 @@ in {
           "kitty/themes/monokai-pro.conf".source = ./config/kitty/themes/monokai-pro.conf;
           "kitty/themes/catppuccin-macchiato.conf".source = ./config/kitty/themes/catppuccin-macchiato.conf;
         })
-        (mkIf desktop.bspwm.enable {
+        (mkIf (desktop.bspwm.enable || desktop.hyprland.enable) {
           # Status Bar
           # "polybar/config.ini".text = import ./config/polybar/config.ini { theme = cfg; pkgs = pkgs; };
           # "polybar/glyphs.ini".source = ./config/polybar/glyphs.ini;

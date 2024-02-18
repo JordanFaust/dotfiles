@@ -9,8 +9,8 @@
   ## Modules
   modules = {
     desktop = {
-      # hyperland.enable = true;
-      bspwm.enable = true;
+      hyprland.enable = true;
+      # bspwm.enable = true;
       cursor = {
         enable = true;
         theme = "Dracula";

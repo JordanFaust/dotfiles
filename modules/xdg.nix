@@ -43,9 +43,9 @@
     };
 
     # Move ~/.Xauthority out of $HOME (setting XAUTHORITY early isn't enough)
-    extraInit = ''
-      export XAUTHORITY=/tmp/Xauthority
-      [ -e ~/.Xauthority ] && mv -f ~/.Xauthority "$XAUTHORITY"
-    '';
+    # extraInit = ''
+    #   export XAUTHORITY=/tmp/Xauthority
+    #   [ -e ~/.Xauthority ] && mv -f ~/.Xauthority "$XAUTHORITY"
+    # '';
   };
 }

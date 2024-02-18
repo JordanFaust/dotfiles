@@ -19,4 +19,4 @@ rfd/*
 
 doom.d/secrets/*
 
-vagrant/.vagrant*
+.vagrant*
