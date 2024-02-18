@@ -7,10 +7,10 @@
   imports = [ "${modulesPath}/installer/scan/not-detected.nix" ];
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "thunderbolt" "nvme" "usb_storage" "sd_mod" "sdhci_pci" ];
-  boot.initrd.kernelModules = [ ];
+  boot.initrd.kernelModules = [ "nvidia" ];
   boot.kernelModules = [ "kvm-intel" ];
   boot.kernelPackages = pkgs.unstable.linuxKernel.packages.linux_6_1;
-  boot.extraModulePackages = [ ];
+  boot.extraModulePackages = [ config.boot.kernelPackages.nvidia_x11 ];
   # See https://github.com/pop-os/gnome-shell/issues/124
   # Disabling psmouse to prevent the mouse moving when the laptop lid is closed
   boot.extraModprobeConfig = ''

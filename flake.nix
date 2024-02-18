@@ -30,6 +30,9 @@
       emacs-overlay.url  = "github:nix-community/emacs-overlay";
       # neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
       nixos-hardware.url = "github:nixos/nixos-hardware";
+      # SDDM + Theme
+      sddm-catppuccin.url = "github:khaneliman/sddm-catppuccin";
+      sddm-catppuccin.inputs.nixpkgs.follows = "nixpkgs";
     };
 
   outputs = inputs @ { self, nixpkgs, nixpkgs-unstable, ... }:

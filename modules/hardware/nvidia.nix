@@ -19,6 +19,9 @@ in {
     services.xserver.videoDrivers = [ "nvidia" ];
     hardware.nvidia.prime = {
       sync.enable = true;
+      # reverseSync.enable = true;
+      # # Enable if using an external GPU
+      # allowExternalGpu = false;
       nvidiaBusId = "PCI:1:0:0";
       intelBusId  = "PCI:0:2:0";
     };

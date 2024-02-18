@@ -1,4 +1,4 @@
-{ config, options, lib, pkgs, ... }:
+{ config, options, lib, pkgs, inputs, ... }:
 
 with lib;
 with lib.my;
@@ -102,6 +102,9 @@ in {
     # Ensure that displays are correctly configured when creating a new session
     services.xserver.displayManager.lightdm.extraSeatDefaults = ''
       session-setup-script=${pkgs.autorandr}/bin/autorandr -c
+    '';
+    services.xserver.displayManager.setupCommands = ''
+      ${pkgs.autorandr}/bin/autorandr -c
     '';
 
     services.picom = {

@@ -65,6 +65,22 @@
         "type": "github"
       }
     },
+    "flake-compat": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1673956053,
+        "narHash": "sha256-4gtG9iQuiKITOjNQQeQIpoIB6b16fm+504Ch3sNKLd8=",
+        "owner": "edolstra",
+        "repo": "flake-compat",
+        "rev": "35bb57c0c8d8b62bbfd284272c928ceb64ddbde9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "edolstra",
+        "repo": "flake-compat",
+        "type": "github"
+      }
+    },
     "flake-utils": {
       "inputs": {
         "systems": "systems_2"
@@ -209,7 +225,29 @@
         "home-manager": "home-manager_2",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs_2",
-        "nixpkgs-unstable": "nixpkgs-unstable"
+        "nixpkgs-unstable": "nixpkgs-unstable",
+        "sddm-catppuccin": "sddm-catppuccin"
+      }
+    },
+    "sddm-catppuccin": {
+      "inputs": {
+        "flake-compat": "flake-compat",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1685468525,
+        "narHash": "sha256-CaCMrXlwt7JfSycB8WH3XCWUu+i7bPSfFv3duo7ZlZo=",
+        "owner": "khaneliman",
+        "repo": "sddm-catppuccin",
+        "rev": "ffaad5c8964b52ccd92a80dfd3a7931c8b68c446",
+        "type": "github"
+      },
+      "original": {
+        "owner": "khaneliman",
+        "repo": "sddm-catppuccin",
+        "type": "github"
       }
     },
     "systems": {
