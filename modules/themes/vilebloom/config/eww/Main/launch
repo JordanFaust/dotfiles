@@ -1,4 +1,0 @@
-#!/usr/bin/env bash
-
-echo "[eww] widget=main launching widget"
-eww open-many --toggle background-closer main
