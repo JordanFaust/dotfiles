@@ -85,4 +85,7 @@
   services.openssh.startWhenNeeded = true;
 
   networking.networkmanager.enable = true;
+
+  # Virtualisation
+  virtualisation.libvirtd.enable = true;
 }

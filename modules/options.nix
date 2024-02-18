@@ -43,7 +43,10 @@ with lib.my;
       in {
         inherit name;
         description = "Jordan Faust";
-        extraGroups = [ "wheel" ];
+        extraGroups = [
+         "qemu-libvirtd" "libvirtd"
+         "wheel" "video" "audio" "disk" "networkmanager"
+        ];
         isNormalUser = true;
         home = "/home/${name}";
         group = "users";

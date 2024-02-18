@@ -71,6 +71,10 @@ in {
       dmenu
       networkmanager_dmenu
 
+      # NixOS Config Testing
+      vagrant
+      virt-manager
+
       # Misc
       pdftk
     ];
