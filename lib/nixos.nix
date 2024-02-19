@@ -1,4 +1,4 @@
-{ inputs, lib, pkgs, ... }:
+{ inputs, lib, pkgs, home-manager, ... }:
 
 with lib;
 with lib.my;
@@ -7,14 +7,25 @@ in {
   mkHost = path: attrs @ { system ? sys, ... }:
     nixosSystem {
       inherit system;
-      specialArgs = { inherit lib inputs system; };
+      specialArgs = { inherit lib inputs system home-manager; };
       modules = [
+        # Setup nixpkgs and establish hostname
         {
           nixpkgs.pkgs = pkgs;
           networking.hostName = mkDefault (removeSuffix ".nix" (baseNameOf path));
         }
+        # Filter attributes?
         (filterAttrs (n: v: !elem n [ "system" ]) attrs)
+        # Load the configuration in the defualt.nix file in the directory of the system
         ../.   # /default.nix
+        home-manager.nixosModules.home-manager
+        {
+          home-manager.useGlobalPkgs = true;
+          home-manager.useUserPackages = true;
+          home-manager.users.jordan = import "${path}/home.nix";
+        }
+        # ../home.nix
+        # ?
         (import path)
       ];
     };

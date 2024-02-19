@@ -20,6 +20,13 @@ in {
       '';
     };
 
+    wayland = {
+      enable = mkBoolOpt false;
+    };
+    xserver = {
+      enable = mkBoolOpt false;
+    };
+
     wallpaper = mkOpt (either path null) null;
 
     loginWallpaper = mkOpt (either path null)

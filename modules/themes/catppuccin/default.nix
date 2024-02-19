@@ -15,9 +15,9 @@ in {
         theme = {
           wallpaper = mkDefault ./config/wallpaper.jpg;
           gtk = {
-            theme = "Dracula";
-            iconTheme = "Papirus";
-            cursorTheme = "Dracula";
+            theme = "Catppuccin-Macchiato-Compact-Pink-Dark";
+            iconTheme = "MoreWaita";
+            cursorTheme = "Qogir";
           };
           fonts = {
             sans.name = "Fira Sans";

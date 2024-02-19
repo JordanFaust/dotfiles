@@ -38,57 +38,76 @@
       ags.inputs.nixpkgs.follows = "nixpkgs";
     };
 
-  outputs = inputs @ { self, nixpkgs, nixpkgs-unstable, ... }:
-    let
-      inherit (lib.my) mapModules mapModulesRec mapHosts;
+outputs = inputs @ { self, nixpkgs, nixpkgs-unstable, home-manager, ... }:
+  let
+    inherit (lib.my) mapModules mapModulesRec mapHosts;
 
-      system = "x86_64-linux";
+    system = "x86_64-linux";
+    username = "jordan";
 
-      mkPkgs = pkgs: extraOverlays: import pkgs {
-        inherit system;
-        config.allowUnfree = true;  # forgive me Stallman senpai
-        overlays = extraOverlays ++ (lib.attrValues self.overlays);
-      };
-      pkgs  = mkPkgs nixpkgs [ self.overlay ];
-      pkgs' = mkPkgs nixpkgs-unstable [];
-
-      lib = nixpkgs.lib.extend
-        (self: super: { my = import ./lib { inherit pkgs inputs; lib = self; }; });
-    in {
-      lib = lib.my;
-
-      overlay =
-        final: prev: {
-          unstable = pkgs';
-          my = self.packages."${system}";
-        };
-
-      overlays =
-        mapModules ./overlays import;
-
-      packages."${system}" =
-        mapModules ./packages (p: pkgs.callPackage p { inherit inputs; });
-
-      nixosModules =
-        { dotfiles = import ./.; } // mapModulesRec ./modules import;
-
-      nixosConfigurations =
-        mapHosts ./hosts {};
-
-      devShell."${system}" =
-        import ./shell.nix { inherit pkgs; };
-
-      templates = {
-        full = {
-          path = ./.;
-          description = "A grossly incandescent nixos config";
-        };
-      } // import ./templates;
-      defaultTemplate = self.templates.full;
-
-      defaultApp."${system}" = {
-        type = "app";
-        program = ./bin/hey;
-      };
+    mkPkgs = pkgs: extraOverlays: import pkgs {
+      inherit system;
+      config.allowUnfree = true;
+      overlays = extraOverlays ++ (lib.attrValues self.overlays);
     };
+    pkgs  = mkPkgs nixpkgs [ self.overlay ];
+    pkgs' = mkPkgs nixpkgs-unstable [];
+
+    lib = nixpkgs.lib.extend
+      (self: super: { my = import ./lib { inherit pkgs inputs home-manager; lib = self; }; });
+  in {
+    lib = lib.my;
+
+    overlay =
+      final: prev: {
+        unstable = pkgs';
+        my = self.packages."${system}";
+      };
+
+    overlays =
+      mapModules ./overlays import;
+
+    #
+    # Custom Packages
+    #
+    packages."${system}" =
+      mapModules ./packages (p: pkgs.callPackage p { inherit inputs; });
+
+    #
+    # Custom Modules
+    #
+    nixosModules =
+      { dotfiles = import ./.; } // mapModulesRec ./modules import;
+
+    #
+    # Host Configuration
+    #
+    nixosConfigurations =
+      mapHosts ./hosts {};
+
+    #
+    # Home Configuration
+    #
+    # homeConfigurations.${username} = home-manager.lib.homeManagerConfiguration {
+    #   inherit pkgs;
+    #   extraSpecialArgs = { inherit inputs username lib; };
+    #   modules = [ ./home-manager/home.nix ];
+    # };
+
+    devShell."${system}" =
+      import ./shell.nix { inherit pkgs; };
+
+    templates = {
+      full = {
+        path = ./.;
+        description = "A grossly incandescent nixos config";
+      };
+    } // import ./templates;
+    defaultTemplate = self.templates.full;
+
+    defaultApp."${system}" = {
+      type = "app";
+      program = ./bin/hey;
+    };
+  };
 }

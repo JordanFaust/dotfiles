@@ -1,9 +1,12 @@
 
-{ pkgs, config, lib, ... }:
-{
+{ pkgs, inputs, config, lib, home-manager, ... }:
+let
+  username = "jordan";
+in rec {
   imports = [
-    ../home.nix
+    ../local.nix
     ./hardware-configuration.nix
+    # (import ./home.nix { inherit pkgs inputs config lib home-manager; })
   ];
 
   ## Modules
@@ -80,10 +83,20 @@
     };
     theme = {
       active = "catppuccin";
+      wayland = {
+        enable = true;
+      };
       # wayland.enable = true;
       # xserver.enable = false;
     };
   };
+
+  # home-manager.nixosModules.home-manager
+  # {
+  #   inherit pkgs;
+  #   extraSpecialArgs = { inherit inputs username lib; };
+  #   modules = [ ./home-manager/home.nix ];
+  # };
 
   programs.ssh.startAgent = true;
   programs.dconf.enable = true;
