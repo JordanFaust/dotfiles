@@ -21,7 +21,7 @@ in
       package = cursor-package;
       name = cursor-theme;
       size = 24;
-      gtk.enable = true;
+      # gtk.enable = true;
     };
     file = {
       # ".local/share/fonts" = {
@@ -56,10 +56,10 @@ in
         variant = "macchiato";
       };
     };
-    cursorTheme = {
-      name = cursor-theme;
-      package = cursor-package;
-    };
+    # cursorTheme = {
+    #   name = cursor-theme;
+    #   package = cursor-package;
+    # };
     iconTheme.name = "MoreWaita";
     gtk3.extraCss = ''
       headerbar, .titlebar,

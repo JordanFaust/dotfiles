@@ -1,31 +1,38 @@
 { pkgs, inputs, config, lib, home-manager, ... }:
+with lib;
+with lib.my;
 let
   username = "jordan";
   homeDirectory = "/home/${username}";
 in
 {
-  imports = [
-    ( import ../../home-manager/gtk.nix { inherit pkgs; } )
-    # ./ags.nix
-    # ./blackbox.nix
-    # ./browser.nix
-    # ./bspwm.nix
-    # ./dconf.nix
-    # ./git.nix
-    # ./helix.nix
-    # ./hyprland.nix
-    # ./lf.nix
-    # ./neofetch.nix
-    # ./neovim.nix
-    # ./packages.nix
-    # ./sh.nix
-    # ./starship.nix
-    # ./stm.nix
-    # ./sway.nix
-    # ./theme.nix
-    # ./tmux.nix
-    # ./wezterm.nix
-  ];
+  imports =
+    # I use home-manager to deploy files to $HOME; little else
+    [ inputs.home-manager.nixosModules.home-manager ]
+    # All my personal modules
+    ++ (mapModulesRec' (toString ../../home-manager) import);
+  # imports = [
+  #   ( import ../../home-manager/gtk.nix { inherit pkgs; } )
+  #   # ./ags.nix
+  #   # ./blackbox.nix
+  #   # ./browser.nix
+  #   # ./bspwm.nix
+  #   # ./dconf.nix
+  #   # ./git.nix
+  #   # ./helix.nix
+  #   # ./hyprland.nix
+  #   # ./lf.nix
+  #   # ./neofetch.nix
+  #   # ./neovim.nix
+  #   # ./packages.nix
+  #   # ./sh.nix
+  #   # ./starship.nix
+  #   # ./stm.nix
+  #   # ./sway.nix
+  #   # ./theme.nix
+  #   # ./tmux.nix
+  #   # ./wezterm.nix
+  # ];
 
   news.display = "show";
 
