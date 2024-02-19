@@ -1,22 +1,41 @@
-{ options, config, lib, pkgs, inputs, home-manager, ... }:
+{ config, lib, pkgs, inputs, ... }:
 with lib;
 with lib.my;
 let
+  cfg = config.themes.gtk;
   gtk-theme = "Catppuccin-Macchiato-Compact-Pink-Dark";
-
   cursor-theme = "Qogir";
   cursor-package = pkgs.qogir-icon-theme;
 in
 {
-  options.modules.theme.gtk = {
-    enable = mkBoolOpt false;
+  options.theme.gtk = lib.mkOption {
+    description = ''
+      The GTK configuration for the user.
+    '';
+    enable = lib.mkEnableOption "enable GTK with configured themes";
+    package = mkOption {
+      type = with types; nullOr package;
+      default = null;
+      defaultText = literalExpression "null";
+      example = literalExpression "pkgs.yaru-theme";
+      description = ''
+        Package providing the GTK theme. This package will be installed to your profile.
+        If `null` then the GTK theme is assumed to already be available.
+      '';
+    };
+    name = mkOption {
+      type = with types; str;
+      default = "Adwaita";
+      defaultText = literalExpression ''"Adwaita"'';
+      example = literalExpression ''"Yaru"'';
+      description = "Name of the cursor theme within the package.";
+    };
   };
 
-  config = {
+  config = lib.mkIf (cfg.enable) {
     home = {
       packages = with pkgs; [
         # font-awesome
-        # nerdfonts
         # morewaita-icon-theme
         # cantarell-fonts
       ];
@@ -52,7 +71,7 @@ in
     };
 
     gtk = {
-      enable = true;
+      enable = cfg.enable;
       font.name = "Cascadia Code Regular";
       theme = {
         name = gtk-theme;
