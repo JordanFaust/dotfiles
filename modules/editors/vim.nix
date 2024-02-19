@@ -50,7 +50,7 @@ in {
       neovim
 
       # Neovim Addon Dependencies
-      ranger 
+      ranger
 
       # Image preview
       chafa
@@ -60,7 +60,8 @@ in {
         desktopName = "Neovim";
         genericName = "Text Editor";
         icon = "nvim";
-        exec = "${kitty}/bin/kitty --title Neovim --class neovim -e nvim %F";
+        # KITTY_ENABLE_WAYLAND must be set here or integrations with wayland, such as copy/paste, won't work
+        exec = "bash -c \"KITTY_ENABLE_WAYLAND=1; ${kitty}/bin/kitty --title Neovim --class neovim -e nvim %F\"";
         categories = [ "Utility" "TextEditor" ];
       })
     ];

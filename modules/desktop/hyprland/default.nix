@@ -23,6 +23,7 @@ in {
     # Optional, hint electron apps to use wayland:
     environment.sessionVariables.NIXOS_OZONE_WL = "1";
     environment.sessionVariables.WLR_NO_HARDWARE_CURSORS = "1";
+    environment.sessionVariables.KITTY_ENABLE_WAYLAND = "1";
 
     # Install required packages for this window manager
     environment.systemPackages = with pkgs; [
@@ -38,9 +39,15 @@ in {
       # cage
       # greetd.greetd
       # greetd.regreet
+
       # Notifications
       unstable.dunst
       libnotify
+
+      # Clipboard Utilities
+      wl-clipboard
+      wl-clipboard-x11
+      cliphist
     ];
 
     services = {

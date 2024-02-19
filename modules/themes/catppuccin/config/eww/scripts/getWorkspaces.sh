@@ -21,7 +21,7 @@ workspaces() {
 	content3="◇"
 	content4="◇"
 	content5="◇"
-	
+
 	[[ "$f1" ]] && content1="◆"
 	[[ "$f2" ]] && content2="◆"
 	[[ "$f3" ]] && content3="◆"

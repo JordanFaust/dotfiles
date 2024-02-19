@@ -54,8 +54,10 @@ in {
 
       # Widgets
       # unstable.eww
-      (builtins.getFlake "github:NixOS/nixpkgs/61f87a8dc31587ea7738c9e14f46f8a3199874e5").legacyPackages.${pkgs.system}.eww
+      # (builtins.getFlake "github:NixOS/nixpkgs/61f87a8dc31587ea7738c9e14f46f8a3199874e5").legacyPackages.${pkgs.system}.eww
+      (builtins.getFlake "github:NixOS/nixpkgs/61f87a8dc31587ea7738c9e14f46f8a3199874e5").legacyPackages.${pkgs.system}.eww-wayland
       # eww
+      socat
       # Audio
       pavucontrol
       # Battery
