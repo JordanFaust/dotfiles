@@ -13,4 +13,5 @@ in
     # ++ (mapModulesRec' (toString ../../home-manager) import);
 
     themes.gtk.enable = true;
+    themes.catppuccin.enable = true;
 }

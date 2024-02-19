@@ -8,7 +8,7 @@ let
   cursor-package = pkgs.qogir-icon-theme;
 in
 {
-  options.theme.gtk = lib.mkOption {
+  options.desktop.gtk = lib.mkOption {
     description = ''
       The GTK configuration for the user.
     '';
