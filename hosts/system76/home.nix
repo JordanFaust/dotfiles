@@ -7,8 +7,9 @@ let
 in
 {
   imports =
-    # I use home-manager to deploy files to $HOME; little else
-    [ inputs.home-manager.nixosModules.home-manager ]
+    # Space to include configuraton that must run first
+    # TODO: might remove
+    [ ]
     # All my personal modules
     ++ (mapModulesRec' (toString ../../home-manager) import);
   # imports = [

@@ -86,6 +86,9 @@ in rec {
       wayland = {
         enable = true;
       };
+      gtk = {
+        enable = true;
+      };
       # wayland.enable = true;
       # xserver.enable = false;
     };
