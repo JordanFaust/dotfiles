@@ -33,6 +33,9 @@
       # SDDM + Theme
       sddm-catppuccin.url = "github:khaneliman/sddm-catppuccin";
       sddm-catppuccin.inputs.nixpkgs.follows = "nixpkgs";
+      # AGS
+      ags.url = "github:Aylur/ags";
+      ags.inputs.nixpkgs.follows = "nixpkgs";
     };
 
   outputs = inputs @ { self, nixpkgs, nixpkgs-unstable, ... }:
@@ -64,7 +67,7 @@
         mapModules ./overlays import;
 
       packages."${system}" =
-        mapModules ./packages (p: pkgs.callPackage p {});
+        mapModules ./packages (p: pkgs.callPackage p { inherit inputs; });
 
       nixosModules =
         { dotfiles = import ./.; } // mapModulesRec ./modules import;

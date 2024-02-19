@@ -1,4 +1,4 @@
-{ lib, stdenv, luajit, my, ... }:
+{ lib, inputs, stdenv, luajit, my, ... }:
 
 let name = "fennel";
     version = "0.9.2";

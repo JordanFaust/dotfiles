@@ -1,4 +1,4 @@
-{ lib, stdenvNoCC, fetchFromGitHub, my,  ... }:
+{ lib, inputs, stdenvNoCC, fetchFromGitHub, my,  ... }:
 
 let pname = "nonicons";
     version = "0.0.18";

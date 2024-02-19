@@ -1,4 +1,5 @@
 { lib
+, inputs
 , python3
 , python3Packages
 , fetchFromGitHub

@@ -1,6 +1,6 @@
 # modules/themes/catppuccin/default.nix --- a pokemon and keyboard inspired theme
 
-{ options, config, lib, pkgs, ... }:
+{ options, config, lib, pkgs, inputs, ... }:
 
 with lib;
 with lib.my;
@@ -32,6 +32,8 @@ let cfg = config.modules.theme;
       # Turn notifactions back on
       ${pkgs.dunst}/bin/dunstctl set-paused false
     '';
+
+    # catppuccin-ags = pkgs.callPackage ./ags/ags.nix {};
 in {
   config = mkIf (cfg.active == "catppuccin") (mkMerge [
     # Desktop-agnostic configuration
@@ -114,6 +116,17 @@ in {
         lockscreen
         # Fix broken nerd fonts
         nerdfix
+
+        inputs.ags.packages.${pkgs.hostPlatform.system}.ags
+        # my.greeter
+        # my.desktop
+        # my.ags.desktop
+        # my.catppuccin-ags
+        my.ags.desktop.script
+        my.ags.greeter.script
+        dart-sass
+        gtk3
+        accountsservice
       ];
       fonts.packages = with pkgs; [
         # General Coding Fonts
@@ -457,6 +470,9 @@ in {
           "kvantum.kvconfig" = {
             text = "theme=Dracula-purple-solid";
             target = "Kvantum/kvantum.kvconfig";
+          };
+          "ags/config.js" = {
+            source = "${pkgs.my.ags.desktop.config}/config.js";
           };
         })
         (mkIf desktop.media.graphics.vector.enable {

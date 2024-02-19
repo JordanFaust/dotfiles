@@ -85,6 +85,8 @@ with lib.my;
     nix.settings = let users = [ "root" config.user.name ]; in {
       trusted-users = users;
       allowed-users = users;
+      experimental-features = "nix-command flakes";
+      auto-optimise-store = true;
     };
 
     # must already begin with pre-existing PATH. Also, can't use binDir here,
