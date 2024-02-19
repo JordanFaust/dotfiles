@@ -1,4 +1,4 @@
-# modules/themes/catppuccin/default.nix --- a pokemon and keyboard inspired theme
+# modules/themes/catppuccin/wayland.nix --- a soothing pastel theme
 
 { options, config, lib, pkgs, inputs, ... }:
 
@@ -15,9 +15,9 @@ in {
         theme = {
           wallpaper = mkDefault ./config/wallpaper.jpg;
           gtk = {
-            theme = "Dracula";
-            iconTheme = "Papirus";
-            cursorTheme = "Dracula";
+            theme = "Catppuccin-Macchiato-Compact-Pink-Dark";
+            iconTheme = "MoreWaita";
+            cursorTheme = "Qogir";
           };
           fonts = {
             sans.name = "Fira Sans";
@@ -60,10 +60,27 @@ in {
       };
     }
 
-    # Desktop (X11) theming
-    (mkIf config.services.xserver.enable {
+    # Desktop (Wayland) theming
+    (mkIf config.programs.hyprland.enable {
+
+      environment.sessionVariables = {
+        XCURSOR_THEME = cfg.gtk.cursorTheme;
+        XCURSOR_SIZE = "24";
+      };
+
+      gtk = {
+        enable = true;
+        font.name = "Cascadia Code Regular";
+        theme.name = cfg.gtk.theme
+      }
+
       user.packages = with pkgs; [
-        unstable.dracula-theme
+        pkgs.catppuccin-gtk.override {
+          accents = [ "pink" ]; # You can specify multiple accents here to output multiple themes
+          size = "compact";
+          tweaks = [ "rimless" "black" ]; # You can also specify multiple tweaks here
+          variant = "macchiato";
+        }
         # TODO replace this with papirus
         dracula-theme
         paper-icon-theme # for rofi
@@ -87,16 +104,13 @@ in {
         nerdfix
 
         inputs.ags.packages.${pkgs.hostPlatform.system}.ags
-        # my.greeter
-        # my.desktop
-        # my.ags.desktop
-        # my.catppuccin-ags
         my.ags.desktop.script
         my.ags.greeter.script
         dart-sass
         gtk3
         accountsservice
       ];
+
       fonts.packages = with pkgs; [
         # General Coding Fonts
         jetbrains-mono
@@ -169,14 +183,6 @@ in {
         };
       };
 
-      # Login screen theme
-      services.xserver.displayManager.lightdm.greeters.mini.extraConfig = ''
-        text-color = "${cfg.colors.magenta}"
-        password-background-color = "${cfg.colors.black}"
-        window-color = "${cfg.colors.types.border}"
-        border-color = "${cfg.colors.types.border}"
-      '';
-
       # Autorandr Hooks
       #
       # The hooks here will be ran after autorandr detects a change in display configuration.
@@ -223,123 +229,6 @@ in {
       #   systemctl restart --user eww.service
       # '';
 
-      # EWW systemd  service
-      systemd.user.services."eww" = {
-        enable = true;
-
-        description = "Elkowar Wacky Widgets";
-        documentation = [ "man:eww(1)" ];
-        wantedBy = [ "default.target" ];
-        partOf = [ "home-manager-jordan.service" ];
-        # wantedBy = [ "graphical-session.target" ];
-        # partOf = [ "graphical-session.target" ];
-
-        serviceConfig = {
-          Type="forking";
-          # Expand the path of the unit to include system and user packages
-          # * System packages can be found within /run/current-system/sw/bin
-          # * User (home-manager) packages can be found within /etc/profiles/per-user/$USER/bin
-          Environment = "PATH=/run/current-system/sw/bin:/etc/profiles/per-user/${config.user.name}/bin";
-          ExecStart = let scriptPkg = pkgs.writeShellScriptBin "eww-start" ''
-            echo "Starting eww daemon"
-            eww --debug daemon --logs &
-            echo "Started eww daemon"
-            sleep 1
-            eww open bar
-          ''; in "${scriptPkg}/bin/eww-start";
-          ExecStop = "${pkgs.procps}/bin/pkill eww";
-
-          Restart = "always";
-          RestartSec = 5;
-        };
-      };
-
-      # systemd.user.paths."eww".pathConfig = {
-      #   PathChanges = "$HOME/config/eww";
-      #   Unit = "eww.service";
-      # };
-      #
-      # # This service won't be restarted as part of a nixos-rebuild switch,
-      # # the process must be killed to allow the systemd unit to restart it
-      # # with any changes added as part of a theme.
-      # modules.theme.onReload.spotify_cover_art = ''
-      #   systemctl restart --user spotify_cover_art.service
-      # '';
-
-      # EWW Spotify Cover Art
-      systemd.user.services."spotify_cover_art" = {
-        enable = true;
-
-        description = "Spotify Cover Art Daemon";
-        documentation = [ "man:eww(1)" ];
-        partOf = [ "home-manager-jordan.service" ];
-
-        serviceConfig = {
-          Type="forking";
-          # Expand the path of the unit to include system and user packages
-          # * System packages can be found within /run/current-system/sw/bin
-          # * User (home-manager) packages can be found within /etc/profiles/per-user/$USER/bin
-          Environment = "PATH=/run/current-system/sw/bin:/etc/profiles/per-user/${config.user.name}/bin";
-          ExecStart = let scriptPkg = pkgs.writeShellScriptBin "spotify_cover_art_daemon" ''
-            TMP_DIR="/tmp/eww/playerctl"
-            PLAYERS="spotify,%any,firefox,chromium,brave,mpd"
-            daemon_start() {
-              local song_art
-              local album
-              local artist
-              local cover_path
-              local temp_path
-              local gradient_direction
-              local gradient
-
-              gradient_direction="gradient:direction=east"
-              gradient="gradient:rgba(16,20,21,1.0)-rgba(16,20,21,0.5)"
-              temp_path="/tmp/eww/playerctl/temp.png"
-
-              mkdir -p $TMP_DIR
-
-              # Follow changes to the art url of the player. Process and download cover art that has not already been
-              # downloaded.
-              while read -r line
-              do
-
-                if [[ "$line" == "No players found" ]]; then
-                  continue
-                fi
-
-                song_art=$line
-                album=$(playerctl -p $PLAYERS metadata --format '{{ album }}')
-                artist=$(playerctl -p $PLAYERS metadata --format '{{ artist }}')
-                echo "processing album art, album: $album, artist: $artist"
-                cover_path="$TMP_DIR/$artist - $album.png"
-
-
-                if [[ -f "$cover_path" ]]; then
-                  echo "cover art already exists: $cover_path"
-                  continue
-                fi
-
-                echo "downloading art to $temp_path"
-                curl -s "$song_art" --output "$temp_path"
-
-                echo "resizing image"
-                convert "$temp_path" -resize 390x390\> "$temp_path"
-
-                echo "applying gradient"
-                convert "$temp_path" -size 390x390 -define "$gradient_direction" "$gradient" -compose multiply -composite "$cover_path"
-
-                echo "done!"
-              done < <(playerctl -p "$PLAYERS" metadata mpris:artUrl -F)
-            }
-
-            daemon_start &
-          ''; in "${scriptPkg}/bin/spotify_cover_art_daemon";
-
-          Restart = "always";
-          RestartSec = 5;
-        };
-      };
-
       home.file = {
         # Firefox configuration
         ".mozilla/firefox/jordan.default" = { source = ./config/firefox; recursive = true; };
@@ -355,10 +244,6 @@ in {
           # Sourced from sessionCommands in modules/themes/default.nix
           "xtheme/90-theme".source = ./config/Xresources;
         }
-        (mkIf desktop.bspwm.enable {
-          "bspwm/rc.d/00-theme".source = ./config/bspwmrc;
-          # "bspwm/rc.d/95-polybar".source = ./config/polybar/run.sh;
-        })
         (mkIf desktop.apps.rofi.enable {
           "rofi/theme" = { source = ./config/rofi; recursive = true; };
         })
@@ -395,6 +280,9 @@ in {
           "kvantum.kvconfig" = {
             text = "theme=Dracula-purple-solid";
             target = "Kvantum/kvantum.kvconfig";
+          };
+          "ags/config.js" = {
+            source = "${pkgs.my.ags.desktop.config}/config.js";
           };
         })
         (mkIf desktop.media.graphics.vector.enable {

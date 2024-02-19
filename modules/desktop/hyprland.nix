@@ -43,15 +43,11 @@ in {
       # Greeter
       libsForQt5.sddm
       libsForQt5.qt5.qtgraphicaleffects
-
-      # qtgraphicaleffects
+      # Greeter Themes
       catppuccin-sddm-corners
       inputs.sddm-catppuccin.packages.${pkgs.hostPlatform.system}.sddm-catppuccin
       sddm-chili-theme
       where-is-my-sddm-theme
-      # cage
-      # greetd.greetd
-      # greetd.regreet
 
       # Notifications
       unstable.dunst
@@ -61,6 +57,20 @@ in {
       wl-clipboard
       wl-clipboard-x11
       cliphist
+
+      # Screen Capture Utilities
+      wl-gammactl
+      wf-recorder
+      hyprpicker
+      imagemagick
+      slurp
+
+      # System Control Utilities
+      pavucontrol
+      brightnessctl
+      wayshot
+      swappy
+      swww
 
       # Gnome stuff
       gnome.gnome-calendar

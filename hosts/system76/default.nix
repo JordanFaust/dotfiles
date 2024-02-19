@@ -78,7 +78,11 @@
       ssh.enable = true;
       docker.enable = true;
     };
-    theme.active = "catppuccin";
+    theme = {
+      active = "catppuccin";
+      # wayland.enable = true;
+      # xserver.enable = false;
+    };
   };
 
   programs.ssh.startAgent = true;

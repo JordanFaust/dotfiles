@@ -15,6 +15,7 @@ in {
           let srv = config.services;
           in srv.xserver.enable ||
              srv.sway.enable ||
+             srv.wayland.enable ||
              !(anyAttrs
                (n: v: isAttrs v &&
                       anyAttrs (n: v: isAttrs v && v.enable))
