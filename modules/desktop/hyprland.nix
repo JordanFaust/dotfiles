@@ -113,17 +113,9 @@ in {
       };
     };
 
-    modules.theme.onReload.hyprland = ''
-      ${pkgs.hyprland}/bin/hyprctl reload
-    '';
-
-    # This service won't be restarted as part of a nixos-rebuild switch,
-    # the process must be killed to allow the systemd unit to restart it
-    # with any changes added as part of a theme.
-    modules.theme.onReload.dunst = ''
-      ${pkgs.procps}/bin/pkill -u "$USER" dunst
-    '';
-
+    # modules.theme.onReload.hyprland = ''
+    #   ${pkgs.hyprland}/bin/hyprctl reload
+    # '';
 
     systemd = {
       user.services.polkit-gnome-authentication-agent-1 = {
@@ -141,39 +133,18 @@ in {
           TimeoutStopSec = 10;
         };
       };
-
-      user.services.dunst = {
-        enable = true;
-
-        description = "Dunst notification daemon";
-        documentation = [ "man:dunst(1)" ];
-        wantedBy = [ "graphical-session.target" ];
-        partOf = [ "graphical-session.target" ];
-
-        serviceConfig = {
-          Type = "dbus";
-          # Expand the path of the unit to include system and user packages
-          # * System packages can be found within /run/current-system/sw/bin
-          # * User (home-manager) packages can be found within /etc/profiles/per-user/$USER/bin
-          Environment = "PATH=/run/current-system/sw/bin:/etc/profiles/per-user/${config.user.name}/bin";
-          BusName = "org.freedesktop.Notifications";
-          ExecStart = "${pkgs.unstable.dunst}/bin/dunst";
-          Restart = "always";
-          RestartSec = 2;
-        };
-      };
     };
 
     # # Use the Regreet greetd theme
     # programs.regreet.enable = true;
 
     # link recursively so other modules can link files in their folders
-    home.configFile = {
-      # "sxhkd".source = "${configDir}/sxhkd";
-      "hypr" = {
-        source = "${configDir}/hypr";
-        recursive = true;
-      };
-    };
+    # home.configFile = {
+    #   # "sxhkd".source = "${configDir}/sxhkd";
+    #   "hypr" = {
+    #     source = "${configDir}/hypr";
+    #     recursive = true;
+    #   };
+    # };
   };
 }

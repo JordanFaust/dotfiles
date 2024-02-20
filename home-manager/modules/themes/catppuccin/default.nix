@@ -31,6 +31,15 @@ in
   };
   #
   config = lib.mkIf (cfg.enable) {
+    home = {
+      packages = with pkgs; [
+        adw-gtk3
+        font-awesome
+        morewaita-icon-theme
+        cantarell-fonts
+      ];
+    };
+
     desktop.gtk = {
       enable = true;
       name = gtk-theme;

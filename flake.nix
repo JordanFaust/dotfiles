@@ -19,11 +19,22 @@
       #
       # home-manager.url = "github:rycee/home-manager/release-23.11";
       # home-manager.inputs.nixpkgs.follows = "nixpkgs";
+
+      # Follow the latest and greatest by default
       nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
       home-manager = {
         url = "github:nix-community/home-manager";
         inputs.nixpkgs.follows = "nixpkgs";
       };
+
+      # Hyperland Home Manager
+      hyprland.url = "github:hyprwm/Hyprland";
+      hyprland-plugins = {
+        url = "github:hyprwm/hyprland-plugins";
+        inputs.nixpkgs.follows = "hyprland";
+      };
+
+      matugen.url = "github:InioX/matugen";
 
       agenix.url = "github:ryantm/agenix";
       agenix.inputs.nixpkgs.follows = "nixpkgs";

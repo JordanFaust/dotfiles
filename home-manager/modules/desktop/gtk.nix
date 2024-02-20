@@ -55,6 +55,7 @@ in
         package = cursor-package;
         name = cursor-theme;
         size = 24;
+        gtk.enable = cfg.enable;
       };
 
       file = {
