@@ -71,6 +71,10 @@ in {
       swww
 
       # Gnome stuff
+      loupe
+      gnome.adwaita-icon-theme
+      gnome.nautilus
+      gnome.baobab
       gnome.gnome-calendar
       gnome.gnome-boxes
       gnome.gnome-system-monitor

@@ -6,7 +6,7 @@ import Media from "./buttons/Media"
 import PowerMenu from "./buttons/PowerMenu"
 import SysTray from "./buttons/SysTray"
 import SystemIndicators from "./buttons/SystemIndicators"
-// import Taskbar from "./buttons/Taskbar"
+import Taskbar from "./buttons/Taskbar"
 import Workspaces from "./buttons/Workspaces"
 import ScreenRecord from "./buttons/ScreenRecord"
 import Messages from "./buttons/Messages"
@@ -26,7 +26,7 @@ const widget = {
     powermenu: PowerMenu,
     systray: SysTray,
     system: SystemIndicators,
-    // taskbar: Taskbar,
+    taskbar: Taskbar,
     workspaces: Workspaces,
     screenrecord: ScreenRecord,
     messages: Messages,

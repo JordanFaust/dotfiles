@@ -173,6 +173,9 @@ in {
         '';
       };
 
+      # Enable GVS for cover art caching
+      services.gvfs.enable = true;
+
       ##
       ## Autolock
       ##

@@ -3,6 +3,7 @@
   imports = [ inputs.ags.homeManagerModules.default ];
 
   home.packages = with pkgs; [
+    libdbusmenu-gtk3
     dart-sass
     gtk3 # gtk-launch
   ];
