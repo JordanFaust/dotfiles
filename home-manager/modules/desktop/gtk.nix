@@ -43,20 +43,20 @@ in
     home = {
       packages = with pkgs; [
         gnome.dconf-editor
-        # font-awesome
-        # morewaita-icon-theme
-        # cantarell-fonts
       ];
+
       sessionVariables = {
         XCURSOR_THEME = cursor-theme;
         XCURSOR_SIZE = "24";
+        GTK_THEME = cfg.name;
       };
+
       pointerCursor = {
         package = cursor-package;
         name = cursor-theme;
         size = 24;
-        # gtk.enable = true;
       };
+
       file = {
         # ".local/share/fonts" = {
         #   recursive = true;
@@ -89,13 +89,27 @@ in
       #   name = cursor-theme;
       #   package = cursor-package;
       # };
+
       iconTheme.name = "MoreWaita";
+
       gtk3.extraCss = ''
         headerbar, .titlebar,
         .csd:not(.popup):not(tooltip):not(messagedialog) decoration{
           border-radius: 0;
         }
       '';
+
+      gtk3.extraConfig = {
+        Settings = ''
+          gtk-application-prefer-dark-theme=1
+        '';
+      };
+
+      gtk4.extraConfig = {
+        Settings = ''
+          gtk-application-prefer-dark-theme=1
+        '';
+      };
     };
 
     qt = {

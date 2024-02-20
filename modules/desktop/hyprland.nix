@@ -32,6 +32,7 @@ in {
     environment.sessionVariables = {
       NIXOS_OZONE_WL = "1";
       WLR_NO_HARDWARE_CURSORS = "1";
+      WLR_DRM_NO_ATOMIC = "1";
       KITTY_ENABLE_WAYLAND = "1";
     };
 
@@ -78,6 +79,7 @@ in {
       gnome.gnome-calculator
       gnome.gnome-clocks
       gnome.gnome-software # for flatpak
+      gnome.gnome-tweaks
     ];
 
     services = {
