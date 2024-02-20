@@ -91,15 +91,12 @@ in rec {
     };
   };
 
-  # home-manager.nixosModules.home-manager
-  # {
-  #   inherit pkgs;
-  #   extraSpecialArgs = { inherit inputs username lib; };
-  #   modules = [ ./home-manager/home.nix ];
-  # };
-
   programs.ssh.startAgent = true;
   programs.dconf.enable = true;
+
+  # Enable upower for ASG battery service
+  services.upower.enable = true;
+
   services.openssh.startWhenNeeded = true;
 
   networking.networkmanager.enable = true;
