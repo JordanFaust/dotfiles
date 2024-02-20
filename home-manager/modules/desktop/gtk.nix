@@ -2,39 +2,47 @@
 with lib;
 with lib.my;
 let
-  cfg = config.themes.gtk;
-  gtk-theme = "Catppuccin-Macchiato-Compact-Pink-Dark";
+  cfg = config.desktop.gtk;
   cursor-theme = "Qogir";
   cursor-package = pkgs.qogir-icon-theme;
 in
 {
-  options.desktop.gtk = lib.mkOption {
+  options.desktop.gtk = mkOption {
     description = ''
       The GTK configuration for the user.
     '';
-    enable = lib.mkEnableOption "enable GTK with configured themes";
-    package = mkOption {
-      type = with types; nullOr package;
-      default = null;
-      defaultText = literalExpression "null";
-      example = literalExpression "pkgs.yaru-theme";
-      description = ''
-        Package providing the GTK theme. This package will be installed to your profile.
-        If `null` then the GTK theme is assumed to already be available.
-      '';
-    };
-    name = mkOption {
-      type = with types; str;
-      default = "Adwaita";
-      defaultText = literalExpression ''"Adwaita"'';
-      example = literalExpression ''"Yaru"'';
-      description = "Name of the cursor theme within the package.";
-    };
+    type = with lib.types;
+      nullOr (submoduleWith {
+        modules = [{
+          options = {
+            enable = mkEnableOption "gtk";
+            package = mkOption {
+              type = with types; nullOr package;
+              default = null;
+              defaultText = literalExpression "null";
+              example = literalExpression "pkgs.yaru-theme";
+              description = ''
+                Package providing the cursor theme. This package will be installed to your profile.
+                If `null` then the cursor theme is assumed to already be available.
+              '';
+            };
+            name = mkOption {
+              type = with types; str;
+              default = "Adwaita";
+              defaultText = literalExpression ''"Adwaita"'';
+              example = literalExpression ''"Yaru"'';
+              description = "Name of the cursor theme within the package.";
+            };
+          };
+        }];
+      });
+    default = {};
   };
 
   config = lib.mkIf (cfg.enable) {
     home = {
       packages = with pkgs; [
+        gnome.dconf-editor
         # font-awesome
         # morewaita-icon-theme
         # cantarell-fonts
@@ -58,15 +66,15 @@ in
         #   recursive = true;
         #   source = "${nerdfonts}/share/fonts/truetype/NerdFonts";
         # };
-        ".config/gtk-4.0/gtk.css" = {
-          text = ''
-            window.messagedialog .response-area > button,
-            window.dialog.message .dialog-action-area > button,
-            .background.csd{
-              border-radius: 0;
-            }
-          '';
-        };
+        # ".config/gtk-4.0/gtk.css" = {
+        #   text = ''
+        #     window.messagedialog .response-area > button,
+        #     window.dialog.message .dialog-action-area > button,
+        #     .background.csd{
+        #       border-radius: 0;
+        #     }
+        #   '';
+        # };
       };
     };
 
@@ -74,13 +82,8 @@ in
       enable = cfg.enable;
       font.name = "Cascadia Code Regular";
       theme = {
-        name = gtk-theme;
-        package = pkgs.catppuccin-gtk.override {
-          accents = [ "pink" ];
-          size = "compact";
-          tweaks = [ "rimless" "black" ];
-          variant = "macchiato";
-        };
+        name = cfg.name;
+        package = cfg.package;
       };
       # cursorTheme = {
       #   name = cursor-theme;

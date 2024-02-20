@@ -14,4 +14,5 @@ in
 
     themes.gtk.enable = true;
     themes.catppuccin.enable = true;
+    # themes.catppuccin.enable = true;
 }

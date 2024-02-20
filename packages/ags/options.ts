@@ -9,17 +9,17 @@ const options = mkOptions(OPTIONS, {
     theme: {
         dark: {
             primary: {
-                bg: opt("#51a4e7"),
-                fg: opt("#141414"),
+                bg: opt("#ED8796"),
+                fg: opt("#1E2030"),
             },
             error: {
-                bg: opt("#e55f86"),
-                fg: opt("#141414"),
+                bg: opt("#EED49F"),
+                fg: opt("#1E2030"),
             },
-            bg: opt("#171717"),
-            fg: opt("#eeeeee"),
-            widget: opt("#eeeeee"),
-            border: opt("#eeeeee"),
+            bg: opt("#24273A"),
+            fg: opt("#ded8d7"),
+            widget: opt("#ded8d7"),
+            border: opt("#ded8d7"),
         },
         light: {
             primary: {
@@ -53,7 +53,7 @@ const options = mkOptions(OPTIONS, {
 
     font: {
         size: opt(13),
-        name: opt("Ubuntu Nerd Font"),
+        name: opt("Cascadia Code Regular"),
     },
 
     bar: {
@@ -64,7 +64,7 @@ const options = mkOptions(OPTIONS, {
             start: opt<BarWidget[]>([
                 "launcher",
                 "workspaces",
-                "taskbar",
+                // "taskbar",
                 "expander",
                 "messages",
             ]),

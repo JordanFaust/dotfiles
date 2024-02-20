@@ -2,25 +2,40 @@
 with lib;
 with lib.my;
 let
-  cfg = config.themes.gtk;
+  cfg = config.themes.catppuccin;
   gtk-theme = "Catppuccin-Macchiato-Compact-Pink-Dark";
   cursor-theme = "Qogir";
   cursor-package = pkgs.qogir-icon-theme;
 in
 {
-  options.theme.catppuccin = lib.mkOption {
+  options.themes.catppuccin = mkOption {
     description = ''
-      Catppuccin is a community-driven pastel theme that aims to be the middle ground between low and high contrast themes.
+      The GTK configuration for the user.
     '';
-    enable = lib.mkEnableOption "enable catppuccin theme";
+    type = with lib.types;
+      nullOr (submoduleWith {
+        modules = [{
+          options = {
+            enable = mkEnableOption "catppuccin";
+            variant = mkOption {
+              type = with types; str;
+              default = "macchiato";
+              defaultText = literalExpression ''"macchiato"'';
+              example = literalExpression ''"macchiato"'';
+              description = "Name of the catppuccin variant";
+            };
+          };
+        }];
+      });
+    default = {};
   };
-
+  #
   config = lib.mkIf (cfg.enable) {
-    config.desktop.gtk = {
+    desktop.gtk = {
       enable = true;
       name = gtk-theme;
       package = pkgs.catppuccin-gtk.override {
-        accents = [ "pink" ];
+        accents = [ "sapphire" ];
         size = "compact";
         tweaks = [ "rimless" "black" ];
         variant = "macchiato";

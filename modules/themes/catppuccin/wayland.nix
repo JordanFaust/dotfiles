@@ -34,12 +34,12 @@ in {
       # };
 
       user.packages = with pkgs; [
-        (catppuccin-gtk.override {
-          accents = [ "pink" ]; # You can specify multiple accents here to output multiple themes
-          size = "compact";
-          tweaks = [ "rimless" "black" ]; # You can also specify multiple tweaks here
-          variant = "macchiato";
-        })
+        # (catppuccin-gtk.override {
+        #   accents = [ "pink" ]; # You can specify multiple accents here to output multiple themes
+        #   size = "compact";
+        #   tweaks = [ "rimless" "black" ]; # You can also specify multiple tweaks here
+        #   variant = "macchiato";
+        # })
         # TODO replace this with papirus
         dracula-theme
         paper-icon-theme # for rofi
@@ -240,9 +240,9 @@ in {
             text = "theme=Dracula-purple-solid";
             target = "Kvantum/kvantum.kvconfig";
           };
-          "ags/config.js" = {
-            source = "${pkgs.my.ags.desktop.config}/config.js";
-          };
+          # "ags/config.js" = {
+          #   source = "${pkgs.my.ags.desktop.config}/config.js";
+          # };
         })
         (mkIf desktop.media.graphics.vector.enable {
           "inkscape/templates/default.svg".source = ./config/inkscape/default-template.svg;

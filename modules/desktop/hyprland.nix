@@ -15,9 +15,6 @@ in {
       enable = true;
       package = pkgs.hyprland;
       xwayland.enable = true;
-
-      # Optional, hint electron apps to use wayland:
-      enableNvidiaPatches = true;
     };
 
     xdg.portal = {

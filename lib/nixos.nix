@@ -23,6 +23,8 @@ in {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
           home-manager.users.jordan = import "${path}/home.nix";
+
+          home-manager.extraSpecialArgs = { inherit inputs; };
         }
         # ../home.nix
         # ?
