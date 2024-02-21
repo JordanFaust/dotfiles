@@ -94,9 +94,6 @@ in rec {
   programs.ssh.startAgent = true;
   programs.dconf.enable = true;
 
-  # Enable upower for ASG battery service
-  services.upower.enable = true;
-
   services.openssh.startWhenNeeded = true;
 
   networking.networkmanager.enable = true;

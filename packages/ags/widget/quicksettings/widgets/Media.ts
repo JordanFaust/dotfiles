@@ -16,14 +16,23 @@ function lengthStr(length: number) {
 }
 
 const Player = (player: MprisPlayer) => {
+    const albumCover = (path: string, size: number) => `
+        min-width: ${size}px;
+        min-height: ${size}px;
+        background-image: url('${path}');
+    `;
+
     const cover = Widget.Box({
         class_name: "cover",
         vpack: "start",
-        css: Utils.merge([player.bind("cover_path"), media.coverSize.bind()], (path, size) => `
-            min-width: ${size}px;
-            min-height: ${size}px;
-            background-image: url('${path}');
-        `),
+        setup: self => {
+            const update = () => {
+                const { cover_path } = player
+                self.css = albumCover(cover_path, media.coverSize.value)
+            }
+            self.hook(player, update)
+        },
+        css: Utils.merge([player.bind("cover_path"), media.coverSize.bind()], (path, size) => albumCover(path, size))
     })
 
     const title = Widget.Label({

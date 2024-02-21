@@ -12,7 +12,18 @@ in
     # # All my personal modules
     # ++ (mapModulesRec' (toString ../../home-manager) import);
 
-    themes.gtk.enable = true;
-    themes.catppuccin.enable = true;
-    # themes.catppuccin.enable = true;
+  #
+  # Desktop and Window Manager Configuration
+  #
+  desktop = {
+    hyprland.enable = true;
+  };
+
+  #
+  # Desktop Theme Configuration
+  #
+  themes = {
+    gtk.enable = true;
+    catppuccin.enable = true;
+  };
 }

@@ -38,6 +38,11 @@ in
         morewaita-icon-theme
         cantarell-fonts
       ];
+
+      file = {
+        ".config/background" = { source = ./background.jpg; };
+        ".face" = { source = ./dalle-nixos-profile.jpg; };
+      };
     };
 
     desktop.gtk = {
