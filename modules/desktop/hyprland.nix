@@ -3,6 +3,7 @@
 with lib;
 with lib.my;
 let cfg = config.modules.desktop.hyprland;
+    hyprland = inputs.hyprland.packages.${pkgs.system}.hyprland;
     configDir = config.dotfiles.configDir;
 in {
   options.modules.desktop.hyprland = {
@@ -13,7 +14,7 @@ in {
     # Enable Hyprland
     programs.hyprland = {
       enable = true;
-      package = pkgs.hyprland;
+      package = hyprland;
       xwayland.enable = true;
     };
 
@@ -34,13 +35,17 @@ in {
       WLR_NO_HARDWARE_CURSORS = "1";
       WLR_DRM_NO_ATOMIC = "1";
       KITTY_ENABLE_WAYLAND = "1";
+      MOZ_ENABLE_WAYLAND = "1";
     };
 
     # Install required packages for this window manager
     environment.systemPackages = with pkgs; [
+      # Required for XDG Portal Hyprland
+      qt6.qtwayland
+
       # Greeter
-      libsForQt5.sddm
-      libsForQt5.qt5.qtgraphicaleffects
+      stable.libsForQt5.sddm
+      stable.libsForQt5.qt5.qtgraphicaleffects
       # Greeter Themes
       catppuccin-sddm-corners
       inputs.sddm-catppuccin.packages.${pkgs.hostPlatform.system}.sddm-catppuccin
@@ -62,6 +67,7 @@ in {
       hyprpicker
       imagemagick
       slurp
+      grim
 
       # System Control Utilities
       pavucontrol

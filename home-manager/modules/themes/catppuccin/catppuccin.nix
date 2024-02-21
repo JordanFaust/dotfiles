@@ -35,7 +35,7 @@ in
       packages = with pkgs; [
         adw-gtk3
         font-awesome
-        morewaita-icon-theme
+        unstable.morewaita-icon-theme
         cantarell-fonts
       ];
 

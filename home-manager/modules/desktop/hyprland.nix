@@ -51,6 +51,8 @@ in
       settings = {
         exec-once = [
           "ags -b hypr"
+          "dbus-update-activation-environment --systemd --all"
+          "systemctl --user import-environment DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP QT_QPA_PLATFORMTHEME"
           # "hyprctl setcursor Qogir 24"
           # "transmission-gtk"
         ];

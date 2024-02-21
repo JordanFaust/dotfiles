@@ -20,6 +20,9 @@
       # home-manager.url = "github:rycee/home-manager/release-23.11";
       # home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
+      nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-23.11";
+      nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+
       # Follow the latest and greatest by default
       nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
       home-manager = {
@@ -51,7 +54,7 @@
       ags.inputs.nixpkgs.follows = "nixpkgs";
     };
 
-outputs = inputs @ { self, nixpkgs, nixpkgs-unstable, home-manager, ... }:
+outputs = inputs @ { self, nixpkgs, nixpkgs-stable, nixpkgs-unstable, home-manager, ... }:
   let
     inherit (lib.my) mapModules mapModulesRec mapHosts;
 
@@ -65,6 +68,7 @@ outputs = inputs @ { self, nixpkgs, nixpkgs-unstable, home-manager, ... }:
     };
     pkgs  = mkPkgs nixpkgs [ self.overlay ];
     pkgs' = mkPkgs nixpkgs-unstable [];
+    pkgs-stable' = mkPkgs nixpkgs-stable [];
 
     lib = nixpkgs.lib.extend
       (self: super: { my = import ./lib { inherit pkgs inputs home-manager; lib = self; }; });
@@ -73,7 +77,10 @@ outputs = inputs @ { self, nixpkgs, nixpkgs-unstable, home-manager, ... }:
 
     overlay =
       final: prev: {
+        # Tracking unstable everywhere by default. Adding this for legacy support and to allow
+        # swapping pack to stable
         unstable = pkgs';
+        stable = pkgs-stable';
         my = self.packages."${system}";
       };
 
