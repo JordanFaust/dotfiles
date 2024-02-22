@@ -9,22 +9,31 @@ in {
   };
 
   config = mkIf cfg.enable {
-    # hardware.opengl = {
-    #   enable = true;
-    #   driSupport = true;
-    #   driSupport32Bit = true;
-    # };
-
-    # hardware.nvidia.modesetting.enable = false;
-    services.xserver.videoDrivers = [ "nvidia" ];
-    hardware.nvidia.prime = {
-      sync.enable = true;
-      # reverseSync.enable = true;
-      # # Enable if using an external GPU
-      # allowExternalGpu = false;
-      nvidiaBusId = "PCI:1:0:0";
-      intelBusId  = "PCI:0:2:0";
+    hardware.opengl = {
+      enable = true;
+      driSupport = true;
+      driSupport32Bit = true;
     };
+
+    services.xserver.videoDrivers = [ "nvidia" ];
+
+    hardware.nvidia = {
+      modesetting.enable = true;
+
+      prime = {
+        # sync.enable = true;
+        reverseSync.enable = true;
+        # Enable if using an external GPU
+        allowExternalGpu = false;
+        nvidiaBusId = "PCI:1:0:0";
+        intelBusId  = "PCI:0:2:0";
+      };
+
+      open = true;
+      nvidiaSettings = false; # gui app
+      package = config.boot.kernelPackages.nvidiaPackages.latest;
+    };
+
 
     # programs.autorandr.enable = true;
     environment.systemPackages = with pkgs; [

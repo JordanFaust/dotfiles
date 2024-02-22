@@ -4,7 +4,7 @@ const DEBUG = Deno.env.get('DEBUG');
 const { compilerOptions, imports } = JSON.parse(Deno.readTextFileSync('deno.json'));
 const bundleOptions = { compilerOptions, importMap: { imports } };
 
-function logPublicContent() {
+export function logPublicContent() {
   console.table(
     Array.from(Deno.readDirSync('public')).reduce((table, entry) => {
       const { size, mtime } = Deno.statSync('public/' + entry.name);
@@ -28,7 +28,7 @@ function logPublicContent() {
   );
 }
 
-async function emit(src, out) {
+export async function emit(src, out) {
   return Deno.writeTextFile(out, (await bundle(src, bundleOptions)).code);
 }
 

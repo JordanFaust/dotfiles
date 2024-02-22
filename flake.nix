@@ -52,6 +52,8 @@
       # AGS
       ags.url = "github:Aylur/ags";
       ags.inputs.nixpkgs.follows = "nixpkgs";
+      # Support building deno applications
+      deno2nix.url = "github:SnO2WMaN/deno2nix";
     };
 
 outputs = inputs @ { self, nixpkgs, nixpkgs-stable, nixpkgs-unstable, home-manager, ... }:
@@ -66,7 +68,7 @@ outputs = inputs @ { self, nixpkgs, nixpkgs-stable, nixpkgs-unstable, home-manag
       config.allowUnfree = true;
       overlays = extraOverlays ++ (lib.attrValues self.overlays);
     };
-    pkgs  = mkPkgs nixpkgs [ self.overlay ];
+    pkgs  = mkPkgs nixpkgs [ self.overlay inputs.deno2nix.overlays.default ];
     pkgs' = mkPkgs nixpkgs-unstable [];
     pkgs-stable' = mkPkgs nixpkgs-stable [];
 

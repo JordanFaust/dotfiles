@@ -44,8 +44,8 @@ with lib.my;
         inherit name;
         description = "Jordan Faust";
         extraGroups = [
-         "qemu-libvirtd" "libvirtd"
-         "wheel" "video" "audio" "disk" "networkmanager"
+          "qemu-libvirtd" "libvirtd"
+           "wheel" "video" "audio" "disk" "networkmanager"
         ];
         isNormalUser = true;
         home = "/home/${name}";

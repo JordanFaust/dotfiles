@@ -22,5 +22,6 @@
       "singleQuote": true,
       "proseWrap": "preserve"
     }
-  }
+  },
+  "importMap": "./vendor/import_map.json"
 }
