@@ -21,7 +21,7 @@ let
     hash = "sha256-ZNZ1RlGwgBHlYCmsbfg7tHxaVw2raeJOKJ9x/Zfrkn0=";
   };
   pname   = "peek-nvim";
-  version = "1.0.4p2";
+  version = "1.0.4p3";
   src = fetchFromGitHub {
     owner = "toppair";
     repo = "peek.nvim";
@@ -106,6 +106,8 @@ in stdenv.mkDerivation rec {
     cp -r $src/public public
     cp -r $src/scripts scripts
     cp $src/deno.json deno.json
+
+    # cp -r ${gfmCss} public/github-markdown.min.css
 
     ls -al
 

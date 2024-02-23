@@ -56,7 +56,7 @@ in {
       chafa
 
       # Peek.nvim pre-built
-      my.peek-nvim
+      # my.peek-nvim
 
       (makeDesktopItem {
         name = "Neovim";
@@ -69,14 +69,14 @@ in {
       })
     ];
 
-    home = {
-      file = {
-        ".local/nvim/plugin/peek.nvim" = {
-          source = pkgs.my.peek-nvim;
-          recursive = true;
-        };
-      };
-    };
+    # home = {
+    #   file = {
+    #     ".local/nvim/plugin/peek.nvim" = {
+    #       source = pkgs.my.peek-nvim;
+    #       recursive = true;
+    #     };
+    #   };
+    # };
 
     # This is for non-neovim, so it loads my nvim config
     # env.VIMINIT = "let \\$MYVIMRC='\\$XDG_CONFIG_HOME/nvim/init.vim' | source \\$MYVIMRC";
