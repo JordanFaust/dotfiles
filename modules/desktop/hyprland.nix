@@ -36,6 +36,7 @@ in {
       WLR_DRM_NO_ATOMIC = "1";
       KITTY_ENABLE_WAYLAND = "1";
       MOZ_ENABLE_WAYLAND = "1";
+      QT_QPA_PLATFORM = "wayland";
     };
 
     # Install required packages for this window manager

@@ -61,7 +61,7 @@ in {
     }
 
     # Desktop (X11) theming
-    (mkIf config.services.xserver.enable {
+    (mkIf (config.services.xserver.enable && !cfg.wayland.enable) {
       user.packages = with pkgs; [
         unstable.dracula-theme
         # TODO replace this with papirus
@@ -85,17 +85,6 @@ in {
         moreutils
         # Fix broken nerd fonts
         nerdfix
-
-        inputs.ags.packages.${pkgs.hostPlatform.system}.ags
-        # my.greeter
-        # my.desktop
-        # my.ags.desktop
-        # my.catppuccin-ags
-        my.ags.desktop.script
-        my.ags.greeter.script
-        dart-sass
-        gtk3
-        accountsservice
       ];
       fonts.packages = with pkgs; [
         # General Coding Fonts
@@ -387,15 +376,15 @@ in {
           # X11 Menu
           "jgmenu" = { source = ./config/jgmenu; recursive = true; };
           # GTK Theme
-          "Dracula-purple-solid-kvantum" = {
-            recursive = true;
-            source = "${pkgs.unstable.dracula-theme}/share/themes/Dracula/kde/kvantum/Dracula-purple-solid";
-            target = "Kvantum/Dracula-purple-solid";
-          };
-          "kvantum.kvconfig" = {
-            text = "theme=Dracula-purple-solid";
-            target = "Kvantum/kvantum.kvconfig";
-          };
+          # "Dracula-purple-solid-kvantum" = {
+          #   recursive = true;
+          #   source = "${pkgs.unstable.dracula-theme}/share/themes/Dracula/kde/kvantum/Dracula-purple-solid";
+          #   target = "Kvantum/Dracula-purple-solid";
+          # };
+          # "kvantum.kvconfig" = {
+          #   text = "theme=Dracula-purple-solid";
+          #   target = "Kvantum/kvantum.kvconfig";
+          # };
         })
         (mkIf desktop.media.graphics.vector.enable {
           "inkscape/templates/default.svg".source = ./config/inkscape/default-template.svg;

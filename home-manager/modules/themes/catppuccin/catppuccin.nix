@@ -33,26 +33,62 @@ in
   config = lib.mkIf (cfg.enable) {
     home = {
       packages = with pkgs; [
+        paper-icon-theme # for rofi
+        papirus-icon-theme # dunst
+        gnome.adwaita-icon-theme
+        # TODO replace pamixer with amixer
+        pamixer
+        alsa-utils
+        playerctl
+        # misc
+        gpick
+        neofetch
+        # Dunst + EWW
+        recode
+        # Added utilities used in rice scripts
+        moreutils
+        # Fix broken nerd fonts
+        nerdfix
+
         adw-gtk3
         font-awesome
         unstable.morewaita-icon-theme
         cantarell-fonts
+
+        (catppuccin-kde.override {
+          flavour = [ "macchiato" ];
+          accents = [ "rosewater" ];
+        })
       ];
 
       file = {
-        ".config/background" = { source = ./background.jpg; };
         ".face" = { source = ./dalle-nixos-profile.jpg; };
       };
+
+    };
+
+    xdg.configFile = {
+      "background" = { source = ./background.jpg; };
     };
 
     desktop.gtk = {
       enable = true;
       name = gtk-theme;
       package = pkgs.catppuccin-gtk.override {
-        accents = [ "sapphire" ];
+        accents = [ "rosewater" ];
         size = "compact";
         tweaks = [ "rimless" "black" ];
         variant = "macchiato";
+      };
+
+      qt = {
+        style = "kvantum";
+        platformTheme = "kde";
+        name = "Catppuccin-Macchiato-Rosewater";
+        package = pkgs.catppuccin-kvantum.override {
+          accent =  "Rosewater";
+          variant = "Macchiato";
+        };
       };
     };
   };

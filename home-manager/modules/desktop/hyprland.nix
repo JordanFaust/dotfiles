@@ -127,6 +127,10 @@ in
           (f "xdg-desktop-portal-gnome")
           (f "transmission-gtk")
           (f "com.github.Aylur.ags")
+          "workspace 3 silent, title:^(Spotify Premium)$"
+          "workspace 3 silent, class:^(Slack)$"
+          "workspace 3 silent, initialTitle:^(Slack)$"
+          "workspace 5 silent, title:^(Zoom - Licensed account)$"
         ];
 
         bind = let

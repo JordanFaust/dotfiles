@@ -5,6 +5,8 @@ let
   cfg = config.desktop.gtk;
   cursor-theme = "Qogir";
   cursor-package = pkgs.qogir-icon-theme;
+  qtTheme = strings.concatStrings (strings.splitString "-" cfg.qt.name);
+  kdeTheme = (pkgs.catppuccin-kde.override { flavour = [ "macchiato" ]; accents = [ "rosewater" ]; });
 in
 {
   options.desktop.gtk = mkOption {
@@ -22,8 +24,8 @@ in
               defaultText = literalExpression "null";
               example = literalExpression "pkgs.yaru-theme";
               description = ''
-                Package providing the cursor theme. This package will be installed to your profile.
-                If `null` then the cursor theme is assumed to already be available.
+                Package providing the gtk theme. This package will be installed to your profile.
+                If `null` then the gtk theme is assumed to already be available.
               '';
             };
             name = mkOption {
@@ -32,6 +34,39 @@ in
               defaultText = literalExpression ''"Adwaita"'';
               example = literalExpression ''"Yaru"'';
               description = "Name of the cursor theme within the package.";
+            };
+            qt = {
+              style = mkOption {
+                type = with types; str;
+                default = "kvantum";
+                defaultText = literalExpression ''"kvantum"'';
+                example = literalExpression ''"kvantum"'';
+                description = "Name of the theme platform to use for qt themes.";
+              };
+              platformTheme = mkOption {
+                type = with types; str;
+                default = "kde";
+                defaultText = literalExpression ''"kde"'';
+                example = literalExpression ''"gtk"'';
+                description = "Name of the platform to use for qt theme";
+              };
+              package = mkOption {
+                type = with types; nullOr package;
+                default = null;
+                defaultText = literalExpression "null";
+                example = literalExpression "pkgs.yaru-theme";
+                description = ''
+                  Package providing the qt theme. This package will be installed to your profile.
+                  If `null` then the theme is assumed to already be available.
+                '';
+              };
+              name = mkOption {
+                type = with types; str;
+                default = "Adwaita";
+                defaultText = literalExpression ''"Adwaita"'';
+                example = literalExpression ''"Yaru"'';
+                description = "Name of the qt theme within the package.";
+              };
             };
           };
         }];
@@ -43,6 +78,7 @@ in
     home = {
       packages = with pkgs; [
         gnome.dconf-editor
+
       ];
 
       sessionVariables = {
@@ -58,6 +94,13 @@ in
         gtk.enable = cfg.enable;
       };
 
+
+# -rw-r-----  1 jordan users  44732 Jan 11  2023 all-the-icons.ttf
+# -rw-r-----  1 jordan users 489672 Jan 11  2023 file-icons.ttf
+# -rw-r-----  1 jordan users 152796 Jan 11  2023 fontawesome.ttf
+# -rw-r-----  1 jordan users 128180 Jan 11  2023 material-design-icons.ttf
+# -rw-r-----  1 jordan users  52544 Jan 11  2023 octicons.ttf
+# -rw-r-----  1 jordan users  99564 Jan 11  2023 weathericons.ttf
       file = {
         # ".local/share/fonts" = {
         #   recursive = true;
@@ -76,7 +119,16 @@ in
         #     }
         #   '';
         # };
+        ".local/share/Kvantum/${qtTheme}".source = "${cfg.qt.package}/share/Kvantum/${cfg.qt.name}";
+        ".local/share/plasma/desktoptheme/${qtTheme}".source = "${kdeTheme}/share/color-schemes";
       };
+    };
+
+    xdg.configFile = {
+      "Kvantum/kvantum.kvconfig".source = (pkgs.formats.ini {}).generate "kvantum.kvconfig" {
+        theme.name = qtTheme;
+      };
+      "Kvantum/${qtTheme}".source = "${cfg.qt.package}/share/Kvantum/${cfg.qt.name}";
     };
 
     gtk = {
@@ -114,8 +166,12 @@ in
     };
 
     qt = {
-      enable = true;
+      enable = cfg.enable;
       platformTheme = "kde";
+      style = {
+        name = "kvantum";
+        package = cfg.qt.package;
+      };
     };
   };
 }
