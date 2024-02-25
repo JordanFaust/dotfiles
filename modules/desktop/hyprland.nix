@@ -114,9 +114,9 @@ in {
         enable = true;
         displayManager = {
           defaultSession = "hyprland";
-          sddm.enable = true;
-          sddm.theme = "catppuccin";
-          sddm.wayland.enable = true;
+          # sddm.enable = true;
+          # sddm.theme = "catppuccin";
+          # sddm.wayland.enable = true;
           # lightdm.enable = true;
           # lightdm.greeters.pantheon.enable = true;
         };

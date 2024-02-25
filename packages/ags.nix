@@ -11,6 +11,14 @@
 , fd
 , brightnessctl
 , accountsservice
+, slurp
+, wf-recorder
+, wl-clipboard
+, wayshot
+, swappy
+, hyprpicker
+, pavucontrol
+, networkmanager
 }:
 
 let
@@ -21,7 +29,7 @@ let
   pname = "desktop";
   config = stdenv.mkDerivation {
     inherit pname;
-    version = "1.7.6";
+    version = "1.7.7";
     src = ./ags;
 
     buildPhase = ''
@@ -56,7 +64,6 @@ in {
       fd
       brightnessctl
       swww
-      inputs.matugen.packages.${system}.default
       slurp
       wf-recorder
       wl-clipboard
@@ -68,12 +75,11 @@ in {
     ]}
     ${ags}/bin/ags -b ${pname} -c ${config}/config.js $@
   '';
-  greeter = { layout, cursor }: writeScriptBin "greeter" ''
-    export XKB_DEFAULT_LAYOUT=${layout}
+  greeter = { cursor }: writeScriptBin "greeter" ''
     export XCURSOR_THEME=${cursor}
     export PATH=$PATH:${dart-sass}/bin
     export PATH=$PATH:${fd}/bin
-    ${ags}/bin/ags -b ${pname} -c ${config}/greeter.js $@
+    ${cage}/bin/cage -ds -m last ${ags}/bin/ags -- -c ${config}/greeter.js
   '';
 }
 

@@ -94,6 +94,7 @@ outputs = inputs @ { self, nixpkgs, nixpkgs-stable, nixpkgs-unstable, home-manag
     #
     packages."${system}" =
       mapModules ./packages (p: pkgs.callPackage p { inherit inputs; });
+      # // { desktop = (pkgs.callPackage ./packages/ags.nix { inherit inputs; }); };
 
     #
     # Custom Modules

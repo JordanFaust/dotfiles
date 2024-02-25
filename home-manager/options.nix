@@ -25,8 +25,6 @@ with lib.my;
       gtk = {
         enable = mkBoolOpt false;
         theme = mkOpt str "";
-        iconTheme = mkOpt str "";
-        cursorTheme = mkOpt str "";
       };
 
       onReload = mkOpt (attrsOf lines) {};
