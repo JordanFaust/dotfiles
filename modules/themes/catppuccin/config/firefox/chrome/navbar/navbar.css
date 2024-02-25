@@ -3,14 +3,15 @@
 }
 
 toolbox#navigator-toolbox {
+    background: var(--dark-base) !important;
     border-bottom: solid var(--dividers) var(--sidebar-shadow-color) !important;
 }
 
-#nav-bar {
+toolbar#nav-bar {
     min-height: 36px !important;
     box-shadow: none !important;
     padding-inline: 5px 6px !important;
-    background-color: var(--toolbar-bgcolor) !important;
+    background-color: var(--dark-base) !important;
     padding: 8px !important;
 }
 
@@ -118,10 +119,10 @@ toolbar:not([customizing="true"])
     transition: all var(--transition-time) var(--ease-out) !important;
 }
 
-toolbox[id="navigator-toolbox"]:hover #PersonalToolbar {
-    opacity: 1;
-    margin: 0 !important;
-}
+/* toolbox[id="navigator-toolbox"]:hover #PersonalToolbar { */
+/*     opacity: 1; */
+/*     margin: 0 !important; */
+/* } */
 
 #PlacesToolbarItems {
     margin: 7px 4px !important;
