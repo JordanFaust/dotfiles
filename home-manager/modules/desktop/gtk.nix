@@ -17,6 +17,9 @@ in
       nullOr (submoduleWith {
         modules = [{
           options = {
+            #
+            # GTK Theme Configuration
+            #
             enable = mkEnableOption "gtk";
             package = mkOption {
               type = with types; nullOr package;
@@ -35,6 +38,42 @@ in
               example = literalExpression ''"Yaru"'';
               description = "Name of the cursor theme within the package.";
             };
+
+            #
+            # Cursor Theme Configuration
+            #
+            cursor = {
+              package = mkOption {
+                type = with types; nullOr package;
+                default = null;
+                defaultText = literalExpression "null";
+                example = literalExpression "pkgs.yaru-theme";
+                description = ''
+                  Package providing the curosr theme. This package will be installed to your profile.
+                  If `null` then the cursor theme is assumed to already be available.
+                '';
+              };
+              name = mkOption {
+                type = with types; str;
+                default = "Adwaita";
+                defaultText = literalExpression ''"Adwaita"'';
+                example = literalExpression ''"Yaru"'';
+                description = "Name of the cursor theme within the package.";
+              };
+
+              size = mkOption {
+                type = types.nullOr types.int;
+                default = null;
+                example = 16;
+                description = ''
+                  The size of the cursor.
+                '';
+              };
+            };
+
+            #
+            # QT Theme Configuration
+            #
             qt = {
               style = mkOption {
                 type = with types; str;
@@ -82,15 +121,14 @@ in
       ];
 
       sessionVariables = {
-        XCURSOR_THEME = cursor-theme;
-        XCURSOR_SIZE = "24";
         GTK_THEME = cfg.name;
       };
 
       pointerCursor = {
-        package = cursor-package;
-        name = cursor-theme;
-        size = 24;
+        name = "${cfg.cursor.name}";
+        package = cfg.cursor.package;
+        size = cfg.cursor.size;
+
         gtk.enable = cfg.enable;
       };
 
@@ -102,23 +140,6 @@ in
 # -rw-r-----  1 jordan users  52544 Jan 11  2023 octicons.ttf
 # -rw-r-----  1 jordan users  99564 Jan 11  2023 weathericons.ttf
       file = {
-        # ".local/share/fonts" = {
-        #   recursive = true;
-        #   source = "${nerdfonts}/share/fonts/truetype/NerdFonts";
-        # };
-        # ".fonts" = {
-        #   recursive = true;
-        #   source = "${nerdfonts}/share/fonts/truetype/NerdFonts";
-        # };
-        # ".config/gtk-4.0/gtk.css" = {
-        #   text = ''
-        #     window.messagedialog .response-area > button,
-        #     window.dialog.message .dialog-action-area > button,
-        #     .background.csd{
-        #       border-radius: 0;
-        #     }
-        #   '';
-        # };
         ".local/share/Kvantum/${qtTheme}".source = "${cfg.qt.package}/share/Kvantum/${cfg.qt.name}";
         ".local/share/plasma/desktoptheme/${qtTheme}".source = "${kdeTheme}/share/color-schemes";
       };
@@ -138,10 +159,12 @@ in
         name = cfg.name;
         package = cfg.package;
       };
-      # cursorTheme = {
-      #   name = cursor-theme;
-      #   package = cursor-package;
-      # };
+
+      cursorTheme = {
+        name = cfg.cursor.name;
+        package = cfg.cursor.package;
+        size = cfg.cursor.size;
+      };
 
       iconTheme.name = "MoreWaita";
 
@@ -153,15 +176,11 @@ in
       '';
 
       gtk3.extraConfig = {
-        Settings = ''
-          gtk-application-prefer-dark-theme=1
-        '';
+        "gtk-application-prefer-dark-theme" = "1";
       };
 
       gtk4.extraConfig = {
-        Settings = ''
-          gtk-application-prefer-dark-theme=1
-        '';
+        "gtk-application-prefer-dark-theme" = "1";
       };
     };
 

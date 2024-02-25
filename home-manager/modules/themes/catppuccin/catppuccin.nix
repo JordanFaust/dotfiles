@@ -81,6 +81,12 @@ in
         variant = "macchiato";
       };
 
+      cursor = {
+        name = "Catppuccin-Macchiato-Red-Cursors";
+        package = pkgs.catppuccin-cursors.macchiatoRed;
+        size = 36;
+      };
+
       qt = {
         style = "kvantum";
         platformTheme = "kde";

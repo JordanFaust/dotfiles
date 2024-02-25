@@ -158,14 +158,5 @@ in {
 
     # # Use the Regreet greetd theme
     # programs.regreet.enable = true;
-
-    # link recursively so other modules can link files in their folders
-    # home.configFile = {
-    #   # "sxhkd".source = "${configDir}/sxhkd";
-    #   "hypr" = {
-    #     source = "${configDir}/hypr";
-    #     recursive = true;
-    #   };
-    # };
   };
 }
