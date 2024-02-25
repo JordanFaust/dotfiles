@@ -43,6 +43,10 @@ in {
     environment.systemPackages = with pkgs; [
       # Required for XDG Portal Hyprland
       qt6.qtwayland
+      libsForQt5.qt5.qtwayland
+      # Ensure support for both qt5ct and qt6ct via kvantume
+      libsForQt5.qt5ct
+      qt6Packages.qtstyleplugin-kvantum
 
       # Greeter
       stable.libsForQt5.sddm

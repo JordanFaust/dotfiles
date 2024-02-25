@@ -6,7 +6,6 @@ let
   cursor-theme = "Qogir";
   cursor-package = pkgs.qogir-icon-theme;
   qtTheme = strings.concatStrings (strings.splitString "-" cfg.qt.name);
-  kdeTheme = (pkgs.catppuccin-kde.override { flavour = [ "macchiato" ]; accents = [ "rosewater" ]; });
 in
 {
   options.desktop.gtk = mkOption {
@@ -117,7 +116,6 @@ in
     home = {
       packages = with pkgs; [
         gnome.dconf-editor
-
       ];
 
       sessionVariables = {
@@ -132,24 +130,16 @@ in
         gtk.enable = cfg.enable;
       };
 
-
-# -rw-r-----  1 jordan users  44732 Jan 11  2023 all-the-icons.ttf
-# -rw-r-----  1 jordan users 489672 Jan 11  2023 file-icons.ttf
-# -rw-r-----  1 jordan users 152796 Jan 11  2023 fontawesome.ttf
-# -rw-r-----  1 jordan users 128180 Jan 11  2023 material-design-icons.ttf
-# -rw-r-----  1 jordan users  52544 Jan 11  2023 octicons.ttf
-# -rw-r-----  1 jordan users  99564 Jan 11  2023 weathericons.ttf
       file = {
-        ".local/share/Kvantum/${qtTheme}".source = "${cfg.qt.package}/share/Kvantum/${cfg.qt.name}";
-        ".local/share/plasma/desktoptheme/${qtTheme}".source = "${kdeTheme}/share/color-schemes";
+        ".local/share/Kvantum/${cfg.qt.name}".source = "${cfg.qt.package}/share/Kvantum/${cfg.qt.name}";
       };
     };
 
     xdg.configFile = {
       "Kvantum/kvantum.kvconfig".source = (pkgs.formats.ini {}).generate "kvantum.kvconfig" {
-        theme.name = qtTheme;
+        theme.name = cfg.qt.name;
+        General.theme = cfg.qt.name;
       };
-      "Kvantum/${qtTheme}".source = "${cfg.qt.package}/share/Kvantum/${cfg.qt.name}";
     };
 
     gtk = {
@@ -168,13 +158,6 @@ in
 
       iconTheme.name = "MoreWaita";
 
-      gtk3.extraCss = ''
-        headerbar, .titlebar,
-        .csd:not(.popup):not(tooltip):not(messagedialog) decoration{
-          border-radius: 0;
-        }
-      '';
-
       gtk3.extraConfig = {
         "gtk-application-prefer-dark-theme" = "1";
       };
@@ -186,7 +169,7 @@ in
 
     qt = {
       enable = cfg.enable;
-      platformTheme = "kde";
+      platformTheme = "qtct";
       style = {
         name = "kvantum";
         package = cfg.qt.package;

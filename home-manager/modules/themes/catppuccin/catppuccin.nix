@@ -89,7 +89,7 @@ in
 
       qt = {
         style = "kvantum";
-        platformTheme = "kde";
+        platformTheme = "qt5ct";
         name = "Catppuccin-Macchiato-Rosewater";
         package = pkgs.catppuccin-kvantum.override {
           accent =  "Rosewater";
