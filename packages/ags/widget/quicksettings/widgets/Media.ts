@@ -1,6 +1,5 @@
 import { type MprisPlayer } from "types/service/mpris"
 import icons from "lib/icons"
-import type Gtk from "gi://Gtk?version=3.0"
 import options from "options"
 import { icon } from "lib/utils"
 
@@ -16,23 +15,29 @@ function lengthStr(length: number) {
 }
 
 const Player = (player: MprisPlayer) => {
-    const albumCover = (path: string, size: number) => `
-        min-width: ${size}px;
-        min-height: ${size}px;
-        background-image: url('${path}');
-    `;
-
+    const updateCoverCSS = (path: string, url: string, size: number) => {
+        // print(`track update path=${path} url=${url} size=${size}`)
+        return `
+            min-width: ${size}px;
+            min-height: ${size}px;
+            background-image: url('${path || url}');
+        `
+    };
     const cover = Widget.Box({
         class_name: "cover",
         vpack: "start",
         setup: self => {
-            const update = () => {
-                const { cover_path } = player
-                self.css = albumCover(cover_path, media.coverSize.value)
-            }
-            self.hook(player, update)
+           const update = () => {
+              const { cover_path } = player;
+              self.css = updateCoverCSS(cover_path, "", media.coverSize.value)
+          }
+          self.hook(player, update);
         },
-        css: Utils.merge([player.bind("cover_path"), media.coverSize.bind()], (path, size) => albumCover(path, size))
+        // css: Utils.merge([
+        //     player.bind("cover_path"),
+        //     player.bind("track_cover_url"),
+        //     media.coverSize.bind()
+        // ], (path, url, size) => updateCoverCSS(path, url, size)),
     })
 
     const title = Widget.Label({
@@ -129,7 +134,7 @@ const Player = (player: MprisPlayer) => {
     return Widget.Box(
         { class_name: "player", vexpand: false },
         cover,
-        Widget.Box<Gtk.Widget>(
+        Widget.Box(
             { vertical: true },
             Widget.Box([
                 title,

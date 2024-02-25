@@ -2,6 +2,7 @@
 , inputs
 , system
 , stdenv
+, cage
 , writeShellScriptBin
 , writeScriptBin
 , swww
@@ -17,7 +18,7 @@ let
     extraPackages = [accountsservice];
   };
 
-  pname = "catppuccin";
+  pname = "desktop";
   config = stdenv.mkDerivation {
     inherit pname;
     version = "1.7.6";
@@ -45,26 +46,34 @@ let
       cp -f greeter.js $out/greeter.js
     '';
   };
+
+  addBins = list: builtins.concatStringsSep ":" (builtins.map (p: "${p}/bin") list);
 in {
-  desktop = {
-    inherit config;
-    script = writeScriptBin pname ''
-      export PATH=$PATH:${dart-sass}/bin
-      export PATH=$PATH:${fd}/bin
-      export PATH=$PATH:${brightnessctl}/bin
-      export PATH=$PATH:${swww}/bin
-      ${ags}/bin/ags -b ${pname} -c ${config}/config.js $@
-    '';
-  };
-  greeter = {
-    inherit config;
-    # script = writeShellScriptBin "greeter" ''
-    script = writeScriptBin "greeter" ''
-      export PATH=$PATH:${dart-sass}/bin
-      export PATH=$PATH:${fd}/bin
-      ${ags}/bin/ags -b ${pname} -c ${config}/greeter.js $@
-    '';
-  };
-  config = config;
+  inherit config;
+  desktop = writeScriptBin pname ''
+    export PATH=$PATH:${addBins [
+      dart-sass
+      fd
+      brightnessctl
+      swww
+      inputs.matugen.packages.${system}.default
+      slurp
+      wf-recorder
+      wl-clipboard
+      wayshot
+      swappy
+      hyprpicker
+      pavucontrol
+      networkmanager
+    ]}
+    ${ags}/bin/ags -b ${pname} -c ${config}/config.js $@
+  '';
+  greeter = { layout, cursor }: writeScriptBin "greeter" ''
+    export XKB_DEFAULT_LAYOUT=${layout}
+    export XCURSOR_THEME=${cursor}
+    export PATH=$PATH:${dart-sass}/bin
+    export PATH=$PATH:${fd}/bin
+    ${ags}/bin/ags -b ${pname} -c ${config}/greeter.js $@
+  '';
 }
 
