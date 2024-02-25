@@ -10,6 +10,8 @@
 
     --downloads-item-height: 48px !important;
 
+    /* TODO: Drop everything below this once a rule for dark mode detection fully works */
+
     /* toolbar */
     --toolbar-bgcolor: var(--dark-base) !important;
 
@@ -32,6 +34,33 @@
     --lwt-toolbarbutton-active-background: var(--dark-4) !important;
 
     --lwt-toolbar-field-color: var(--light-2) !important;
+
+    /* popup */
+    --arrowpanel-background: var(--dark-base) !important;
+    --arrowpanel-dimmed: var(--accent) !important; /* hover color */
+    --arrowpanel-dimmed-further: var(--accent) !important; /* hover color */
+    --panel-item-hover-bgcolor: var(--accent) !important; /* hover color */
+
+    /* popup_text */
+    --arrowpanel-color: var(--light-1) !important;
+    --autocomplete-popup-color: var(--light-1) !important;
+    --panel-disabled-color: hsla(0, 0%, 100%, 0.5) !important;
+
+    /* popup_border */
+    --arrowpanel-border-color: var(--dark-base) !important;
+    --autocomplete-popup-border-color: var(--dark-base) !important;
+
+    /* popup_highlight */
+    --autocomplete-popup-highlight-background: var(--dark-1) !important;
+
+    /* popup_highlight_text */
+    --autocomplete-popup-highlight-color: var(--light-2) !important;
+
+    /* urlbar icon */
+    --toolbarbutton-hover-background: var(--dark-4) !important;
+    --toolbarbutton-active-background: var(--dark-base) !important;
+
+    --sidebar-shadow-color: var(--dark-0);
 }
 
 /* light mode */
@@ -102,7 +131,11 @@
 /* don't bother with sidebar in light mode */
 
 /* dark mode */
-:root[style*="--lwt-accent-color:rgb(12, 12, 13);"] {
+:root[style*="--lwt-accent-color:rgb(12, 12, 13);"],
+:root[style*="--lwt-accent-color:rgb(28, 27, 34);"],
+:root[style*="--lwt-accent-color:dark;"],
+:root[style*="color-scheme:light dark;"],
+:root[style*="color-scheme:dark;"] {
     /* accentcolor */
     --lwt-accent-color: var(--accent) !important;
 
@@ -111,6 +144,22 @@
 
     /* toolbar */
     --toolbar-bgcolor: var(--dark-base) !important;
+
+    --lwt-toolbar-field-color: var(--light-2) !important;
+
+    --toolbar-non-lwt-bgcolor: var(--dark-base) !important;
+    --toolbar-non-lwt-textcolor: var(--light-2) !important;
+    --toolbar-field-focus-border-color: var(--lwt-toolbar-field-color) !important;
+
+    --toolbar-field-background-color: var(--dark-1) !important;
+    --toolbar-field-focus-background-color: var(--dark-1) !important;
+
+    --toolbar-field-background-color: var(--dark-1) !important;
+    --toolbar-field-hover-background-color: var(--dark-1) !important;
+    --toolbar-field-focus-background-color: var(--dark-1) !important;
+
+    --lwt-toolbarbutton-icon-fill: var(--light-1) !important;
+    --lwt-toolbar-field-color: var(--light-2) !important;
 
     /* toolbar_text */
     --toolbar-color: var(--light-1) !important;
@@ -135,12 +184,12 @@
     /* button_background_active */
     --lwt-toolbarbutton-active-background: var(--dark-4) !important;
 
-    --lwt-toolbar-field-color: var(--light-2) !important;
-
     /* popup */
-    --arrowpanel-background: var(--dark-1) !important;
-    --arrowpanel-dimmed: var(--dark-2) !important; /* hover color */
-    --arrowpanel-dimmed-further: var(--dark-3) !important; /* hover color */
+    --arrowpanel-background: var(--dark-base) !important;
+    --panel-item-avtive-bgcolor: var(--dark-3) !important; /* hover color */
+    --arrowpanel-dimmed: var(--accent) !important; /* hover color */
+    --arrowpanel-dimmed-further: var(--accent) !important; /* hover color */
+    --panel-item-hover-bgcolor: var(--accent) !important; /* hover color */
 
     /* popup_text */
     --arrowpanel-color: var(--light-1) !important;
@@ -148,11 +197,11 @@
     --panel-disabled-color: hsla(0, 0%, 100%, 0.5) !important;
 
     /* popup_border */
-    --arrowpanel-border-color: var(--dark-1) !important;
-    --autocomplete-popup-border-color: var(--dark-1) !important;
+    --arrowpanel-border-color: var(--dark-base) !important;
+    --autocomplete-popup-border-color: var(--dark-base) !important;
 
     /* popup_highlight */
-    --autocomplete-popup-highlight-background: var(--dark-2) !important;
+    --autocomplete-popup-highlight-background: var(--dark-1) !important;
 
     /* popup_highlight_text */
     --autocomplete-popup-highlight-color: var(--light-2) !important;
@@ -183,6 +232,10 @@
 #titlebar,
 #tabbrowser-tabs {
     --tab-min-height: 34px !important;
+}
+
+findbar {
+  background-color: var(--dark-1) !important;
 }
 
 :root:-moz-any(:-moz-lwtheme-brighttext, [privatebrowsingmode="temporary"]) {

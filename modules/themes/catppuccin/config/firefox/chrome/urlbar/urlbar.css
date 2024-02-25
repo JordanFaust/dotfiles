@@ -14,6 +14,12 @@
     background-color: var(--accent) !important;
 }
 
+.urlbarView-row {
+  &[selected] {
+    background-color: var(--accent) !important;
+  }
+}
+
 .urlbarView-row-inner {
     align-items: center !important;
     position: relative !important;

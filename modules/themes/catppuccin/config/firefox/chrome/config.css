@@ -53,22 +53,22 @@
 }
 
 :root[privatebrowsingmode="temporary"] {
-    --dark-0: #151D28;
-    --dark-base: #192330;
+    --dark-0: #192330;
+    --dark-base: #24273A;
     --dark-1: #20103c;
-    --dark-2: #2A3B51;
-    --dark-3: #374E6C;
-    --dark-4: #53338A;
-    --light-0: #cc6b9c;
-    --light-base: #b9407c;
-    --light-1: #ab3b73;
-    --light-2: #9c3569;
-    --light-3: #8d305e;
-    --light-4: #7d2b54;
-    --accent: #e9207e;
-    --yellow: #c9b336;
-    --green: #36c987;
-    --red: #c9365d;
+    --dark-2: #20103c;
+    --dark-3: #2A3B51;
+    --dark-4: #374E6C;
+    --light-0: #ded8d7;
+    --light-base: #ded8d7;
+    --light-1: #dfd9d8;
+    --light-2: #ded8d7;
+    --light-3: #94abc7;
+    --light-4: #87a0c0;
+    --accent: #ED8796;
+    --yellow: #EED49F;
+    --green: #A6DA95;
+    --red: #ED8796;
     --extension-icon-mask: grayscale(85%) invert(13%) sepia(80%) saturate(3107%) hue-rotate(256deg) brightness(84%)
         contrast(93%);
 }
