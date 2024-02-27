@@ -1,9 +1,3 @@
 #+TITLE: Host Configurations
 
-* Systems
-+ kuro
-+ shiro
-+ ao
-+ aka
-+ aijiro
-+ unlisted: 100+ linodes, 7 VMs
+system76 - laptop

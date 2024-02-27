@@ -1,15 +1,19 @@
 
-{ pkgs, config, lib, ... }:
-{
+{ pkgs, inputs, config, lib, home-manager, ... }:
+let
+  username = "jordan";
+in rec {
   imports = [
-    ../home.nix
+    ../local.nix
     ./hardware-configuration.nix
+    # (import ./home.nix { inherit pkgs inputs config lib home-manager; })
   ];
 
   ## Modules
   modules = {
     desktop = {
-      bspwm.enable = true;
+      hyprland.enable = true;
+      # bspwm.enable = true;
       cursor = {
         enable = true;
         theme = "Dracula";
@@ -18,7 +22,6 @@
         globalprotect.enable = true;
         rofi.enable = true;
         slack.enable = true;
-        zoom.enable = true;
       };
       browsers = {
         default = "firefox";
@@ -77,12 +80,23 @@
       ssh.enable = true;
       docker.enable = true;
     };
-    theme.active = "catppuccin";
+    theme = {
+      active = "catppuccin";
+      wayland = {
+        enable = true;
+      };
+      # wayland.enable = true;
+      # xserver.enable = false;
+    };
   };
 
   programs.ssh.startAgent = true;
   programs.dconf.enable = true;
+
   services.openssh.startWhenNeeded = true;
 
   networking.networkmanager.enable = true;
+
+  # Virtualisation
+  virtualisation.libvirtd.enable = true;
 }

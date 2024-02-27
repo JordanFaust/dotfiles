@@ -7,6 +7,7 @@
             :anchor "center bottom")
   :stacking "bg"
   :windowtype "dock"
+  :exclusive true
   :reserve (struts :distance "40px" :side "bottom")
   :wm-ignore false
   (bar))

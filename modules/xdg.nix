@@ -17,7 +17,6 @@
       XDG_CONFIG_HOME = "$HOME/.config";
       XDG_DATA_HOME   = "$HOME/.local/share";
       XDG_BIN_HOME    = "$HOME/.local/bin";
-      XCURSOR_THEME   = "Dracula";
     };
     variables = {
       # Conform more programs to XDG conventions. The rest are handled by their
@@ -43,9 +42,9 @@
     };
 
     # Move ~/.Xauthority out of $HOME (setting XAUTHORITY early isn't enough)
-    extraInit = ''
-      export XAUTHORITY=/tmp/Xauthority
-      [ -e ~/.Xauthority ] && mv -f ~/.Xauthority "$XAUTHORITY"
-    '';
+    # extraInit = ''
+    #   export XAUTHORITY=/tmp/Xauthority
+    #   [ -e ~/.Xauthority ] && mv -f ~/.Xauthority "$XAUTHORITY"
+    # '';
   };
 }

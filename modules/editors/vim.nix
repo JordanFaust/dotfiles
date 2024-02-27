@@ -50,20 +50,33 @@ in {
       neovim
 
       # Neovim Addon Dependencies
-      ranger 
+      ranger
 
       # Image preview
       chafa
+
+      # Peek.nvim pre-built
+      # my.peek-nvim
 
       (makeDesktopItem {
         name = "Neovim";
         desktopName = "Neovim";
         genericName = "Text Editor";
         icon = "nvim";
-        exec = "${kitty}/bin/kitty --title Neovim --class neovim -e nvim %F";
+        # KITTY_ENABLE_WAYLAND must be set here or integrations with wayland, such as copy/paste, won't work
+        exec = "bash -c \"KITTY_ENABLE_WAYLAND=1; ${kitty}/bin/kitty --title Neovim --class neovim -e nvim %F\"";
         categories = [ "Utility" "TextEditor" ];
       })
     ];
+
+    # home = {
+    #   file = {
+    #     ".local/nvim/plugin/peek.nvim" = {
+    #       source = pkgs.my.peek-nvim;
+    #       recursive = true;
+    #     };
+    #   };
+    # };
 
     # This is for non-neovim, so it loads my nvim config
     # env.VIMINIT = "let \\$MYVIMRC='\\$XDG_CONFIG_HOME/nvim/init.vim' | source \\$MYVIMRC";

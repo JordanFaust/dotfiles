@@ -1,6 +1,7 @@
 #!/usr/bin/env cached-nix-shell
 #! nix-shell -p ruby_3_2 -i "ruby -S" --quiet
 
+# vi: set ft=ruby :
 DESC = <<~DESC
   Nix's CLI has a poor user story, in my opinion. It could be better; Guix is a
   good role model here. I wrote this script to abstract the more common

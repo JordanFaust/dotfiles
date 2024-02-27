@@ -25,6 +25,8 @@ with lib.my;
       dataFile   = mkOpt' attrs {} "Files to place in $XDG_DATA_HOME";
     };
 
+    user-options = mkOpt' attrs {} "Primary user options";
+
     env = mkOption {
       type = attrsOf (oneOf [ str path (listOf (either str path)) ]);
       apply = mapAttrs
@@ -43,7 +45,10 @@ with lib.my;
       in {
         inherit name;
         description = "Jordan Faust";
-        extraGroups = [ "wheel" ];
+        extraGroups = [
+          "qemu-libvirtd" "libvirtd"
+           "wheel" "video" "audio" "disk" "networkmanager"
+        ];
         isNormalUser = true;
         home = "/home/${name}";
         group = "users";
@@ -79,9 +84,13 @@ with lib.my;
 
     users.users.${config.user.name} = mkAliasDefinitions options.user;
 
+    user-options = config.home-manager.users.jordan;
+
     nix.settings = let users = [ "root" config.user.name ]; in {
       trusted-users = users;
       allowed-users = users;
+      experimental-features = "nix-command flakes";
+      auto-optimise-store = true;
     };
 
     # must already begin with pre-existing PATH. Also, can't use binDir here,

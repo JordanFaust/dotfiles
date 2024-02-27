@@ -1,5 +1,7 @@
 #!/usr/bin/env zsh
 source $ZDOTDIR/config.zsh
+# Source any session variables setup by home-manager
+source "/etc/profiles/per-user/$USER/etc/profile.d/hm-session-vars.sh"
 
 # NOTE ZGEN_DIR and ZGEN_SOURCE are forward-declared in modules/shell/zsh.nix
 # NOTE Using zgenom because zgen is no longer maintained

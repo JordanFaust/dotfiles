@@ -1,37 +1,12 @@
-# modules/themes/vilebloom/default.nix --- a pokemon and keyboard inspired theme
+# modules/themes/catppuccin/default.nix --- a pokemon and keyboard inspired theme
 
-{ options, config, lib, pkgs, ... }:
+{ options, config, lib, pkgs, inputs, ... }:
 
 with lib;
 with lib.my;
 let cfg = config.modules.theme;
 
-    # Script used to lock the computer
-    lockscreen = pkgs.writeScriptBin "lockscreen" ''
-      fg=152733
-      wrong=ffba95
-      highlight=ffba95
-      date=24455b
-      verify=ffba95
-
-      # Pause notifications until the screen is unlocked
-      ${pkgs.dunst}/bin/dunstctl set-paused true
-      # Force the displays to go to sleep
-      ${pkgs.xorg.xset}/bin/xset dpms force off
-      # Lock the screen and block until unlocked
-      ${pkgs.i3lock-color}/bin/i3lock-color --nofork --force-clock -i $XDG_DATA_HOME/wallpaper -e --indicator --radius=20 --ring-width=40 \
-        --inside-color=$fg --ring-color=$fg --insidever-color=$verify --ringver-color=$verify \
-        --insidewrong-color=$wrong --ringwrong-color=$wrong --keyhl-color=$verify --separator-color=$verify \
-        --bshl-color=$verify  --date-color=$date --time-color=$date --greeter-color=$fg --wrong-color=$wrong --verif-color=$verify\
-        --verif-text="Verifying Password..." --wrong-text="Wrong Password!" --noinput-text="" --greeter-text="Type the password to Unlock" \
-        --time-font="JetBrainsMono Nerd Font:style=Bold" --date-font="JetBrainsMono Nerd Font" --verif-font="JetBrainsMono Nerd Font" \
-        --greeter-font="JetBrainsMono Nerd Font" --wrong-font="JetBrainsMono Nerd Font" --time-str="%H:%M" --time-size=140 \
-        --date-str="%a, %d %b" --date-size=45 --verif-size=23 --greeter-size=23 --wrong-size=23 \
-        --ind-pos="2690:1060" --time-pos="2690:800" --date-pos="2690:845" --greeter-pos="2690:1145" --wrong-pos="2690:1160" --verif-pos="2690:1160" \
-        --pointer=default --refresh-rate=0 --pass-media-keys --pass-volume-keys --line-uses-inside --fill
-      # Turn notifactions back on
-      ${pkgs.dunst}/bin/dunstctl set-paused false
-    '';
+    # catppuccin-ags = pkgs.callPackage ./ags/ags.nix {};
 in {
   config = mkIf (cfg.active == "catppuccin") (mkMerge [
     # Desktop-agnostic configuration
@@ -40,9 +15,9 @@ in {
         theme = {
           wallpaper = mkDefault ./config/wallpaper.jpg;
           gtk = {
-            theme = "Dracula";
-            iconTheme = "Papirus";
-            cursorTheme = "Dracula";
+            theme = "Catppuccin-Macchiato-Compact-Pink-Dark";
+            iconTheme = "MoreWaita";
+            cursorTheme = "Qogir";
           };
           fonts = {
             sans.name = "Fira Sans";
@@ -86,7 +61,7 @@ in {
     }
 
     # Desktop (X11) theming
-    (mkIf config.services.xserver.enable {
+    (mkIf (config.services.xserver.enable && !cfg.wayland.enable) {
       user.packages = with pkgs; [
         unstable.dracula-theme
         # TODO replace this with papirus
@@ -108,10 +83,6 @@ in {
         recode
         # Added utilities used in rice scripts
         moreutils
-        # Lock Screen
-        i3lock-color
-        # User provided lockscreen script
-        lockscreen
         # Fix broken nerd fonts
         nerdfix
       ];
@@ -230,51 +201,7 @@ in {
       ## Autolock
       ##
 
-      # Enable autolocking
-      services.xserver.xautolock.enable = true;
-      # Enable notifications warning about the computer being locked
-      services.xserver.xautolock.enableNotifier = true;
-      # Idle time (in minutes) to wait until autolock locks the computer
-      services.xserver.xautolock.time = 15;
-      # Time in seconds before the actual lock when the notification about the lock will be sent
-      services.xserver.xautolock.notify = 30;
-      # The notification sent before locking the computer
-      services.xserver.xautolock.notifier = "${pkgs.dunst}/bin/dunstify -i \"gnome-lockscreen\" \"System\" \"Locking in 30 seconds\"";
-      # The script to run to lock the computer
-      services.xserver.xautolock.locker = "${lockscreen}/bin/lockscreen";
-
-      # # This service won't be restarted as part of a nixos-rebuild switch,
-      # # the process must be killed to allow the systemd unit to restart it
-      # # with any changes added as part of a theme.
-      # modules.theme.onReload.polybar = ''
-      #   while ${pkgs.procps}/bin/pgrep -u $UID -x polybar >/dev/null; do ${pkgs.coreutils}/bin/sleep 1; ${pkgs.procps}/bin/pkill -u $UID -x polybar; done
-      # '';
-      #
-      # # Polybar systemd service
-      # systemd.user.services."polybar" = {
-      #   enable = true;
-      #
-      #   description = "Status Bar";
-      #   documentation = [ "man:polybar(1)" ];
-      #   wantedBy = [ "graphical-session.target" ];
-      #   partOf = [ "graphical-session.target" ];
-      #
-      #   serviceConfig = {
-      #     Type="forking";
-      #     # Expand the path of the unit to include system and user packages
-      #     # * System packages can be found within /run/current-system/sw/bin
-      #     # * User (home-manager) packages can be found within /etc/profiles/per-user/$USER/bin
-      #     Environment = "PATH=/run/current-system/sw/bin:/etc/profiles/per-user/${config.user.name}/bin";
-      #     ExecStart = let scriptPkg = pkgs.writeShellScriptBin "polybar-start" ''
-      #       echo "Starting primary monitor bar"
-      #       polybar bar -c $XDG_CONFIG_HOME/polybar/config.ini -r &
-      #       echo "Primary monitor bar started"
-      #     ''; in "${scriptPkg}/bin/polybar-start";
-      #
-      #     Restart = "always";
-      #     RestartSec = 2;
-      #   };
-      # };
+      # TODO
 
       # This service won't be restarted as part of a nixos-rebuild switch,
       # the process must be killed to allow the systemd unit to restart it
@@ -432,7 +359,7 @@ in {
           "kitty/themes/monokai-pro.conf".source = ./config/kitty/themes/monokai-pro.conf;
           "kitty/themes/catppuccin-macchiato.conf".source = ./config/kitty/themes/catppuccin-macchiato.conf;
         })
-        (mkIf desktop.bspwm.enable {
+        (mkIf (desktop.bspwm.enable || desktop.hyprland.enable) {
           # Status Bar
           # "polybar/config.ini".text = import ./config/polybar/config.ini { theme = cfg; pkgs = pkgs; };
           # "polybar/glyphs.ini".source = ./config/polybar/glyphs.ini;
@@ -449,15 +376,15 @@ in {
           # X11 Menu
           "jgmenu" = { source = ./config/jgmenu; recursive = true; };
           # GTK Theme
-          "Dracula-purple-solid-kvantum" = {
-            recursive = true;
-            source = "${pkgs.unstable.dracula-theme}/share/themes/Dracula/kde/kvantum/Dracula-purple-solid";
-            target = "Kvantum/Dracula-purple-solid";
-          };
-          "kvantum.kvconfig" = {
-            text = "theme=Dracula-purple-solid";
-            target = "Kvantum/kvantum.kvconfig";
-          };
+          # "Dracula-purple-solid-kvantum" = {
+          #   recursive = true;
+          #   source = "${pkgs.unstable.dracula-theme}/share/themes/Dracula/kde/kvantum/Dracula-purple-solid";
+          #   target = "Kvantum/Dracula-purple-solid";
+          # };
+          # "kvantum.kvconfig" = {
+          #   text = "theme=Dracula-purple-solid";
+          #   target = "Kvantum/kvantum.kvconfig";
+          # };
         })
         (mkIf desktop.media.graphics.vector.enable {
           "inkscape/templates/default.svg".source = ./config/inkscape/default-template.svg;

@@ -1,4 +1,4 @@
-{ config, options, lib, pkgs, ... }:
+{ config, options, lib, pkgs, inputs, ... }:
 
 with lib;
 with lib.my;
@@ -15,6 +15,7 @@ in {
           let srv = config.services;
           in srv.xserver.enable ||
              srv.sway.enable ||
+             srv.wayland.enable ||
              !(anyAttrs
                (n: v: isAttrs v &&
                       anyAttrs (n: v: isAttrs v && v.enable))
@@ -54,8 +55,10 @@ in {
 
       # Widgets
       # unstable.eww
-      (builtins.getFlake "github:NixOS/nixpkgs/61f87a8dc31587ea7738c9e14f46f8a3199874e5").legacyPackages.${pkgs.system}.eww
+      # (builtins.getFlake "github:NixOS/nixpkgs/61f87a8dc31587ea7738c9e14f46f8a3199874e5").legacyPackages.${pkgs.system}.eww
+      (builtins.getFlake "github:NixOS/nixpkgs/61f87a8dc31587ea7738c9e14f46f8a3199874e5").legacyPackages.${pkgs.system}.eww-wayland
       # eww
+      socat
       # Audio
       pavucontrol
       # Battery
@@ -70,6 +73,10 @@ in {
       # TODO should I stick with dmenu or switch to the gnome applet
       dmenu
       networkmanager_dmenu
+
+      # NixOS Config Testing
+      vagrant
+      virt-manager
 
       # Misc
       pdftk
@@ -98,6 +105,9 @@ in {
     # Ensure that displays are correctly configured when creating a new session
     services.xserver.displayManager.lightdm.extraSeatDefaults = ''
       session-setup-script=${pkgs.autorandr}/bin/autorandr -c
+    '';
+    services.xserver.displayManager.setupCommands = ''
+      ${pkgs.autorandr}/bin/autorandr -c
     '';
 
     services.picom = {
@@ -150,9 +160,9 @@ in {
     };
 
     # Try really hard to get QT to respect my GTK theme.
-    env.GTK_DATA_PREFIX = [ "${config.system.path}" ];
-    env.QT_QPA_PLATFORMTHEME = "gnome";
-    env.QT_STYLE_OVERRIDE = "kvantum";
+    # env.GTK_DATA_PREFIX = [ "${config.system.path}" ];
+    # env.QT_QPA_PLATFORMTHEME = "gnome";
+    # env.QT_STYLE_OVERRIDE = "kvantum";
 
     services.xserver.displayManager.sessionCommands = ''
       # GTK2_RC_FILES must be available to the display manager.

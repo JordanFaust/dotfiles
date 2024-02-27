@@ -40,6 +40,11 @@
     fill: var(--lwt-toolbarbutton-icon-fill) !important;
 }
 
+#star-button,
+#pageActionButton {
+    padding: 0px 6px 4px 0 !important;
+}
+
 #reader-mode-button{
     list-style-image: url(reader-mode.svg) !important;
 }

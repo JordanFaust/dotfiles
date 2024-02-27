@@ -9,8 +9,15 @@
 
 .urlbarView-row:hover,
 .urlbarView-row-inner:hover {
-    background: var(--lwt-accent-color) !important;
-    background-color: var(--lwt-accent-color) !important;
+    /* background: var(--lwt-accent-color) !important; */
+    background: var(--accent) !important;
+    background-color: var(--accent) !important;
+}
+
+.urlbarView-row {
+  &[selected] {
+    background-color: var(--accent) !important;
+  }
 }
 
 .urlbarView-row-inner {

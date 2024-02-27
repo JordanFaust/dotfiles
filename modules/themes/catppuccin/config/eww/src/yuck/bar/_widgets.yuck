@@ -10,9 +10,22 @@
   )
 )
 
+(deflisten workspaces :initial "[]" "scripts/get-workspaces.sh")
+(deflisten current_workspace :initial "1" "scripts/get-active-workspace.sh")
 (defwidget workspaces []
-  (literal :content workspace))
-(deflisten workspace "./scripts/getWorkspaces.sh")
+  (eventbox :onscroll "scripts/change-active-workspace.sh {} ${current_workspace}" :class "workspaces-widget"
+    (box :space-evenly true
+      (label :text "${workspaces}${current_workspace}" :visible false)
+      (for workspace in workspaces
+        (eventbox :onclick "hyprctl dispatch workspace ${workspace.id}"
+          (box :class "workspace-entry ${workspace.id == current_workspace ? "current" : ""} ${workspace.windows > 0 ? "occupied" : "empty"}"
+            (label :text "${workspace.id}")
+          )
+        )
+      )
+    )
+  )
+)
 
 (defwidget time []
   (box :orientation "h"
@@ -36,7 +49,7 @@
           :min 0
           :max 100
           :orientation "h"
-          :value battery_capacity
+          :value { battery_capacity != '' ? battery_capacity : 100 }
         )
         (label :class "battery-label"
           :text {bat ? "${battery_capacity}%" : ""}

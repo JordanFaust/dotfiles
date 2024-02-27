@@ -18,3 +18,5 @@ install.log
 rfd/*
 
 doom.d/secrets/*
+
+.vagrant*

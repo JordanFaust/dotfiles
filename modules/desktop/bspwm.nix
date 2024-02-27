@@ -1,4 +1,4 @@
-{ options, config, lib, pkgs, ... }:
+{ options, config, lib, pkgs, inputs, ... }:
 
 with lib;
 with lib.my;
@@ -17,11 +17,25 @@ in {
     '';
 
     environment.systemPackages = with pkgs; [
+
       # bspwm
+      (makeDesktopItem {
+        name = "none+bspwm";
+        desktopName = "bspwm";
+        icon = "display";
+        exec = "${bspwm}/bin/bspwm";
+        categories = [ "System" ];
+      })
       bc
       bsp-layout
       # Greeter
       unstable.lightdm
+      libsForQt5.sddm
+      # qtgraphicaleffects
+      catppuccin-sddm-corners
+      inputs.sddm-catppuccin.packages.${pkgs.hostPlatform.system}.sddm-catppuccin
+      sddm-chili-theme
+      where-is-my-sddm-theme
       # Notifications
       unstable.dunst
       libnotify
@@ -68,6 +82,8 @@ in {
         enable = true;
         displayManager = {
           defaultSession = "none+bspwm";
+          # sddm.enable = true;
+          # sddm.theme = "catppuccin";
           lightdm.enable = true;
           lightdm.greeters.pantheon.enable = true;
         };

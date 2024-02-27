@@ -15,6 +15,6 @@ in {
 
     user.extraGroups = [ "plugdev" ];
 
-    services.xserver.xkbOptions = "compose:ralt";
+    services.xserver.xkb.options = "compose:ralt";
   };
 }
