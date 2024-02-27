@@ -1,0 +1,152 @@
+{ config, options, pkgs, lib, ... }:
+
+with lib;
+with lib.my;
+let cfg = config.modules.shell.tmux;
+    configDir = config.dotfiles.configDir;
+in {
+  options.modules.shell.tmux = with types; {
+    enable = mkBoolOpt false;
+    rcFiles = mkOpt (listOf (either str path)) [];
+  };
+
+  config = mkIf cfg.enable {
+    user.packages = with pkgs; [
+      tmux
+      # Remote Pairing via Neovim Terminal
+      tmate
+    ];
+
+    # modules.theme.onReload.tmux = "${pkgs.tmux}/bin/tmux source-file $TMUX_HOME/extraInit";
+
+    modules.shell.zsh = {
+      rcInit = "_cache tmuxifier init -";
+      rcFiles = [ "${configDir}/tmux/aliases.zsh" ];
+    };
+
+    # Tell tmate to use Tmux configuration
+    home = {
+      file = {
+        ".tmate.conf" = {
+            text = ''
+              set  -s default-terminal "screen-256color"
+
+              # disable programs changing window names via terminal escape sequence
+              setw -g allow-rename off
+              setw -g automatic-rename off     # Don't rename window after current program
+              set  -g renumber-windows on      # renumber windows when one is closed
+              # Zero-based indexing is fine in programming languages, but not so much in a
+              # multiplexer when zero is on the other side of the keyboard.
+              set  -g base-index 1
+              setw -g pane-base-index 1
+              # display tmux messages longer
+              set  -g display-time 1500
+              set  -g display-panes-time 800
+              # Address vim-mode switching delay (http://superuser.com/a/252717/65504)
+              set  -s escape-time   0
+              set -sg repeat-time   600
+              set  -g history-limit 50000
+              # Update status-{left,right} more often (default: 15)
+              set  -g status-interval 5
+              # Rather than constraining window size to the maximum size of any client
+              # connected to the *session*, constrain window size to the maximum size of any
+              # client connected to *that window*. Much more reasonable.
+              setw -g aggressive-resize off
+              # For terminals that support them, propagate these events to programs that
+              # understand them.
+              set  -s focus-events on
+              # Enable mouse + mouse wheel
+              set  -g mouse on
+              #  Reattach to another session if the current session is destroyed
+              set -g detach-on-destroy off
+
+              ########################################
+              # Keybinds                             #
+              ########################################
+
+              # Rebind prefix to C-c. Press twice to send literal C-c.
+              unbind C-b
+              set -g prefix C-c
+              bind C-c send-prefix
+
+              # Vi-style keybinds
+              set -g status-keys vi
+              set -g mode-keys   vi
+
+              bind c new-window      -c "#{pane_current_path}"
+              bind V split-window -h -c "#{pane_current_path}"
+              bind S split-window -v -c "#{pane_current_path}"
+
+              bind h select-pane -L
+              bind j select-pane -D
+              bind k select-pane -U
+              bind l select-pane -R
+              bind H run '$TMUX_HOME/swap-pane.sh left'
+              bind J run '$TMUX_HOME/swap-pane.sh down'
+              bind K run '$TMUX_HOME/swap-pane.sh up'
+              bind L run '$TMUX_HOME/swap-pane.sh right'
+              bind M run '$TMUX_HOME/swap-pane.sh master'
+
+              bind o resize-pane -Z
+              bind s choose-session
+              bind w choose-window
+              bind / choose-session
+              bind . choose-window
+
+              # bind = select-layout tiled
+              bind | select-layout even-horizontal
+              bind _ select-layout even-vertical
+
+              # Disable confirmation
+              bind x kill-pane
+              bind X kill-window
+              bind q kill-session
+              bind Q kill-server
+
+              bind C-w last-pane
+              bind C-n next-window
+              bind C-p previous-window
+
+              # break pane into a window
+              bind = select-layout even-vertical
+              bind + select-layout even-horizontal
+              bind - break-pane
+              bind _ join-pane
+
+              # Clears the screen the scroll back history
+              bind -n C-l send-keys C-l \; send-keys -R \; clear-history
+
+              set -g @open-editor 'C-e'
+              set -g @open-S 'https://www.duckduckgo.com/'
+              set -g @resurrect-processes 'ssh sqlite3 "git log"'
+
+              ${concatMapStrings (path: "source-file '${path}'\n") cfg.rcFiles}
+            '';
+          };
+      };
+
+      configFile = {
+        "tmux" = { source = "${configDir}/tmux"; recursive = true; };
+        "tmux/extraInit" = {
+          text = ''
+            #!/usr/bin/env bash
+            # This file is auto-generated by nixos, don't edit by hand!
+            ${concatMapStrings (path: "tmux source-file '${path}'\n") cfg.rcFiles}
+            tmux run-shell '${pkgs.tmuxPlugins.copycat}/share/tmux-plugins/copycat/copycat.tmux'
+            tmux run-shell '${pkgs.tmuxPlugins.prefix-highlight}/share/tmux-plugins/prefix-highlight/prefix_highlight.tmux'
+            tmux run-shell '${pkgs.tmuxPlugins.yank}/share/tmux-plugins/yank/yank.tmux'
+            tmux run-shell '${pkgs.tmuxPlugins.resurrect}/share/tmux-plugins/resurrect/resurrect.tmux'
+          '';
+          executable = true;
+        };
+      };
+    };
+
+    env = {
+      PATH = [ "$TMUXIFIER/bin" ];
+      TMUX_HOME = "$XDG_CONFIG_HOME/tmux";
+      TMUXIFIER = "$XDG_DATA_HOME/tmuxifier";
+      TMUXIFIER_LAYOUT_PATH = "$XDG_DATA_HOME/tmuxifier";
+    };
+  };
+}
