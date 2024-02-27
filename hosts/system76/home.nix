@@ -30,5 +30,5 @@ in
   # Applications
   applications = {
     streaming.enable = true;
-  }
+  };
 }

@@ -2,9 +2,10 @@
 with lib;
 with lib.my;
 let
+  cfg = config.applications.streaming;
 in
 {
-  options.desktop.gtk = mkOption {
+  options.applications.streaming = mkOption {
     description = ''
       Configurations for streaming video and recording the desktop.
     '';
@@ -43,10 +44,18 @@ in
   config = lib.mkIf (cfg.enable) {
     home = {
       packages = with pkgs; [
-        obs-studio
         zoom-us
       ];
-    }
+    };
+
+    programs.obs-studio = {
+      enable = true;
+      plugins = with pkgs.obs-studio-plugins; [
+        wlrobs
+        obs-backgroundremoval
+        obs-pipewire-audio-capture
+      ];
+    };
   };
 }
 
