@@ -3,18 +3,19 @@
 , system
 , stdenv
 , cage
-, writeShellScriptBin
-, writeScriptBin
 , swww
 , bun
 , dart-sass
+, gtk3
 , fd
 , brightnessctl
 , accountsservice
 , slurp
 , wf-recorder
 , wl-clipboard
+, writeShellScript
 , wayshot
+, which
 , swappy
 , hyprpicker
 , pavucontrol
@@ -22,14 +23,47 @@
 }:
 
 let
+  name = "desktop";
+
   ags = inputs.ags.packages.${system}.default.override {
     extraPackages = [accountsservice];
   };
 
-  pname = "desktop";
+  dependencies = [
+    which
+    dart-sass
+    fd
+    brightnessctl
+    swww
+    inputs.matugen.packages.${system}.default
+    inputs.hyprland.packages.${system}.default
+    slurp
+    wf-recorder
+    wl-clipboard
+    wayshot
+    swappy
+    hyprpicker
+    pavucontrol
+    networkmanager
+    gtk3
+  ];
+
+  addBins = list: builtins.concatStringsSep ":" (builtins.map (p: "${p}/bin") list);
+
+  greeter = writeShellScript "greeter" ''
+    export PATH=$PATH:${addBins dependencies}
+    echo "starting greeter"
+    ${lib.getExe cage} -d -s -m last ${ags}/bin/ags -- -c ${config}/greeter.js
+  '';
+
+  desktop = writeShellScript name ''
+    export PATH=$PATH:${addBins dependencies}
+    ${ags}/bin/ags -b ${name} -c ${config}/config.js $@
+  '';
+
   config = stdenv.mkDerivation {
-    inherit pname;
-    version = "1.7.7";
+    inherit name;
+    version = "1.7.8";
     src = ./ags;
 
     buildPhase = ''
@@ -54,32 +88,27 @@ let
       cp -f greeter.js $out/greeter.js
     '';
   };
+in stdenv.mkDerivation {
+  inherit name;
 
-  addBins = list: builtins.concatStringsSep ":" (builtins.map (p: "${p}/bin") list);
-in {
-  inherit config;
-  desktop = writeScriptBin pname ''
-    export PATH=$PATH:${addBins [
-      dart-sass
-      fd
-      brightnessctl
-      swww
-      slurp
-      wf-recorder
-      wl-clipboard
-      wayshot
-      swappy
-      hyprpicker
-      pavucontrol
-      networkmanager
-    ]}
-    ${ags}/bin/ags -b ${pname} -c ${config}/config.js $@
+  src = config;
+
+  installPhase = ''
+    mkdir -p $out/bin
+
+    cp -r . $out
+
+    cp ${desktop} $out/bin/${name}
+    cp ${greeter} $out/bin/greeter
   '';
-  greeter = { cursor }: writeScriptBin "greeter" ''
-    export XCURSOR_THEME=${cursor}
-    export PATH=$PATH:${dart-sass}/bin
-    export PATH=$PATH:${fd}/bin
-    ${cage}/bin/cage -ds -m last ${ags}/bin/ags -- -c ${config}/greeter.js
-  '';
+
+  meta = {
+    homepage = "https://github.com/JordanFaust/dotfiles";
+    description = "GTK desktop widgets via AGS";
+    # license = lib.licenses.unlicense;
+    platforms = [ "x86_64-linux" ];
+    maintainers = [];
+    mainProgram = "${name}";
+  };
 }
 

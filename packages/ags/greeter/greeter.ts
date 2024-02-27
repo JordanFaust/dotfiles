@@ -31,8 +31,10 @@ const win = RegularWindow({
     }),
 })
 
+print(`starting main window`)
 export default {
     onConfigParsed() {
+        print(`configuration loaded and parsed`)
         style()
         gtk()
     },

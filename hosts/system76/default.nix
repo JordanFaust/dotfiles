@@ -22,7 +22,6 @@ in rec {
         globalprotect.enable = true;
         rofi.enable = true;
         slack.enable = true;
-        zoom.enable = true;
       };
       browsers = {
         default = "firefox";

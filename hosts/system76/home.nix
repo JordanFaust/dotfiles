@@ -26,4 +26,9 @@ in
     gtk.enable = true;
     catppuccin.enable = true;
   };
+
+  # Applications
+  applications = {
+    streaming.enable = true;
+  }
 }
