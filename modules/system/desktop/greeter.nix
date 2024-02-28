@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 let
-  cursor = config.user-options.desktop.gtk.cursor.name;
+  # cursor = config.user-options.desktop.gtk.cursor.name;
   # conf = pkgs.writeText "config" ''
   #   exec-once = ${lib.getExe greeter}; hyprctl dispatch exit
   #   misc {

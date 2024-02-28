@@ -45,9 +45,9 @@ in {
 
       # Other dotfiles
       home.configFile = with config.modules; mkMerge [
-        (mkIf desktop.apps.rofi.enable {
+        {
           "rofi/theme" = { source = ./config/rofi; recursive = true; };
-        })
+        }
         (mkIf desktop.term.kitty.enable {
           "kitty" = { source = ./config/kitty; recursive = true; };
           "kitty/themes/monokai-pro.conf".source = ./config/kitty/themes/monokai-pro.conf;

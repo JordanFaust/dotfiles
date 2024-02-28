@@ -13,10 +13,8 @@ in rec {
   modules = {
     desktop = {
       hyprland.enable = true;
-      apps = {
-        globalprotect.enable = true;
-        rofi.enable = true;
-        slack.enable = true;
+      applications = {
+        vpn.enable = true;
       };
       browsers = {
         default = "firefox";

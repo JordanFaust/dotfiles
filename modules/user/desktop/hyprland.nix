@@ -14,9 +14,14 @@ let
   playerctl = "${pkgs.playerctl}/bin/playerctl";
   brightnessctl = "${pkgs.brightnessctl}/bin/brightnessctl";
   pactl = "${pkgs.pulseaudio}/bin/pactl";
+
+  cursor = {
+    name = config.modules.desktop.gtk.cursor.name;
+    size = config.modules.desktop.gtk.cursor.size;
+  };
 in
 {
-  options.desktop.hyprland = mkOption {
+  options.modules.desktop.hyprland = mkOption {
     description = ''
       Enable the Hyprland Window Manager
     '';
@@ -53,7 +58,7 @@ in
           "ags -b hypr"
           "dbus-update-activation-environment --systemd --all"
           "systemctl --user import-environment DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP QT_QPA_PLATFORMTHEME"
-          "hyprctl setcursor ${config.desktop.gtk.cursor.name} ${builtins.toString config.desktop.gtk.cursor.size}"
+          "hyprctl setcursor ${cursor.name} ${builtins.toString cursor.size}"
         ];
 
         monitor = [

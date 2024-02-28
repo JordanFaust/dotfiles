@@ -8,7 +8,7 @@ in
 {
   imports =
     # Space to include configuraton that must run first
-    [ ./options.nix ]
+    [ ]
     # # All my personal modules
     ++ (mapModulesRec'
          (toString ../../modules/user)

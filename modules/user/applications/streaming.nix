@@ -3,10 +3,10 @@ with lib;
 with lib.my;
 let
   cfg = config.modules.applications.streaming;
-  enabled = config.minimal == false && cfg.enable;
+  enabled = config.modules.workstation.enable && cfg.enable;
 in
 {
-  options.applications.streaming = mkOption {
+  options.modules.applications.streaming = mkOption {
     description = ''
       Configurations for streaming video and recording the desktop.
     '';

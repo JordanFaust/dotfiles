@@ -2,13 +2,10 @@
 with lib;
 with lib.my;
 let
+  cfg = config.modules.workstation;
 in
 {
-  # imports =
-  #   # Space to include configuraton that must run first
-  #   # TODO: might remove
-  #   [( import ./common.nix { inherit pkgs inputs config lib username; })];
-  options.module.workstation = mkOption {
+  options.modules.workstation = mkOption {
     description = ''
       High level options to enable or disable system capabilities. Defaults to a complete
       workstation environment.
@@ -28,10 +25,10 @@ in
 
   config = lib.mkIf (cfg.enable) {
     # Enable DConf for configuration of systems
-    modules.dconf.enable = true;
+    modules.desktop.dconf.enable = true;
 
     # Enable GTK
-    modules.gtk.enable = config.themes.gtk.enable;
+    modules.desktop.gtk.enable = config.modules.themes.gtk.enable;
     # home.stateVersion = "21.11";
   };
 }

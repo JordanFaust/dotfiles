@@ -8,7 +8,7 @@ let
   cursor-package = pkgs.qogir-icon-theme;
 in
 {
-  options.themes.catppuccin = mkOption {
+  options.modules.themes.catppuccin = mkOption {
     description = ''
       The GTK configuration for the user.
     '';
@@ -71,7 +71,7 @@ in
       "background" = { source = ./background.jpg; };
     };
 
-    desktop.gtk = {
+    modules.desktop.gtk = {
       enable = true;
       name = gtk-theme;
       package = pkgs.catppuccin-gtk.override {

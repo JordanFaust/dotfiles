@@ -8,7 +8,7 @@ let
   qtTheme = strings.concatStrings (strings.splitString "-" cfg.qt.name);
 in
 {
-  options.desktop.gtk = mkOption {
+  options.modules.desktop.gtk = mkOption {
     description = ''
       The GTK configuration for the user.
     '';

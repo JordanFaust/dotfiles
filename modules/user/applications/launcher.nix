@@ -1,20 +1,40 @@
-{ config, options, lib, pkgs, ... }:
-
+{ config, lib, pkgs, osConfig, ... }:
 with lib;
 with lib.my;
-let cfg = config.modules.desktop.apps.rofi;
+let
+  cfg = config.modules.applications.launcher;
+  minimal = !config.modules.workstation.enable;
 in {
-  options.modules.desktop.apps.rofi = {
-    enable = mkBoolOpt false;
+  options.modules.applications.launcher = mkOption {
+    description = ''
+      Configurations for application launchers, such as rofi.
+    '';
+    type = with lib.types;
+      nullOr (submoduleWith {
+        modules = [{
+          options = {
+            #
+            # Launcher
+            #
+            enable = mkEnableOption "launcher";
+
+            #
+            # Rofi
+            #
+            rofi = {
+              enable = mkEnableOption "rofi";
+            };
+          };
+        }];
+      });
+    default = {
+      enable = true;
+      rofi.enable = true;
+    };
   };
 
-  config = mkIf cfg.enable {
-    # link recursively so other modules can link files in its folder
-    # home.xdg.configFile."rofi" = {
-    #   source = <config/rofi>;
-    #   recursive = true;
-    # };
-
+  # Add configured launchers if this isn't a minimal install and launchers are enabled.
+  config = mkIf (cfg.enable) {
     user.packages = with pkgs; [
       (writeScriptBin "rofi" ''
         #!${stdenv.shell}
