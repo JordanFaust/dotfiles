@@ -3,6 +3,7 @@ with lib;
 with lib.my;
 let
   cfg = config.applications.streaming;
+  enabled = config.minimal == false && cfg.enable;
 in
 {
   options.applications.streaming = mkOption {
@@ -35,13 +36,13 @@ in
         }];
       });
     default = {
-      enable = false;
+      enable = true;
       obs.enable = true;
       zoom.enable = true;
     };
   };
 
-  config = lib.mkIf (cfg.enable) {
+  config = lib.mkIf (enabled) {
     home = {
       packages = with pkgs; [
         zoom-us

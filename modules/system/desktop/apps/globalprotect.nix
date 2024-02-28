@@ -3,7 +3,7 @@
 with lib;
 with lib.my;
 let
-    cfg = config.modules.desktop.apps.globalprotect;
+    cfg = config.modules.desktop.apps.globalprotect.system;
     vpn = pkgs.writeScriptBin "vpn" ''
         #!${pkgs.stdenv.shell}
         prog_name="$(basename $0)"
@@ -93,8 +93,16 @@ let
         esac
     '';
 in {
-  options.modules.desktop.apps.globalprotect = {
-    enable = mkBoolOpt false;
+  options.modules.desktop.apps.globalprotect = lib.mkOption {
+    default = {};
+    description = ''
+      Enable the Global Protect and the SAML GUI VPN client.
+    '';
+    type = lib.types.submodule {
+      options = {
+        enable = mkEnableOption "globalprotect";
+      };
+    };
   };
 
   config = mkIf cfg.enable {

@@ -3,6 +3,17 @@ with lib;
 with lib.my;
 {
   options = {
+    # Minimal will reduce the packages, services, and programs configured to the minimal
+    # set needed for a VM or a live boot disk image.
+    minimal = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = "Only install the minimally required software";
+    };
+
+    #
+    # Theme Configurations
+    #
     themes = with types; {
       active = mkOption {
         type = nullOr str;

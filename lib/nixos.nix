@@ -14,7 +14,7 @@ in {
           nixpkgs.pkgs = pkgs;
           networking.hostName = mkDefault (removeSuffix ".nix" (baseNameOf path));
         }
-        # Filter attributes?
+        # Filter system from the attributes as it has already been set?
         (filterAttrs (n: v: !elem n [ "system" ]) attrs)
         # Load the configuration in the defualt.nix file in the directory of the system
         ../.   # /default.nix

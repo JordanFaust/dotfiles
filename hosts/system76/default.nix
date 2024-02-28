@@ -13,11 +13,10 @@ in rec {
   modules = {
     desktop = {
       hyprland.enable = true;
-      # bspwm.enable = true;
-      cursor = {
-        enable = true;
-        theme = "Dracula";
-      };
+      # cursor = {
+      #   enable = true;
+      #   theme = "Dracula";
+      # };
       apps = {
         globalprotect.enable = true;
         rofi.enable = true;
