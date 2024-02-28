@@ -1,8 +1,8 @@
-{ config, lib, pkgs, inputs, ... }:
+{ config, lib, pkgs, inputs, osConfig, ... }:
 with lib;
 with lib.my;
 let
-  cfg = config.desktop.gtk;
+  cfg = config.modules.desktop.gtk;
   cursor-theme = "Qogir";
   cursor-package = pkgs.qogir-icon-theme;
   qtTheme = strings.concatStrings (strings.splitString "-" cfg.qt.name);

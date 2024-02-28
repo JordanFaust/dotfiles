@@ -1,6 +1,6 @@
-{  config, lib, pkgs, inputs, ... }:
+{  config, lib, pkgs, inputs, osConfig, ... }:
 let
-  cursor = config.desktop.gtk.cursor.name;
+  cursor = config.modules.desktop.gtk.cursor.name;
 in {
   imports = [ inputs.ags.homeManagerModules.default ];
 

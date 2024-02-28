@@ -2,11 +2,10 @@
 with lib;
 with lib.my;
 let
-  cfg = config.themes.catppuccin;
+  cfg = config.modules.themes.catppuccin;
   gtk-theme = "Catppuccin-Macchiato-Compact-Pink-Dark";
   cursor-theme = "Qogir";
   cursor-package = pkgs.qogir-icon-theme;
-  network = osConfig.networking.hostName;
 in
 {
   options.themes.catppuccin = mkOption {

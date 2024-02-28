@@ -1,8 +1,8 @@
-{ config, inputs, pkgs, lib, ... }:
+{ config, inputs, pkgs, lib, osConfig, ... }:
 with lib;
 with lib.my;
 let
-  cfg = config.desktop.hyprland;
+  cfg = config.modules.desktop.hyprland;
   hyprland = inputs.hyprland.packages.${pkgs.system}.hyprland;
   plugins = inputs.hyprland-plugins.packages.${pkgs.system};
 

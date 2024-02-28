@@ -1,8 +1,8 @@
-{ config, lib, pkgs, inputs, ... }:
+{ config, lib, pkgs, inputs, osConfig, ... }:
 with lib;
 with lib.my;
 let
-  cfg = config.applications.streaming;
+  cfg = config.modules.applications.streaming;
   enabled = config.minimal == false && cfg.enable;
 in
 {
