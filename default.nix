@@ -4,10 +4,8 @@ with lib;
 with lib.my;
 {
   imports =
-    # I use home-manager to deploy files to $HOME; little else
-    [ inputs.home-manager.nixosModules.home-manager ]
     # All my personal modules
-    ++ (mapModulesRec' (toString ./modules/system) import);
+    (mapModulesRec' (toString ./modules/system) import);
 
   # Common config for all nixos machines; and to ensure the flake operates
   # soundly

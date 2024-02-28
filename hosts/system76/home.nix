@@ -1,4 +1,4 @@
-{ pkgs, inputs, config, lib, home-manager, ... }:
+{ pkgs, inputs, config, lib, home-manager, osConfig, ... }:
 with lib;
 with lib.my;
 let
@@ -9,11 +9,10 @@ in
   imports =
     # Space to include configuraton that must run first
     [ ]
-    # [( import ../../modules/user/workstation.nix { inherit pkgs inputs config lib username; } )];
     # # All my personal modules
     ++ (mapModulesRec'
          (toString ../../modules/user)
-         (path: import path { inherit pkgs inputs config lib username; }));
+         (path: import path { inherit pkgs inputs config lib username osConfig; }));
 
   #
   # Desktop and Window Manager Configuration

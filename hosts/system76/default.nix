@@ -24,21 +24,13 @@ in rec {
       };
       media = {
         documents.enable = true;
-        graphics = {
-          enable = true;
-          sprites.enable = false;
-          models.enable = false;
-        };
+        graphics.enable = true;
         mpv.enable = true;
-        # Disable until ffmpeg is fixed
-        recording.enable = false;
         spotify.enable = true;
       };
       term = {
         default = "kitty";
-        alacritty.enable = false;
         kitty.enable = true;
-        st.enable = false;
       };
       vm = {
         qemu.enable = true;
@@ -57,10 +49,6 @@ in rec {
     };
     editors = {
       default = "nvim";
-      emacs = {
-        enable = false;
-        doom.enable = true;
-      };
       vim.enable = true;
     };
     shell = {
@@ -77,11 +65,7 @@ in rec {
     };
     theme = {
       active = "catppuccin";
-      wayland = {
-        enable = true;
-      };
-      # wayland.enable = true;
-      # xserver.enable = false;
+      wayland.enable = true;
     };
   };
 

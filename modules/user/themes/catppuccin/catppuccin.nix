@@ -1,4 +1,4 @@
-{ config, lib, pkgs, inputs, ... }:
+{ config, lib, pkgs, inputs, osConfig, ... }:
 with lib;
 with lib.my;
 let
@@ -6,6 +6,7 @@ let
   gtk-theme = "Catppuccin-Macchiato-Compact-Pink-Dark";
   cursor-theme = "Qogir";
   cursor-package = pkgs.qogir-icon-theme;
+  network = osConfig.networking.hostName;
 in
 {
   options.themes.catppuccin = mkOption {

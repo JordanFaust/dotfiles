@@ -16,9 +16,15 @@ in {
         }
         # Filter system from the attributes as it has already been set?
         (filterAttrs (n: v: !elem n [ "system" ]) attrs)
-        # Load the configuration in the defualt.nix file in the directory of the system
-        ../.   # /default.nix
+        # Add home-manager as a system module, allow using it within user modules and
+        # granting access to the capabilities of home-manager within system modules.
         home-manager.nixosModules.home-manager
+        # Load the default.nix configuration at the root of the repo. This includes setup
+        # configuration common for all systems and establishes basic configuration of
+        # used within both system and user modules via home-manager.
+        ../.   # /default.nix
+        # Load the configuration for home-manager for the target user. The import for the
+        # target user will land home package configurations.
         {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
@@ -27,8 +33,9 @@ in {
 
           home-manager.extraSpecialArgs = { inherit inputs; };
         }
-        # ../home.nix
-        # ?
+        # import the configuration within the target host directory. This will start by
+        # evaluating the ./host/path/default.nix which should include the appropriate imports
+        # of the other configurations, such as hardware-configuration.nix.
         (import path)
       ];
     };
