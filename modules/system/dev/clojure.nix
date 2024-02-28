@@ -1,7 +1,3 @@
-# modules/dev/clojure.nix --- https://clojure.org/
-#
-# I don't use clojure... yet.
-
 { config, options, lib, pkgs, my, ... }:
 
 with lib;

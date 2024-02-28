@@ -4,28 +4,14 @@
 # infinite knowledge and shelter me from ads, but bless my $HOME with
 # directories nobody needs and live long enough to turn into Chrome.
 
-{ options, config, lib, pkgs, osConfig, ... }:
+{ config, lib, pkgs, osConfig, username, ... }:
 
 with lib;
 with lib.my;
-let cfg = config.modules.applications.browsers;
+let
+  cfg = config.modules.applications.browsers;
+  minimal = config.modules.minimal;
 in {
-  options.modules.desktop.browsers.firefox = with types; {
-    enable = mkBoolOpt false;
-    profileName = mkOpt types.str config.user.name;
-
-    settings = mkOpt' (attrsOf (oneOf [ bool int str ])) {} ''
-      Firefox preferences to set in <filename>user.js</filename>
-    '';
-    extraConfig = mkOpt' lines "" ''
-      Extra lines to add to <filename>user.js</filename>
-    '';
-
-    userChrome  = mkOpt' lines "" "CSS Styles for Firefox's interface";
-    userContent = mkOpt' lines "" "Global CSS Styles for websites";
-
-  };
-
   options.modules.applications.browsers = lib.mkOption {
     description = ''
       Configurations for instant messangers, such as slack.
@@ -45,7 +31,7 @@ in {
             firefox = {
               enable = mkEnableOption "firefox";
 
-              profileName = mkOpt types.str config.user.name;
+              profileName = mkOpt types.str username;
 
               settings = mkOpt' (attrsOf (oneOf [ bool int str ])) {} ''
                 Firefox preferences to set in <filename>user.js</filename>
@@ -66,9 +52,9 @@ in {
     };
   };
 
-  config = mkIf cfg.enable (mkMerge [
-    {
-      user.packages = with pkgs; [
+  config = mkIf (!minimal && cfg.enable) {
+    home = {
+      packages = with pkgs; [
         unstable.firefox-bin
         (makeDesktopItem {
           name = "firefox-private";
@@ -79,12 +65,16 @@ in {
           categories = [ "Network" ];
         })
       ];
+    };
 
-      # Prevent auto-creation of ~/Desktop. The trailing slash is necessary; see
-      # https://bugzilla.mozilla.org/show_bug.cgi?id=1082717
-      env.XDG_DESKTOP_DIR = "$HOME/";
+    # Prevent auto-creation of ~/Desktop. The trailing slash is necessary; see
+    # https://bugzilla.mozilla.org/show_bug.cgi?id=1082717
+    # env.XDG_DESKTOP_DIR = "$HOME/";
 
-      modules.applications.browsers.firefox.settings = {
+    # Use a stable profile name so we can target it in themes
+    home.file = let
+      cfgPath = ".mozilla/firefox";
+      settings = {
         # Default to dark theme in DevTools panel
         "devtools.theme" = "dark";
         # Enable ETP for decent security (makes firefox containers and many
@@ -101,7 +91,7 @@ in {
         # Enable userContent.css and userChrome.css for our theme modules
         "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
         # Stop creating ~/Downloads!
-        "browser.download.dir" = "${config.user.home}/downloads";
+        "browser.download.dir" = "${username}/downloads";
         # Don't use the built-in password manager. A nixos user is more likely
         # using an external one (you are using one, right?).
         "signon.rememberSignons" = false;
@@ -239,41 +229,38 @@ in {
         "extensions.formautofill.creditCards.enabled" = false;
         "extensions.formautofill.heuristics.enabled" = false;
       };
+    in {
+      "${cfgPath}/profiles.ini".text = ''
+        [Profile0]
+        Name=default
+        IsRelative=1
+        Path=${cfg.firefox.profileName}.default
+        Default=1
 
-      # Use a stable profile name so we can target it in themes
-      home.file = let cfgPath = ".mozilla/firefox"; in {
-        "${cfgPath}/profiles.ini".text = ''
-          [Profile0]
-          Name=default
-          IsRelative=1
-          Path=${cfg.firefox.profileName}.default
-          Default=1
+        [General]
+        StartWithLastProfile=1
+        Version=2
+      '';
 
-          [General]
-          StartWithLastProfile=1
-          Version=2
-        '';
+      "${cfgPath}/${cfg.firefox.profileName}.default/user.js" =
+        mkIf (settings != {} || cfg.firefox.extraConfig != "") {
+          text = ''
+            ${concatStrings (mapAttrsToList (name: value: ''
+              user_pref("${name}", ${builtins.toJSON value});
+            '') settings)}
+            ${cfg.firefox.extraConfig}
+          '';
+        };
 
-        "${cfgPath}/${cfg.firefox.profileName}.default/user.js" =
-          mkIf (cfg.firefox.settings != {} || cfg.firefox.extraConfig != "") {
-            text = ''
-              ${concatStrings (mapAttrsToList (name: value: ''
-                user_pref("${name}", ${builtins.toJSON value});
-              '') cfg.firefox.settings)}
-              ${cfg.firefox.extraConfig}
-            '';
-          };
+      "${cfgPath}/${cfg.firefox.profileName}.default/chrome/userChrome.css" =
+        mkIf (cfg.firefox.userChrome != "") {
+          text = cfg.firefox.userChrome;
+        };
 
-        "${cfgPath}/${cfg.firefox.profileName}.default/chrome/userChrome.css" =
-          mkIf (cfg.firefox.userChrome != "") {
-            text = cfg.firefox.userChrome;
-          };
-
-        "${cfgPath}/${cfg.firefox.profileName}.default/chrome/userContent.css" =
-          mkIf (cfg.firefox.userContent != "") {
-            text = cfg.firefox.userContent;
-          };
-      };
-    }
-  ]);
+      "${cfgPath}/${cfg.firefox.profileName}.default/chrome/userContent.css" =
+        mkIf (cfg.firefox.userContent != "") {
+          text = cfg.firefox.userContent;
+        };
+    };
+  };
 }

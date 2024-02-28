@@ -14,21 +14,10 @@ in
       nullOr (submoduleWith {
         modules = [{
           options = {
-            #
-            # Streaming
-            #
             enable = mkEnableOption "streaming";
-
-            #
-            # OBS
-            #
             obs = {
               enable = mkEnableOption "obs";
             };
-
-            #
-            # Zoom
-            #
             zoom = {
               enable = mkEnableOption "zoom";
             };

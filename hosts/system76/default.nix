@@ -16,12 +16,6 @@ in rec {
       applications = {
         vpn.enable = true;
       };
-      media = {
-        documents.enable = true;
-        graphics.enable = true;
-        mpv.enable = true;
-        spotify.enable = true;
-      };
       term = {
         default = "kitty";
         kitty.enable = true;
@@ -31,8 +25,6 @@ in rec {
       };
     };
     dev = {
-      cc.enable = true;
-      clojure.enable = true;
       golang.enable = true;
       lua.enable = true;
       node.enable = true;
@@ -40,10 +32,6 @@ in rec {
       rust.enable = false;
       shell.enable = true;
       python.enable = true;
-    };
-    editors = {
-      default = "nvim";
-      vim.enable = true;
     };
     shell = {
       # vaultwarden.enable = true;
