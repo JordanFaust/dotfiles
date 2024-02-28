@@ -16,10 +16,6 @@ in rec {
       applications = {
         vpn.enable = true;
       };
-      browsers = {
-        default = "firefox";
-        firefox.enable = true;
-      };
       media = {
         documents.enable = true;
         graphics.enable = true;

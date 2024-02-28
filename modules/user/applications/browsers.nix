@@ -4,11 +4,11 @@
 # infinite knowledge and shelter me from ads, but bless my $HOME with
 # directories nobody needs and live long enough to turn into Chrome.
 
-{ options, config, lib, pkgs, ... }:
+{ options, config, lib, pkgs, osConfig, ... }:
 
 with lib;
 with lib.my;
-let cfg = config.modules.desktop.browsers.firefox;
+let cfg = config.modules.applications.browsers;
 in {
   options.modules.desktop.browsers.firefox = with types; {
     enable = mkBoolOpt false;
@@ -23,6 +23,47 @@ in {
 
     userChrome  = mkOpt' lines "" "CSS Styles for Firefox's interface";
     userContent = mkOpt' lines "" "Global CSS Styles for websites";
+
+  };
+
+  options.modules.applications.browsers = lib.mkOption {
+    description = ''
+      Configurations for instant messangers, such as slack.
+    '';
+    type = with lib.types;
+      nullOr (submoduleWith {
+        modules = [{
+          options = {
+            #
+            # Browser
+            #
+            enable = mkEnableOption "browsers";
+
+            #
+            # Firefox
+            #
+            firefox = {
+              enable = mkEnableOption "firefox";
+
+              profileName = mkOpt types.str config.user.name;
+
+              settings = mkOpt' (attrsOf (oneOf [ bool int str ])) {} ''
+                Firefox preferences to set in <filename>user.js</filename>
+              '';
+              extraConfig = mkOpt' lines "" ''
+                Extra lines to add to <filename>user.js</filename>
+              '';
+
+              userChrome  = mkOpt' lines "" "CSS Styles for Firefox's interface";
+              userContent = mkOpt' lines "" "Global CSS Styles for websites";
+            };
+          };
+        }];
+      });
+    default = {
+      enable = true;
+      firefox.enable = true;
+    };
   };
 
   config = mkIf cfg.enable (mkMerge [
@@ -43,7 +84,7 @@ in {
       # https://bugzilla.mozilla.org/show_bug.cgi?id=1082717
       env.XDG_DESKTOP_DIR = "$HOME/";
 
-      modules.desktop.browsers.firefox.settings = {
+      modules.applications.browsers.firefox.settings = {
         # Default to dark theme in DevTools panel
         "devtools.theme" = "dark";
         # Enable ETP for decent security (makes firefox containers and many
@@ -205,7 +246,7 @@ in {
           [Profile0]
           Name=default
           IsRelative=1
-          Path=${cfg.profileName}.default
+          Path=${cfg.firefox.profileName}.default
           Default=1
 
           [General]
@@ -213,24 +254,24 @@ in {
           Version=2
         '';
 
-        "${cfgPath}/${cfg.profileName}.default/user.js" =
-          mkIf (cfg.settings != {} || cfg.extraConfig != "") {
+        "${cfgPath}/${cfg.firefox.profileName}.default/user.js" =
+          mkIf (cfg.firefox.settings != {} || cfg.firefox.extraConfig != "") {
             text = ''
               ${concatStrings (mapAttrsToList (name: value: ''
                 user_pref("${name}", ${builtins.toJSON value});
-              '') cfg.settings)}
-              ${cfg.extraConfig}
+              '') cfg.firefox.settings)}
+              ${cfg.firefox.extraConfig}
             '';
           };
 
-        "${cfgPath}/${cfg.profileName}.default/chrome/userChrome.css" =
-          mkIf (cfg.userChrome != "") {
-            text = cfg.userChrome;
+        "${cfgPath}/${cfg.firefox.profileName}.default/chrome/userChrome.css" =
+          mkIf (cfg.firefox.userChrome != "") {
+            text = cfg.firefox.userChrome;
           };
 
-        "${cfgPath}/${cfg.profileName}.default/chrome/userContent.css" =
-          mkIf (cfg.userContent != "") {
-            text = cfg.userContent;
+        "${cfgPath}/${cfg.firefox.profileName}.default/chrome/userContent.css" =
+          mkIf (cfg.firefox.userContent != "") {
+            text = cfg.firefox.userContent;
           };
       };
     }

@@ -3,7 +3,7 @@ with lib;
 with lib.my;
 let
   cfg = config.modules.applications.streaming;
-  enabled = config.modules.workstation.enable && cfg.enable;
+  minimal = config.modules.minimal;
 in
 {
   options.modules.applications.streaming = mkOption {
@@ -42,7 +42,7 @@ in
     };
   };
 
-  config = lib.mkIf (enabled) {
+  config = lib.mkIf (!minimal && cfg.enable) {
     home = {
       packages = with pkgs; [
         zoom-us

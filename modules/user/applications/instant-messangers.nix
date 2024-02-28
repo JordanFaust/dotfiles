@@ -1,8 +1,11 @@
-{ config, lib, pkgs, osConfig, ... }:
+{ config, lib, pkgs, inputs, osConfig, ... }:
 with lib;
 with lib.my;
-let cfg = config.modules.applications.instant-messangers;
-in {
+let
+  cfg = config.modules.applications.instant-messangers;
+  minimal = config.modules.minimal;
+in
+{
   options.modules.applications.instant-messangers = mkOption {
     description = ''
       Configurations for instant messangers, such as slack.
@@ -32,9 +35,11 @@ in {
   };
 
   # Add configured instant messangers if this isn't a minimal install and instant messangers are enabled.
-  config = mkIf (cfg.enable) {
-    user.packages = with pkgs; [
-      slack
-    ];
+  config = mkIf (!minimal && cfg.enable) {
+    home = {
+      packages = with pkgs; [
+        slack
+      ];
+    };
   };
 }

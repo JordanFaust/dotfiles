@@ -18,17 +18,17 @@ in {
         (filterAttrs (n: v: !elem n [ "system" ]) attrs)
         # Add home-manager as a system module, allow using it within user modules and
         # granting access to the capabilities of home-manager within system modules.
-        home-manager.nixosModules.home-manager
         # Load the default.nix configuration at the root of the repo. This includes setup
         # configuration common for all systems and establishes basic configuration of
         # used within both system and user modules via home-manager.
         ../.   # /default.nix
         # Load the configuration for home-manager for the target user. The import for the
         # target user will land home package configurations.
+        home-manager.nixosModules.home-manager
         {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
-          home-manager.users.jordan = import "${path}/home.nix";
+          home-manager.users.jordan = import ../hosts/system76/home.nix;
           # home-manager.users.modules = modules;
 
           home-manager.extraSpecialArgs = { inherit inputs; };
