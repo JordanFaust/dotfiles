@@ -74,7 +74,7 @@ outputs = inputs @ { self, nixpkgs, nixpkgs-stable, nixpkgs-unstable, home-manag
 
     lib = nixpkgs.lib.extend
       (self: super: { my = import ./lib { inherit pkgs inputs home-manager; lib = self; }; });
-  in {
+  in rec {
     lib = lib.my;
 
     overlay =
@@ -100,13 +100,13 @@ outputs = inputs @ { self, nixpkgs, nixpkgs-stable, nixpkgs-unstable, home-manag
     # Custom Modules
     #
     nixosModules =
-      { dotfiles = import ./.; } // mapModulesRec ./modules import;
+      { dotfiles = import ./.; } // mapModulesRec ./modules/system import;
 
     #
     # Host Configuration
     #
     nixosConfigurations =
-      mapHosts ./hosts {};
+      mapHosts ./hosts { };
 
     #
     # Home Configuration

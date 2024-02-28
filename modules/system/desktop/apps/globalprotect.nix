@@ -3,7 +3,7 @@
 with lib;
 with lib.my;
 let
-    cfg = config.modules.desktop.apps.globalprotect.system;
+    cfg = config.modules.desktop.apps.globalprotect;
     vpn = pkgs.writeScriptBin "vpn" ''
         #!${pkgs.stdenv.shell}
         prog_name="$(basename $0)"

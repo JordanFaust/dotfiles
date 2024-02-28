@@ -5,13 +5,6 @@ let
   homeDirectory = "/home/${username}";
 in
 {
-  imports =
-    # Space to include configuraton that must run first
-    # TODO: might remove
-    [(import ./options.nix { inherit lib types; } )]
-    # All my personal modules
-    ++ (mapModulesRec' (toString ./modules) import);
-
   news.display = "show";
 
   targets.genericLinux.enable = true;

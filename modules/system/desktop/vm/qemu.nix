@@ -4,7 +4,7 @@ with lib;
 with lib.my;
 let cfg = config.modules.desktop.vm.qemu;
 in {
-  options.modules.desktop.vm.qemu.system = lib.mkOption {
+  options.modules.desktop.vm.qemu = lib.mkOption {
     default = {};
     description = ''
       Enable Qemu virtualization.
@@ -16,7 +16,7 @@ in {
     };
   };
 
-  config = mkIf cfg.system.enable {
+  config = mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
       qemu
     ];

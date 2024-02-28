@@ -9,7 +9,7 @@ with lib;
 with lib.my;
 let cfg = config.modules.desktop.vm.virtualbox;
 in {
-  options.modules.desktop.vm.virtualbox.system = lib.mkOption {
+  options.modules.desktop.vm.virtualbox = lib.mkOption {
     default = {};
     description = ''
       Enable VirtualBox Virtualization software and UI.
@@ -21,7 +21,7 @@ in {
     };
   };
 
-  config = mkIf cfg.system.enable {
+  config = mkIf cfg.enable {
     virtualisation.virtualbox.host = {
       enable = true;
       # urg, takes so long to build, but needed for macOS guest

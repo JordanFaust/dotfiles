@@ -8,9 +8,12 @@ in
 {
   imports =
     # Space to include configuraton that must run first
-    [( import ../../home-manager/workstation.nix { inherit pkgs inputs config lib username; } )];
+    [ ]
+    # [( import ../../modules/user/workstation.nix { inherit pkgs inputs config lib username; } )];
     # # All my personal modules
-    # ++ (mapModulesRec' (toString ../../home-manager) import);
+    ++ (mapModulesRec'
+         (toString ../../modules/user)
+         (path: import path { inherit pkgs inputs config lib username; }));
 
   #
   # Desktop and Window Manager Configuration

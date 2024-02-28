@@ -16,7 +16,7 @@ with lib.my;
       binDir     = mkOpt path "${config.dotfiles.dir}/bin";
       configDir  = mkOpt path "${config.dotfiles.dir}/config";
       modulesDir = mkOpt path "${config.dotfiles.dir}/modules";
-      themesDir  = mkOpt path "${config.dotfiles.modulesDir}/themes";
+      themesDir  = mkOpt path "${config.dotfiles.modulesDir}/system/themes";
     };
 
     home = {
@@ -84,7 +84,7 @@ with lib.my;
 
     users.users.${config.user.name} = mkAliasDefinitions options.user;
 
-    user-options = config.home-manager.users.jordan;
+    user-options = config.home-manager.users.${config.user.name};
 
     nix.settings = let users = [ "root" config.user.name ]; in {
       trusted-users = users;
