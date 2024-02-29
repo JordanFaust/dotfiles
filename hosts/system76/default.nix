@@ -39,7 +39,6 @@ in rec {
     };
     theme = {
       active = "catppuccin";
-      wayland.enable = true;
     };
   };
 

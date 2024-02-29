@@ -66,15 +66,54 @@ in {
           flavour = ["macchiato"];
           accents = ["rosewater"];
         })
+
+        #
+        # Font Config
+        #
+
+        # General Coding Fonts
+        jetbrains-mono
+        fira-code
+        fira-code-symbols
+        cascadia-code
+        victor-mono
+        # General Sans Fonts
+        open-sans
+        siji
+        # Icon Fonts
+        (nerdfonts.override {fonts = ["CascadiaCode"];})
+        my.nonicons
       ];
 
       file = {
-        ".face" = {source = ./dalle-nixos-profile.jpg;};
+        # Avatar/Face jpg
+        ".face" = {source = ./assets/dalle-nixos-profile.jpg;};
+
+        # Firefox configuration
+        ".mozilla/firefox/jordan.default" = {
+          source = ./config/firefox;
+          recursive = true;
+        };
       };
     };
 
+    # Enable fontconfig to discover fonts added as home.packages above
+    fonts.fontconfig.enable = true;
+
     xdg.configFile = {
+      # Background Image
       "background" = {source = ./background.jpg;};
+      # Rofi Themes
+      "rofi/theme" = {
+        source = ./config/rofi;
+        recursive = true;
+      };
+      # Kitty Config/Theme
+      "kitty" = {
+        source = ./config/kitty;
+        recursive = true;
+      };
+      "kitty/themes/catppuccin-macchiato.conf".source = ./config/kitty/themes/catppuccin-macchiato.conf;
     };
 
     modules.desktop.gtk = {

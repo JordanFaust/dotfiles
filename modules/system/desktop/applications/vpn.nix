@@ -117,7 +117,6 @@ in {
       globalprotect-openconnect
     ];
 
-    services.gnome.at-spi2-core.enable = true;
     services.globalprotect = {
       enable = true;
       # if you need a Host Integrity Protection report
