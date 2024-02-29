@@ -1,7 +1,9 @@
-{ config, lib, ... }:
-
-with lib;
 {
+  config,
+  lib,
+  ...
+}:
+with lib; {
   time.timeZone = mkDefault "America/Chicago";
   i18n.defaultLocale = mkDefault "en_US.UTF-8";
   # For redshift, mainly

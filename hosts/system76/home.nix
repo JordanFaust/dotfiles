@@ -1,34 +1,47 @@
-{ pkgs, inputs, config, lib, home-manager, ... }:
+{
+  pkgs,
+  inputs,
+  config,
+  lib,
+  home-manager,
+  osConfig,
+  ...
+}:
 with lib;
-with lib.my;
-let
+with lib.my; let
   username = "jordan";
   homeDirectory = "/home/${username}";
-in
-{
+in {
   imports =
     # Space to include configuraton that must run first
-    [( import ../../home-manager/workstation.nix { inherit pkgs inputs config lib username; } )];
+    []
     # # All my personal modules
-    # ++ (mapModulesRec' (toString ../../home-manager) import);
+    ++ (mapModulesRec'
+      (toString ../../modules/user)
+      (path: import path {inherit pkgs inputs config lib username osConfig;}));
 
-  #
-  # Desktop and Window Manager Configuration
-  #
-  desktop = {
-    hyprland.enable = true;
-  };
+  modules = {
+    # Enable all standardized components for a full development workstation.
+    workstation.enable = true;
 
-  #
-  # Desktop Theme Configuration
-  #
-  themes = {
-    gtk.enable = true;
-    catppuccin.enable = true;
-  };
+    #
+    # Desktop and Window Manager Configuration
+    #
+    desktop = {
+      hyprland.enable = true;
+    };
 
-  # Applications
-  applications = {
-    streaming.enable = true;
+    #
+    # Desktop Theme Configuration
+    #
+    themes = {
+      gtk.enable = true;
+      catppuccin.enable = true;
+    };
+
+    # Applications
+    applications = {
+      streaming.enable = true;
+    };
   };
 }

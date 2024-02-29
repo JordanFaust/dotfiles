@@ -1,28 +1,27 @@
-{ lib
-, inputs
-, system
-, stdenv
-, cage
-, swww
-, bun
-, dart-sass
-, gtk3
-, fd
-, brightnessctl
-, accountsservice
-, slurp
-, wf-recorder
-, wl-clipboard
-, writeShellScript
-, wayshot
-, which
-, swappy
-, hyprpicker
-, pavucontrol
-, networkmanager
-}:
-
-let
+{
+  lib,
+  inputs,
+  system,
+  stdenv,
+  cage,
+  swww,
+  bun,
+  dart-sass,
+  gtk3,
+  fd,
+  brightnessctl,
+  accountsservice,
+  slurp,
+  wf-recorder,
+  wl-clipboard,
+  writeShellScript,
+  wayshot,
+  which,
+  swappy,
+  hyprpicker,
+  pavucontrol,
+  networkmanager,
+}: let
   name = "desktop";
 
   ags = inputs.ags.packages.${system}.default.override {
@@ -88,27 +87,27 @@ let
       cp -f greeter.js $out/greeter.js
     '';
   };
-in stdenv.mkDerivation {
-  inherit name;
+in
+  stdenv.mkDerivation {
+    inherit name;
 
-  src = config;
+    src = config;
 
-  installPhase = ''
-    mkdir -p $out/bin
+    installPhase = ''
+      mkdir -p $out/bin
 
-    cp -r . $out
+      cp -r . $out
 
-    cp ${desktop} $out/bin/${name}
-    cp ${greeter} $out/bin/greeter
-  '';
+      cp ${desktop} $out/bin/${name}
+      cp ${greeter} $out/bin/greeter
+    '';
 
-  meta = {
-    homepage = "https://github.com/JordanFaust/dotfiles";
-    description = "GTK desktop widgets via AGS";
-    # license = lib.licenses.unlicense;
-    platforms = [ "x86_64-linux" ];
-    maintainers = [];
-    mainProgram = "${name}";
-  };
-}
-
+    meta = {
+      homepage = "https://github.com/JordanFaust/dotfiles";
+      description = "GTK desktop widgets via AGS";
+      # license = lib.licenses.unlicense;
+      platforms = ["x86_64-linux"];
+      maintainers = [];
+      mainProgram = "${name}";
+    };
+  }

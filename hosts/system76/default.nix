@@ -1,6 +1,11 @@
-
-{ pkgs, inputs, config, lib, home-manager, ... }:
-let
+{
+  pkgs,
+  inputs,
+  config,
+  lib,
+  home-manager,
+  ...
+}: let
   username = "jordan";
 in rec {
   imports = [
@@ -13,68 +18,20 @@ in rec {
   modules = {
     desktop = {
       hyprland.enable = true;
-      # bspwm.enable = true;
-      cursor = {
-        enable = true;
-        theme = "Dracula";
-      };
-      apps = {
-        globalprotect.enable = true;
-        rofi.enable = true;
-        slack.enable = true;
-      };
-      browsers = {
-        default = "firefox";
-        firefox.enable = true;
-      };
-      media = {
-        documents.enable = true;
-        graphics = {
-          enable = true;
-          sprites.enable = false;
-          models.enable = false;
-        };
-        mpv.enable = true;
-        # Disable until ffmpeg is fixed
-        recording.enable = false;
-        spotify.enable = true;
-      };
-      term = {
-        default = "kitty";
-        alacritty.enable = false;
-        kitty.enable = true;
-        st.enable = false;
+      applications = {
+        vpn.enable = true;
       };
       vm = {
         qemu.enable = true;
       };
     };
-    dev = {
-      cc.enable = true;
-      clojure.enable = true;
-      golang.enable = true;
-      lua.enable = true;
-      node.enable = true;
-      ruby.enable = true;
-      rust.enable = false;
-      shell.enable = true;
-      python.enable = true;
-    };
-    editors = {
-      default = "nvim";
-      emacs = {
-        enable = false;
-        doom.enable = true;
-      };
-      vim.enable = true;
-    };
     shell = {
       # vaultwarden.enable = true;
       direnv.enable = true;
-      git.enable    = true;
-      gnupg.enable  = true;
-      tmux.enable   = true;
-      zsh.enable    = true;
+      git.enable = true;
+      gnupg.enable = true;
+      tmux.enable = true;
+      zsh.enable = true;
     };
     services = {
       ssh.enable = true;
@@ -82,11 +39,6 @@ in rec {
     };
     theme = {
       active = "catppuccin";
-      wayland = {
-        enable = true;
-      };
-      # wayland.enable = true;
-      # xserver.enable = false;
     };
   };
 
