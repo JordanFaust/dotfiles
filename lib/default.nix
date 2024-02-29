@@ -1,18 +1,26 @@
-{ inputs, lib, pkgs, home-manager, ... }:
-
-let
+{
+  inputs,
+  lib,
+  pkgs,
+  home-manager,
+  ...
+}: let
   inherit (lib) makeExtensible attrValues foldr;
   inherit (modules) mapModules;
 
   modules = import ./modules.nix {
     inherit lib;
-    self.attrs = import ./attrs.nix { inherit lib; self = {}; };
+    self.attrs = import ./attrs.nix {
+      inherit lib;
+      self = {};
+    };
   };
 
   mylib = makeExtensible (self:
-    with self; mapModules ./.
-      (file: import file { inherit self lib pkgs inputs home-manager; }));
+    with self;
+      mapModules ./.
+      (file: import file {inherit self lib pkgs inputs home-manager;}));
 in
-mylib.extend
+  mylib.extend
   (self: super:
     foldr (a: b: a // b) {} (attrValues super))

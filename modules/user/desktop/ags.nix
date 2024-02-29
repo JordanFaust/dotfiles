@@ -1,8 +1,14 @@
-{  config, lib, pkgs, inputs, osConfig, ... }:
-let
+{
+  config,
+  lib,
+  pkgs,
+  inputs,
+  osConfig,
+  ...
+}: let
   cursor = config.modules.desktop.gtk.cursor.name;
 in {
-  imports = [ inputs.ags.homeManagerModules.default ];
+  imports = [inputs.ags.homeManagerModules.default];
 
   home.packages = with pkgs; [
     libdbusmenu-gtk3

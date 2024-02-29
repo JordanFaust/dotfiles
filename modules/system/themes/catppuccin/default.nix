@@ -1,12 +1,16 @@
 # modules/themes/catppuccin/default.nix --- a pokemon and keyboard inspired theme
-
-{ options, config, lib, pkgs, inputs, ... }:
-
+{
+  options,
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
 with lib;
-with lib.my;
-let cfg = config.modules.theme;
-
-    # catppuccin-ags = pkgs.callPackage ./ags/ags.nix {};
+with lib.my; let
+  cfg = config.modules.theme;
+  # catppuccin-ags = pkgs.callPackage ./ags/ags.nix {};
 in {
   config = mkIf (cfg.active == "catppuccin") (mkMerge [
     # Desktop-agnostic configuration
@@ -25,32 +29,32 @@ in {
             mono.size = 16;
           };
           colors = {
-            black         = "#24273A";
-            red           = "#ED8796";
-            green         = "#A6DA95";
-            yellow        = "#EED49F";
-            blue          = "#8AADF4";
-            magenta       = "#B7BDF8";
-            cyan          = "#91D7E3";
-            silver        = "#dfd9d8";
-            grey          = "#24455b";
-            brightred     = "#ED8796";
-            brightgreen   = "#A6DA95";
-            brightyellow  = "#EED49F";
-            brightblue    = "#8AADF4";
+            black = "#24273A";
+            red = "#ED8796";
+            green = "#A6DA95";
+            yellow = "#EED49F";
+            blue = "#8AADF4";
+            magenta = "#B7BDF8";
+            cyan = "#91D7E3";
+            silver = "#dfd9d8";
+            grey = "#24455b";
+            brightred = "#ED8796";
+            brightgreen = "#A6DA95";
+            brightyellow = "#EED49F";
+            brightblue = "#8AADF4";
             brightmagenta = "#B7BDF8";
-            brightcyan    = "#91D7E3";
-            white         = "#ded8d7";
+            brightcyan = "#91D7E3";
+            white = "#ded8d7";
 
-            types.fg      = "#ded8d7";
-            types.bg      = "#24273A";
+            types.fg = "#ded8d7";
+            types.bg = "#24273A";
             types.panelbg = "#1E2030";
-            types.border  = "#F5A97F";
+            types.border = "#F5A97F";
           };
         };
 
-        shell.zsh.rcFiles  = [ ./config/zsh/prompt.zsh ];
-        shell.tmux.rcFiles = [ ./config/tmux.conf ];
+        shell.zsh.rcFiles = [./config/zsh/prompt.zsh];
+        shell.tmux.rcFiles = [./config/tmux.conf];
         # desktop.browsers = {
         #   firefox.userChrome = concatMapStringsSep "\n" readFile [
         #     ./config/firefox/userChrome.css
@@ -99,27 +103,36 @@ in {
         # font-awesome
         # material-icons
         # material-design-icons
-        (nerdfonts.override { fonts = [ "CascadiaCode" ]; })
+        (nerdfonts.override {fonts = ["CascadiaCode"];})
         my.nonicons
       ];
 
       home.file = {
         # Firefox configuration
-        ".mozilla/firefox/jordan.default" = { source = ./config/firefox; recursive = true; };
+        ".mozilla/firefox/jordan.default" = {
+          source = ./config/firefox;
+          recursive = true;
+        };
       };
 
       # Other dotfiles
-      home.configFile = with config.modules; mkMerge [
-        {
-          "rofi/theme" = { source = ./config/rofi; recursive = true; };
-        }
-        (mkIf desktop.term.kitty.enable {
-          "kitty" = { source = ./config/kitty; recursive = true; };
-          "kitty/themes/monokai-pro.conf".source = ./config/kitty/themes/monokai-pro.conf;
-          "kitty/themes/catppuccin-macchiato.conf".source = ./config/kitty/themes/catppuccin-macchiato.conf;
-        })
-      ];
+      home.configFile = with config.modules;
+        mkMerge [
+          {
+            "rofi/theme" = {
+              source = ./config/rofi;
+              recursive = true;
+            };
+          }
+          (mkIf desktop.term.kitty.enable {
+            "kitty" = {
+              source = ./config/kitty;
+              recursive = true;
+            };
+            "kitty/themes/monokai-pro.conf".source = ./config/kitty/themes/monokai-pro.conf;
+            "kitty/themes/catppuccin-macchiato.conf".source = ./config/kitty/themes/catppuccin-macchiato.conf;
+          })
+        ];
     })
   ]);
 }
-

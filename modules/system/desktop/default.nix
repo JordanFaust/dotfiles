@@ -1,8 +1,14 @@
-{ config, options, lib, pkgs, inputs, ... }:
-
+{
+  config,
+  options,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
 with lib;
-with lib.my;
-let cfg = config.modules.desktop;
+with lib.my; let
+  cfg = config.modules.desktop;
 in {
   config = mkIf config.services.xserver.enable {
     assertions = [
@@ -11,38 +17,40 @@ in {
         message = "Can't have more than one desktop environment enabled at a time";
       }
       {
-        assertion =
-          let srv = config.services;
-          in srv.xserver.enable ||
-             srv.sway.enable ||
-             srv.wayland.enable ||
-             !(anyAttrs
-               (n: v: isAttrs v &&
-                      anyAttrs (n: v: isAttrs v && v.enable))
-               cfg);
+        assertion = let
+          srv = config.services;
+        in
+          srv.xserver.enable
+          || srv.sway.enable
+          || srv.wayland.enable
+          || !(anyAttrs
+            (n: v:
+              isAttrs v
+              && anyAttrs (n: v: isAttrs v && v.enable))
+            cfg);
         message = "Can't enable a desktop app without a desktop environment";
       }
     ];
 
     user.packages = with pkgs; [
-      feh       # image viewer
+      feh # image viewer
       xclip
       xdotool
       xdo
       xorg.xwininfo
-      libqalculate  # calculator cli w/ currency conversion
+      libqalculate # calculator cli w/ currency conversion
       (makeDesktopItem {
         name = "scratch-calc";
         desktopName = "Calculator";
         icon = "calc";
         exec = ''scratch "${tmux}/bin/tmux new-session -s calc -n calc qalc"'';
-        categories = [ "Development" ];
+        categories = ["Development"];
       })
-      qgnomeplatform        # QPlatformTheme for a better Qt application inclusion in GNOME
+      qgnomeplatform # QPlatformTheme for a better Qt application inclusion in GNOME
       libsForQt5.qtstyleplugin-kvantum # SVG-based Qt5 theme engine plus a config tool and extra theme
 
       # Patch favorite fonts with NerdFonts
-      (nerdfonts.override { fonts = [ "JetBrainsMono" "FiraCode"]; })
+      (nerdfonts.override {fonts = ["JetBrainsMono" "FiraCode"];})
 
       # Performance Monitoring
       bmon
@@ -89,7 +97,7 @@ in {
         ubuntu_font_family
         dejavu_fonts
         symbola
-        (nerdfonts.override { fonts = [ "JetBrainsMono" "FiraCode" "DroidSansMono" ]; })
+        (nerdfonts.override {fonts = ["JetBrainsMono" "FiraCode" "DroidSansMono"];})
       ];
     };
 

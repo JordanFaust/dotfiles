@@ -1,28 +1,35 @@
-{ config, lib, pkgs, inputs, osConfig, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  inputs,
+  osConfig,
+  ...
+}:
 with lib;
-with lib.my;
-let
+with lib.my; let
   cfg = config.modules.applications.streaming;
   minimal = config.modules.minimal;
-in
-{
+in {
   options.modules.applications.streaming = mkOption {
     description = ''
       Configurations for streaming video and recording the desktop.
     '';
     type = with lib.types;
       nullOr (submoduleWith {
-        modules = [{
-          options = {
-            enable = mkEnableOption "streaming";
-            obs = {
-              enable = mkEnableOption "obs";
+        modules = [
+          {
+            options = {
+              enable = mkEnableOption "streaming";
+              obs = {
+                enable = mkEnableOption "obs";
+              };
+              zoom = {
+                enable = mkEnableOption "zoom";
+              };
             };
-            zoom = {
-              enable = mkEnableOption "zoom";
-            };
-          };
-        }];
+          }
+        ];
       });
     default = {
       enable = true;
@@ -48,4 +55,3 @@ in
     };
   };
 }
-

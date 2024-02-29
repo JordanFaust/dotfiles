@@ -1,9 +1,15 @@
-{ config, options, lib, pkgs, my, ... }:
-
+{
+  config,
+  options,
+  lib,
+  pkgs,
+  my,
+  ...
+}:
 with lib;
-with lib.my;
-let devCfg = config.modules.dev;
-    cfg = devCfg.clojure;
+with lib.my; let
+  devCfg = config.modules.dev;
+  cfg = devCfg.clojure;
 in {
   options.modules.dev.clojure = {
     enable = mkBoolOpt false;

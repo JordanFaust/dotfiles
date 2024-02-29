@@ -1,9 +1,15 @@
-{ options, config, lib, pkgs, inputs, ... }:
-
+{
+  options,
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
 with lib;
-with lib.my;
-let cfg = config.modules.desktop.bspwm;
-    configDir = config.dotfiles.configDir;
+with lib.my; let
+  cfg = config.modules.desktop.bspwm;
+  configDir = config.dotfiles.configDir;
 in {
   options.modules.desktop.bspwm = {
     enable = mkBoolOpt false;
@@ -17,14 +23,13 @@ in {
     '';
 
     environment.systemPackages = with pkgs; [
-
       # bspwm
       (makeDesktopItem {
         name = "none+bspwm";
         desktopName = "bspwm";
         icon = "display";
         exec = "${bspwm}/bin/bspwm";
-        categories = [ "System" ];
+        categories = ["System"];
       })
       bc
       bsp-layout
@@ -56,14 +61,14 @@ in {
         desktopName = "xfce Display Settings";
         icon = "display";
         exec = "${xfce.xfce4-settings}/bin/xfce4-display-settings";
-        categories = [ "Settings" "Accessibility" "XFCE" ];
+        categories = ["Settings" "Accessibility" "XFCE"];
       })
       (makeDesktopItem {
         name = "xfce Accessibility Settings";
         desktopName = "xfce Accessibility Settings";
         icon = "settings";
         exec = "${xfce.xfce4-settings}/bin/xfce4-accessibility-settings";
-        categories = [ "Settings" "Accessibility" "XFCE" ];
+        categories = ["Settings" "Accessibility" "XFCE"];
       })
       xfce.xfce4-power-manager
       (makeDesktopItem {
@@ -71,7 +76,7 @@ in {
         desktopName = "xfce Power Manager";
         icon = "settings";
         exec = "${xfce.xfce4-settings}/bin/xfce4-power-manager-settings";
-        categories = [ "Settings" "Accessibility" "XFCE" ];
+        categories = ["Settings" "Accessibility" "XFCE"];
       })
     ];
 
@@ -102,9 +107,9 @@ in {
       enable = true;
 
       description = "Dunst notification daemon";
-      documentation = [ "man:dunst(1)" ];
-      wantedBy = [ "graphical-session.target" ];
-      partOf = [ "graphical-session.target" ];
+      documentation = ["man:dunst(1)"];
+      wantedBy = ["graphical-session.target"];
+      partOf = ["graphical-session.target"];
 
       serviceConfig = {
         Type = "dbus";

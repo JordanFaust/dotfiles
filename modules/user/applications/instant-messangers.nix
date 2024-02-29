@@ -1,32 +1,39 @@
-{ config, lib, pkgs, inputs, osConfig, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  inputs,
+  osConfig,
+  ...
+}:
 with lib;
-with lib.my;
-let
+with lib.my; let
   cfg = config.modules.applications.instant-messangers;
   minimal = config.modules.minimal;
-in
-{
+in {
   options.modules.applications.instant-messangers = mkOption {
     description = ''
       Configurations for instant messangers, such as slack.
     '';
     type = with lib.types;
       nullOr (submoduleWith {
-        modules = [{
-          options = {
-            #
-            # Launcher
-            #
-            enable = mkEnableOption "instant-messangers";
+        modules = [
+          {
+            options = {
+              #
+              # Launcher
+              #
+              enable = mkEnableOption "instant-messangers";
 
-            #
-            # Slack
-            #
-            slack = {
-              enable = mkEnableOption "slack";
+              #
+              # Slack
+              #
+              slack = {
+                enable = mkEnableOption "slack";
+              };
             };
-          };
-        }];
+          }
+        ];
       });
     default = {
       enable = true;

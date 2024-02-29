@@ -6,7 +6,6 @@
 #
 # Welcome to ground zero. Where the whole flake gets set up and all its modules
 # are loaded.
-
 {
   description = "A grossly incandescent nixos config.";
 
@@ -56,35 +55,48 @@
     alejandra.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-outputs = inputs @ { self, nixpkgs, nixpkgs-stable, nixpkgs-unstable, home-manager, alejandra, ... }:
-  let
+  outputs = inputs @ {
+    self,
+    nixpkgs,
+    nixpkgs-stable,
+    nixpkgs-unstable,
+    home-manager,
+    alejandra,
+    ...
+  }: let
     inherit (lib.my) mapModules mapModulesRec mapHosts;
 
     system = "x86_64-linux";
     username = "jordan";
 
-    mkPkgs = pkgs: extraOverlays: import pkgs {
-      inherit system;
-      config.allowUnfree = true;
-      overlays = extraOverlays ++ (lib.attrValues self.overlays);
-    };
-    pkgs  = mkPkgs nixpkgs [ self.overlay inputs.deno2nix.overlays.default ];
+    mkPkgs = pkgs: extraOverlays:
+      import pkgs {
+        inherit system;
+        config.allowUnfree = true;
+        overlays = extraOverlays ++ (lib.attrValues self.overlays);
+      };
+    pkgs = mkPkgs nixpkgs [self.overlay inputs.deno2nix.overlays.default];
     pkgs' = mkPkgs nixpkgs-unstable [];
     pkgs-stable' = mkPkgs nixpkgs-stable [];
 
-    lib = nixpkgs.lib.extend
-      (self: super: { my = import ./lib { inherit pkgs inputs home-manager; lib = self; }; });
+    lib =
+      nixpkgs.lib.extend
+      (self: super: {
+        my = import ./lib {
+          inherit pkgs inputs home-manager;
+          lib = self;
+        };
+      });
   in rec {
     lib = lib.my;
 
-    overlay =
-      final: prev: {
-        # Tracking unstable everywhere by default. Adding this for legacy support and to allow
-        # swapping pack to stable
-        unstable = pkgs';
-        stable = pkgs-stable';
-        my = self.packages."${system}";
-      };
+    overlay = final: prev: {
+      # Tracking unstable everywhere by default. Adding this for legacy support and to allow
+      # swapping pack to stable
+      unstable = pkgs';
+      stable = pkgs-stable';
+      my = self.packages."${system}";
+    };
 
     overlays =
       mapModules ./overlays import;
@@ -93,20 +105,20 @@ outputs = inputs @ { self, nixpkgs, nixpkgs-stable, nixpkgs-unstable, home-manag
     # Custom Packages
     #
     packages."${system}" =
-      mapModules ./packages (p: pkgs.callPackage p { inherit inputs; });
-      # // { desktop = (pkgs.callPackage ./packages/ags.nix { inherit inputs; }); };
+      mapModules ./packages (p: pkgs.callPackage p {inherit inputs;});
+    # // { desktop = (pkgs.callPackage ./packages/ags.nix { inherit inputs; }); };
 
     #
     # Custom Modules
     #
     nixosModules =
-      { dotfiles = import ./.; } // mapModulesRec ./modules/system import;
+      {dotfiles = import ./.;} // mapModulesRec ./modules/system import;
 
     #
     # Host Configuration
     #
     nixosConfigurations =
-      mapHosts ./hosts { };
+      mapHosts ./hosts {};
 
     #
     # Home Configuration
@@ -118,14 +130,16 @@ outputs = inputs @ { self, nixpkgs, nixpkgs-stable, nixpkgs-unstable, home-manag
     # };
 
     devShell."${system}" =
-      import ./shell.nix { inherit pkgs; };
+      import ./shell.nix {inherit pkgs;};
 
-    templates = {
-      full = {
-        path = ./.;
-        description = "A grossly incandescent nixos config";
-      };
-    } // import ./templates;
+    templates =
+      {
+        full = {
+          path = ./.;
+          description = "A grossly incandescent nixos config";
+        };
+      }
+      // import ./templates;
     defaultTemplate = self.templates.full;
 
     defaultApp."${system}" = {

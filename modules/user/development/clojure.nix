@@ -1,22 +1,29 @@
-{ config, lib, pkgs, inputs, osConfig, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  inputs,
+  osConfig,
+  ...
+}:
 with lib;
-with lib.my;
-let
+with lib.my; let
   cfg = config.modules.development.clojure;
   minimal = config.modules.minimal;
-in
-{
+in {
   options.modules.development.clojure = mkOption {
     description = ''
       Configurations for Clojure development.
     '';
     type = with lib.types;
       nullOr (submoduleWith {
-        modules = [{
-          options = {
-            enable = mkEnableOption "clojure";
-          };
-        }];
+        modules = [
+          {
+            options = {
+              enable = mkEnableOption "clojure";
+            };
+          }
+        ];
       });
     default = {
       enable = true;

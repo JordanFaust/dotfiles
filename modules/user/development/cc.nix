@@ -1,22 +1,29 @@
-{ config, lib, pkgs, inputs, osConfig, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  inputs,
+  osConfig,
+  ...
+}:
 with lib;
-with lib.my;
-let
+with lib.my; let
   cfg = config.modules.development.cc;
   minimal = config.modules.minimal;
-in
-{
+in {
   options.modules.development.cc = mkOption {
     description = ''
       Configurations for C development.
     '';
     type = with lib.types;
       nullOr (submoduleWith {
-        modules = [{
-          options = {
-            enable = mkEnableOption "cc";
-          };
-        }];
+        modules = [
+          {
+            options = {
+              enable = mkEnableOption "cc";
+            };
+          }
+        ];
       });
     default = {
       enable = true;

@@ -3,12 +3,16 @@
 # Oh Firefox, gateway to the interwebs, devourer of ram. Give onto me your
 # infinite knowledge and shelter me from ads, but bless my $HOME with
 # directories nobody needs and live long enough to turn into Chrome.
-
-{ config, lib, pkgs, osConfig, username, ... }:
-
+{
+  config,
+  lib,
+  pkgs,
+  osConfig,
+  username,
+  ...
+}:
 with lib;
-with lib.my;
-let
+with lib.my; let
   cfg = config.modules.applications.browsers;
   minimal = config.modules.minimal;
 in {
@@ -18,33 +22,35 @@ in {
     '';
     type = with lib.types;
       nullOr (submoduleWith {
-        modules = [{
-          options = {
-            #
-            # Browser
-            #
-            enable = mkEnableOption "browsers";
+        modules = [
+          {
+            options = {
+              #
+              # Browser
+              #
+              enable = mkEnableOption "browsers";
 
-            #
-            # Firefox
-            #
-            firefox = {
-              enable = mkEnableOption "firefox";
+              #
+              # Firefox
+              #
+              firefox = {
+                enable = mkEnableOption "firefox";
 
-              profileName = mkOpt types.str username;
+                profileName = mkOpt types.str username;
 
-              settings = mkOpt' (attrsOf (oneOf [ bool int str ])) {} ''
-                Firefox preferences to set in <filename>user.js</filename>
-              '';
-              extraConfig = mkOpt' lines "" ''
-                Extra lines to add to <filename>user.js</filename>
-              '';
+                settings = mkOpt' (attrsOf (oneOf [bool int str])) {} ''
+                  Firefox preferences to set in <filename>user.js</filename>
+                '';
+                extraConfig = mkOpt' lines "" ''
+                  Extra lines to add to <filename>user.js</filename>
+                '';
 
-              userChrome  = mkOpt' lines "" "CSS Styles for Firefox's interface";
-              userContent = mkOpt' lines "" "Global CSS Styles for websites";
+                userChrome = mkOpt' lines "" "CSS Styles for Firefox's interface";
+                userContent = mkOpt' lines "" "Global CSS Styles for websites";
+              };
             };
-          };
-        }];
+          }
+        ];
       });
     default = {
       enable = true;
@@ -62,7 +68,7 @@ in {
           genericName = "Open a private Firefox window";
           icon = "firefox";
           exec = "${unstable.firefox-bin}/bin/firefox --private-window";
-          categories = [ "Network" ];
+          categories = ["Network"];
         })
       ];
     };
@@ -134,13 +140,13 @@ in {
         # Show whole URL in address bar
         "browser.urlbar.trimURLs" = false;
         # Disable some not so useful functionality.
-        "browser.disableResetPrompt" = true;       # "Looks like you haven't started Firefox in a while."
-        "browser.onboarding.enabled" = false;      # "New to Firefox? Let's get started!" tour
+        "browser.disableResetPrompt" = true; # "Looks like you haven't started Firefox in a while."
+        "browser.onboarding.enabled" = false; # "New to Firefox? Let's get started!" tour
         "browser.aboutConfig.showWarning" = false; # Warning when opening about:config
         "media.videocontrols.picture-in-picture.video-toggle.enabled" = false;
         "extensions.pocket.enabled" = false;
         "extensions.shield-recipe-client.enabled" = false;
-        "reader.parse-on-load.enabled" = false;  # "reader view"
+        "reader.parse-on-load.enabled" = false; # "reader view"
 
         # Security-oriented defaults
         "security.family_safety.mode" = 0;
@@ -157,7 +163,7 @@ in {
         "browser.newtabpage.activity-stream.asrouter.userprefs.cfr.features" = false;
         "extensions.htmlaboutaddons.recommendations.enabled" = false;
         "extensions.htmlaboutaddons.discover.enabled" = false;
-        "extensions.getAddons.showPane" = false;  # uses Google Analytics
+        "extensions.getAddons.showPane" = false; # uses Google Analytics
         "browser.discovery.enabled" = false;
         # Reduce File IO / SSD abuse
         # Otherwise, Firefox bombards the HD with writes. Not so nice for SSDs.
@@ -218,7 +224,7 @@ in {
         # Disable crash reports
         "breakpad.reportURL" = "";
         "browser.tabs.crashReporting.sendReport" = false;
-        "browser.crashReports.unsubmittedCheck.autoSubmit2" = false;  # don't submit backlogged reports
+        "browser.crashReports.unsubmittedCheck.autoSubmit2" = false; # don't submit backlogged reports
 
         # Disable Form autofill
         # https://wiki.mozilla.org/Firefox/Features/Form_Autofill
@@ -242,25 +248,23 @@ in {
         Version=2
       '';
 
-      "${cfgPath}/${cfg.firefox.profileName}.default/user.js" =
-        mkIf (settings != {} || cfg.firefox.extraConfig != "") {
-          text = ''
-            ${concatStrings (mapAttrsToList (name: value: ''
+      "${cfgPath}/${cfg.firefox.profileName}.default/user.js" = mkIf (settings != {} || cfg.firefox.extraConfig != "") {
+        text = ''
+          ${concatStrings (mapAttrsToList (name: value: ''
               user_pref("${name}", ${builtins.toJSON value});
-            '') settings)}
-            ${cfg.firefox.extraConfig}
-          '';
-        };
+            '')
+            settings)}
+          ${cfg.firefox.extraConfig}
+        '';
+      };
 
-      "${cfgPath}/${cfg.firefox.profileName}.default/chrome/userChrome.css" =
-        mkIf (cfg.firefox.userChrome != "") {
-          text = cfg.firefox.userChrome;
-        };
+      "${cfgPath}/${cfg.firefox.profileName}.default/chrome/userChrome.css" = mkIf (cfg.firefox.userChrome != "") {
+        text = cfg.firefox.userChrome;
+      };
 
-      "${cfgPath}/${cfg.firefox.profileName}.default/chrome/userContent.css" =
-        mkIf (cfg.firefox.userContent != "") {
-          text = cfg.firefox.userContent;
-        };
+      "${cfgPath}/${cfg.firefox.profileName}.default/chrome/userContent.css" = mkIf (cfg.firefox.userContent != "") {
+        text = cfg.firefox.userContent;
+      };
     };
   };
 }

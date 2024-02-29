@@ -1,10 +1,14 @@
 # modules/desktop/term/kitty.nix
-
-{ options, config, lib, pkgs, ... }:
-
+{
+  options,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
-with lib.my;
-let cfg = config.modules.desktop.term.kitty;
+with lib.my; let
+  cfg = config.modules.desktop.term.kitty;
 in {
   options.modules.desktop.term.kitty = {
     enable = mkBoolOpt false;
@@ -24,7 +28,7 @@ in {
         genericName = "Kitty terminal";
         icon = "utilities-terminal";
         exec = "${kitty}/bin/kitty";
-        categories = [ "Development" "System" "Utility" ];
+        categories = ["Development" "System" "Utility"];
       })
     ];
   };

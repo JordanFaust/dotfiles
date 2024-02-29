@@ -1,15 +1,23 @@
-{ config, options, lib, pkgs, ... }:
-
-let
-  inherit (lib)
+{
+  config,
+  options,
+  lib,
+  pkgs,
+  ...
+}: let
+  inherit
+    (lib)
     concatStringsSep
     mapAttrsToList
     mkIf
     mkMerge
     mkDefault
-    types;
-  inherit (lib.my)
-    mkOpt;
+    types
+    ;
+  inherit
+    (lib.my)
+    mkOpt
+    ;
   cfg = config.modules.security;
 in {
   options.modules.security = {
@@ -76,7 +84,7 @@ in {
         "net.ipv4.tcp_congestion_control" = "bbr";
         "net.core.default_qdisc" = "cake";
       };
-      boot.kernelModules = [ "tcp_bbr" ];
+      boot.kernelModules = ["tcp_bbr"];
 
       # Change me later!
       user.initialPassword = "nixos";
@@ -108,7 +116,8 @@ in {
     # credentials from the sensitive repo
 
     (mkIf (cfg.copySensitive != {})
-      (let sensitive = pkgs.writeScriptBin "sensitive" ''
+      (let
+        sensitive = pkgs.writeScriptBin "sensitive" ''
           #!/usr/bin/env bash
           echo "Checking if sensitive repo is setup"
           if [[ ! -d /etc/sensitive ]]; then
@@ -123,14 +132,15 @@ in {
           if [[ -d /etc/sensitive ]]; then
             echo "[sensitive] Copying sensitive credentials"
             ${concatStringsSep "\n"
-              (mapAttrsToList (name: script: ''
+            (mapAttrsToList (name: script: ''
                 echo "[${name}]"
                 ${script}
-              '') cfg.copySensitive)}
+              '')
+              cfg.copySensitive)}
           fi
         '';
       in {
-        user.packages = [ sensitive ];
+        user.packages = [sensitive];
         system.userActivationScripts.sensitive = ''
           [ -z "$NORELOAD" ] && ${sensitive}/bin/sensitive
         '';

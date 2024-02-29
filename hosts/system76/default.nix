@@ -1,6 +1,11 @@
-
-{ pkgs, inputs, config, lib, home-manager, ... }:
-let
+{
+  pkgs,
+  inputs,
+  config,
+  lib,
+  home-manager,
+  ...
+}: let
   username = "jordan";
 in rec {
   imports = [
@@ -36,10 +41,10 @@ in rec {
     shell = {
       # vaultwarden.enable = true;
       direnv.enable = true;
-      git.enable    = true;
-      gnupg.enable  = true;
-      tmux.enable   = true;
-      zsh.enable    = true;
+      git.enable = true;
+      gnupg.enable = true;
+      tmux.enable = true;
+      zsh.enable = true;
     };
     services = {
       ssh.enable = true;

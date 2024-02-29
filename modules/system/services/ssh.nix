@@ -1,9 +1,13 @@
-{ options, config, lib, ... }:
-
+{
+  options,
+  config,
+  lib,
+  ...
+}:
 with lib;
-with lib.my;
-let cfg = config.modules.services.ssh;
-    configDir = config.dotfiles.configDir;
+with lib.my; let
+  cfg = config.modules.services.ssh;
+  configDir = config.dotfiles.configDir;
 in {
   options.modules.services.ssh = {
     enable = mkBoolOpt false;

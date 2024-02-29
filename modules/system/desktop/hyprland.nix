@@ -1,10 +1,16 @@
-{ options, config, lib, pkgs, inputs, ... }:
-
+{
+  options,
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
 with lib;
-with lib.my;
-let cfg = config.modules.desktop.hyprland;
-    hyprland = inputs.hyprland.packages.${pkgs.system}.hyprland;
-    configDir = config.dotfiles.configDir;
+with lib.my; let
+  cfg = config.modules.desktop.hyprland;
+  hyprland = inputs.hyprland.packages.${pkgs.system}.hyprland;
+  configDir = config.dotfiles.configDir;
 in {
   options.modules.desktop.hyprland = {
     enable = mkBoolOpt false;
@@ -148,9 +154,9 @@ in {
         enable = true;
 
         description = "polkit-gnome-authentication-agent-1";
-        wantedBy = [ "graphical-session.target" ];
-        wants = [ "graphical-session.target" ];
-        after = [ "graphical-session.target" ];
+        wantedBy = ["graphical-session.target"];
+        wants = ["graphical-session.target"];
+        after = ["graphical-session.target"];
         serviceConfig = {
           Type = "simple";
           ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";

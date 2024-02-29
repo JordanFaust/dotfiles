@@ -1,8 +1,13 @@
-{ options, config, lib, pkgs, ... }:
-
+{
+  options,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
-with lib.my;
-let cfg = config.modules.desktop.vm.qemu;
+with lib.my; let
+  cfg = config.modules.desktop.vm.qemu;
 in {
   options.modules.desktop.vm.qemu = lib.mkOption {
     default = {};

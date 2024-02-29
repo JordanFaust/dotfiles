@@ -1,11 +1,16 @@
 # modules/dev/ruby.nix
 #
-{ config, options, lib, pkgs, ... }:
-
+{
+  config,
+  options,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
-with lib.my;
-let devCfg = config.modules.dev;
-    cfg = devCfg.ruby;
+with lib.my; let
+  devCfg = config.modules.dev;
+  cfg = devCfg.ruby;
 in {
   options.modules.dev.ruby = {
     enable = mkBoolOpt false;
@@ -32,11 +37,11 @@ in {
         bundix
         my.ruby-lsp
       ];
-      env.GEM_PATH = [ "${pkgs.ruby_3_2}/lib/ruby/gems/3.2.0" ];
-      env.PATH = [ "${pkgs.ruby_3_2}/lib/ruby/gems/3.2.0" ];
+      env.GEM_PATH = ["${pkgs.ruby_3_2}/lib/ruby/gems/3.2.0"];
+      env.PATH = ["${pkgs.ruby_3_2}/lib/ruby/gems/3.2.0"];
     })
 
     (mkIf cfg.xdg.enable {
-    })
+      })
   ];
 }

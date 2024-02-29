@@ -1,10 +1,15 @@
-{ pkgs, inputs, config, lib, username, ... }:
-with lib;
-with lib.my;
-let
-  homeDirectory = "/home/${username}";
-in
 {
+  pkgs,
+  inputs,
+  config,
+  lib,
+  username,
+  ...
+}:
+with lib;
+with lib.my; let
+  homeDirectory = "/home/${username}";
+in {
   news.display = "show";
 
   targets.genericLinux.enable = true;
@@ -18,7 +23,7 @@ in
       NIXPKGS_ALLOW_INSECURE = "1";
       BAT_THEME = "base16";
       GOPATH = "${homeDirectory}/.local/share/go";
-      GOMODCACHE="${homeDirectory}/.cache/go/pkg/mod";
+      GOMODCACHE = "${homeDirectory}/.cache/go/pkg/mod";
     };
 
     sessionPath = [
@@ -28,4 +33,3 @@ in
 
   programs.home-manager.enable = true;
 }
-

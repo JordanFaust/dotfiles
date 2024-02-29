@@ -1,8 +1,12 @@
-{ config, lib, pkgs, inputs, ... }:
-
+{
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
 with lib;
-with lib.my;
-let
+with lib.my; let
   cfg = config.modules.applications.neovim;
 in {
   options.modules.applications.neovim = mkOption {
@@ -11,14 +15,16 @@ in {
     '';
     type = with lib.types;
       nullOr (submoduleWith {
-        modules = [{
-          options = {
-            #
-            # Neovim
-            #
-            enable = mkEnableOption "neovim";
-          };
-        }];
+        modules = [
+          {
+            options = {
+              #
+              # Neovim
+              #
+              enable = mkEnableOption "neovim";
+            };
+          }
+        ];
       });
     default = {
       enable = true;
@@ -56,7 +62,7 @@ in {
           icon = "nvim";
           # KITTY_ENABLE_WAYLAND must be set here or integrations with wayland, such as copy/paste, won't work
           exec = "bash -c \"KITTY_ENABLE_WAYLAND=1; ${kitty}/bin/kitty --title Neovim --class neovim -e nvim %F\"";
-          categories = [ "Utility" "TextEditor" ];
+          categories = ["Utility" "TextEditor"];
         })
       ];
     };

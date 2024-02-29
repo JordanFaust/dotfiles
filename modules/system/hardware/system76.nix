@@ -1,8 +1,13 @@
-{ options, config, lib, pkgs, ... }:
-
+{
+  options,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
-with lib.my;
-let cfg = config.modules.hardware.system76;
+with lib.my; let
+  cfg = config.modules.hardware.system76;
 in {
   options.modules.hardware.system76 = {
     enable = mkBoolOpt false;

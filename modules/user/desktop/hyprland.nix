@@ -1,7 +1,13 @@
-{ config, inputs, pkgs, lib, osConfig, ... }:
+{
+  config,
+  inputs,
+  pkgs,
+  lib,
+  osConfig,
+  ...
+}:
 with lib;
-with lib.my;
-let
+with lib.my; let
   cfg = config.modules.desktop.hyprland;
   hyprland = inputs.hyprland.packages.${pkgs.system}.hyprland;
   plugins = inputs.hyprland-plugins.packages.${pkgs.system};
@@ -19,19 +25,20 @@ let
     name = config.modules.desktop.gtk.cursor.name;
     size = config.modules.desktop.gtk.cursor.size;
   };
-in
-{
+in {
   options.modules.desktop.hyprland = mkOption {
     description = ''
       Enable the Hyprland Window Manager
     '';
     type = with lib.types;
       nullOr (submoduleWith {
-        modules = [{
-          options = {
-            enable = mkEnableOption "gtk";
-          };
-        }];
+        modules = [
+          {
+            options = {
+              enable = mkEnableOption "gtk";
+            };
+          }
+        ];
       });
     default = {};
   };
@@ -42,7 +49,7 @@ in
       comment = "Gnome Control Center";
       icon = "org.gnome.Settings";
       exec = "env XDG_CURRENT_DESKTOP=gnome ${pkgs.gnome.gnome-control-center}/bin/gnome-control-center";
-      categories = [ "X-Preferences" ];
+      categories = ["X-Preferences"];
       terminal = false;
     };
 
@@ -146,48 +153,49 @@ in
           mvtows = binding "SUPER CONTROL" "movetoworkspace";
           e = "exec, ags -b hypr";
           arr = [1 2 3 4 5];
-        in [
-          "CTRL SHIFT, R,  ${e} quit; ags -b hypr"
-          "SUPER, R,       ${e} -t applauncher"
-          "SUPER, Tab,     ${e} -t overview"
-          ",XF86PowerOff,  ${e} -r 'powermenu.shutdown()'"
-          "CTRL,Home,      ${e} -r 'recorder.start()'"
-          "ALT,Home,       ${e} -r 'recorder.stop()'"
-          ",Home,          ${e} -r 'recorder.screenshot()'"
-          "Super,Home,     ${e} -r 'recorder.screenshot(true)'"
+        in
+          [
+            "CTRL SHIFT, R,  ${e} quit; ags -b hypr"
+            "SUPER, R,       ${e} -t applauncher"
+            "SUPER, Tab,     ${e} -t overview"
+            ",XF86PowerOff,  ${e} -r 'powermenu.shutdown()'"
+            "CTRL,Home,      ${e} -r 'recorder.start()'"
+            "ALT,Home,       ${e} -r 'recorder.stop()'"
+            ",Home,          ${e} -r 'recorder.screenshot()'"
+            "Super,Home,     ${e} -r 'recorder.screenshot(true)'"
 
-          # Launch Applicaitons Shortcuts
-          "SUPER, Return, exec, kitty -e bash -c \"(tmux ls | grep -qEv 'attached|scratch' && tmux at) || tmux\""
-          "SUPER, Space, exec, $DOTFILES_BIN/rofi/appmenu"
+            # Launch Applicaitons Shortcuts
+            "SUPER, Return, exec, kitty -e bash -c \"(tmux ls | grep -qEv 'attached|scratch' && tmux at) || tmux\""
+            "SUPER, Space, exec, $DOTFILES_BIN/rofi/appmenu"
 
-          # youtube
-          ", XF86Launch1,  exec, ${yt}"
+            # youtube
+            ", XF86Launch1,  exec, ${yt}"
 
-          "ALT, Tab, focuscurrentorlast"
-          "SUPER, Q, killactive"
-          "SUPERSHIFT, F, fullscreen, 0"
-          "SUPER, F, fullscreen, 1"
-          "SUPER, P, togglesplit"
+            "ALT, Tab, focuscurrentorlast"
+            "SUPER, Q, killactive"
+            "SUPERSHIFT, F, fullscreen, 0"
+            "SUPER, F, fullscreen, 1"
+            "SUPER, P, togglesplit"
 
-          (mvfocus "k" "u")
-          (mvfocus "j" "d")
-          (mvfocus "l" "r")
-          (mvfocus "h" "l")
-          (ws "left" "e-1")
-          (ws "right" "e+1")
-          (mvtows "left" "e-1")
-          (mvtows "right" "e+1")
-          (resizeactive "k" "0 -20")
-          (resizeactive "j" "0 20")
-          (resizeactive "l" "20 0")
-          (resizeactive "h" "-20 0")
-          (mvactive "k" "u")
-          (mvactive "j" "d")
-          (mvactive "l" "r")
-          (mvactive "h" "l")
-        ]
-        ++ (map (i: ws (toString i) (toString i)) arr)
-        ++ (map (i: mvtows (toString i) (toString i)) arr);
+            (mvfocus "k" "u")
+            (mvfocus "j" "d")
+            (mvfocus "l" "r")
+            (mvfocus "h" "l")
+            (ws "left" "e-1")
+            (ws "right" "e+1")
+            (mvtows "left" "e-1")
+            (mvtows "right" "e+1")
+            (resizeactive "k" "0 -20")
+            (resizeactive "j" "0 20")
+            (resizeactive "l" "20 0")
+            (resizeactive "h" "-20 0")
+            (mvactive "k" "u")
+            (mvactive "j" "d")
+            (mvactive "l" "r")
+            (mvactive "h" "l")
+          ]
+          ++ (map (i: ws (toString i) (toString i)) arr)
+          ++ (map (i: mvtows (toString i) (toString i)) arr);
 
         bindle = [
           ",XF86MonBrightnessUp,   exec, ${brightnessctl} set +5%"
@@ -198,7 +206,7 @@ in
           ",XF86AudioLowerVolume,  exec, ${pactl} set-sink-volume @DEFAULT_SINK@ -5%"
         ];
 
-        bindl =  [
+        bindl = [
           ",XF86AudioPlay,    exec, ${playerctl} play-pause"
           ",XF86AudioStop,    exec, ${playerctl} pause"
           ",XF86AudioPause,   exec, ${playerctl} pause"
@@ -240,7 +248,6 @@ in
             "workspaces,1,6,overshot,slide"
           ];
         };
-
       };
     };
   };

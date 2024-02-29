@@ -1,20 +1,28 @@
-{ pkgs, inputs, config, lib, username, osConfig, ... }:
-with lib.hm.gvariant;
-let
-  cfg = config.modules.desktop.dconf;
-in
 {
+  pkgs,
+  inputs,
+  config,
+  lib,
+  username,
+  osConfig,
+  ...
+}:
+with lib.hm.gvariant; let
+  cfg = config.modules.desktop.dconf;
+in {
   options.modules.desktop.dconf = lib.mkOption {
     description = ''
       Dconf configuration options for gnome desktop components.
     '';
     type = with lib.types;
       nullOr (submoduleWith {
-        modules = [{
-          options = {
-            enable = lib.mkEnableOption "dconf";
-          };
-        }];
+        modules = [
+          {
+            options = {
+              enable = lib.mkEnableOption "dconf";
+            };
+          }
+        ];
       });
     default = {
       enable = true;
@@ -33,8 +41,8 @@ in
       };
 
       "org/gnome/desktop/search-providers" = {
-        disabled = [ "org.gnome.Boxes.desktop" ];
-        enabled = [ "org.gnome.Weather.desktop" ];
+        disabled = ["org.gnome.Boxes.desktop"];
+        enabled = ["org.gnome.Weather.desktop"];
         sort-order = [
           "org.gnome.Contacts.desktop"
           "org.gnome.Documents.desktop"
@@ -56,13 +64,13 @@ in
       };
 
       "org/gnome/desktop/wm/keybindings" = {
-        close = [ "<Alt>q" ];
-        switch-to-workspace-1 = [ "<Super>1" ];
-        switch-to-workspace-2 = [ "<Super>2" ];
-        switch-to-workspace-3 = [ "<Super>3" ];
-        switch-to-workspace-4 = [ "<Super>4" ];
-        switch-to-workspace-5 = [ "<Super>5" ];
-        toggle-fullscreen = [ "<Super>g" ];
+        close = ["<Alt>q"];
+        switch-to-workspace-1 = ["<Super>1"];
+        switch-to-workspace-2 = ["<Super>2"];
+        switch-to-workspace-3 = ["<Super>3"];
+        switch-to-workspace-4 = ["<Super>4"];
+        switch-to-workspace-5 = ["<Super>5"];
+        toggle-fullscreen = ["<Super>g"];
       };
 
       "org/gnome/shell/keybindings" = {
@@ -116,12 +124,12 @@ in
       };
 
       "org/gnome/shell/keybindings" = {
-        toggle-application-view = [ "<Super>r" ];
+        toggle-application-view = ["<Super>r"];
       };
 
       "org/virt-manager/virt-manager/connections" = {
         autoconnect = ["qemu:///system"];
-          uris = ["qemu:///system"];
+        uris = ["qemu:///system"];
       };
     };
   };

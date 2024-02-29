@@ -1,11 +1,16 @@
 # modules/dev/golang.nix
-
-{ config, options, lib, pkgs, my, ... }:
-
+{
+  config,
+  options,
+  lib,
+  pkgs,
+  my,
+  ...
+}:
 with lib;
-with lib.my;
-let devCfg = config.modules.dev;
-    cfg = devCfg.golang;
+with lib.my; let
+  devCfg = config.modules.dev;
+  cfg = devCfg.golang;
 in {
   options.modules.dev.golang = {
     enable = mkBoolOpt false;

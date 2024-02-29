@@ -1,7 +1,6 @@
-{ lib, ... }:
+{lib, ...}:
 with lib;
-with lib.my;
-{
+with lib.my; {
   options = {
     modules = {
       # Minimal will reduce the packages, services, and programs configured to the minimal
@@ -19,8 +18,12 @@ with lib.my;
         active = mkOption {
           type = nullOr str;
           default = null;
-          apply = v: let theme = builtins.getEnv "THEME"; in
-                     if theme != "" then theme else v;
+          apply = v: let
+            theme = builtins.getEnv "THEME";
+          in
+            if theme != ""
+            then theme
+            else v;
           description = ''
             Name of the theme to enable. Can be overridden by the THEME environment
             variable. Themes can also be hot-swapped with 'hey theme $THEME'.
@@ -29,10 +32,13 @@ with lib.my;
 
         wallpaper = mkOpt (either path null) null;
 
-        loginWallpaper = mkOpt (either path null)
-          (if cfg.wallpaper != null
-           then toFilteredImage cfg.wallpaper "-gaussian-blur 0x2 -modulate 70 -level 5%"
-           else null);
+        loginWallpaper =
+          mkOpt (either path null)
+          (
+            if cfg.wallpaper != null
+            then toFilteredImage cfg.wallpaper "-gaussian-blur 0x2 -modulate 70 -level 5%"
+            else null
+          );
 
         gtk = {
           enable = mkBoolOpt false;

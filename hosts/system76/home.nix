@@ -1,18 +1,24 @@
-{ pkgs, inputs, config, lib, home-manager, osConfig, ... }:
+{
+  pkgs,
+  inputs,
+  config,
+  lib,
+  home-manager,
+  osConfig,
+  ...
+}:
 with lib;
-with lib.my;
-let
+with lib.my; let
   username = "jordan";
   homeDirectory = "/home/${username}";
-in
-{
+in {
   imports =
     # Space to include configuraton that must run first
-    [ ]
+    []
     # # All my personal modules
     ++ (mapModulesRec'
-         (toString ../../modules/user)
-         (path: import path { inherit pkgs inputs config lib username osConfig; }));
+      (toString ../../modules/user)
+      (path: import path {inherit pkgs inputs config lib username osConfig;}));
 
   modules = {
     # Enable all standardized components for a full development workstation.

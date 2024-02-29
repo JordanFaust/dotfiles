@@ -1,7 +1,12 @@
-{ config, lib, pkgs, osConfig, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  osConfig,
+  ...
+}:
 with lib;
-with lib.my;
-let
+with lib.my; let
   cfg = config.modules.applications.launcher;
   minimal = config.modules.minimal;
 in {
@@ -11,21 +16,23 @@ in {
     '';
     type = with lib.types;
       nullOr (submoduleWith {
-        modules = [{
-          options = {
-            #
-            # Launcher
-            #
-            enable = mkEnableOption "launcher";
+        modules = [
+          {
+            options = {
+              #
+              # Launcher
+              #
+              enable = mkEnableOption "launcher";
 
-            #
-            # Rofi
-            #
-            rofi = {
-              enable = mkEnableOption "rofi";
+              #
+              # Rofi
+              #
+              rofi = {
+                enable = mkEnableOption "rofi";
+              };
             };
-          };
-        }];
+          }
+        ];
       });
     default = {
       enable = true;

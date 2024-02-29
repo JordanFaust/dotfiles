@@ -1,8 +1,13 @@
-{ options, config, lib, pkgs, ... }:
-
+{
+  options,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
-with lib.my;
-let cfg = config.modules.hardware.audio;
+with lib.my; let
+  cfg = config.modules.hardware.audio;
 in {
   options.modules.hardware.audio = {
     enable = mkBoolOpt false;
@@ -38,10 +43,30 @@ in {
     '';
 
     security.pam.loginLimits = [
-      { domain = "@audio"; item = "memlock"; type = "-"   ; value = "unlimited"; }
-      { domain = "@audio"; item = "rtprio" ; type = "-"   ; value = "99"       ; }
-      { domain = "@audio"; item = "nofile" ; type = "soft"; value = "99999"    ; }
-      { domain = "@audio"; item = "nofile" ; type = "hard"; value = "524288"    ; }
+      {
+        domain = "@audio";
+        item = "memlock";
+        type = "-";
+        value = "unlimited";
+      }
+      {
+        domain = "@audio";
+        item = "rtprio";
+        type = "-";
+        value = "99";
+      }
+      {
+        domain = "@audio";
+        item = "nofile";
+        type = "soft";
+        value = "99999";
+      }
+      {
+        domain = "@audio";
+        item = "nofile";
+        type = "hard";
+        value = "524288";
+      }
     ];
   };
 }
