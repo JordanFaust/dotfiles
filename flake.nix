@@ -10,19 +10,10 @@
   description = "A grossly incandescent nixos config.";
 
   inputs = {
-    # Default to using packages within the stable 23.11 release
-    # nixpkgs.url = "nixpkgs/nixos-23.11";
-    # # Provide a means to install cutting edge packages where necessary
-    # nixpkgs-unstable.url = "nixpkgs/nixpkgs-unstable";
-    #
-    # home-manager.url = "github:rycee/home-manager/release-23.11";
-    # home-manager.inputs.nixpkgs.follows = "nixpkgs";
-
-    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-23.11";
-    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
-
     # Follow the latest and greatest by default
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-23.11";
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -31,7 +22,7 @@
     # Hyperland Home Manager
     hyprland.url = "github:hyprwm/Hyprland";
     hyprland-plugins.url = "github:hyprwm/hyprland-plugins";
-    hyprland-plugins.inputs.nixpkgs.follows = "nixpkgs";
+    hyprland-plugins.inputs.hyprland.follows = "hyprland";
 
     # AGS
     ags.url = "github:Aylur/ags";
