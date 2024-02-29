@@ -8,19 +8,19 @@
 }:
 with lib;
 with lib.my; let
-  cfg = config.modules.development.clojure;
+  cfg = config.modules.development.golang;
   minimal = config.modules.minimal;
 in {
-  options.modules.development.clojure = mkOption {
+  options.modules.development.golang = mkOption {
     description = ''
-      Configurations for Clojure development.
+      Configurations for Golang development.
     '';
     type = with lib.types;
       nullOr (submoduleWith {
         modules = [
           {
             options = {
-              enable = mkEnableOption "rust";
+              enable = mkEnableOption "golang";
             };
           }
         ];
@@ -33,11 +33,21 @@ in {
   config = lib.mkIf (!minimal && cfg.enable) {
     home = {
       packages = with pkgs; [
-        clojure
-        clojure-lsp
-        joker
-        leiningen
+        # The specific language version
+        go
+        # LSP
+        gopls
+        # protoc
+        protobuf
+        protobufc
+        # Buf CLI
+        buf
       ];
+
+      sessionVariables = {
+        BUF_USER = "jordanfaust";
+        GOPRIVATE = "github.com/procore,$GOPRIVATE";
+      };
     };
   };
 }

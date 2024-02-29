@@ -8,19 +8,19 @@
 }:
 with lib;
 with lib.my; let
-  cfg = config.modules.development.clojure;
+  cfg = config.modules.development.lua;
   minimal = config.modules.minimal;
 in {
-  options.modules.development.clojure = mkOption {
+  options.modules.development.lua = mkOption {
     description = ''
-      Configurations for Clojure development.
+      Configurations for Lua development.
     '';
     type = with lib.types;
       nullOr (submoduleWith {
         modules = [
           {
             options = {
-              enable = mkEnableOption "rust";
+              enable = mkEnableOption "lua";
             };
           }
         ];
@@ -33,10 +33,14 @@ in {
   config = lib.mkIf (!minimal && cfg.enable) {
     home = {
       packages = with pkgs; [
-        clojure
-        clojure-lsp
-        joker
-        leiningen
+        lua
+        # luajit
+        luaformatter
+        sumneko-lua-language-server
+        stylua
+        lua54Packages.luarocks
+        # luaPackages.moonscript
+        # (mkIf cfg.love2D.enable love2d)
       ];
     };
   };

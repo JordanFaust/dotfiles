@@ -51,23 +51,18 @@ in {
       };
 
       # Other dotfiles
-      home.configFile = with config.modules;
-        mkMerge [
-          {
-            "rofi/theme" = {
-              source = ./config/rofi;
-              recursive = true;
-            };
-          }
-          (mkIf desktop.term.kitty.enable {
-            "kitty" = {
-              source = ./config/kitty;
-              recursive = true;
-            };
-            "kitty/themes/monokai-pro.conf".source = ./config/kitty/themes/monokai-pro.conf;
-            "kitty/themes/catppuccin-macchiato.conf".source = ./config/kitty/themes/catppuccin-macchiato.conf;
-          })
-        ];
+      home.configFile = with config.modules; {
+        "rofi/theme" = {
+          source = ./config/rofi;
+          recursive = true;
+        };
+        "kitty" = {
+          source = ./config/kitty;
+          recursive = true;
+        };
+        "kitty/themes/monokai-pro.conf".source = ./config/kitty/themes/monokai-pro.conf;
+        "kitty/themes/catppuccin-macchiato.conf".source = ./config/kitty/themes/catppuccin-macchiato.conf;
+      };
     })
   ]);
 }

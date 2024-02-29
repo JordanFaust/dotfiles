@@ -21,22 +21,9 @@ in rec {
       applications = {
         vpn.enable = true;
       };
-      term = {
-        default = "kitty";
-        kitty.enable = true;
-      };
       vm = {
         qemu.enable = true;
       };
-    };
-    dev = {
-      golang.enable = true;
-      lua.enable = true;
-      node.enable = true;
-      ruby.enable = true;
-      rust.enable = false;
-      shell.enable = true;
-      python.enable = true;
     };
     shell = {
       # vaultwarden.enable = true;

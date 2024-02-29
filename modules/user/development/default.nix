@@ -1,22 +1,19 @@
 {
   config,
-  options,
   lib,
   pkgs,
+  inputs,
+  osConfig,
   ...
 }:
 with lib;
 with lib.my; let
-  cfg = config.modules.dev;
+  minimal = config.modules.minimal;
 in {
-  options.modules.dev = {
-    xdg.enable = mkBoolOpt true;
-  };
-
-  config = mkMerge [
+  config = lib.mkIf (!minimal) {
     # These are some common dev tools that are required
-    {
-      user.packages = with pkgs; [
+    home = {
+      packages = with pkgs; [
         # Add AWS V2 CLI
         awscli2
         aws-vault
@@ -59,12 +56,9 @@ in {
         unstable.jfrog-cli
       ];
 
-      environment.shellAliases = {
+      shellAliases = {
         k = "kubectl";
       };
-    }
-
-    (mkIf cfg.xdg.enable {
-      })
-  ];
+    };
+  };
 }

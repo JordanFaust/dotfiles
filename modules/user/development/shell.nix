@@ -8,12 +8,12 @@
 }:
 with lib;
 with lib.my; let
-  cfg = config.modules.development.clojure;
+  cfg = config.modules.development.shell;
   minimal = config.modules.minimal;
 in {
-  options.modules.development.clojure = mkOption {
+  options.modules.development.shell = mkOption {
     description = ''
-      Configurations for Clojure development.
+      Configurations for Shell development.
     '';
     type = with lib.types;
       nullOr (submoduleWith {
@@ -33,10 +33,7 @@ in {
   config = lib.mkIf (!minimal && cfg.enable) {
     home = {
       packages = with pkgs; [
-        clojure
-        clojure-lsp
-        joker
-        leiningen
+        shellcheck
       ];
     };
   };
