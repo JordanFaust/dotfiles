@@ -26,7 +26,7 @@ in {
 
     modules.shell.zsh = {
       rcInit = "_cache tmuxifier init -";
-      rcFiles = ["${configDir}/tmux/aliases.zsh"];
+      # rcFiles = ["${configDir}/tmux/aliases.zsh"];
     };
 
     # Tell tmate to use Tmux configuration
@@ -131,10 +131,10 @@ in {
       };
 
       configFile = {
-        "tmux" = {
-          source = "${configDir}/tmux";
-          recursive = true;
-        };
+        #"tmux" = {
+        #  source = "${configDir}/tmux";
+        #  recursive = true;
+        #};
         "tmux/extraInit" = {
           text = ''
             #!/usr/bin/env bash
