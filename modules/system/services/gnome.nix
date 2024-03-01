@@ -10,7 +10,6 @@ with lib.my; let
   cfg = config.modules.services.gnome;
   configDir = config.dotfiles.configDir;
 in {
-
   options.modules.services.gnome = lib.mkOption {
     description = ''
       Configurations for Gnome services.
