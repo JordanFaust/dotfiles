@@ -47,6 +47,7 @@ in rec {
       audio.enable = true;
       ergodox.enable = true;
       sensors.enable = true;
+      amd.enable = true;
       system76.enable = true;
     };
   };
