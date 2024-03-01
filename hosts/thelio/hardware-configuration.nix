@@ -14,22 +14,22 @@
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/19e82474-d6fa-4692-b4cc-611b924c8daf";
+    { device = "/dev/disk/by-uuid/09d1822c-4760-4152-acee-07f03cf452a7";
       fsType = "ext4";
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/DD9B-6FBB";
+    { device = "/dev/disk/by-uuid/8D52-F965";
       fsType = "vfat";
     };
 
   fileSystems."/media/procore" =
-    { device = "/dev/disk/by-uuid/3d25d7c9-82c2-467d-a4e4-d4d48d71b322";
+    { device = "/dev/disk/by-uuid/8d3e5281-d432-406c-b339-aa247fae8418";
       fsType = "ext4";
     };
 
   fileSystems."/home" =
-    { device = "/dev/disk/by-uuid/0fc52c49-c267-4a12-94ba-ac26e621dcd2";
+    { device = "/dev/disk/by-uuid/e17a51fe-fa91-452c-a4a1-276ec001af29";
       fsType = "ext4";
     };
 
