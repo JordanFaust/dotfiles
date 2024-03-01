@@ -67,7 +67,12 @@
         config.allowUnfree = true;
         overlays = extraOverlays ++ (lib.attrValues self.overlays);
       };
-    pkgs = mkPkgs nixpkgs [self.overlay inputs.deno2nix.overlays.default];
+
+    inputOverlays = with inputs; [
+      deno2nix.overlays.default
+    ];
+
+    pkgs = mkPkgs nixpkgs [self.overlay] ++ inputOverlays;
     pkgs' = mkPkgs nixpkgs-unstable [];
     pkgs-stable' = mkPkgs nixpkgs-stable [];
 
