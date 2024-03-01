@@ -11,8 +11,8 @@ dotfiles over there.
 > **Disclaimer:** _This is not a community framework or distribution._ It's a
 > private configuration and an ongoing experiment to feel out NixOS. I make no
 > guarantees that it will work out of the box for anyone but myself. It may also
-> change drastically and without warning. 
-> 
+> change drastically and without warning.
+>
 > Until I can bend spoons with my nix-fu, please don't treat me like an
 > authority or expert in the NixOS space. Seek help on [the NixOS
 > discourse](https://discourse.nixos.org) instead.
@@ -46,7 +46,7 @@ dotfiles over there.
    ```sh
    # Yoink nixos-unstable
    wget -O nixos.iso https://channels.nixos.org/nixos-unstable/latest-nixos-minimal-x86_64-linux.iso
-   
+
    # Write it to a flash drive
    cp nixos.iso /dev/sdX
    ```
@@ -68,23 +68,22 @@ dotfiles over there.
    USER=...
 
    git clone https://github.com/JordanFaust/dotfiles /etc/dotfiles
-   git checkout nixos
+   git checkout main
    cd /etc/dotfiles
-   
+
    # Create a host config in `hosts/` and add it to the repo:
    mkdir -p hosts/$HOST
    nixos-generate-config --root /mnt --dir /etc/dotfiles/hosts/$HOST
    rm -f hosts/$HOST/configuration.nix
-   cp hosts/kuro/default.nix hosts/$HOST/default.nix
    vim hosts/$HOST/default.nix  # configure this for your system; don't use it verbatim!
    git add hosts/$HOST
-   
+
    # Install nixOS
    USER=$USER nixos-install --root /mnt --impure --flake .#$HOST
-   
-   # If you get 'unrecognized option: --impure', replace '--impure' with 
+
+   # If you get 'unrecognized option: --impure', replace '--impure' with
    # `--option pure-eval no`.
-   
+
    # Then move the dotfiles to the mounted drive!
    mv /etc/dotfiles /mnt/etc/dotfiles
    ```
@@ -162,18 +161,18 @@ Options:
   Because managing hundreds of servers is the tenth circle of hell without a
   declarative, generational, and immutable single-source-of-truth configuration
   framework like NixOS.
-  
+
   Sure beats the nightmare of capistrano/chef/puppet/ansible + brittle shell
   scripts I left behind.
 
 + **Should I use NixOS?**
 
   **Short answer:** no.
-  
+
   **Long answer:** no really. Don't.
-  
+
   **Long long answer:** I'm not kidding. Don't.
-  
+
   **Unsigned long long answer:** Alright alright. Here's why not:
 
   - Its learning curve is steep.
@@ -201,7 +200,7 @@ Options:
 
   If none of this has deterred you, then you didn't need my advice in the first
   place. Stop procrastinating and try NixOS!
-  
+
 + **How do you manage secrets?**
 
   With [agenix].
@@ -211,24 +210,24 @@ Options:
   I envy Guix's CLI and want similar for NixOS, whose toolchain is spread across
   many commands, none of which are as intuitive: `nix`, `nix-collect-garbage`,
   `nixos-rebuild`, `nix-env`, `nix-shell`.
-  
+
   I don't claim `hey` is the answer, but everybody likes their own brew.
- 
+
 + **How 2 flakes?**
 
   Would it be the NixOS experience if I gave you all the answers in one,
   convenient place?
-  
+
   No. Suffer my pain:
-  
+
   + [A three-part tweag article that everyone's read.](https://www.tweag.io/blog/2020-05-25-flakes/)
   + [An overengineered config to scare off beginners.](https://github.com/divnix/devos)
   + [A minimalistic config for scared beginners.](https://github.com/colemickens/nixos-flake-example)
   + [A nixos wiki page that spells out the format of flake.nix.](https://nixos.wiki/wiki/Flakes)
   + [Official documentation that nobody reads.](https://nixos.org/learn.html)
   + [Some great videos on general nixOS tooling and hackery.](https://www.youtube.com/channel/UC-cY3DcYladGdFQWIKL90SQ)
-  + A couple flake configs that I 
-    [may](https://github.com/LEXUGE/nixos) 
+  + A couple flake configs that I
+    [may](https://github.com/LEXUGE/nixos)
     [have](https://github.com/bqv/nixrc)
     [shamelessly](https://git.sr.ht/~dunklecat/nixos-config/tree)
     [rummaged](https://github.com/utdemir/dotfiles)
