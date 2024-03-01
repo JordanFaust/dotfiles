@@ -10,7 +10,7 @@ with lib.my; {
   imports =
     # Home Manager is added her as some functionality is still used within
     # the nixos modules.
-    [ inputs.home-manager.nixosModules.home-manager ]
+    [inputs.home-manager.nixosModules.home-manager]
     # All my personal modules
     ++ (mapModulesRec' (toString ./modules/system) import);
 
