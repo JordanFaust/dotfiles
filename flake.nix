@@ -23,6 +23,8 @@
     hyprland.url = "github:hyprwm/Hyprland";
     hyprland-plugins.url = "github:hyprwm/hyprland-plugins";
     hyprland-plugins.inputs.hyprland.follows = "hyprland";
+    hyprlock.url = "github:hyprwm/hyprlock";
+    # hyprlock.inputs.hyprland.follows = "hyprland";
     xdg-desktop-portal-hyprland.url = "github:hyprwm/xdg-desktop-portal-hyprland";
 
     # AGS
@@ -68,11 +70,7 @@
         overlays = extraOverlays ++ (lib.attrValues self.overlays);
       };
 
-    inputOverlays = with inputs; [
-      deno2nix.overlays.default
-    ];
-
-    pkgs = mkPkgs nixpkgs [self.overlay] ++ inputOverlays;
+    pkgs = mkPkgs nixpkgs [self.overlay inputs.deno2nix.overlays.default];
     pkgs' = mkPkgs nixpkgs-unstable [];
     pkgs-stable' = mkPkgs nixpkgs-stable [];
 

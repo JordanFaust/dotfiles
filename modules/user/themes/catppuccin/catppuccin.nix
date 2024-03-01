@@ -103,6 +103,8 @@ in {
     xdg.configFile = {
       # Background Image
       "background" = {source = ./background.jpg;};
+      # Lockscreen Image
+      "lockscreen" = {source = ./assets/doggocat.png;};
       # Rofi Themes
       "rofi/theme" = {
         source = ./config/rofi;

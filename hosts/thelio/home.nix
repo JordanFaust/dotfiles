@@ -13,7 +13,7 @@ with lib.my; let
   homeDirectory = "/home/${username}";
 in {
   imports =
-    # Space to include configuraton that must run first
+    # Space to include configuration that must run first
     []
     # # All my personal modules
     ++ (mapModulesRec'
