@@ -39,6 +39,15 @@ in rec {
     theme = {
       active = "catppuccin";
     };
+
+    # Hardware
+    hardware = {
+      audio.enable = true;
+      ergodox.enable = true;
+      nvidia.enable = true;
+      sensors.enable = true;
+      system76.enable = true;
+    };
   };
 
   programs.ssh.startAgent = true;
@@ -50,4 +59,9 @@ in rec {
 
   # Virtualisation
   virtualisation.libvirtd.enable = true;
+
+  # CPU
+  nix.settings.max-jobs = lib.mkDefault 20;
+  powerManagement.cpuFreqGovernor = lib.mkDefault "performance";
+  hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 }

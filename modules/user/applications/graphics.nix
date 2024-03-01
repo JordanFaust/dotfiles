@@ -91,10 +91,10 @@ in {
     };
 
     xdg.configFile = mkIf cfg.raster.enable {
-      "GIMP/2.10" = {
-        source = "${osConfig.dotfiles.configDir}/gimp";
-        recursive = true;
-      };
+      # "GIMP/2.10" = {
+      #   source = "${osConfig.dotfiles.configDir}/gimp";
+      #   recursive = true;
+      # };
     };
   };
 }

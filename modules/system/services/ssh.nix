@@ -23,7 +23,7 @@ in {
     };
 
     home.file = {
-      ".ssh/config".source = "${configDir}/ssh/config";
+      # ".ssh/config".source = "${configDir}/ssh/config";
     };
   };
 }
