@@ -23,6 +23,7 @@
     hyprland.url = "github:hyprwm/Hyprland";
     hyprland-plugins.url = "github:hyprwm/hyprland-plugins";
     hyprland-plugins.inputs.hyprland.follows = "hyprland";
+    xdg-desktop-portal-hyprland.url = "github:hyprwm/xdg-desktop-portal-hyprland";
 
     # AGS
     ags.url = "github:Aylur/ags";
