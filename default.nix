@@ -8,8 +8,11 @@
 with lib;
 with lib.my; {
   imports =
+    # Home Manager is added her as some functionality is still used within
+    # the nixos modules.
+    [ inputs.home-manager.nixosModules.home-manager ]
     # All my personal modules
-    mapModulesRec' (toString ./modules/system) import;
+    ++ (mapModulesRec' (toString ./modules/system) import);
 
   # Common config for all nixos machines; and to ensure the flake operates
   # soundly

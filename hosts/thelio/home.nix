@@ -23,7 +23,6 @@ in {
   modules = {
     # Enable all standardized components for a full development workstation.
     workstation.enable = true;
-    minimal = true;
 
     #
     # Desktop and Window Manager Configuration

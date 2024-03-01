@@ -13,6 +13,8 @@ in rec {
     ./hardware-configuration.nix
   ];
 
+  #users.users.jordan.isNormalUser = true;
+
   ## Modules
   modules = {
     desktop = {
@@ -44,7 +46,6 @@ in rec {
     hardware = {
       audio.enable = true;
       ergodox.enable = true;
-      nvidia.enable = true;
       sensors.enable = true;
       system76.enable = true;
     };
@@ -61,7 +62,7 @@ in rec {
   virtualisation.libvirtd.enable = true;
 
   # CPU
-  nix.settings.max-jobs = lib.mkDefault 20;
+  nix.settings.max-jobs = lib.mkDefault 16;
   powerManagement.cpuFreqGovernor = lib.mkDefault "performance";
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 }
