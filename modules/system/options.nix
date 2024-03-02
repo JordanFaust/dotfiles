@@ -13,9 +13,15 @@ with lib.my; {
     dotfiles = {
       dir =
         mkOpt path
+        # We need to drop /mnt in the evaluated directories as the configuration is fully built.
+        # On reboot, the mounted volume will exist as the root directory.
         (removePrefix "/mnt"
-          (findFirst pathExists (toString ../.) [
+          # Find the first path that can contain the root config directory.
+          # ../../. - This transits manually from this current file up to the root of the repo
+          (findFirst pathExists (toString ../../.) [
+            # This may be the moved location of the config files after an install but before a reboot
             "/mnt/etc/dotfiles"
+            # This is the expected location of the root of this flake
             "/etc/dotfiles"
           ]));
       binDir = mkOpt path "${config.dotfiles.dir}/bin";
