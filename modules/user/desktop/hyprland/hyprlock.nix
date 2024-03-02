@@ -14,12 +14,6 @@ in {
   options = {};
 
   config = lib.mkIf (cfg.enable) {
-    # home = {
-    #   packages = with pkgs; [
-    #     hyprlock
-    #   ];
-    # };
-
     programs.hyprlock = {
       enable = true;
       # General Configuraiton
@@ -105,3 +99,5 @@ in {
     };
   };
 }
+
+
