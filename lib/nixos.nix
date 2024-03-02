@@ -10,9 +10,12 @@ with lib.my; let
   sys = "x86_64-linux";
 in {
   mkHost = path: attrs @ {system ? sys, ...}:
+    let
+      specialArgs = {lib = lib; inputs = inputs; system = attrs.system; home-manager = home-manager;};
+    in
     nixosSystem {
       inherit system;
-      specialArgs = {inherit lib inputs system home-manager;};
+      specialArgs = {inherit (specialArgs) lib inputs system home-manager;};
       modules = [
         # Setup nixpkgs and establish hostname
         {
@@ -36,7 +39,7 @@ in {
           home-manager.users.jordan = import ../hosts/system76/home.nix;
           # home-manager.users.modules = modules;
 
-          home-manager.extraSpecialArgs = {inherit inputs;};
+          home-manager.extraSpecialArgs = {inherit (specialArgs) inputs system;};
         }
         # import the configuration within the target host directory. This will start by
         # evaluating the ./host/path/default.nix which should include the appropriate imports

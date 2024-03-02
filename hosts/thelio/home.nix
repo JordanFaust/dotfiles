@@ -5,6 +5,7 @@
   lib,
   home-manager,
   osConfig,
+  system,
   ...
 }:
 with lib;
@@ -18,7 +19,10 @@ in {
     # # All my personal modules
     ++ (mapModulesRec'
       (toString ../../modules/user)
-      (path: import path {inherit pkgs inputs config lib username osConfig;}));
+      (path: import path {inherit pkgs inputs config lib username osConfig system;}));
+      # (path: import path));
+
+  extraSpecialArgs = { inherit pkgs inputs config lib osConfig system; };
 
   modules = {
     # Enable all standardized components for a full development workstation.

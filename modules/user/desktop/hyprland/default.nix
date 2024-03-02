@@ -131,6 +131,7 @@ in {
 
         windowrule = let
           f = regex: "float, ^(${regex})$";
+          inhibitfocus = regex: "idleinhibit focus,title:^(${regex})$";
         in [
           (f "org.gnome.Calculator")
           (f "org.gnome.Nautilus")
@@ -148,6 +149,8 @@ in {
           "workspace 3 silent, class:^(Slack)$"
           "workspace 3 silent, initialTitle:^(Slack)$"
           "workspace 5 silent, title:^(Zoom - Licensed account)$"
+          # Inhibit Screen Locking/Sleeping during video calls/watching videos
+          (inhibitfocus "Zoom Meeting")
         ];
 
         bind = let
