@@ -106,7 +106,6 @@ in {
     ];
 
     services = {
-      picom.enable = true;
       redshift.enable = true;
       # Configure greetd as the greeter
       # greetd = {

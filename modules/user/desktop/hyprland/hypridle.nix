@@ -4,7 +4,7 @@
   pkgs,
   lib,
   osConfig,
-  # system,
+  system,
   ...
 }:
 with lib;
@@ -25,7 +25,7 @@ in {
         # Lock Screen Timeout
         {
           timeout = 900;
-          onTimeout = "${lib.getExe inputs.hyprlock.packages."x86_64-linux".default}";
+          onTimeout = "${lib.getExe inputs.hyprlock.packages.${system}.default}";
           onResume  = "${lib.getExe pkgs.libnotify} Unlocked!";
         }
         # Screen Off

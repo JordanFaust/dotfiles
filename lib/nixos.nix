@@ -11,7 +11,7 @@ with lib.my; let
 in {
   mkHost = path: attrs @ {system ? sys, ...}:
     let
-      specialArgs = {lib = lib; inputs = inputs; system = attrs.system; home-manager = home-manager;};
+      specialArgs = {lib = lib; inputs = inputs; system = system; home-manager = home-manager;};
     in
     nixosSystem {
       inherit system;
@@ -36,7 +36,7 @@ in {
         {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
-          home-manager.users.jordan = import ../hosts/system76/home.nix;
+          home-manager.users.jordan = import "${path}/home.nix";
           # home-manager.users.modules = modules;
 
           home-manager.extraSpecialArgs = {inherit (specialArgs) inputs system;};
