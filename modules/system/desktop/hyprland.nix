@@ -112,18 +112,18 @@ in {
       #   enable = true;
       #   settings = {
       #     default_session = {
-      #       command = "${pkgs.cage}/bin/cage -s -- regreet";
+      #       command = "${lib.getExe hyprland}";
       #     };
       #   };
       # };
-
+      #
       xserver = {
         enable = true;
         displayManager = {
           defaultSession = "hyprland";
-          sddm.enable = true;
-          sddm.theme = "catppuccin";
-          sddm.wayland.enable = true;
+          # sddm.enable = true;
+          # sddm.theme = "catppuccin";
+          # sddm.wayland.enable = true;
           # lightdm.enable = true;
           # lightdm.greeters.pantheon.enable = true;
         };
@@ -166,8 +166,5 @@ in {
         };
       };
     };
-
-    # # Use the Regreet greetd theme
-    # programs.regreet.enable = true;
   };
 }
