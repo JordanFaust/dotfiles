@@ -13,5 +13,4 @@ Object.assign(globalThis, {
 })
 
 Utils.ensureDirectory(TMP)
-App.addIcons(`${App.configDir}/assets`)
 

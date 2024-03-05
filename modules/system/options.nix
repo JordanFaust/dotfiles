@@ -105,7 +105,7 @@ with lib.my; {
 
     users.users.${config.user.name} = mkAliasDefinitions options.user;
 
-    # user-options = config.home-manager.users.${config.user.name};
+    user-options = config.home-manager.users.${config.user.name};
 
     nix.settings = let
       users = ["root" config.user.name];

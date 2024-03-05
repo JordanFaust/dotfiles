@@ -23,6 +23,7 @@
   networkmanager,
 }: let
   name = "desktop";
+  version = "1.8.0";
 
   ags = inputs.ags.packages.${system}.default.override {
     extraPackages = [accountsservice];
@@ -61,8 +62,7 @@
   '';
 
   config = stdenv.mkDerivation {
-    inherit name;
-    version = "1.7.8";
+    inherit name version;
     src = ./ags;
 
     buildPhase = ''
@@ -89,7 +89,7 @@
   };
 in
   stdenv.mkDerivation {
-    inherit name;
+    inherit name version;
 
     src = config;
 

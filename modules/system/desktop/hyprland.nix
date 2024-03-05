@@ -107,27 +107,12 @@ in {
 
     services = {
       redshift.enable = true;
-      # Configure greetd as the greeter
-      # greetd = {
-      #   enable = true;
-      #   settings = {
-      #     default_session = {
-      #       command = "${pkgs.cage}/bin/cage -s -- regreet";
-      #     };
-      #   };
-      # };
 
       xserver = {
         enable = true;
         displayManager = {
           defaultSession = "hyprland";
-          sddm.enable = true;
-          sddm.theme = "catppuccin";
-          sddm.wayland.enable = true;
-          # lightdm.enable = true;
-          # lightdm.greeters.pantheon.enable = true;
         };
-        # windowManager.bspwm.enable = true;
       };
 
       # AGS and Gnome services
@@ -166,8 +151,5 @@ in {
         };
       };
     };
-
-    # # Use the Regreet greetd theme
-    # programs.regreet.enable = true;
   };
 }

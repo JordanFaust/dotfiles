@@ -63,7 +63,6 @@ in rec {
   virtualisation.libvirtd.enable = true;
 
   # CPU
-  nix.settings.max-jobs = lib.mkDefault 16;
   powerManagement.cpuFreqGovernor = lib.mkDefault "performance";
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 }

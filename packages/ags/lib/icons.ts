@@ -3,6 +3,7 @@ export const substitutes = {
     "blueberry.py": "blueberry",
     "Caprine": "facebook-messenger",
     "com.raggesilver.BlackBox-symbolic": "terminal-symbolic",
+    "org.wezfurlong.wezterm-symbolic": "terminal-symbolic",
     "audio-headset-bluetooth": "audio-headphones-symbolic",
     "audio-card-analog-usb": "audio-speakers-symbolic",
     "audio-card-analog-pci": "audio-card-symbolic",
@@ -12,6 +13,7 @@ export const substitutes = {
 }
 
 export default {
+    missing: "image-missing-symbolic",
     fallback: {
         executable: "application-x-executable-symbolic",
         notification: "dialog-information-symbolic",
@@ -61,6 +63,11 @@ export default {
             card: "audio-card-symbolic",
         },
         mixer: "mixer-symbolic",
+    },
+    powerprofile: {
+        balanced: "power-profile-balanced-symbolic",
+        "power-saver": "power-profile-power-saver-symbolic",
+        performance: "power-profile-performance-symbolic",
     },
     asusctl: {
         profile: {

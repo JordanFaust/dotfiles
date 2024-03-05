@@ -9,7 +9,7 @@
 with lib;
 with lib.my; let
   cfg = config.modules.themes.catppuccin;
-  gtk-theme = "Catppuccin-Macchiato-Compact-Pink-Dark";
+  gtk-theme = "Catppuccin-Macchiato-Compact-Rosewater-Dark";
   cursor-theme = "Qogir";
   cursor-package = pkgs.qogir-icon-theme;
 in {
@@ -102,9 +102,9 @@ in {
 
     xdg.configFile = {
       # Background Image
-      "background" = {source = ./background.jpg;};
+      "background" = {source = "${osConfig.dotfiles.configDir}/themes/catppuccin/background.jpg";};
       # Lockscreen Image
-      "lockscreen" = {source = ./assets/doggocat.png;};
+      "lockscreen" = {source = "${osConfig.dotfiles.configDir}/themes/catppuccin/doggocat.png";};
       # Rofi Themes
       "rofi/theme" = {
         source = ./config/rofi;
