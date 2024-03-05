@@ -40,11 +40,11 @@ in {
 
   config = lib.mkIf (!minimal && cfg.enable) {
     # Force Zoom to open in the browser until issues are resolved
-    # home = {
-    #   packages = with pkgs; [
-    #     zoom-us
-    #   ];
-    # };
+    home = {
+      packages = with pkgs; [
+        zoom-us
+      ];
+    };
 
     programs.obs-studio = {
       enable = true;

@@ -37,6 +37,12 @@ in {
   };
 
   config = mkIf (cfg.enable) {
+    user.packages = with pkgs; [
+      # Script that executes the configures greetd configuration for testing
+      (pkgs.writeScriptBin "greetd-test" ''
+        ${config.services.greetd.settings.default_session.command}
+      '')
+    ];
     # # Use the Regreet greetd theme
     programs.regreet = {
       enable = true;
@@ -44,7 +50,7 @@ in {
       settings = {
         background = {
           path = "${config.dotfiles.configDir}/themes/catppuccin/doggocat.png";
-          fit = "Contain";
+          fit = "Cover";
         };
 
         gtk = {
