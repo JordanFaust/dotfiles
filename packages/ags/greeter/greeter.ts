@@ -31,14 +31,12 @@ const win = RegularWindow({
     }),
 })
 
-print(`starting main window`)
-export default {
+App.config({
     onConfigParsed() {
-        print(`configuration loaded and parsed`)
         style()
         gtk()
     },
     icons: "./assets",
     windows: [win],
-    cursorTheme: GLib.getenv("XCURSOR_THEME"),
-}
+    cursorTheme: GLib.getenv("XCURSOR_THEME")!,
+})
