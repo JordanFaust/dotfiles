@@ -11,7 +11,4 @@ with lib; {
     latitude = 39.035300;
     longitude = -94.463600;
   };
-
-  # So the vaultwarden CLI knows where to find my server.
-  modules.shell.vaultwarden.config.server = "vault.lissner.net";
 }

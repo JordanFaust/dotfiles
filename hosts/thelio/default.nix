@@ -27,10 +27,8 @@ in rec {
       };
     };
     shell = {
-      # vaultwarden.enable = true;
       direnv.enable = true;
       git.enable = true;
-      gnupg.enable = true;
       tmux.enable = true;
       zsh.enable = true;
     };
