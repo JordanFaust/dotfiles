@@ -11,7 +11,7 @@ in {
   imports = [inputs.ags.homeManagerModules.default];
 
   home.packages = with pkgs; [
-    libdbusmenu-gtk3
+    # libdbusmenu-gtk3
     bun
     dart-sass
     # allow triggering greeter from cli

@@ -38,10 +38,6 @@
 
     nixos-hardware.url = "github:nixos/nixos-hardware";
 
-    # SDDM + Theme
-    sddm-catppuccin.url = "github:khaneliman/sddm-catppuccin";
-    sddm-catppuccin.inputs.nixpkgs.follows = "nixpkgs";
-
     # Support building deno applications
     deno2nix.url = "github:SnO2WMaN/deno2nix";
 

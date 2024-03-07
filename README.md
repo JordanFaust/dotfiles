@@ -93,16 +93,6 @@ dotfiles over there.
 > :warning: **Don't forget to change your `root` and `$USER` passwords!** They
 > are set to `nixos` by default.
 
-7. Installing Doom Packages
-
-The installation setup Doom Emacs and its personal configuration. Next you have to
-install all of the packages
-
-``` sh
-doom install
-```
-
-
 8. Setting Up Firefox
 
 Not everything was setup for my firefox theme via the install. I use the following extensions:
@@ -154,91 +144,27 @@ Options:
     -i, -A, -q, -e, -p               Forward to nix-env
 ```
 
-## Frequently asked questions
+## Security
 
-+ **Why NixOS?**
+The following steps can generate an SBOM and analyze the generate a list of packages that currently have unpached CVEs
 
-  Because managing hundreds of servers is the tenth circle of hell without a
-  declarative, generational, and immutable single-source-of-truth configuration
-  framework like NixOS.
+Generate meta information used during SBOM generation:
 
-  Sure beats the nightmare of capistrano/chef/puppet/ansible + brittle shell
-  scripts I left behind.
+```bash
+nix-env -qa --meta --json '.*' > reports/meta.json
+```
 
-+ **Should I use NixOS?**
+Generate SBOM:
 
-  **Short answer:** no.
+```bash
+sbomnix /run/current-system/sw/ --csv ./reports/sbom.csv --cdx ./reports/sbox.cdx.json --spdx ./reports/sbom.spdx.json --meta ./reports/meta.json
+```
 
-  **Long answer:** no really. Don't.
+Scan for vulnerabilities from the generated SBOM:
 
-  **Long long answer:** I'm not kidding. Don't.
-
-  **Unsigned long long answer:** Alright alright. Here's why not:
-
-  - Its learning curve is steep.
-  - You _will_ trial and error your way to enlightenment, if you survive long
-    enough.
-  - NixOS is unlike other Linux distros. Your issues will be unique and
-    difficult to google.
-  - If the words "declarative", "generational", and "immutable" don't make you
-    _fully_ erect, you're considering NixOS for the wrong reasons.
-  - The overhead of managing a NixOS config will rarely pay for itself with
-    fewer than 3 systems (perhaps another distro with nix on top would suit you
-    better?).
-  - Official documentation for Nix(OS) is vast, but shallow.
-  - Unofficial resources and example configs are sparse and tend to be either
-    too simple or too complex (or outdated).
-  - The Nix language is obtuse and its toolchain is unintuitive. This is made
-    infinitely worse if you've never touched the shell or a functional language
-    before, but you'll _need_ to learn it to do even a fraction of what makes
-    NixOS worth all the trouble.
-  - A decent grasp of Linux and its ecosystem is a must, if only to distinguish
-    Nix(OS) issues from Linux (or upstream) issues -- as well as to debug them
-    or report them to the correct authority (and coherently).
-  - If you need somebody else to tell you whether or not you need NixOS, you
-    don't need NixOS.
-
-  If none of this has deterred you, then you didn't need my advice in the first
-  place. Stop procrastinating and try NixOS!
-
-+ **How do you manage secrets?**
-
-  With [agenix].
-
-+ **Why did you write bin/hey?**
-
-  I envy Guix's CLI and want similar for NixOS, whose toolchain is spread across
-  many commands, none of which are as intuitive: `nix`, `nix-collect-garbage`,
-  `nixos-rebuild`, `nix-env`, `nix-shell`.
-
-  I don't claim `hey` is the answer, but everybody likes their own brew.
-
-+ **How 2 flakes?**
-
-  Would it be the NixOS experience if I gave you all the answers in one,
-  convenient place?
-
-  No. Suffer my pain:
-
-  + [A three-part tweag article that everyone's read.](https://www.tweag.io/blog/2020-05-25-flakes/)
-  + [An overengineered config to scare off beginners.](https://github.com/divnix/devos)
-  + [A minimalistic config for scared beginners.](https://github.com/colemickens/nixos-flake-example)
-  + [A nixos wiki page that spells out the format of flake.nix.](https://nixos.wiki/wiki/Flakes)
-  + [Official documentation that nobody reads.](https://nixos.org/learn.html)
-  + [Some great videos on general nixOS tooling and hackery.](https://www.youtube.com/channel/UC-cY3DcYladGdFQWIKL90SQ)
-  + A couple flake configs that I
-    [may](https://github.com/LEXUGE/nixos)
-    [have](https://github.com/bqv/nixrc)
-    [shamelessly](https://git.sr.ht/~dunklecat/nixos-config/tree)
-    [rummaged](https://github.com/utdemir/dotfiles)
-    [through](https://github.com/purcell/dotfiles).
-  + [Some notes about using Nix](https://github.com/justinwoo/nix-shorts)
-  + [What helped me figure out generators (for npm, yarn, python and haskell)](https://myme.no/posts/2020-01-26-nixos-for-development.html)
-  + [Learn from someone else's descent into madness; this journals his
-    experience digging into the NixOS
-    ecosystem](https://www.ianthehenry.com/posts/how-to-learn-nix/introduction/)
-  + [What y'all will need when Nix drives you to drink.](https://www.youtube.com/watch?v=Eni9PPPPBpg)
-
+```bash
+grype sbom:./reports/sbom.spdx.json --add-cpes-if-none
+```
 
 [doom-emacs]: https://github.com/hlissner/doom-emacs
 [nixos]: https://releases.nixos.org/?prefix=nixos/unstable/

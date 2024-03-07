@@ -55,17 +55,7 @@ in {
       libsForQt5.qt5ct
       qt6Packages.qtstyleplugin-kvantum
 
-      # Greeter
-      stable.libsForQt5.sddm
-      stable.libsForQt5.qt5.qtgraphicaleffects
-      # Greeter Themes
-      catppuccin-sddm-corners
-      inputs.sddm-catppuccin.packages.${pkgs.hostPlatform.system}.sddm-catppuccin
-      sddm-chili-theme
-      where-is-my-sddm-theme
-
       # Notifications
-      unstable.dunst
       libnotify
 
       # Clipboard Utilities
@@ -77,7 +67,6 @@ in {
       wl-gammactl
       wf-recorder
       hyprpicker
-      imagemagick
       slurp
       grim
 
@@ -117,22 +106,16 @@ in {
 
       # AGS and Gnome services
       gvfs.enable = true;
-      # devmon.enable = true;
-      # udisks2.enable = true;
       upower.enable = true;
-      # power-profiles-daemon.enable = true;
       accounts-daemon.enable = true;
       gnome = {
         # evolution-data-server.enable = true;
         glib-networking.enable = true;
         gnome-keyring.enable = true;
         # gnome-online-accounts.enable = true;
+        at-spi2-core.enable = true;
       };
     };
-
-    # modules.theme.onReload.hyprland = ''
-    #   ${pkgs.hyprland}/bin/hyprctl reload
-    # '';
 
     systemd = {
       user.services.polkit-gnome-authentication-agent-1 = {

@@ -44,9 +44,6 @@ in {
         papirus-icon-theme # dunst
         gnome.adwaita-icon-theme
         # TODO replace pamixer with amixer
-        pamixer
-        alsa-utils
-        playerctl
         # misc
         gpick
         neofetch
