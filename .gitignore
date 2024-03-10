@@ -20,3 +20,5 @@ rfd/*
 doom.d/secrets/*
 
 .vagrant*
+
+reports/*
