@@ -53,7 +53,7 @@ export default (notification: Notification) => {
         children: [
             NotificationIcon(notification),
             Widget.Box({
-                hexpand: true,
+                hexpand: false,
                 vertical: true,
                 children: [
                     Widget.Box({
@@ -84,7 +84,7 @@ export default (notification: Notification) => {
                     }),
                     Widget.Label({
                         class_name: "description",
-                        hexpand: true,
+                        hexpand: false,
                         use_markup: true,
                         xalign: 0,
                         justification: "left",
