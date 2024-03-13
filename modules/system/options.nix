@@ -69,6 +69,7 @@ with lib.my; {
         "audio"
         "disk"
         "networkmanager"
+        "greeter"
       ];
       isNormalUser = true;
       home = "/home/${name}";

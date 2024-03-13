@@ -83,9 +83,7 @@ in {
           layout = "dwindle";
           resize_on_border = true;
           no_cursor_warps = true;
-          # gaps_in = 8;
-          # gaps_out = 15;
-          gaps_in = 8;
+          gaps_in = 14;
           gaps_out = 28;
           border_size = 3;
           "col.active_border" = "rgb(EED49F) rgb(EED49F)";
