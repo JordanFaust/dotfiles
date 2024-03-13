@@ -92,6 +92,12 @@ in {
           recursive = true;
         };
       };
+
+      sessionVariables = {
+        QT_SCALE_FACTOR = "2.6";
+        ELM_SCALE = "2.6";
+        GDK_SCALE = "0.5";
+      };
     };
 
     # Enable fontconfig to discover fonts added as home.packages above

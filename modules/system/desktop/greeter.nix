@@ -42,6 +42,7 @@ in {
       (pkgs.writeScriptBin "greetd-test" ''
         ${config.services.greetd.settings.default_session.command}
       '')
+      greetd.regreet
     ];
     # # Use the Regreet greetd theme
     programs.regreet = {
