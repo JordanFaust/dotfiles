@@ -168,7 +168,7 @@ in {
         in
           [
             "CTRL SHIFT, R,  ${e} quit; ags -b hypr"
-            "SUPER, R,       ${e} -t applauncher"
+            "SUPER, R,       ${e} -t launcher"
             "SUPER, Tab,     ${e} -t overview"
             ",XF86PowerOff,  ${e} -r 'powermenu.shutdown()'"
             "CTRL,Home,      ${e} -r 'recorder.start()'"

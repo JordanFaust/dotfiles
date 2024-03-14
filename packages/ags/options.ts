@@ -92,7 +92,7 @@ const options = mkOptions(OPTIONS, {
                 colored: opt(false),
                 label: opt(" Applications"),
             },
-            action: opt(() => App.toggleWindow("applauncher")),
+            action: opt(() => App.toggleWindow("launcher")),
         },
         date: {
             format: opt("%H:%M - %A %e."),
@@ -134,27 +134,31 @@ const options = mkOptions(OPTIONS, {
         },
     },
 
-    applauncher: {
+    launcher: {
         iconSize: opt(62),
         width: opt(0),
         margin: opt(80),
-        maxItem: opt(6),
-        favorites: opt([
-            [
-                "firefox",
-                "org.gnome.Nautilus",
-                "obsidian",
-                "spotify",
-                "bottles",
-            ],
-            [
-                "wezterm",
-                "org.gnome.Calendar",
-                "discord",
-                "teams-for-linux",
-                "caprine",
-            ],
-        ]),
+        nix: {
+            pkgs: opt("nixpkgs/nixos-unstable"),
+            max: opt(8),
+        },
+        sh: {
+            max: opt(16),
+        },
+        apps: {
+            iconSize: opt(62),
+            max: opt(6),
+            favorites: opt([
+                [
+                    "firefox",
+                    "org.gnome.Nautilus",
+                    "org.gnome.Calendar",
+                    "neovim",
+                    "slack",
+                    "spotify",
+                ],
+            ]),
+        }
     },
 
     overview: {
