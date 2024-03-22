@@ -89,9 +89,24 @@ in {
 
   config = mkIf (cfg.active != null) (mkMerge [
     {
-      fonts.fontconfig.defaultFonts = {
-        sansSerif = [cfg.fonts.sans.name];
-        monospace = [cfg.fonts.mono.name];
+      fonts = {
+        packages = with pkgs; [
+          jetbrains-mono
+          fira-code
+          fira-code-symbols
+          cascadia-code
+          victor-mono
+          # General Sans Fonts
+          open-sans
+          siji
+          # Icon Fonts
+          (nerdfonts.override {fonts = ["CascadiaCode"];})
+          my.nonicons
+        ];
+        fontconfig.defaultFonts = {
+          sansSerif = [cfg.fonts.sans.name];
+          monospace = [cfg.fonts.mono.name];
+        };
       };
     }
   ]);
