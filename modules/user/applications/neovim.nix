@@ -71,7 +71,6 @@ in {
     xdg.configFile = {
       "neovide/config.toml".source = (pkgs.formats.toml {}).generate "config.toml" {
         font = {
-          # normal = "Cacadia Code Regular";
           normal = {
             family = "Cascadia Code";
             style = "Medium";
@@ -82,11 +81,11 @@ in {
           };
           italic = {
             family = "Victor Mono";
-            style = "Italic";
+            style = "Italic SemiBold";
           };
-          italic_bold = {
+          bold_italic = {
             family = "Victor Mono";
-            style = "Italic";
+            style = "Bold Italic";
           };
           size = 18;
         };

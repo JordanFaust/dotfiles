@@ -118,7 +118,7 @@ in {
     modules.desktop.gtk = {
       enable = true;
       name = gtk-theme;
-      package = pkgs.catppuccin-gtk.override {
+      package = pkgs.stable.catppuccin-gtk.override {
         accents = ["rosewater"];
         size = "compact";
         tweaks = ["rimless" "black"];

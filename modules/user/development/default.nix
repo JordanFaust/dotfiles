@@ -15,10 +15,10 @@ in {
     home = {
       packages = with pkgs; [
         # Add AWS V2 CLI
-        awscli2
-        aws-vault
-        ssm-agent
-        ssm-session-manager-plugin
+        stable.awscli2
+        stable.aws-vault
+        stable.ssm-agent
+        stable.ssm-session-manager-plugin
 
         # Kubernetes
         kubectx
