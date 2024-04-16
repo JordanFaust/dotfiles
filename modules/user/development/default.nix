@@ -54,6 +54,9 @@ in {
 
         # Security
         unstable.jfrog-cli
+
+        # Steam Run as a last ditch effort
+        steam-run
       ];
 
       shellAliases = {
