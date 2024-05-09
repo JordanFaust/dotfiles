@@ -1,5 +1,6 @@
-
 :root{
+  --theme-colors-toolbar_field_focus: #ED8796;
+  --tab-size: 45px;
   --dark-0: #192330;
   --dark-base: #24273A;
   --dark-1: #20103c;
@@ -109,15 +110,20 @@ tab-item .label {
     padding-bottom: 2px;
 }
 
-/* tab-item .twisty:before{ */
-/*    background: var(--light-3) !important; */
-/* } */
 tab-item .twisty:before{
    background: var(--red) !important;
 }
 
 tab-item.active .label {
     color: var(--light-0) !important;
+}
+
+tab-item.active .background {
+  background: var(--dark-3) !important;
+}
+
+tab-item.active .background:not(.base) {
+  box-shadow: none !important;
 }
 
 tab-item.active {
@@ -180,7 +186,7 @@ tab-item:not(pinned) tab-closebox {
 }
 
 :root.left tab-item .sound-button:after {
-    transform: translateX(0px); !important;
+    transform: translateX(0px) !important;
     transition: all calc(var(--animation-duration)*2.2) var(--ease-out) !important;
 }
 
@@ -299,5 +305,3 @@ tab-item.active.contextual-identity-firefox-container-4 {
 #all-tabs {
     border: none !important;
 }
-
-

@@ -49,11 +49,13 @@ in {
     # Install required packages for this window manager
     environment.systemPackages = with pkgs; [
       # Required for XDG Portal Hyprland
-      qt6.qtwayland
+      # Uncomment once hyprland-picker incompatibility is fixed
+      # kdePackages.qtwayland
+      (builtins.getFlake "github:NixOS/nixpkgs/a3ed7406349a9335cb4c2a71369b697cecd9d351").legacyPackages.${pkgs.system}.kdePackages.qtwayland
+      # qt6Packages.qtstyleplugin-kvantum
       libsForQt5.qt5.qtwayland
       # Ensure support for both qt5ct and qt6ct via kvantume
       libsForQt5.qt5ct
-      qt6Packages.qtstyleplugin-kvantum
 
       # Notifications
       libnotify

@@ -245,7 +245,7 @@ module Hey
         sh %w{nix-store --optimise}, sudo: true
         # Clear out left-over secrets. The switch-to-configuration call below will
         # regenerate them.
-        if File.exists?("/run/secrets/*")
+        if File.exist?("/run/secrets/*")
           sh %w{rm -rf /run/secrets/*}, sudo: true
         end
         # nix-collect-garbage is a Nix tool, not a NixOS tool. It won't delete old

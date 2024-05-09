@@ -7,6 +7,7 @@
   swww,
   bun,
   dart-sass,
+  fzf,
   gtk3,
   fd,
   brightnessctl,
@@ -33,6 +34,7 @@
     which
     dart-sass
     fd
+    fzf
     brightnessctl
     swww
     inputs.matugen.packages.${system}.default

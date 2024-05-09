@@ -70,7 +70,25 @@ in {
           exec = "${unstable.firefox-bin}/bin/firefox --private-window";
           categories = ["Network"];
         })
+        chromium
       ];
+
+      sessionVariables = {
+        DEFAULT_BROWSER = "${pkgs.unstable.firefox-bin}/bin/firefox";
+      };
+    };
+
+    xdg.mimeApps = {
+      enable = true;
+
+      defaultApplications = {
+        "default-web-browser" = "firefox.desktop";
+        "text/html" = "firefox.desktop";
+        "x-scheme-handler/http" = "firefox.desktop";
+        "x-scheme-handler/https" = "firefox.desktop";
+        "x-scheme-handler/about" = "firefox.desktop";
+        "x-scheme-handler/unknown" = "firefox.desktop";
+      };
     };
 
     # Prevent auto-creation of ~/Desktop. The trailing slash is necessary; see

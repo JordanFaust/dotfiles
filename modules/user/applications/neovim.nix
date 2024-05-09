@@ -45,6 +45,7 @@ in {
         # deno-webkit
         # neovim-nightly
         neovim
+        neovide
 
         # Neovim Addon Dependencies
         ranger
@@ -65,6 +66,30 @@ in {
           categories = ["Utility" "TextEditor"];
         })
       ];
+    };
+
+    xdg.configFile = {
+      "neovide/config.toml".source = (pkgs.formats.toml {}).generate "config.toml" {
+        font = {
+          normal = {
+            family = "Cascadia Code";
+            style = "Medium";
+          };
+          bold = {
+            family = "Cascadia Code";
+            style = "Bold";
+          };
+          italic = {
+            family = "Victor Mono";
+            style = "Italic SemiBold";
+          };
+          bold_italic = {
+            family = "Victor Mono";
+            style = "Bold Italic";
+          };
+          size = 18;
+        };
+      };
     };
   };
 }
