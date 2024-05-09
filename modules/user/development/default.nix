@@ -32,6 +32,10 @@ in {
         unstable.kubernetes-helm
         kustomize
         unstable.skaffold
+        tilt
+        k3d
+        lens
+        postman
 
         # Terraform
         terraform
