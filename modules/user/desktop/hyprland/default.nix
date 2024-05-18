@@ -82,7 +82,6 @@ in {
         general = {
           layout = "dwindle";
           resize_on_border = true;
-          no_cursor_warps = true;
           gaps_in = 14;
           gaps_out = 28;
           border_size = 3;
@@ -119,7 +118,7 @@ in {
         gestures = {
           workspace_swipe = true;
           workspace_swipe_forever = true;
-          workspace_swipe_numbered = true;
+          # workspace_swipe_numbered = true;
         };
 
         workspace = [
@@ -149,7 +148,7 @@ in {
           "workspace 3 silent, title:^(Spotify Premium)$"
           "workspace 3 silent, class:^(Slack)$"
           "workspace 3 silent, initialTitle:^(Slack)$"
-          "workspace 5 silent, title:^(Zoom - Licensed account)$"
+          "workspace 5 silent, title:^(Zoom Workplace - Licensed account)$"
           # Inhibit Screen Locking/Sleeping during video calls/watching videos
           (inhibitfocus "Zoom Meeting")
         ];
