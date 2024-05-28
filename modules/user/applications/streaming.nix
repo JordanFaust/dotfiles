@@ -42,7 +42,7 @@ in {
     # Force Zoom to open in the browser until issues are resolved
     home = {
       packages = with pkgs; [
-        zoom-us
+        # zoom-us
       ];
     };
 

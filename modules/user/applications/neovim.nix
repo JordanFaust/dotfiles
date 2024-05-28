@@ -87,7 +87,7 @@ in {
             family = "Victor Mono";
             style = "Bold Italic";
           };
-          size = 18;
+          size = 14;
         };
       };
     };
