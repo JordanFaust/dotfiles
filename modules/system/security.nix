@@ -104,26 +104,26 @@ in {
         openssl
         # Security scanning tools
         # Disable until grype can actually build in nixos
-        # vulnix
-        # sbomnix
-        # grype
-        # syft
-        # (pkgs.writeShellScriptBin "nixos-scan" ''
-        #   mkdir -p /etc/dotfiles/reports
-        #
-        #   echo "Generating meta information.."
-        #   nix-env -qa --meta --json '.*' > /etc/dotfiles/reports/meta.json
-        #
-        #   echo "Generating SBOM..."
-        #   ${sbomnix}/bin/sbomnix /run/current-system/sw/ \
-        #     --csv /etc/dotfiles/reports/sbom.csv \
-        #     --cdx /etc/dotfiles/reports/sbox.cdx.json \
-        #     --spdx /etc/dotfiles/reports/sbom.spdx.json \
-        #     --meta /etc/dotfiles/reports/meta.json
-        #
-        #   echo "Evaluating vulnerabilities..."
-        #   ${grype}/bin/grype sbom:/etc/dotfiles/reports/sbom.spdx.json --add-cpes-if-none
-        # '')
+        vulnix
+        sbomnix
+        grype
+        syft
+        (pkgs.writeShellScriptBin "nixos-scan" ''
+          mkdir -p /etc/dotfiles/reports
+
+          echo "Generating meta information.."
+          nix-env -qa --meta --json '.*' > /etc/dotfiles/reports/meta.json
+
+          echo "Generating SBOM..."
+          ${sbomnix}/bin/sbomnix /run/current-system/sw/ \
+            --csv /etc/dotfiles/reports/sbom.csv \
+            --cdx /etc/dotfiles/reports/sbox.cdx.json \
+            --spdx /etc/dotfiles/reports/sbom.spdx.json \
+            --meta /etc/dotfiles/reports/meta.json
+
+          echo "Evaluating vulnerabilities..."
+          ${grype}/bin/grype sbom:/etc/dotfiles/reports/sbom.spdx.json --add-cpes-if-none
+        '')
       ];
       services.keybase.enable = true;
     }
