@@ -56,15 +56,15 @@ in {
         # Peek.nvim pre-built
         # my.peek-nvim
 
-        (makeDesktopItem {
-          name = "Neovim";
-          desktopName = "Neovim";
-          genericName = "Text Editor";
-          icon = "nvim";
-          # KITTY_ENABLE_WAYLAND must be set here or integrations with wayland, such as copy/paste, won't work
-          exec = "bash -c \"KITTY_ENABLE_WAYLAND=1; ${kitty}/bin/kitty --title Neovim --class neovim -e nvim %F\"";
-          categories = ["Utility" "TextEditor"];
-        })
+        # (makeDesktopItem {
+        #   name = "Neovim";
+        #   desktopName = "Neovim";
+        #   genericName = "Text Editor";
+        #   icon = "nvim";
+        #   # KITTY_ENABLE_WAYLAND must be set here or integrations with wayland, such as copy/paste, won't work
+        #   exec = "bash -c \"KITTY_ENABLE_WAYLAND=1; ${kitty}/bin/kitty --title Neovim --class neovim -e nvim %F\"";
+        #   categories = ["Utility" "TextEditor"];
+        # })
       ];
     };
 
