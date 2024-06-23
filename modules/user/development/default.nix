@@ -65,6 +65,9 @@ in {
 
         # Nix Development
         nil
+
+        # Markdown
+        marksman
       ];
 
       shellAliases = {

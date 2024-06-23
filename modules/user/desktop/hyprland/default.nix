@@ -130,27 +130,43 @@ in {
         ];
 
         windowrule = let
-          f = regex: "float, ^(${regex})$";
+          fregex = regex: "float, ^(${regex})$";
           inhibitfocus = regex: "idleinhibit focus,title:^(${regex})$";
         in [
-          (f "org.gnome.Calculator")
-          (f "org.gnome.Nautilus")
-          (f "pavucontrol")
-          (f "nm-connection-editor")
-          (f "blueberry.py")
-          (f "org.gnome.Settings")
-          (f "org.gnome.design.Palette")
-          (f "Color Picker")
-          (f "xdg-desktop-portal")
-          (f "xdg-desktop-portal-gnome")
-          (f "transmission-gtk")
-          (f "com.github.Aylur.ags")
+          (fregex "org.gnome.Calculator")
+          (fregex "org.gnome.Nautilus")
+          (fregex "pavucontrol")
+          (fregex "nm-connection-editor")
+          (fregex "blueberry.py")
+          (fregex "org.gnome.Settings")
+          (fregex "org.gnome.design.Palette")
+          (fregex "Color Picker")
+          (fregex "xdg-desktop-portal")
+          (fregex "xdg-desktop-portal-gnome")
+          (fregex "transmission-gtk")
+          (fregex "com.github.Aylur.ags")
           "workspace 3 silent, title:^(Spotify Premium)$"
           "workspace 3 silent, class:^(Slack)$"
           "workspace 3 silent, initialTitle:^(Slack)$"
           "workspace 5 silent, title:^(Zoom Workplace - Licensed account)$"
+          "workspace stayfocused, title:MainPicker"
           # Inhibit Screen Locking/Sleeping during video calls/watching videos
           (inhibitfocus "Zoom Meeting")
+        ];
+
+        windowrulev2 = let
+          f = title: class: "float, title:^(${title})$, class:^(${class})$";
+          pin = title: class: "pin, title:^(${title})$ class:^(${class})$";
+        in [
+          # Make sure that the zoom toolbar and video window are floating
+          (f "zoom_linux_float_video_window" "zoom")
+          (f "as_toolbar" "zoom")
+          # Pin the floating video window and make it follow the current workspace
+          (pin "zoom_linux_float_video_window" "zoom")
+          # First move the toolbar so it doesn't disappear behind AGS bar
+          # Pin the floating toolbar and make it follow the current workspace
+          "move 1498 58, title:^(as_toolbar)$, class:^(zoom)$"
+          (pin "as_toolbar" "zoom")
         ];
 
         bind = let
@@ -235,7 +251,7 @@ in {
           shadow_render_power = 5;
           "col.shadow" = "0x33000000";
           "col.shadow_inactive" = "0x22000000";
-          rounding = 10;
+          rounding = 5;
           blur = {
             enabled = true;
             size = 9;
