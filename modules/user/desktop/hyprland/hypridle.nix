@@ -16,7 +16,7 @@ in {
 
   config = lib.mkIf (cfg.enable) {
     services.hypridle = {
-      enable = false;
+      enable = true;
 
       # Generate Configuration
       settings = {

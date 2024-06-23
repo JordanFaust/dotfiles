@@ -71,24 +71,52 @@ in {
     xdg.configFile = {
       "neovide/config.toml".source = (pkgs.formats.toml {}).generate "config.toml" {
         font = {
-          normal = {
-            family = "Cascadia Code";
-            style = "Medium";
-          };
+          normal = [
+            {
+              family = "MonoLisa Variable";
+              style = "Medium";
+            }
+            {
+              family = "Cascadia Code";
+              style = "Medium";
+            }
+          ];
           bold = {
-            family = "Cascadia Code";
-            style = "Bold";
+            family = "MonoLisa Variable";
+            style = "ExtraBold";
           };
           italic = {
-            family = "Victor Mono";
-            style = "Italic SemiBold";
+            family = "MonoLisa Variable";
+            style = "Italic Medium";
           };
           bold_italic = {
-            family = "Victor Mono";
-            style = "Bold Italic";
+            family = "MonoLisa Variable";
+            style = "Italic ExtraBold";
           };
           size = 14;
         };
+        # font.features = {
+        #   MonoLisa = [ "+ss01" ];
+        # };
+        # font = {
+        #   normal = {
+        #     family = "Cascadia Code";
+        #     style = "Medium";
+        #   };
+        #   bold = {
+        #     family = "Cascadia Code";
+        #     style = "Bold";
+        #   };
+        #   italic = {
+        #     family = "Victor Mono";
+        #     style = "Italic SemiBold";
+        #   };
+        #   bold_italic = {
+        #     family = "Victor Mono";
+        #     style = "Bold Italic";
+        #   };
+        #   size = 14;
+        # };
       };
     };
   };

@@ -30,6 +30,7 @@ in {
 
         # Local Dev
         unstable.kubernetes-helm
+        helm-ls
         kustomize
         unstable.skaffold
         tilt

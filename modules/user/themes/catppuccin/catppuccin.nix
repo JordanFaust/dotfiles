@@ -77,9 +77,10 @@ in {
         # General Sans Fonts
         open-sans
         siji
-        # Icon Fonts
         (nerdfonts.override {fonts = ["CascadiaCode"];})
+        # Icon Fonts
         my.nonicons
+        inputs.private-fonts.packages.${system}.monolisa-variable
       ];
 
       file = {

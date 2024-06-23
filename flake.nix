@@ -44,6 +44,10 @@
     # FLake Formatter
     alejandra.url = "github:kamadorueda/alejandra/3.0.0";
     alejandra.inputs.nixpkgs.follows = "nixpkgs";
+
+    # Private fonts
+    private-fonts.url = "git+ssh://git@github.com/JordanFaust/private-fonts.git?ref=main";
+    private-fonts.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = inputs @ {
