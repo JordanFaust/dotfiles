@@ -62,6 +62,9 @@ in {
 
         # Steam Run as a last ditch effort
         steam-run
+
+        # Nix Development
+        nil
       ];
 
       shellAliases = {

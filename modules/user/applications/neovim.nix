@@ -74,7 +74,7 @@ in {
           normal = [
             {
               family = "MonoLisa Variable";
-              style = "Medium";
+              style = "SemiBold";
             }
             {
               family = "Cascadia Code";
@@ -87,7 +87,7 @@ in {
           };
           italic = {
             family = "MonoLisa Variable";
-            style = "Italic Medium";
+            style = "Italic SemiBold";
           };
           bold_italic = {
             family = "MonoLisa Variable";
