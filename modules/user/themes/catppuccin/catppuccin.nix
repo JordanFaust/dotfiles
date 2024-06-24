@@ -68,19 +68,22 @@ in {
         # Font Config
         #
 
+        fontforge
         # General Coding Fonts
         jetbrains-mono
         fira-code
         fira-code-symbols
         cascadia-code
         victor-mono
+        inputs.private-fonts.packages.${system}.monolisa-variable
+        # monaspace
         # General Sans Fonts
         open-sans
+
         siji
-        (nerdfonts.override {fonts = ["CascadiaCode"];})
+        (nerdfonts.override {fonts = ["CascadiaCode" "NerdFontsSymbolsOnly"];})
         # Icon Fonts
         my.nonicons
-        inputs.private-fonts.packages.${system}.monolisa-variable
       ];
 
       file = {

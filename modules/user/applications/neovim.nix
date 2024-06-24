@@ -45,7 +45,8 @@ in {
         # deno-webkit
         # neovim-nightly
         neovim
-        neovide
+        # Disabled until https://github.com/neovide/neovide/issues/2491
+        # neovide
 
         # Neovim Addon Dependencies
         ranger
@@ -56,28 +57,56 @@ in {
         # Peek.nvim pre-built
         # my.peek-nvim
 
-        # (makeDesktopItem {
-        #   name = "Neovim";
-        #   desktopName = "Neovim";
-        #   genericName = "Text Editor";
-        #   icon = "nvim";
-        #   # KITTY_ENABLE_WAYLAND must be set here or integrations with wayland, such as copy/paste, won't work
-        #   exec = "bash -c \"KITTY_ENABLE_WAYLAND=1; ${kitty}/bin/kitty --title Neovim --class neovim -e nvim %F\"";
-        #   categories = ["Utility" "TextEditor"];
-        # })
+        (makeDesktopItem {
+          name = "Neovim";
+          desktopName = "Neovim";
+          genericName = "Text Editor";
+          icon = "nvim";
+          # KITTY_ENABLE_WAYLAND must be set here or integrations with wayland, such as copy/paste, won't work
+          exec = "bash -c \"KITTY_ENABLE_WAYLAND=1; ${kitty}/bin/kitty --title Neovim --class neovim -e nvim %F\"";
+          categories = ["Utility" "TextEditor"];
+        })
       ];
     };
 
     xdg.configFile = {
       "neovide/config.toml".source = (pkgs.formats.toml {}).generate "config.toml" {
+        #
+        # Monaspace
+        #
+        # font = {
+        #   normal = [
+        #     {
+        #       family = "Monaspace Neon";
+        #       style = "Normal";
+        #     }
+        #   ];
+        #   bold = {
+        #     family = "Monaspace Neon Var";
+        #     style = "ExtraBold";
+        #   };
+        #   italic = {
+        #     family = "Monaspace Radon Var";
+        #     style = "Italic SemiBold";
+        #   };
+        #   bold_italic = {
+        #     family = "Monaspace Radon Var";
+        #     style = "Italic ExtraBold";
+        #   };
+        #   size = 16;
+        # };
+
+        #
+        # MonoLisa
+        #
         font = {
           normal = [
             {
               family = "MonoLisa Variable";
-              style = "SemiBold";
+              style = "Medium";
             }
             {
-              family = "Cascadia Code";
+              family = "CaskaydiaCove Nerd Font";
               style = "Medium";
             }
           ];
@@ -87,17 +116,18 @@ in {
           };
           italic = {
             family = "MonoLisa Variable";
-            style = "Italic SemiBold";
+            style = "Italic Medium";
           };
           bold_italic = {
             family = "MonoLisa Variable";
             style = "Italic ExtraBold";
           };
-          size = 14;
+          size = 16;
         };
         # font.features = {
         #   MonoLisa = [ "+ss01" ];
         # };
+
         # font = {
         #   normal = {
         #     family = "Cascadia Code";

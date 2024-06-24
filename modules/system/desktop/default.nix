@@ -35,9 +35,6 @@ in {
     user.packages = with pkgs; [
       libsForQt5.qtstyleplugin-kvantum # SVG-based Qt5 theme engine plus a config tool and extra theme
 
-      # Patch favorite fonts with NerdFonts
-      (nerdfonts.override {fonts = ["JetBrainsMono" "FiraCode"];})
-
       # Performance Monitoring
       bmon
       btop
@@ -59,9 +56,6 @@ in {
       fontDir.enable = true;
       enableGhostscriptFonts = true;
       packages = with pkgs; [
-        ubuntu_font_family
-        dejavu_fonts
-        symbola
         (nerdfonts.override {fonts = ["JetBrainsMono" "FiraCode" "DroidSansMono"];})
       ];
     };
