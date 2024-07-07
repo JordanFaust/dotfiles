@@ -131,7 +131,6 @@ in {
 
         windowrule = let
           fregex = regex: "float, ^(${regex})$";
-          inhibitfocus = regex: "idleinhibit focus,title:^(${regex})$";
         in [
           (fregex "org.gnome.Calculator")
           (fregex "org.gnome.Nautilus")
@@ -150,23 +149,28 @@ in {
           "workspace 3 silent, initialTitle:^(Slack)$"
           "workspace 5 silent, title:^(Zoom Workplace - Licensed account)$"
           "workspace stayfocused, title:MainPicker"
-          # Inhibit Screen Locking/Sleeping during video calls/watching videos
-          (inhibitfocus "Zoom Meeting")
         ];
 
         windowrulev2 = let
           f = title: class: "float, title:^(${title})$, class:^(${class})$";
           pin = title: class: "pin, title:^(${title})$ class:^(${class})$";
+          inhibitfocus = regex: "idleinhibit focus,title:^(${regex})$";
         in [
           # Make sure that the zoom toolbar and video window are floating
           (f "zoom_linux_float_video_window" "zoom")
+          (f "zoom_linux_float_message_reminder" "zoom")
           (f "as_toolbar" "zoom")
           # Pin the floating video window and make it follow the current workspace
           (pin "zoom_linux_float_video_window" "zoom")
+          # Pin the floating message reminder and make it follow the current workspace
+          # Zoom should be smart enough to make sure they don't stack
+          (pin "zoom_linux_float_message_reminder" "zoom")
           # First move the toolbar so it doesn't disappear behind AGS bar
           # Pin the floating toolbar and make it follow the current workspace
           "move 1498 58, title:^(as_toolbar)$, class:^(zoom)$"
           (pin "as_toolbar" "zoom")
+          # Inhibit Screen Locking/Sleeping during video calls/watching videos
+          (inhibitfocus "Zoom Meeting")
         ];
 
         bind = let
