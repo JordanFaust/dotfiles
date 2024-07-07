@@ -17,6 +17,12 @@ in {
   };
 
   config = mkIf cfg.enable {
+    nix.settings = {
+      substituters = ["https://hyprland.cachix.org"];
+      trusted-public-keys = [
+        "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
+      ];
+    };
     # Enable Hyprland
     programs.hyprland = {
       enable = true;
@@ -50,8 +56,8 @@ in {
     environment.systemPackages = with pkgs; [
       # Required for XDG Portal Hyprland
       # Uncomment once hyprland-picker incompatibility is fixed
-      # kdePackages.qtwayland
-      (builtins.getFlake "github:NixOS/nixpkgs/a3ed7406349a9335cb4c2a71369b697cecd9d351").legacyPackages.${pkgs.system}.kdePackages.qtwayland
+      kdePackages.qtwayland
+      # (builtins.getFlake "github:NixOS/nixpkgs/a3ed7406349a9335cb4c2a71369b697cecd9d351").legacyPackages.${pkgs.system}.kdePackages.qtwayland
       # qt6Packages.qtstyleplugin-kvantum
       libsForQt5.qt5.qtwayland
       # Ensure support for both qt5ct and qt6ct via kvantume
@@ -101,9 +107,10 @@ in {
 
       xserver = {
         enable = true;
-        displayManager = {
-          defaultSession = "hyprland";
-        };
+      };
+
+      displayManager = {
+        defaultSession = "hyprland";
       };
 
       # AGS and Gnome services

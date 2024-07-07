@@ -103,6 +103,7 @@ in {
         kbfs
         openssl
         # Security scanning tools
+        # Disable until grype can actually build in nixos
         vulnix
         sbomnix
         grype

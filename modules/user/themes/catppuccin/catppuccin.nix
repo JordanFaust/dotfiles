@@ -68,17 +68,21 @@ in {
         # Font Config
         #
 
+        fontforge
         # General Coding Fonts
         jetbrains-mono
         fira-code
         fira-code-symbols
         cascadia-code
         victor-mono
+        inputs.private-fonts.packages.${system}.monolisa-variable
+        # monaspace
         # General Sans Fonts
         open-sans
+
         siji
+        (nerdfonts.override {fonts = ["CascadiaCode" "NerdFontsSymbolsOnly"];})
         # Icon Fonts
-        (nerdfonts.override {fonts = ["CascadiaCode"];})
         my.nonicons
       ];
 
@@ -132,7 +136,7 @@ in {
       };
 
       cursor = {
-        name = "Catppuccin-Macchiato-Red-Cursors";
+        name = "catppuccin-macchiato-red-cursors";
         package = pkgs.catppuccin-cursors.macchiatoRed;
         size = 36;
       };

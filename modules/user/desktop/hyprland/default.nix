@@ -82,7 +82,6 @@ in {
         general = {
           layout = "dwindle";
           resize_on_border = true;
-          no_cursor_warps = true;
           gaps_in = 14;
           gaps_out = 28;
           border_size = 3;
@@ -119,7 +118,7 @@ in {
         gestures = {
           workspace_swipe = true;
           workspace_swipe_forever = true;
-          workspace_swipe_numbered = true;
+          # workspace_swipe_numbered = true;
         };
 
         workspace = [
@@ -131,25 +130,45 @@ in {
         ];
 
         windowrule = let
-          f = regex: "float, ^(${regex})$";
-          inhibitfocus = regex: "idleinhibit focus,title:^(${regex})$";
+          fregex = regex: "float, ^(${regex})$";
         in [
-          (f "org.gnome.Calculator")
-          (f "org.gnome.Nautilus")
-          (f "pavucontrol")
-          (f "nm-connection-editor")
-          (f "blueberry.py")
-          (f "org.gnome.Settings")
-          (f "org.gnome.design.Palette")
-          (f "Color Picker")
-          (f "xdg-desktop-portal")
-          (f "xdg-desktop-portal-gnome")
-          (f "transmission-gtk")
-          (f "com.github.Aylur.ags")
+          (fregex "org.gnome.Calculator")
+          (fregex "org.gnome.Nautilus")
+          (fregex "pavucontrol")
+          (fregex "nm-connection-editor")
+          (fregex "blueberry.py")
+          (fregex "org.gnome.Settings")
+          (fregex "org.gnome.design.Palette")
+          (fregex "Color Picker")
+          (fregex "xdg-desktop-portal")
+          (fregex "xdg-desktop-portal-gnome")
+          (fregex "transmission-gtk")
+          (fregex "com.github.Aylur.ags")
           "workspace 3 silent, title:^(Spotify Premium)$"
           "workspace 3 silent, class:^(Slack)$"
           "workspace 3 silent, initialTitle:^(Slack)$"
-          "workspace 5 silent, title:^(Zoom - Licensed account)$"
+          "workspace 5 silent, title:^(Zoom Workplace - Licensed account)$"
+          "workspace stayfocused, title:MainPicker"
+        ];
+
+        windowrulev2 = let
+          f = title: class: "float, title:^(${title})$, class:^(${class})$";
+          pin = title: class: "pin, title:^(${title})$ class:^(${class})$";
+          inhibitfocus = regex: "idleinhibit focus,title:^(${regex})$";
+        in [
+          # Make sure that the zoom toolbar and video window are floating
+          (f "zoom_linux_float_video_window" "zoom")
+          (f "zoom_linux_float_message_reminder" "zoom")
+          (f "as_toolbar" "zoom")
+          # Pin the floating video window and make it follow the current workspace
+          (pin "zoom_linux_float_video_window" "zoom")
+          # Pin the floating message reminder and make it follow the current workspace
+          # Zoom should be smart enough to make sure they don't stack
+          (pin "zoom_linux_float_message_reminder" "zoom")
+          # First move the toolbar so it doesn't disappear behind AGS bar
+          # Pin the floating toolbar and make it follow the current workspace
+          "move 1498 58, title:^(as_toolbar)$, class:^(zoom)$"
+          (pin "as_toolbar" "zoom")
           # Inhibit Screen Locking/Sleeping during video calls/watching videos
           (inhibitfocus "Zoom Meeting")
         ];
@@ -236,7 +255,7 @@ in {
           shadow_render_power = 5;
           "col.shadow" = "0x33000000";
           "col.shadow_inactive" = "0x22000000";
-          rounding = 10;
+          rounding = 5;
           blur = {
             enabled = true;
             size = 9;

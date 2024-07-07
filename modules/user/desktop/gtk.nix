@@ -176,7 +176,9 @@ in {
 
     qt = {
       enable = cfg.enable;
-      platformTheme = "qtct";
+      platformTheme = {
+        name = "qtct";
+      };
       style = {
         name = "kvantum";
         package = cfg.qt.package;

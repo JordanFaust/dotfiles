@@ -30,6 +30,7 @@ in {
 
         # Local Dev
         unstable.kubernetes-helm
+        helm-ls
         kustomize
         unstable.skaffold
         tilt
@@ -61,6 +62,12 @@ in {
 
         # Steam Run as a last ditch effort
         steam-run
+
+        # Nix Development
+        nil
+
+        # Markdown
+        marksman
       ];
 
       shellAliases = {

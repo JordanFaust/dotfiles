@@ -20,6 +20,8 @@ alias gurl='curl --compressed'
 alias shutdown='sudo shutdown'
 alias reboot='sudo reboot'
 
+alias k='kubectl'
+
 # An rsync that respects gitignore
 rcp() {
   # -a = -rlptgoD

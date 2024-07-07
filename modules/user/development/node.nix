@@ -41,6 +41,9 @@ in {
         # (builtins.getFlake "github:NixOS/nixpkgs/8dfad603247387df1df4826b8bea58efc5d012d8").legacyPackages.${pkgs.system}.nodePackages.wrangler
         unstable.nodePackages.wrangler
         nodePackages.typescript
+        cypress
+
+        biome
         # pkgs.turbo
         # (builtins.getFlake "github:NixOS/nixpkgs/8dfad603247387df1df4826b8bea58efc5d012d8").legacyPackages.${pkgs.system}.turbo
       ];

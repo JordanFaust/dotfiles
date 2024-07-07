@@ -20,7 +20,7 @@
     };
 
     # Hyperland Home Manager
-    hyprland.url = "github:hyprwm/Hyprland";
+    hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
     hyprland-plugins.url = "github:hyprwm/hyprland-plugins";
     hyprland-plugins.inputs.hyprland.follows = "hyprland";
     hyprlock.url = "github:hyprwm/hyprlock";
@@ -44,6 +44,10 @@
     # FLake Formatter
     alejandra.url = "github:kamadorueda/alejandra/3.0.0";
     alejandra.inputs.nixpkgs.follows = "nixpkgs";
+
+    # Private fonts
+    private-fonts.url = "git+ssh://git@github.com/JordanFaust/private-fonts.git?ref=main";
+    private-fonts.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = inputs @ {
