@@ -42,7 +42,7 @@ in {
       packages = with pkgs; [
         paper-icon-theme # for rofi
         papirus-icon-theme # dunst
-        gnome.adwaita-icon-theme
+        adwaita-icon-theme
         # TODO replace pamixer with amixer
         # misc
         gpick

@@ -38,8 +38,9 @@ in {
         nodePackages.pnpm
         # pkgs.unstable.nodePackages.wrangler
         # pkgs.wrangler
-        # (builtins.getFlake "github:NixOS/nixpkgs/8dfad603247387df1df4826b8bea58efc5d012d8").legacyPackages.${pkgs.system}.nodePackages.wrangler
-        unstable.nodePackages.wrangler
+        # (builtins.getFlake "github:NixOS/nixpkgs/a9858885e197f984d92d7fe64e9fff6b2e488d40#nodePackages.wrangler")
+        (builtins.getFlake "github:NixOS/nixpkgs/a9858885e197f984d92d7fe64e9fff6b2e488d40").legacyPackages.${pkgs.system}.nodePackages.wrangler
+        # stable.nodePackages.wrangler
         nodePackages.typescript
         cypress
 

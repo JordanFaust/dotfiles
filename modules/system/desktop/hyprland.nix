@@ -87,18 +87,18 @@ in {
 
       # Gnome stuff
       loupe
-      gnome.adwaita-icon-theme
-      gnome.nautilus
-      gnome.baobab
-      gnome.gnome-calendar
+      adwaita-icon-theme
+      nautilus
+      baobab
+      gnome-calendar
       gnome.gnome-boxes
-      gnome.gnome-system-monitor
+      gnome-system-monitor
       gnome.gnome-control-center
       gnome.gnome-weather
-      gnome.gnome-calculator
+      gnome-calculator
       gnome.gnome-clocks
       gnome.gnome-software # for flatpak
-      gnome.gnome-tweaks
+      gnome-tweaks
       cage
     ];
 
