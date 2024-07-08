@@ -10,6 +10,7 @@
 with lib;
 with lib.my; let
   cfg = config.modules.theme;
+  configDir = config.dotfiles.configDir;
   # catppuccin-ags = pkgs.callPackage ./ags/ags.nix {};
 in {
   config = mkIf (cfg.active == "catppuccin") (mkMerge [
@@ -53,7 +54,7 @@ in {
           };
         };
 
-        shell.zsh.rcFiles = [./config/zsh/prompt.zsh];
+        shell.zsh.rcFiles = ["${configDir}/zsh/.p10k.zsh"];
         shell.tmux.rcFiles = [./config/tmux.conf];
         # desktop.browsers = {
         #   firefox.userChrome = concatMapStringsSep "\n" readFile [
