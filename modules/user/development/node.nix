@@ -34,8 +34,9 @@ in {
     home = {
       packages = with pkgs; [
         nodejs_20
-        yarn
-        nodePackages.pnpm
+        corepack
+        # yarn
+        # nodePackages.pnpm
         # pkgs.unstable.nodePackages.wrangler
         # pkgs.wrangler
         # (builtins.getFlake "github:NixOS/nixpkgs/a9858885e197f984d92d7fe64e9fff6b2e488d40#nodePackages.wrangler")
@@ -55,7 +56,7 @@ in {
         ya = "yarn";
       };
 
-      sessionPath = ["$(${pkgs.yarn}/bin/yarn global bin)"];
+      # sessionPath = ["$(${pkgs.yarn}/bin/yarn global bin)"];
 
       sessionVariables = {
         NPM_CONFIG_USERCONFIG = "$XDG_CONFIG_HOME/npm/config";
