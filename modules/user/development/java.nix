@@ -32,7 +32,7 @@ in {
     home = {
       packages = with pkgs; [
         jdk17
-        jdt-language-server
+        # jdt-language-server
       ];
     };
   };

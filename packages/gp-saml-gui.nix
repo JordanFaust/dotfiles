@@ -21,7 +21,7 @@ in
       owner = "dlenski";
       repo = "gp-saml-gui";
       # rev = "f1fafba32e06a86308aab03abaaa1b076e1e1096";
-      rev = "258f47cdc4a8ed57a1eef16667f6cad0d1cb49b1";
+      rev = "c46af04b3a6325b0ecc982840d7cfbd1629b6d43";
       sha256 = "g10S8C32mnOymCmGNdM8gmGpYn5/ObMJK3g6amKtQmI=";
     };
 
