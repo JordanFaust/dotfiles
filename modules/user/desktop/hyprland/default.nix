@@ -54,7 +54,7 @@ in {
       name = "Settings";
       comment = "Gnome Control Center";
       icon = "org.gnome.Settings";
-      exec = "env XDG_CURRENT_DESKTOP=gnome ${pkgs.gnome.gnome-control-center}/bin/gnome-control-center";
+      exec = "env XDG_CURRENT_DESKTOP=gnome ${pkgs.gnome-control-center}/bin/gnome-control-center";
       categories = ["X-Preferences"];
       terminal = false;
     };
@@ -112,7 +112,7 @@ in {
         dwindle = {
           pseudotile = "yes";
           preserve_split = "yes";
-          # no_gaps_when_only = "yes";
+          no_gaps_when_only = 0;
         };
 
         gestures = {

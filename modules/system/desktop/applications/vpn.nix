@@ -114,13 +114,14 @@ in {
       unstable.openconnect
       my.gp-saml-gui
       vpn
-      globalprotect-openconnect
+      gpauth
+      gpclient
     ];
 
-    services.globalprotect = {
-      enable = true;
-      # if you need a Host Integrity Protection report
-      csdWrapper = "${pkgs.openconnect}/libexec/openconnect/hipreport.sh";
-    };
+    # services.globalprotect = {
+    #   enable = true;
+    #   # if you need a Host Integrity Protection report
+    #   csdWrapper = "${pkgs.openconnect}/libexec/openconnect/hipreport.sh";
+    # };
   };
 }

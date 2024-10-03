@@ -18,7 +18,7 @@ with lib.my; let
       config.allowUnfree = true;
     };
   # The pinned packages set containing a functioning zoom-us package
-  pinnedZoomPkgs = mkPkgs (builtins.getFlake "github:NixOS/nixpkgs/4a3fc4cf736b7d2d288d7a8bf775ac8d4c0920b4");
+  pinnedZoomPkgs = mkPkgs (builtins.getFlake "github:NixOS/nixpkgs/0c19708cf035f50d28eb4b2b8e7a79d4dc52f6bb");
 in {
   options.modules.applications.streaming = mkOption {
     description = ''

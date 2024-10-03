@@ -37,6 +37,7 @@ in {
         k3d
         lens
         postman
+        httpie
 
         # Terraform
         terraform

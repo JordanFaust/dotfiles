@@ -91,13 +91,13 @@ in {
       nautilus
       baobab
       gnome-calendar
-      gnome.gnome-boxes
+      gnome-boxes
       gnome-system-monitor
-      gnome.gnome-control-center
-      gnome.gnome-weather
+      gnome-control-center
+      gnome-weather
       gnome-calculator
-      gnome.gnome-clocks
-      gnome.gnome-software # for flatpak
+      gnome-clocks
+      # gnome-software # for flatpak
       gnome-tweaks
       cage
     ];

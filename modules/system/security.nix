@@ -124,6 +124,7 @@ in {
           echo "Evaluating vulnerabilities..."
           ${grype}/bin/grype sbom:/etc/dotfiles/reports/sbom.spdx.json --add-cpes-if-none
         '')
+        nix-tree
       ];
       services.keybase.enable = true;
     }
