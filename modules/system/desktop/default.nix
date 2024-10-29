@@ -45,7 +45,7 @@ in {
       ##
 
       # NixOS Config Testing
-      vagrant
+      # vagrant
       virt-manager
 
       # Misc

@@ -146,8 +146,8 @@ in {
         platformTheme = "qt5ct";
         name = "Catppuccin-Macchiato-Rosewater";
         package = pkgs.catppuccin-kvantum.override {
-          accent = "Rosewater";
-          variant = "Macchiato";
+          accent = "rosewater";
+          variant = "macchiato";
         };
       };
     };

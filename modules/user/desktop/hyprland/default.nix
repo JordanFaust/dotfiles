@@ -112,7 +112,7 @@ in {
         dwindle = {
           pseudotile = "yes";
           preserve_split = "yes";
-          no_gaps_when_only = 0;
+          # no_gaps_when_only = 0;
         };
 
         gestures = {

@@ -38,6 +38,7 @@ in {
         lens
         postman
         httpie
+        insomnia
 
         # Terraform
         terraform
