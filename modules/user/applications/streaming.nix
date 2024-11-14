@@ -42,7 +42,7 @@ in {
       });
     default = {
       enable = true;
-      obs.enable = true;
+      obs.enable = false;
       zoom.enable = true;
     };
   };
@@ -57,7 +57,7 @@ in {
     };
 
     programs.obs-studio = {
-      enable = true;
+      enable = cfg.obs.enable;
       plugins = with pkgs.obs-studio-plugins; [
         wlrobs
         obs-backgroundremoval

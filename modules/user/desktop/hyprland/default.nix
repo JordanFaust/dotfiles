@@ -59,6 +59,10 @@ in {
       terminal = false;
     };
 
+    home.packages = with pkgs; [
+      hyprpanel
+    ];
+
     wayland.windowManager.hyprland = {
       enable = true;
       package = hyprland;
@@ -68,7 +72,9 @@ in {
 
       settings = {
         exec-once = [
-          "ags -b hypr"
+          # "ags -b hypr"
+          "${pkgs.swww}/bin/swww init"
+          "${pkgs.hyprpanel}/bin/hyprpanel"
           "dbus-update-activation-environment --systemd --all"
           "systemctl --user import-environment DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP QT_QPA_PLATFORMTHEME"
           "hyprctl setcursor ${cursor.name} ${builtins.toString cursor.size}"
@@ -250,11 +256,13 @@ in {
         ];
 
         decoration = {
-          drop_shadow = "yes";
-          shadow_range = 100;
-          shadow_render_power = 5;
-          "col.shadow" = "0x33000000";
-          "col.shadow_inactive" = "0x22000000";
+          shadow = {
+            enabled = true;
+            range = 100;
+            render_power = 5;
+            color = "0x33000000";
+            color_inactive = "0x22000000";
+          };
           rounding = 5;
           blur = {
             enabled = true;
