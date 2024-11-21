@@ -3,20 +3,17 @@
   inputs,
   pkgs,
   lib,
-  osConfig,
   system,
   ...
 }:
-with lib;
-with lib.my; let
+let
   cfg = config.modules.desktop.hyprland;
 in {
-  # imports = [inputs.hypridle.homeManagerModules.default];
   options = {};
 
   config = lib.mkIf (cfg.enable) {
     services.hypridle = {
-      enable = false;
+      enable = true;
 
       # Generate Configuration
       settings = {

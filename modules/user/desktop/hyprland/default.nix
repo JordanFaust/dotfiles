@@ -3,7 +3,6 @@
   inputs,
   pkgs,
   lib,
-  osConfig,
   ...
 }:
 with lib;
@@ -63,6 +62,15 @@ in {
       hyprpanel
     ];
 
+    xdg.configFile = {
+      "xdg-desktop-portal/hyprland-portals.conf".source = (pkgs.formats.ini {}).generate "hyprland-portals.conf" {
+        preferred = {
+          default = "hyprland;gtk";
+          "org.freedesktop.impl.portal.FileChooser" = "kde";
+        };
+      };
+    };
+
     wayland.windowManager.hyprland = {
       enable = true;
       package = hyprland;
@@ -70,13 +78,13 @@ in {
       xwayland.enable = true;
       # plugins = with plugins; [ hyprbars borderspp ];
 
+
       settings = {
         exec-once = [
-          # "ags -b hypr"
-          "${pkgs.swww}/bin/swww init"
-          "${pkgs.hyprpanel}/bin/hyprpanel"
           "dbus-update-activation-environment --systemd --all"
           "systemctl --user import-environment DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP QT_QPA_PLATFORMTHEME"
+          "${pkgs.swww}/bin/swww init"
+          "${pkgs.hyprpanel}/bin/hyprpanel"
           "hyprctl setcursor ${cursor.name} ${builtins.toString cursor.size}"
         ];
 
@@ -166,6 +174,7 @@ in {
           (f "zoom_linux_float_video_window" "zoom")
           (f "zoom_linux_float_message_reminder" "zoom")
           (f "as_toolbar" "zoom")
+          (f "app.zoom.us is sharing your screen." "")
           # Pin the floating video window and make it follow the current workspace
           (pin "zoom_linux_float_video_window" "zoom")
           # Pin the floating message reminder and make it follow the current workspace
@@ -190,7 +199,6 @@ in {
           arr = [1 2 3 4 5];
         in
           [
-            "CTRL SHIFT, R,  ${e} quit; ags -b hypr"
             "SUPER, R,       ${e} -t launcher"
             "SUPER, Tab,     ${e} -t overview"
             ",XF86PowerOff,  ${e} -r 'powermenu.shutdown()'"

@@ -27,7 +27,8 @@ in {
     programs.hyprland = {
       enable = true;
       package = hyprland;
-      portalPackage = inputs.xdg-desktop-portal-hyprland.packages."${pkgs.system}".xdg-desktop-portal-hyprland;
+      # portalPackage = inputs.xdg-desktop-portal-hyprland.packages."${pkgs.system}".xdg-desktop-portal-hyprland;
+      portalPackage = inputs.hyprland.packages."${pkgs.system}".xdg-desktop-portal-hyprland;
       xwayland.enable = true;
     };
 
@@ -105,9 +106,9 @@ in {
     services = {
       redshift.enable = true;
 
-      xserver = {
-        enable = true;
-      };
+      # xserver = {
+      #   enable = true;
+      # };
 
       displayManager = {
         defaultSession = "hyprland";

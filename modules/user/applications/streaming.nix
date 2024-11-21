@@ -52,7 +52,7 @@ in {
     home = {
       packages = with pkgs; [
         # zoom-us
-        pinnedZoomPkgs.zoom-us
+        # pinnedZoomPkgs.zoom-us
       ];
     };
 

@@ -27,7 +27,7 @@
     hypridle.url = "github:hyprwm/hypridle";
     hyprpanel.url = "github:Jas-SinghFSU/HyprPanel";
     # hyprlock.inputs.hyprland.follows = "hyprland";
-    xdg-desktop-portal-hyprland.url = "github:hyprwm/xdg-desktop-portal-hyprland";
+    # xdg-desktop-portal-hyprland.url = "github:hyprwm/xdg-desktop-portal-hyprland";
 
     agenix.url = "github:ryantm/agenix";
     agenix.inputs.nixpkgs.follows = "nixpkgs";
@@ -93,28 +93,28 @@
       stable = pkgs-stable';
       my = self.packages."${system}";
       # TODO: remove this once mutagen resolves the sha collision
-      matugen = final.rustPlatform.buildRustPackage rec {
-        pname = "matugen";
-        version = "2.4.0";
-
-        src = final.fetchFromGitHub {
-          owner = "InioX";
-          repo = "matugen";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-l623fIVhVCU/ylbBmohAtQNbK0YrWlEny0sC/vBJ+dU=";
-        };
-
-        cargoHash = "sha256-FwQhhwlldDskDzmIOxhwRuUv8NxXCxd3ZmOwqcuWz64=";
-
-        meta = {
-          description = "Material you color generation tool";
-          homepage = "https://github.com/InioX/matugen";
-          changelog = "https://github.com/InioX/matugen/blob/${src.rev}/CHANGELOG.md";
-          license = final.lib.licenses.gpl2Only;
-          maintainers = with final.lib.maintainers; [lampros];
-          mainProgram = "matugen";
-        };
-      };
+      # matugen = final.rustPlatform.buildRustPackage rec {
+      #   pname = "matugen";
+      #   version = "2.4.0";
+      #
+      #   src = final.fetchFromGitHub {
+      #     owner = "InioX";
+      #     repo = "matugen";
+      #     rev = "refs/tags/v${version}";
+      #     hash = "sha256-l623fIVhVCU/ylbBmohAtQNbK0YrWlEny0sC/vBJ+dU=";
+      #   };
+      #
+      #   cargoHash = "sha256-FwQhhwlldDskDzmIOxhwRuUv8NxXCxd3ZmOwqcuWz64=";
+      #
+      #   meta = {
+      #     description = "Material you color generation tool";
+      #     homepage = "https://github.com/InioX/matugen";
+      #     changelog = "https://github.com/InioX/matugen/blob/${src.rev}/CHANGELOG.md";
+      #     license = final.lib.licenses.gpl2Only;
+      #     maintainers = with final.lib.maintainers; [lampros];
+      #     mainProgram = "matugen";
+      #   };
+      # };
     };
 
     overlays =

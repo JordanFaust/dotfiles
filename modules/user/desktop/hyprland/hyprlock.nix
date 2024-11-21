@@ -1,13 +1,9 @@
 {
   config,
-  inputs,
-  pkgs,
   lib,
-  osConfig,
   ...
 }:
-with lib;
-with lib.my; let
+let
   cfg = config.modules.desktop.hyprland;
 in {
   # imports = [inputs.hyprlock.homeManagerModules.default];
