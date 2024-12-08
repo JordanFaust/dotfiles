@@ -81,7 +81,8 @@ in {
         open-sans
 
         siji
-        (nerdfonts.override {fonts = ["CascadiaCode" "NerdFontsSymbolsOnly"];})
+        nerd-fonts.caskaydia-cove
+        nerd-fonts.symbols-only
         # Icon Fonts
         my.nonicons
       ];

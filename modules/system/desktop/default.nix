@@ -56,7 +56,9 @@ in {
       fontDir.enable = true;
       enableGhostscriptFonts = true;
       packages = with pkgs; [
-        (nerdfonts.override {fonts = ["JetBrainsMono" "FiraCode" "DroidSansMono"];})
+        nerd-fonts.jetbrains-mono
+        nerd-fonts.fira-code
+        nerd-fonts.droid-sans-mono
       ];
     };
   };

@@ -100,7 +100,7 @@ in {
           open-sans
           siji
           # Icon Fonts
-          (nerdfonts.override {fonts = ["CascadiaCode"];})
+          nerd-fonts.caskaydia-cove
           my.nonicons
         ];
         fontconfig.defaultFonts = {

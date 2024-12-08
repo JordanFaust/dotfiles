@@ -34,7 +34,7 @@ in {
     home = {
       packages = with pkgs; [
         clojure
-        clojure-lsp
+        # clojure-lsp
         joker
         leiningen
       ];

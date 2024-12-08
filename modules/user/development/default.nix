@@ -44,14 +44,11 @@ in {
         terraform
         terraform-docs
 
-        # Istio
+        # Networking API Tools
         istioctl
-
-        # Linkerd
         linkerd
-
-        # Consul
         consul
+        deck
 
         # Devbox
         unstable.devbox

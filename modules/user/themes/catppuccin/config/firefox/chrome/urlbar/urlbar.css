@@ -164,7 +164,7 @@
     -moz-box-align: center !important;
     display: block !important;
     margin: 0 !important;
-    top: 2px !important;
+    top: 10px !important;
     color: inherit !important;
     block-size: border-block !important;
 
@@ -194,11 +194,11 @@
 }
 
 /* if only focused, don't break out the urlbar */
-#urlbar[focused]:not([open]) {
-    width: 100% !important;
-    left: 0 !important;
-    right: 0 !important;
-}
+/*#urlbar[focused]:not([open]) {*/
+/*    width: 100% !important;*/
+/*    left: 0 !important;*/
+/*    right: 0 !important;*/
+/*}*/
 
 #urlbar[open],
 #searchbar[open] {
