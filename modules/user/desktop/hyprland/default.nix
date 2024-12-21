@@ -86,6 +86,8 @@ in {
           "${pkgs.swww}/bin/swww init"
           "${pkgs.hyprpanel}/bin/hyprpanel"
           "hyprctl setcursor ${cursor.name} ${builtins.toString cursor.size}"
+          "wl-paste --type text --watch cliphist store"
+          "wl-paste --type image --watch cliphist store"
         ];
 
         monitor = [
@@ -210,6 +212,9 @@ in {
             # Launch Applicaitons Shortcuts
             "SUPER, Return, exec, kitty -e bash -c \"(tmux ls | grep -qEv 'attached|scratch' && tmux at) || tmux\""
             "SUPER, Space, exec, $DOTFILES_BIN/rofi/appmenu"
+
+            # Copy History Menu
+            "SUPER, V, exec, $DOTFILES_BIN/rofi/copyhistmenu"
 
             # youtube
             ", XF86Launch1,  exec, ${yt}"

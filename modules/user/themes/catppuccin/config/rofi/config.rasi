@@ -26,8 +26,8 @@ configuration {
   magenta: #325f7d;
   blue:    #4684ae;
 
-  text-font:      "Fira Sans 15";
-  text-mono-font: "Fira Code 13";
+  text-font:      "MonoLisa Variable Regular 15";
+  text-font-mono: "MonoLisa Variable Regular 13";
   /* icon-font:      "Hurmit Nerd Font Mono 26"; */
   icon-font:      "FontAwesome 20";
 
@@ -114,7 +114,6 @@ prompt, entry {
   background-color: @bg-focus;
 }
 textbox-icon, prompt {
-  /* background-color: #2f313d; */
   background-color: @bg-dark;
 }
 prompt {

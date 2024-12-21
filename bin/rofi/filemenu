@@ -1,8 +1,8 @@
 #!/usr/bin/env sh
-cd $HOME
+cd "$HOME" || exit
 DIR="$(fd -L -d 4 --type d . | rofi -dmenu -i -p "~/" -theme theme/filemenu.rasi)"
 if [ -d "$DIR" ]; then
-  cd "$DIR"
+  cd "$DIR" || exit
   if [[ $1 == "-x" ]]; then
     scratch
   else

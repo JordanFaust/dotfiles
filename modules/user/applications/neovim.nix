@@ -57,6 +57,9 @@ in {
         # Peek.nvim pre-built
         # my.peek-nvim
 
+        # Code Snippet Image Generator
+        codesnap
+
         (makeDesktopItem {
           name = "Neovim";
           desktopName = "Neovim";

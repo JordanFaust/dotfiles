@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+cliphist list | \
+  rofi -dmenu -show-icons -theme theme/copyhistmenu.rasi | \
+  cliphist decode | \
+  wl-copy
