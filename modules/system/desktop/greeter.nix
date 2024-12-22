@@ -7,15 +7,6 @@
 with lib;
 let
   cfg = config.modules.desktop.greeter;
-  # cursor = config.user-options.desktop.gtk.cursor.name;
-  # conf = pkgs.writeText "config" ''
-  #   exec-once = ${lib.getExe greeter}; hyprctl dispatch exit
-  #   misc {
-  #     disable_splash_rendering = true
-  #     force_default_wallpaper = 1
-  #   }
-  # '';
-  greetdUser = config.services.greetd.settings.default_session.user.group;
 in {
   options.modules.desktop.greeter = mkOption {
     description = ''

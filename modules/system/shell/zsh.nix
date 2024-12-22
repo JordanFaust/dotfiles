@@ -48,7 +48,7 @@ in {
       eza
       fasd
       fd
-      unstable.fzf
+      fzf
       jq
       yq
       ripgrep

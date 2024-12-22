@@ -1,4 +1,3 @@
-[![Made with Doom Emacs](https://img.shields.io/badge/Made_with-Doom_Emacs-blueviolet.svg?style=flat-square&logo=GNU%20Emacs&logoColor=white)](https://github.com/hlissner/doom-emacs)
 [![NixOS Unstable](https://img.shields.io/badge/NixOS-unstable-blue.svg?style=flat-square&logo=NixOS&logoColor=white)](https://nixos.org)
 
 > **NOTE** Shameless copy of [hlissner's](https://github.com/hlissner/dotfiles)
@@ -17,26 +16,25 @@ dotfiles over there.
 > authority or expert in the NixOS space. Seek help on [the NixOS
 > discourse](https://discourse.nixos.org) instead.
 
-<img src="/../screenshots/alucard/fakebusy.png" width="100%" />
+<img src=".github/screenshots/catppuccin/fakebusy.png" width="100%" />
 
-<p align="center">
-<span><img src="/../screenshots/alucard/desktop.png" height="178" /></span>
-<span><img src="/../screenshots/alucard/rofi.png" height="178" /></span>
-<span><img src="/../screenshots/alucard/tiling.png" height="178" /></span>
-</p>
+<!-- <p align="center"> -->
+<!-- <span><img src="/../screenshots/alucard/desktop.png" height="178" /></span> -->
+<!-- <span><img src="/../screenshots/alucard/rofi.png" height="178" /></span> -->
+<!-- <span><img src="/../screenshots/alucard/tiling.png" height="178" /></span> -->
+<!-- </p> -->
 
 ------
 
 |                |                                                          |
 |----------------|----------------------------------------------------------|
 | **Shell:**     | zsh + zgenom                                             |
-| **DM:**        | lightdm + lightdm-mini-greeter                           |
-| **WM:**        | bspwm + polybar                                          |
-| **Editor:**    | [Doom Emacs][doom-emacs]                                 |
-| **Terminal:**  | st                                                       |
+| **DE:**        | Hyprland (Wayland)                                       |
+| **Editor:**    | [neovim](https://neovim.io/)                                                 |
+| **Terminal:**  | kitty                                                    |
 | **Launcher:**  | rofi                                                     |
 | **Browser:**   | firefox                                                  |
-| **GTK Theme:** | [Ant Dracula](https://github.com/EliverLara/Ant-Dracula) |
+| **GTK Theme:** | [Catppuccin](https://github.com/catppuccin/gtk)          |
 
 -----
 

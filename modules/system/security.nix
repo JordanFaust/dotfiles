@@ -108,18 +108,18 @@ in {
         sbomnix
         grype
         syft
+        lynis
         (pkgs.writeShellScriptBin "nixos-scan" ''
           mkdir -p /etc/dotfiles/reports
 
-          echo "Generating meta information.."
-          nix-env -qa --meta --json '.*' > /etc/dotfiles/reports/meta.json
+          # echo "Generating meta information.."
+          # nix-env -qa --meta --json '.*' > /etc/dotfiles/reports/meta.json
 
           echo "Generating SBOM..."
           ${sbomnix}/bin/sbomnix /run/current-system/sw/ \
             --csv /etc/dotfiles/reports/sbom.csv \
             --cdx /etc/dotfiles/reports/sbox.cdx.json \
-            --spdx /etc/dotfiles/reports/sbom.spdx.json \
-            --meta /etc/dotfiles/reports/meta.json
+            --spdx /etc/dotfiles/reports/sbom.spdx.json
 
           echo "Evaluating vulnerabilities..."
           ${grype}/bin/grype sbom:/etc/dotfiles/reports/sbom.spdx.json --add-cpes-if-none
@@ -127,6 +127,257 @@ in {
         nix-tree
       ];
       services.keybase.enable = true;
+
+      #
+      # Systemd Hardening
+      #
+
+      systemd.services.systemd-rfkill = {
+        serviceConfig = {
+          ProtectSystem = "strict";
+          ProtectHome = true;
+          ProtectKernelTunables = true;
+          ProtectKernelModules = true;
+          ProtectControlGroups = true;
+          ProtectClock = true;
+          ProtectProc = "invisible";
+          ProcSubset = "pid";
+          PrivateTmp = true;
+          MemoryDenyWriteExecute = true; #
+          NoNewPrivileges = true;
+          LockPersonality = true; #
+          RestrictRealtime = true; #
+          SystemCallFilter = ["@system-service"];
+          SystemCallArchitectures = "native";
+          UMask = "0077";
+          IPAddressDeny = "any";
+        };
+      };
+
+      systemd.services.systemd-journald = {
+        serviceConfig = {
+          UMask = 0077;
+          PrivateNetwork = true;
+          ProtectHostname = true;
+          ProtectKernelModules = true;
+        };
+      };
+
+      # Network Manager
+      systemd.services.NetworkManager-dispatcher = {
+        serviceConfig = {
+          ProtectHome = true;
+          ProtectKernelTunables = true;
+          ProtectKernelModules = true;
+          ProtectControlGroups = true;
+          ProtectKernelLogs = true;
+          ProtectHostname = true;
+          ProtectClock = true;
+          ProtectProc = "invisible";
+          ProcSubset = "pid";
+          PrivateUsers = true;
+          PrivateDevices = true;
+          MemoryDenyWriteExecute = true;
+          NoNewPrivileges = true;
+          LockPersonality = true;
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
+          RestrictAddressFamilies = ["AF_INET" "AF_UNIX"];
+          RestrictNamespaces = true;
+          SystemCallFilter = ["@system-service"];
+          SystemCallArchitectures = "native";
+          UMask = "0077";
+          IPAddressDeny = "any";
+        };
+      };
+      systemd.services.NetworkManager = {
+        serviceConfig = {
+          NoNewPrivileges = true;
+          ProtectClock = true;
+          ProtectKernelLogs = true;
+          ProtectControlGroups = true;
+          ProtectKernelModules = true;
+          SystemCallArchitectures = "native";
+          MemoryDenyWriteExecute = true;
+          ProtectProc = "invisible";
+          ProcSubset = "pid";
+          RestrictNamespaces = true;
+          ProtectKernelTunables = true;
+          ProtectHome = true;
+          PrivateTmp = true;
+          UMask = "0077";
+          SystemCallFilter = ["@system-service"];
+        };
+      };
+
+      systemd.services."dbus" = {
+        serviceConfig = {
+          PrivateTmp = true;
+          PrivateNetwork = true;
+          ProtectSystem = "full";
+          ProtectHome = true;
+          # SystemCallFilter = "@system-service @clock @cpu-emulation @module @mount @obsolete @raw-io @reboot @swap";
+          ProtectKernelTunables = true;
+          NoNewPrivileges = true;
+          # CapabilityBoundingSet = ["~CAP_SYS_TIME" "~CAP_SYS_PACCT" "~CAP_KILL" "~CAP_WAKE_ALARM" "~CAP_SYS_BOOT" "~CAP_SYS_CHROOT" "~CAP_LEASE" "~CAP_MKNOD" "~CAP_NET_ADMIN" "~CAP_SYS_ADMIN" "~CAP_SYSLOG" "~CAP_NET_BIND_SERVICE" "~CAP_NET_BROADCAST" "~CAP_AUDIT_WRITE" "~CAP_AUDIT_CONTROL" "~CAP_SYS_RAWIO" "~CAP_SYS_NICE" "~CAP_SYS_RESOURCE" "~CAP_SYS_TTY_CONFIG" "~CAP_SYS_MODULE" "~CAP_IPC_LOCK" "~CAP_LINUX_IMMUTABLE" "~CAP_BLOCK_SUSPEND" "~CAP_MAC_*" "~CAP_DAC_*" "~CAP_FOWNER" "~CAP_IPC_OWNER" "~CAP_SYS_PTRACE" "~CAP_SETUID" "~CAP_SETGID" "~CAP_SETPCAP" "~CAP_FSETID" "~CAP_SETFCAP" "~CAP_CHOWN"];
+          ProtectKernelModules = true;
+          ProtectKernelLogs = true;
+          ProtectClock = true;
+          ProtectControlGroups = true;
+          RestrictNamespaces = true;
+          MemoryDenyWriteExecute = true;
+          # RestrictAddressFamilies = ["~AF_PACKET" "~AF_NETLINK"];
+          ProtectHostname = true;
+          LockPersonality = true;
+          RestrictRealtime = true;
+          # PrivateUsers = true;
+        };
+      };
+
+      systemd.services.reload-systemd-vconsole-setup = {
+        serviceConfig = {
+          ProtectSystem = "strict";
+          ProtectHome = true;
+          ProtectKernelTunables = true;
+          ProtectKernelModules = true;
+          ProtectControlGroups = true;
+          ProtectKernelLogs = true;
+          ProtectClock = true;
+          PrivateUsers = true;
+          PrivateDevices = true;
+          MemoryDenyWriteExecute = true;
+          NoNewPrivileges = true;
+          LockPersonality = true;
+          RestrictRealtime = true;
+          RestrictNamespaces = true;
+          UMask = "0077";
+          IPAddressDeny = "any";
+        };
+      };
+
+      systemd.services.rescue = {
+        serviceConfig = {
+          ProtectSystem = "strict";
+          ProtectHome = true;
+          ProtectKernelTunables = true;
+          ProtectKernelModules = true;
+          ProtectControlGroups = true;
+          ProtectKernelLogs = true;
+          ProtectClock = true;
+          ProtectProc = "invisible";
+          ProcSubset = "pid";
+          PrivateTmp = true;
+          PrivateUsers = true;
+          # PrivateDevices = true; # Might need adjustment for rescue operations
+          PrivateIPC = true;
+          MemoryDenyWriteExecute = true;
+          NoNewPrivileges = true;
+          LockPersonality = true;
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
+          RestrictAddressFamilies = "AF_INET AF_INET6"; # Networking might be necessary in rescue mode
+          RestrictNamespaces = true;
+          # SystemCallFilter = ["@system-service" "@clock" "@setuid" "@mount" "@process" "@basic-io" "@privileged"];
+          SystemCallArchitectures = "native";
+          UMask = "0077";
+          # IPAddressDeny = "any"; # May need to be relaxed for network troubleshooting in rescue mode
+        };
+      };
+
+      systemd.services.nix-daemon = {
+        serviceConfig = {
+          ProtectHome = true;
+          PrivateUsers = false;
+        };
+      };
+
+      systemd.services."systemd-ask-password-console" = {
+        serviceConfig = {
+          ProtectSystem = "strict";
+          ProtectHome = true;
+          ProtectKernelTunables = true;
+          ProtectKernelModules = true;
+          ProtectControlGroups = true;
+          ProtectKernelLogs = true;
+          ProtectClock = true;
+          ProtectProc = "invisible";
+          ProcSubset = "pid";
+          PrivateTmp = true;
+          PrivateUsers = true;
+          # PrivateDevices = true; # May need adjustment for console access
+          PrivateIPC = true;
+          MemoryDenyWriteExecute = true;
+          NoNewPrivileges = true;
+          LockPersonality = true;
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
+          RestrictAddressFamilies = "AF_INET AF_INET6";
+          RestrictNamespaces = true;
+          SystemCallFilter = ["@system-service"]; # A more permissive filter
+          SystemCallArchitectures = "native";
+          UMask = "0077";
+          IPAddressDeny = "any";
+        };
+      };
+
+      systemd.services."systemd-ask-password-wall" = {
+        serviceConfig = {
+          ProtectSystem = "strict";
+          ProtectHome = true;
+          ProtectKernelTunables = true;
+          ProtectKernelModules = true;
+          ProtectControlGroups = true;
+          ProtectKernelLogs = true;
+          ProtectClock = true;
+          ProtectProc = "invisible";
+          ProcSubset = "pid";
+          PrivateTmp = true;
+          PrivateUsers = true;
+          PrivateDevices = true;
+          PrivateIPC = true;
+          MemoryDenyWriteExecute = true;
+          NoNewPrivileges = true;
+          LockPersonality = true;
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
+          RestrictAddressFamilies = "AF_INET AF_INET6";
+          RestrictNamespaces = true;
+          SystemCallFilter = ["@system-service"]; # A more permissive filter
+          SystemCallArchitectures = "native";
+          UMask = "0077";
+          IPAddressDeny = "any";
+        };
+      };
+
+      systemd.services."user@1000" = {
+        serviceConfig = {
+          ProtectSystem = "full";
+          ReadWritePaths = ["/etc/dotfiles/"];
+          # ProtectHome = true;
+          # ProtectKernelTunables = true;
+          # ProtectKernelModules = true;
+          # ProtectControlGroups = true;
+          # ProtectKernelLogs = true;
+          # ProtectClock = true;
+          # ProtectProc = "invisible";
+          # ProcSubset = "pid";
+          # PrivateTmp = true;
+          # PrivateUsers = true; # Be cautious, as this may restrict user operations
+          # PrivateDevices = true;
+          # PrivateIPC = true;
+          # MemoryDenyWriteExecute = true;
+          # NoNewPrivileges = true;
+          # LockPersonality = true;
+          # RestrictRealtime = true;
+          # RestrictSUIDSGID = true;
+          # RestrictAddressFamilies = ["AF_INET" "AF_INET6"];
+          # RestrictNamespaces = true;
+          # SystemCallFilter = ["@system-service" "@ipc" "@aio" "@basic-io" "@chown" "@clock" "@file-system" "@io-event" "@network-io" "@process" "@sandbox" "@setuid" "@timer"]; # Adjust based on user needs
+          # SystemCallArchitectures = "native";
+          # UMask = "0077";
+          # IPAddressDeny = "any";
+        };
+      };
     }
 
     # Keybase Sensitive Secrets

@@ -9,8 +9,6 @@
 with lib;
 with lib.my; let
   cfg = config.modules.desktop.hyprland;
-  hyprland = inputs.hyprland.packages.${pkgs.system}.hyprland;
-  configDir = config.dotfiles.configDir;
 in {
   options.modules.desktop.hyprland = {
     enable = mkBoolOpt false;
@@ -26,7 +24,7 @@ in {
     # Enable Hyprland
     programs.hyprland = {
       enable = true;
-      package = hyprland;
+      package = inputs.hyprland.packages.${pkgs.system}.hyprland;
       # portalPackage = inputs.xdg-desktop-portal-hyprland.packages."${pkgs.system}".xdg-desktop-portal-hyprland;
       portalPackage = inputs.hyprland.packages."${pkgs.system}".xdg-desktop-portal-hyprland;
       xwayland.enable = true;
@@ -91,16 +89,16 @@ in {
       adwaita-icon-theme
       nautilus
       baobab
-      gnome-calendar
-      gnome-boxes
-      gnome-system-monitor
-      gnome-control-center
-      gnome-weather
-      gnome-calculator
-      gnome-clocks
+      # gnome-calendar
+      # gnome-boxes
+      # gnome-system-monitor
+      # gnome-control-center
+      # gnome-weather
+      # gnome-calculator
+      # gnome-clocks
       # gnome-software # for flatpak
       gnome-tweaks
-      cage
+      # cage
     ];
 
     services = {

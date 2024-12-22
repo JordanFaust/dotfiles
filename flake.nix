@@ -12,7 +12,7 @@
   inputs = {
     # Follow the latest and greatest by default
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-23.11";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-24.11";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -25,20 +25,15 @@
     hyprland-plugins.inputs.hyprland.follows = "hyprland";
     hyprlock.url = "github:hyprwm/hyprlock";
     hypridle.url = "github:hyprwm/hypridle";
-    hyprpanel.url = "github:Jas-SinghFSU/HyprPanel";
-    # hyprlock.inputs.hyprland.follows = "hyprland";
-    # xdg-desktop-portal-hyprland.url = "github:hyprwm/xdg-desktop-portal-hyprland";
+    hyprpanel.url = "github:Jas-SinghFSU/HyprPanel/955eed6c60a3ea5d6b0b1b8b7086cffbae984277";
 
     agenix.url = "github:ryantm/agenix";
     agenix.inputs.nixpkgs.follows = "nixpkgs";
 
     nixos-hardware.url = "github:nixos/nixos-hardware";
 
-    # Support building deno applications
-    deno2nix.url = "github:SnO2WMaN/deno2nix";
-
     # FLake Formatter
-    alejandra.url = "github:kamadorueda/alejandra/3.0.0";
+    alejandra.url = "github:kamadorueda/alejandra/3.1.0";
     alejandra.inputs.nixpkgs.follows = "nixpkgs";
 
     # Private fonts
@@ -69,7 +64,6 @@
 
     pkgs = mkPkgs nixpkgs [
       self.overlay
-      inputs.deno2nix.overlays.default
       inputs.hyprpanel.overlay
     ];
     pkgs' = mkPkgs nixpkgs-unstable [];
@@ -92,29 +86,6 @@
       unstable = pkgs';
       stable = pkgs-stable';
       my = self.packages."${system}";
-      # TODO: remove this once mutagen resolves the sha collision
-      # matugen = final.rustPlatform.buildRustPackage rec {
-      #   pname = "matugen";
-      #   version = "2.4.0";
-      #
-      #   src = final.fetchFromGitHub {
-      #     owner = "InioX";
-      #     repo = "matugen";
-      #     rev = "refs/tags/v${version}";
-      #     hash = "sha256-l623fIVhVCU/ylbBmohAtQNbK0YrWlEny0sC/vBJ+dU=";
-      #   };
-      #
-      #   cargoHash = "sha256-FwQhhwlldDskDzmIOxhwRuUv8NxXCxd3ZmOwqcuWz64=";
-      #
-      #   meta = {
-      #     description = "Material you color generation tool";
-      #     homepage = "https://github.com/InioX/matugen";
-      #     changelog = "https://github.com/InioX/matugen/blob/${src.rev}/CHANGELOG.md";
-      #     license = final.lib.licenses.gpl2Only;
-      #     maintainers = with final.lib.maintainers; [lampros];
-      #     mainProgram = "matugen";
-      #   };
-      # };
     };
 
     overlays =
@@ -125,7 +96,6 @@
     #
     packages."${system}" =
       mapModules ./packages (p: pkgs.callPackage p {inherit inputs;});
-    # // { desktop = (pkgs.callPackage ./packages/ags.nix { inherit inputs; }); };
 
     #
     # Custom Modules
@@ -139,27 +109,18 @@
     nixosConfigurations =
       mapHosts ./hosts {};
 
-    #
-    # Home Configuration
-    #
-    # homeConfigurations.${username} = home-manager.lib.homeManagerConfiguration {
-    #   inherit pkgs;
-    #   extraSpecialArgs = { inherit inputs username lib; };
-    #   modules = [ ./home-manager/home.nix ];
-    # };
-
     devShell."${system}" =
       import ./shell.nix {inherit pkgs;};
 
-    templates =
-      {
-        full = {
-          path = ./.;
-          description = "A grossly incandescent nixos config";
-        };
-      }
-      // import ./templates;
-    defaultTemplate = self.templates.full;
+    # templates =
+    #   {
+    #     full = {
+    #       path = ./.;
+    #       description = "A grossly incandescent nixos config";
+    #     };
+    #   }
+    #   // import ./templates;
+    # defaultTemplate = self.templates.full;
 
     defaultApp."${system}" = {
       type = "app";
