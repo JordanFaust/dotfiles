@@ -16,8 +16,8 @@ in {
 
   config = mkIf cfg.enable {
     user.packages = with pkgs; [
-      unstable.docker-buildx
-      unstable.docker-compose
+      docker-buildx
+      docker-compose
       # Inspect Docker Images
       dive
     ];
@@ -34,6 +34,10 @@ in {
         enable = true;
         autoPrune.enable = true;
         enableOnBoot = mkDefault false;
+        rootless = {
+          enable = true;
+          setSocketVariable = true;
+        };
         # listenOptions = [];
       };
     };

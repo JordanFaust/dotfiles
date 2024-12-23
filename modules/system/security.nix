@@ -284,12 +284,13 @@ in {
         };
       };
 
-      systemd.services.nix-daemon = {
-        serviceConfig = {
-          ProtectHome = true;
-          PrivateUsers = false;
-        };
-      };
+      # systemd.services.nix-daemon = {
+      #   serviceConfig = {
+      #     ReadWritePaths = [ "/root/" ];
+      #     ProtectHome = true;
+      #     PrivateUsers = false;
+      #   };
+      # };
 
       systemd.services."systemd-ask-password-console" = {
         serviceConfig = {
@@ -349,35 +350,152 @@ in {
         };
       };
 
-      systemd.services."user@1000" = {
+      # Virtualization Services
+
+      systemd.services.virtlockd = {
         serviceConfig = {
-          ProtectSystem = "full";
-          ReadWritePaths = ["/etc/dotfiles/"];
-          # ProtectHome = true;
-          # ProtectKernelTunables = true;
-          # ProtectKernelModules = true;
-          # ProtectControlGroups = true;
-          # ProtectKernelLogs = true;
-          # ProtectClock = true;
-          # ProtectProc = "invisible";
-          # ProcSubset = "pid";
-          # PrivateTmp = true;
-          # PrivateUsers = true; # Be cautious, as this may restrict user operations
-          # PrivateDevices = true;
-          # PrivateIPC = true;
-          # MemoryDenyWriteExecute = true;
-          # NoNewPrivileges = true;
-          # LockPersonality = true;
-          # RestrictRealtime = true;
-          # RestrictSUIDSGID = true;
-          # RestrictAddressFamilies = ["AF_INET" "AF_INET6"];
-          # RestrictNamespaces = true;
-          # SystemCallFilter = ["@system-service" "@ipc" "@aio" "@basic-io" "@chown" "@clock" "@file-system" "@io-event" "@network-io" "@process" "@sandbox" "@setuid" "@timer"]; # Adjust based on user needs
-          # SystemCallArchitectures = "native";
-          # UMask = "0077";
-          # IPAddressDeny = "any";
+          ProtectSystem = "strict";
+          ProtectHome = true;
+          ProtectKernelTunables = true;
+          ProtectKernelModules = true;
+          ProtectControlGroups = true;
+          ProtectKernelLogs = true;
+          ProtectClock = true;
+          ProtectProc = "invisible";
+          ProcSubset = "pid";
+          PrivateTmp = true;
+          PrivateUsers = true;
+          PrivateIPC = true;
+          MemoryDenyWriteExecute = true;
+          NoNewPrivileges = true;
+          LockPersonality = true;
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
+          RestrictAddressFamilies = "AF_INET AF_INET6";
+          RestrictNamespaces = true;
+          SystemCallFilter = ["@system-service"]; # Adjust as necessary
+          SystemCallArchitectures = "native";
+          UMask = "0077";
         };
       };
+      systemd.services.virtlogd = {
+        serviceConfig = {
+          ProtectSystem = "strict";
+          ProtectHome = true;
+          ProtectKernelTunables = true;
+          ProtectKernelModules = true;
+          ProtectControlGroups = true;
+          ProtectKernelLogs = true;
+          ProtectClock = true;
+          ProtectProc = "invisible";
+          ProcSubset = "pid";
+          PrivateTmp = true;
+          PrivateUsers = true;
+          PrivateIPC = true;
+          MemoryDenyWriteExecute = true;
+          NoNewPrivileges = true;
+          LockPersonality = true;
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
+          RestrictAddressFamilies = "AF_INET AF_INET6";
+          RestrictNamespaces = true;
+          SystemCallFilter = ["@system-service"]; # Adjust based on log management needs
+          SystemCallArchitectures = "native";
+          UMask = "0077";
+        };
+      };
+      systemd.services.virtlxcd = {
+        serviceConfig = {
+          ProtectSystem = "strict";
+          ProtectHome = true;
+          ProtectKernelModules = true;
+          ProtectControlGroups = true;
+          ProtectKernelLogs = true;
+          ProtectClock = true;
+          ProtectProc = "invisible";
+          ProcSubset = "pid";
+          PrivateTmp = true;
+          PrivateIPC = true;
+          MemoryDenyWriteExecute = true;
+          NoNewPrivileges = true;
+          LockPersonality = true;
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
+          RestrictAddressFamilies = "AF_INET AF_INET6"; # Necessary for networked containers
+          RestrictNamespaces = true;
+          SystemCallFilter = ["@system-service"]; # Adjust based on container operations
+          SystemCallArchitectures = "native";
+          UMask = "0077";
+        };
+      };
+      systemd.services.virtqemud = {
+        serviceConfig = {
+          ProtectSystem = "strict";
+          ProtectHome = true;
+          ProtectControlGroups = true;
+          ProtectKernelLogs = true;
+          ProtectClock = true;
+          ProtectProc = "invisible";
+          ProcSubset = "pid";
+          PrivateTmp = true;
+          PrivateIPC = true;
+          MemoryDenyWriteExecute = true;
+          NoNewPrivileges = true;
+          LockPersonality = true;
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
+          RestrictAddressFamilies = "AF_INET AF_INET6"; # Necessary for networked VMs
+          RestrictNamespaces = true;
+          SystemCallFilter = ["@system-service"]; # Adjust based on VM operations
+          SystemCallArchitectures = "native";
+          UMask = "0077";
+        };
+      };
+      systemd.services.virtvboxd = {
+        serviceConfig = {
+          ProtectSystem = "strict";
+          ProtectHome = true;
+          ProtectControlGroups = true;
+          ProtectKernelLogs = true;
+          ProtectClock = true;
+          ProtectProc = "invisible";
+          ProcSubset = "pid";
+          PrivateTmp = true;
+          PrivateIPC = true;
+          MemoryDenyWriteExecute = true;
+          NoNewPrivileges = true;
+          LockPersonality = true;
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
+          RestrictAddressFamilies = "AF_INET AF_INET6"; # Necessary for networked VMs
+          RestrictNamespaces = true;
+          SystemCallFilter = ["@system-service"]; # Adjust based on VM operations
+          SystemCallArchitectures = "native";
+          UMask = "0077";
+        };
+      };
+      # systemd.services.docker = {
+      #   serviceConfig = {
+      #     # ProtectSystem = "full";
+      #     # ReadWritePaths = [ "/var/lib/docker/" ];
+      #     ProtectHome = true;
+      #     # ProtectControlGroups = true;
+      #     # ProtectKernelLogs = true;
+      #     ProtectClock = true;
+      #     # ProtectProc = "invisible";
+      #     # ProcSubset = "pid";
+      #     MemoryDenyWriteExecute = true;
+      #     NoNewPrivileges = true;
+      #     LockPersonality = true;
+      #     # RestrictRealtime = true;
+      #     # RestrictSUIDSGID = true;
+      #     # RestrictAddressFamilies = "AF_UNIX AF_INET AF_INET6"; # Necessary for networked VMs
+      #     # RestrictNamespaces = true;
+      #     # SystemCallFilter = ["@system-service" "@pkey" "@sandbox" "@process" "@network-io" "@io-event" "@file-system" ]; # Adjust based on VM operations
+      #     # SystemCallArchitectures = "native";
+      #     UMask = "0077";
+      #   };
+      # };
     }
 
     # Keybase Sensitive Secrets
