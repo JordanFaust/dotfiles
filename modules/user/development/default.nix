@@ -18,6 +18,11 @@ in {
         stable.ssm-agent
         stable.ssm-session-manager-plugin
 
+        # Performance Monitoring
+        bmon
+        btop
+        htop
+
         # Kubernetes
         kubectx
         kubectl

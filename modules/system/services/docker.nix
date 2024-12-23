@@ -34,10 +34,6 @@ in {
         enable = true;
         autoPrune.enable = true;
         enableOnBoot = mkDefault false;
-        rootless = {
-          enable = true;
-          setSocketVariable = true;
-        };
         # listenOptions = [];
       };
     };

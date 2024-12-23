@@ -7,7 +7,6 @@
   config,
   lib,
   pkgs,
-  osConfig,
   username,
   ...
 }:
@@ -61,20 +60,20 @@ in {
   config = mkIf (!minimal && cfg.enable) {
     home = {
       packages = with pkgs; [
-        unstable.firefox-bin
+        firefox-bin
         (makeDesktopItem {
           name = "firefox-private";
           desktopName = "Firefox (Private)";
           genericName = "Open a private Firefox window";
           icon = "firefox";
-          exec = "${unstable.firefox-bin}/bin/firefox --private-window";
+          exec = "${firefox-bin}/bin/firefox --private-window";
           categories = ["Network"];
         })
         chromium
       ];
 
       sessionVariables = {
-        DEFAULT_BROWSER = "${pkgs.unstable.firefox-bin}/bin/firefox";
+        DEFAULT_BROWSER = "${pkgs.firefox-bin}/bin/firefox";
       };
     };
 

@@ -1,19 +1,14 @@
 {
-  pkgs,
   inputs,
   config,
   lib,
-  home-manager,
   ...
-}: let
-  username = "jordan";
-in rec {
+}: {
   imports = [
+    # "${inputs.nixpkgs}/nixos/modules/profiles/hardened.nix"
     ../local.nix
     ./hardware-configuration.nix
   ];
-
-  #users.users.jordan.isNormalUser = true;
 
   ## Modules
   modules = {
