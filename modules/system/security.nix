@@ -51,6 +51,10 @@ in {
         # Disable it, since we don't need it, and is a potential security concern.
         "kernel.sysrq" = 0;
 
+        # Disable ftrace debugging
+        "kernel.ftrace_enabled" = mkDefault false;
+        "kernel.unprivileged_bpf_disabled" = 1;
+
         ## TCP hardening
 
         # Prevent bogus ICMP errors from filling up logs.
@@ -80,9 +84,6 @@ in {
         # Disable bpf() JIT (to eliminate spray attacks)
         "net.core.bpf_jit_enable" = mkDefault false;
 
-        # Disable ftrace debugging
-        "kernel.ftrace_enabled" = mkDefault false;
-
         # Enable strict reverse path filtering (that is, do not attempt to route
         # packets that "obviously" do not belong to the iface's network; dropped
         # packets are logged as martians).
@@ -106,6 +107,8 @@ in {
         # Ignore outgoing ICMP redirects (this is ipv4 only)
         "net.ipv4.conf.all.send_redirects" = mkDefault false;
         "net.ipv4.conf.default.send_redirects" = mkDefault false;
+
+        "net.ipv4.conf.all.forwarding" = mkDefault "0";
       };
 
       boot.kernelModules = ["tcp_bbr"];
@@ -125,6 +128,24 @@ in {
       # Setup basic log rotation
       services.logrotate.enable = true;
       services.journald.extraConfig = "SystemMaxUse=1000M";
+
+      # Setup Password Quaility Control
+      security.pam.services.passwd.rules.password.pwquality = {
+        control = "required";
+        modulePath = "${pkgs.libpwquality.lib}/lib/security/pam_pwquality.so";
+        # order BEFORE pam_unix.so
+        order = config.security.pam.services.passwd.rules.password.unix.order - 10;
+        settings = {
+          shadowretry = 3;
+          minlen = 12;
+          difok = 6;
+          dcredit = -1;
+          ucredit = -1;
+          ocredit = -1;
+          lcredit = -1;
+          enforce_for_root = true;
+        };
+      };
 
       user.packages = with pkgs; [
         # Setup Keybase for use of storing sensitive credentials

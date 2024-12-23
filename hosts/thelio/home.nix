@@ -3,7 +3,6 @@
   inputs,
   config,
   lib,
-  home-manager,
   osConfig,
   system,
   ...
@@ -11,7 +10,6 @@
 with lib;
 with lib.my; let
   username = "jordan";
-  homeDirectory = "/home/${username}";
 in {
   imports =
     # Space to include configuration that must run first
@@ -20,9 +18,6 @@ in {
     ++ (mapModulesRec'
       (toString ../../modules/user)
       (path: import path {inherit pkgs inputs config lib username osConfig system;}));
-      # (path: import path));
-
-  # extraSpecialArgs = { inherit pkgs inputs config lib osConfig system; };
 
   modules = {
     # Enable all standardized components for a full development workstation.
