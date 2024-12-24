@@ -79,7 +79,7 @@ in {
 
       settings = {
         exec-once = [
-          "dbus-update-activation-environment --systemd --all"
+          # "dbus-update-activation-environment --systemd --all"
           "systemctl --user import-environment DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP QT_QPA_PLATFORMTHEME"
           "${pkgs.swww}/bin/swww init"
           "${pkgs.hyprpanel}/bin/hyprpanel"
