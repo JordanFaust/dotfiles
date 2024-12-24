@@ -9,7 +9,6 @@ with lib;
 with lib.my; let
   cfg = config.modules.desktop.hyprland;
   hyprland = inputs.hyprland.packages.${pkgs.system}.hyprland;
-  plugins = inputs.hyprland-plugins.packages.${pkgs.system};
 
   yt = pkgs.writeShellScript "yt" ''
     notify-send "Opening video" "$(wl-paste)"
@@ -75,17 +74,18 @@ in {
     wayland.windowManager.hyprland = {
       enable = true;
       package = hyprland;
-      systemd.enable = true;
+      systemd.enable = false;
+      xwayland.enable = false;
 
       settings = {
         exec-once = [
           # "dbus-update-activation-environment --systemd --all"
-          "systemctl --user import-environment DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP QT_QPA_PLATFORMTHEME"
-          "${pkgs.swww}/bin/swww init"
-          "${pkgs.hyprpanel}/bin/hyprpanel"
-          "hyprctl setcursor ${cursor.name} ${builtins.toString cursor.size}"
-          "wl-paste --type text --watch cliphist store"
-          "wl-paste --type image --watch cliphist store"
+          # "systemctl --user import-environment DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP QT_QPA_PLATFORMTHEME"
+          "uwsm app -- ${pkgs.swww}/bin/swww init"
+          "uwsm app -- ${pkgs.hyprpanel}/bin/hyprpanel"
+          "uwsm app -- wl-paste --type text --watch cliphist store"
+          "uwsm app -- wl-paste --type image --watch cliphist store"
+          # "hyprctl setcursor ${cursor.name} ${builtins.toString cursor.size}"
         ];
 
         monitor = [
