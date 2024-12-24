@@ -49,14 +49,15 @@ in {
   };
 
   config = lib.mkIf (cfg.enable) {
-    xdg.desktopEntries."org.gnome.Settings" = {
-      name = "Settings";
-      comment = "Gnome Control Center";
-      icon = "org.gnome.Settings";
-      exec = "env XDG_CURRENT_DESKTOP=gnome ${pkgs.gnome-control-center}/bin/gnome-control-center";
-      categories = ["X-Preferences"];
-      terminal = false;
-    };
+    # Disabled, along with most gnome dependencies to reduce install size and CVEs
+    # xdg.desktopEntries."org.gnome.Settings" = {
+    #   name = "Settings";
+    #   comment = "Gnome Control Center";
+    #   icon = "org.gnome.Settings";
+    #   exec = "env XDG_CURRENT_DESKTOP=gnome ${pkgs.gnome-control-center}/bin/gnome-control-center";
+    #   categories = ["X-Preferences"];
+    #   terminal = false;
+    # };
 
     home.packages = with pkgs; [
       hyprpanel
@@ -75,9 +76,6 @@ in {
       enable = true;
       package = hyprland;
       systemd.enable = true;
-      xwayland.enable = true;
-      # plugins = with plugins; [ hyprbars borderspp ];
-
 
       settings = {
         exec-once = [
@@ -197,17 +195,11 @@ in {
           resizeactive = binding "SUPER ALT" "resizeactive";
           mvactive = binding "SUPER SHIFT" "movewindow";
           mvtows = binding "SUPER CONTROL" "movetoworkspace";
-          e = "exec, ags -b hypr";
           arr = [1 2 3 4 5];
         in
           [
-            "SUPER, R,       ${e} -t launcher"
-            "SUPER, Tab,     ${e} -t overview"
-            ",XF86PowerOff,  ${e} -r 'powermenu.shutdown()'"
-            "CTRL,Home,      ${e} -r 'recorder.start()'"
-            "ALT,Home,       ${e} -r 'recorder.stop()'"
-            ",Home,          ${e} -r 'recorder.screenshot()'"
-            "Super,Home,     ${e} -r 'recorder.screenshot(true)'"
+            ",Home, exec, grim -g \"$(slurp)\""
+            "Super, Home, exec, grim -g \"$(slurp -d)\" - | wl-copy"
 
             # Launch Applicaitons Shortcuts
             "SUPER, Return, exec, kitty -e bash -c \"(tmux ls | grep -qEv 'attached|scratch' && tmux at) || tmux\""

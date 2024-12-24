@@ -56,7 +56,7 @@ in {
 
         adw-gtk3
         font-awesome
-        unstable.morewaita-icon-theme
+        morewaita-icon-theme
         cantarell-fonts
 
         (catppuccin-kde.override {

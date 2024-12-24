@@ -1,13 +1,8 @@
 {
-  pkgs,
-  inputs,
-  config,
-  lib,
   username,
   ...
 }:
-with lib;
-with lib.my; let
+let
   homeDirectory = "/home/${username}";
 in {
   news.display = "show";

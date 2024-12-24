@@ -16,8 +16,8 @@ in {
 
   config = mkIf cfg.enable {
     user.packages = with pkgs; [
-      unstable.docker-buildx
-      unstable.docker-compose
+      docker-buildx
+      docker-compose
       # Inspect Docker Images
       dive
     ];

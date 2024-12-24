@@ -40,7 +40,6 @@ in {
 
       packages = with pkgs; [
         editorconfig-core-c
-        # unstable.neovim
         deno
         # deno-webkit
         # neovim-nightly

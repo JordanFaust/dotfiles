@@ -73,7 +73,7 @@ in {
         (
           if cfg.vector.enable
           then [
-            unstable.inkscape
+            inkscape
           ]
           else []
         )

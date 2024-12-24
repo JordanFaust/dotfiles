@@ -1,0 +1,197 @@
+{
+	"bar.battery.label": false,
+	"bar.bluetooth.label": true,
+	"bar.clock.format": "%a %b %d  %H:%M:%S %p",
+	"bar.clock.showIcon": true,
+	"bar.clock.showTime": true,
+	"bar.customModules.cpu.icon": " ",
+	"bar.customModules.cpu.label": false,
+	"bar.customModules.cpu.round": false,
+	"bar.customModules.cpuTemp.label": false,
+	"bar.customModules.cpuTemp.round": false,
+	"bar.customModules.cpuTemp.showUnit": false,
+	"bar.customModules.hypridle.label": false,
+	"bar.customModules.hyprsunset.label": false,
+	"bar.customModules.kbLayout.label": false,
+	"bar.customModules.netstat.label": false,
+	"bar.customModules.netstat.round": false,
+	"bar.customModules.ram.label": false,
+	"bar.customModules.ram.round": false,
+	"bar.customModules.storage.label": false,
+	"bar.customModules.submap.label": false,
+	"bar.customModules.submap.showSubmapName": false,
+	"bar.customModules.updates.label": false,
+	"bar.customModules.updates.padZero": false,
+	"bar.customModules.updates.pollingInterval": 1440000,
+	"bar.customModules.weather.label": false,
+	"bar.launcher.autoDetectIcon": true,
+	"bar.launcher.icon": "󰣇",
+	"bar.layouts": {
+		"*": {
+			"left": [
+				"dashboard",
+				"windowtitle",
+				"media"
+			],
+			"middle": [
+				"volume",
+				"workspaces",
+				"notifications"
+			],
+			"right": [
+				"network",
+				"bluetooth",
+				"battery",
+				"clock"
+			]
+		}
+	},
+	"bar.media.show_label": true,
+	"bar.media.truncation": false,
+	"bar.network.label": true,
+	"bar.network.truncation": false,
+	"bar.network.truncation_size": 7,
+	"bar.notifications.hideCountWhenZero": false,
+	"bar.notifications.show_total": true,
+	"bar.scrollSpeed": 5,
+	"bar.volume.label": true,
+	"bar.windowtitle.class_name": false,
+	"bar.windowtitle.custom_title": true,
+	"bar.windowtitle.icon": true,
+	"bar.windowtitle.label": true,
+	"bar.windowtitle.title_map": [
+		[
+			"kitty",
+			"󰄛",
+			"Kitty Terminal"
+		],
+		[
+			"firefox",
+			"󰈹",
+			"Firefox"
+		],
+		[
+			"microsoft-edge.*",
+			"󰇩",
+			"Edge"
+		],
+		[
+			"discord",
+			"",
+			"Discord"
+		],
+		[
+			"com.github.aylur.ags",
+			"",
+			"Settings"
+		],
+		[
+			"neovim",
+			"",
+			"Neovim"
+		]
+	],
+	"bar.windowtitle.truncation": false,
+	"bar.windowtitle.truncation_size": 51,
+	"bar.workspaces.applicationIconMap": {},
+	"bar.workspaces.applicationIconOncePerWorkspace": false,
+	"bar.workspaces.hideUnoccupied": false,
+	"bar.workspaces.monitorSpecific": false,
+	"bar.workspaces.numbered_active_indicator": "underline",
+	"bar.workspaces.scroll_speed": 5,
+	"bar.workspaces.showAllActive": false,
+	"bar.workspaces.showApplicationIcons": false,
+	"bar.workspaces.showWsIcons": true,
+	"bar.workspaces.show_icons": false,
+	"bar.workspaces.spacing": 2,
+	"bar.workspaces.workspaceIconMap": {
+		"1": {
+			"icon": "",
+			"color": "#cad3f5"
+		},
+		"2": {
+			"icon": "󰅩",
+			"color": "#7dc4e4"
+		},
+		"3": {
+			"icon": "󰒱",
+			"color": "#a6da95"
+		},
+		"4": {
+			"icon": "󰃽",
+			"color": "#b7bdf8"
+		},
+		"5": {
+			"icon": "",
+			"color": "#eed49f"
+		}
+	},
+	"bar.workspaces.workspaces": 5,
+	"hyprpanel.restartAgs": false,
+	"menus.clock.time.hideSeconds": false,
+	"menus.clock.time.military": false,
+	"menus.clock.weather.enabled": false,
+	"menus.dashboard.controls.enabled": true,
+	"menus.dashboard.directories.enabled": true,
+	"menus.dashboard.powermenu.avatar.image": "/home/jordan/.face",
+	"menus.dashboard.powermenu.confirmation": false,
+	"menus.dashboard.shortcuts.enabled": true,
+	"menus.dashboard.shortcuts.left.shortcut1.command": "firefox",
+	"menus.dashboard.shortcuts.left.shortcut1.icon": "󰈹",
+	"menus.dashboard.shortcuts.left.shortcut1.tooltip": "Firefox",
+	"menus.dashboard.shortcuts.left.shortcut3.command": "slack",
+	"menus.dashboard.shortcuts.left.shortcut3.icon": "󰒱",
+	"menus.dashboard.shortcuts.left.shortcut3.tooltip": "Slack",
+	"menus.dashboard.shortcuts.left.shortcut4.command": "$DOTFILES_BIN/rofi/appmenu",
+	"menus.dashboard.stats.enabled": true,
+	"menus.media.displayTime": true,
+	"menus.power.confirmation": false,
+	"menus.power.showLabel": false,
+	"notifications.active_monitor": false,
+	"notifications.cache_actions": false,
+	"scalingPriority": "gdk",
+	"theme.bar.border.location": "none",
+	"theme.bar.buttons.background_hover_opacity": 80,
+	"theme.bar.buttons.battery.spacing": "0.9em",
+	"theme.bar.buttons.bluetooth.spacing": "0.8em",
+	"theme.bar.buttons.clock.enableBorder": false,
+	"theme.bar.buttons.clock.spacing": "0.8em",
+	"theme.bar.buttons.dashboard.enableBorder": false,
+	"theme.bar.buttons.enableBorders": false,
+	"theme.bar.buttons.innerRadiusMultiplier": "0.4",
+	"theme.bar.buttons.media.enableBorder": false,
+	"theme.bar.buttons.media.spacing": "0.8em",
+	"theme.bar.buttons.modules.submap.enableBorder": false,
+	"theme.bar.buttons.monochrome": false,
+	"theme.bar.buttons.network.spacing": "0.9em",
+	"theme.bar.buttons.notifications.enableBorder": false,
+	"theme.bar.buttons.notifications.spacing": "0.7em",
+	"theme.bar.buttons.padding_x": "1.2rem",
+	"theme.bar.buttons.padding_y": "0rem",
+	"theme.bar.buttons.radius": "0.15em",
+	"theme.bar.buttons.spacing": "0.25em",
+	"theme.bar.buttons.volume.spacing": "0.7em",
+	"theme.bar.buttons.windowtitle.enableBorder": false,
+	"theme.bar.buttons.windowtitle.spacing": "0.8em",
+	"theme.bar.buttons.workspaces.enableBorder": false,
+	"theme.bar.buttons.workspaces.fontSize": "1.8em",
+	"theme.bar.buttons.workspaces.numbered_active_highlight_border": "0.1em",
+	"theme.bar.buttons.workspaces.numbered_active_highlight_padding": "0.5em",
+	"theme.bar.buttons.workspaces.smartHighlight": false,
+	"theme.bar.buttons.y_margins": "0.25em",
+	"theme.bar.dropdownGap": "3.4em",
+	"theme.bar.floating": false,
+	"theme.bar.menus.buttons.radius": "0.4em",
+	"theme.bar.menus.card_radius": "0.4em",
+	"theme.bar.menus.menu.clock.scaling": 100,
+	"theme.bar.menus.menu.dashboard.scaling": 100,
+	"theme.bar.menus.menu.notifications.pager.show": false,
+	"theme.bar.menus.monochrome": false,
+	"theme.bar.outer_spacing": ".1em",
+	"theme.font.name": "MonoLisa Variable",
+	"theme.font.size": "1.4rem",
+	"theme.font.weight": 600,
+	"theme.osd.active_monitor": false,
+	"theme.osd.enable": true,
+	"wallpaper.enable": false
+}

@@ -1,10 +1,6 @@
 {
-  pkgs,
-  inputs,
   config,
   lib,
-  username,
-  osConfig,
   ...
 }:
 with lib;

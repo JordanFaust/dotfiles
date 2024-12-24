@@ -1,30 +1,21 @@
 {
-  pkgs,
-  inputs,
   config,
   lib,
-  home-manager,
   ...
-}: let
-  username = "jordan";
-in rec {
+}: {
   imports = [
+    # "${inputs.nixpkgs}/nixos/modules/profiles/hardened.nix"
     ../local.nix
     ./hardware-configuration.nix
   ];
-
-  #users.users.jordan.isNormalUser = true;
 
   ## Modules
   modules = {
     desktop = {
       hyprland.enable = true;
-      applications = {
-        vpn.enable = true;
-      };
-      vm = {
-        qemu.enable = true;
-      };
+      # vm = {
+      #   qemu.enable = true;
+      # };
     };
     shell = {
       direnv.enable = true;
@@ -47,7 +38,7 @@ in rec {
       ergodox.enable = true;
       sensors.enable = true;
       amd.enable = true;
-      system76.enable = true;
+      # system76.enable = true;
     };
   };
 
@@ -57,9 +48,24 @@ in rec {
   services.openssh.startWhenNeeded = true;
 
   networking.networkmanager.enable = true;
+  # Disable NetworkManager's internal DNS resolution
+  networking.networkmanager.dns = "none";
+
+  # These options are unnecessary when managing DNS ourselves
+  networking.useDHCP = false;
+  networking.dhcpcd.enable = false;
+
+  # Configure DNS servers manually (this example uses Cloudflare and Google DNS)
+  # IPv6 DNS servers can be used here as well.
+  networking.nameservers = [
+    "1.1.1.1"
+    "1.0.0.1"
+    "8.8.8.8"
+    "8.8.4.4"
+  ];
 
   # Virtualisation
-  virtualisation.libvirtd.enable = true;
+  # virtualisation.libvirtd.enable = true;
 
   # CPU
   powerManagement.cpuFreqGovernor = lib.mkDefault "performance";

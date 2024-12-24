@@ -2,23 +2,23 @@
   config,
   lib,
   pkgs,
-  system,
-  inputs,
-  osConfig,
+  # system,
+  # inputs,
+  # osConfig,
   ...
 }:
 with lib;
 with lib.my; let
   cfg = config.modules.applications.streaming;
   minimal = config.modules.minimal;
-  # Configure allow unfree for the pinned packages sha
-  mkPkgs = pkgs:
-    import pkgs {
-      inherit system;
-      config.allowUnfree = true;
-    };
-  # The pinned packages set containing a functioning zoom-us package
-  pinnedZoomPkgs = mkPkgs (builtins.getFlake "github:NixOS/nixpkgs/0c19708cf035f50d28eb4b2b8e7a79d4dc52f6bb");
+  # # Configure allow unfree for the pinned packages sha
+  # mkPkgs = pkgs:
+  #   import pkgs {
+  #     inherit system;
+  #     config.allowUnfree = true;
+  #   };
+  # # The pinned packages set containing a functioning zoom-us package
+  # pinnedZoomPkgs = mkPkgs (builtins.getFlake "github:NixOS/nixpkgs/0c19708cf035f50d28eb4b2b8e7a79d4dc52f6bb");
 in {
   options.modules.applications.streaming = mkOption {
     description = ''
@@ -49,12 +49,12 @@ in {
 
   config = lib.mkIf (!minimal && cfg.enable) {
     # Force Zoom to open in the browser until issues are resolved
-    home = {
-      packages = with pkgs; [
-        # zoom-us
-        # pinnedZoomPkgs.zoom-us
-      ];
-    };
+    # home = {
+    #   packages = with pkgs; [
+    #     # zoom-us
+    #     # pinnedZoomPkgs.zoom-us
+    #   ];
+    # };
 
     programs.obs-studio = {
       enable = cfg.obs.enable;
