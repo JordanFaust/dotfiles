@@ -32,10 +32,10 @@ in {
         argocd
 
         # Local Dev
-        unstable.kubernetes-helm
+        kubernetes-helm
         helm-ls
         kustomize
-        unstable.skaffold
+        skaffold
         tilt
         k3d
         lens
@@ -54,13 +54,13 @@ in {
         deck
 
         # Devbox
-        unstable.devbox
+        devbox
 
         # Load Testing Tooling
         k6
 
         # Security
-        unstable.jfrog-cli
+        jfrog-cli
 
         # Steam Run as a last ditch effort
         steam-run

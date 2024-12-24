@@ -13,9 +13,6 @@
   modules = {
     desktop = {
       hyprland.enable = true;
-      applications = {
-        vpn.enable = true;
-      };
       # vm = {
       #   qemu.enable = true;
       # };

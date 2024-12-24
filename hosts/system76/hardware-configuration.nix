@@ -14,7 +14,7 @@
   boot.initrd.availableKernelModules = ["xhci_pci" "thunderbolt" "nvme" "usb_storage" "sd_mod" "sdhci_pci"];
   boot.initrd.kernelModules = ["nvidia"];
   boot.kernelModules = ["kvm-intel" "v4l2loopback"];
-  boot.kernelPackages = pkgs.unstable.linuxKernel.packages.linux_6_1;
+  boot.kernelPackages = pkgs.linuxKernel.packages.linux_6_12;
   boot.extraModulePackages = with config.boot.kernelPackages; [
     nvidia_x11
     v4l2loopback
