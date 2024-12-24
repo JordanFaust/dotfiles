@@ -76,9 +76,6 @@ in {
       enable = true;
       package = hyprland;
       systemd.enable = true;
-      xwayland.enable = true;
-      # plugins = with plugins; [ hyprbars borderspp ];
-
 
       settings = {
         exec-once = [

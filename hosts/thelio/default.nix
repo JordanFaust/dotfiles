@@ -1,5 +1,4 @@
 {
-  inputs,
   config,
   lib,
   ...
@@ -17,9 +16,9 @@
       applications = {
         vpn.enable = true;
       };
-      vm = {
-        qemu.enable = true;
-      };
+      # vm = {
+      #   qemu.enable = true;
+      # };
     };
     shell = {
       direnv.enable = true;
@@ -42,7 +41,7 @@
       ergodox.enable = true;
       sensors.enable = true;
       amd.enable = true;
-      system76.enable = true;
+      # system76.enable = true;
     };
   };
 
@@ -69,7 +68,7 @@
   ];
 
   # Virtualisation
-  virtualisation.libvirtd.enable = true;
+  # virtualisation.libvirtd.enable = true;
 
   # CPU
   powerManagement.cpuFreqGovernor = lib.mkDefault "performance";
