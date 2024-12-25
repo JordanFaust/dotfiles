@@ -73,16 +73,26 @@ in {
         };
       };
 
-      # Set relevant environment variables outside of the hyprland.conf directory.
+      # Set relevant environment variables outside of the hyprland.conf directory for
+      # theming, xcursor, nvidia and general toolkit variables.
       # See https://wiki.hyprland.org/Configuring/Environment-variables/
       "uwsm/env" = {
-
         text = ''
           #!/usr/bin/env bash
           export UWSM_FINALIZE_VARNAMES="''${UWSM_FINALIZE_VARNAMES} WAYLAND_DISPLAY"
           export GTK_THEME=${gtkTheme}
           export XCURSOR_THEME=${builtins.toString cursor.name}
-          export XCURSOR_SIZE=${builtins.toString cursor.size}
+          export XCURSOR_SIZE=24
+        '';
+      };
+
+      # Set relevant environment variables for hyprland and aquamarine
+      # See https://wiki.hyprland.org/Configuring/Environment-variables/
+      "uwsm/env-hyprland" = {
+        text = ''
+          #!/usr/bin/env bash
+          export HYPRCURSOR_THEME=${builtins.toString cursor.name}
+          export HYPRCURSOR_SIZE=${builtins.toString cursor.size}
         '';
       };
     };
@@ -95,9 +105,7 @@ in {
 
       settings = {
         exec-once = [
-          # "dbus-update-activation-environment --systemd --all"
-          # "systemctl --user import-environment DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP QT_QPA_PLATFORMTHEME"
-          "uwsm app -- ${pkgs.swww}/bin/swww init"
+          "uwsm app -- ${pkgs.swww}/bin/swww-daemon"
           "uwsm app -- ${pkgs.hyprpanel}/bin/hyprpanel"
           "uwsm app -- wl-paste --type text --watch cliphist store"
           "uwsm app -- wl-paste --type image --watch cliphist store"

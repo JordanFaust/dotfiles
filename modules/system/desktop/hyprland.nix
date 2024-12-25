@@ -102,12 +102,6 @@ in {
     ];
 
     services = {
-      redshift.enable = true;
-
-      # xserver = {
-      #   enable = true;
-      # };
-
       displayManager = {
         defaultSession = "hyprland";
       };
