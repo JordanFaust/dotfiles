@@ -8,8 +8,8 @@
 with lib;
 with lib.my; let
   cfg = config.modules.desktop.hyprland;
+
   hyprland = inputs.hyprland.packages.${pkgs.system}.hyprland;
-  plugins = inputs.hyprland-plugins.packages.${pkgs.system};
 
   yt = pkgs.writeShellScript "yt" ''
     notify-send "Opening video" "$(wl-paste)"
@@ -19,6 +19,8 @@ with lib.my; let
   playerctl = "${pkgs.playerctl}/bin/playerctl";
   brightnessctl = "${pkgs.brightnessctl}/bin/brightnessctl";
   pactl = "${pkgs.pulseaudio}/bin/pactl";
+
+  gtkTheme = config.modules.desktop.gtk.name;
 
   cursor = {
     name = config.modules.desktop.gtk.cursor.name;
@@ -70,22 +72,44 @@ in {
           "org.freedesktop.impl.portal.FileChooser" = "kde";
         };
       };
+
+      # Set relevant environment variables outside of the hyprland.conf directory for
+      # theming, xcursor, nvidia and general toolkit variables.
+      # See https://wiki.hyprland.org/Configuring/Environment-variables/
+      "uwsm/env" = {
+        text = ''
+          #!/usr/bin/env bash
+          export UWSM_FINALIZE_VARNAMES="''${UWSM_FINALIZE_VARNAMES} WAYLAND_DISPLAY"
+          export GTK_THEME=${gtkTheme}
+          export XCURSOR_THEME=${builtins.toString cursor.name}
+          export XCURSOR_SIZE=${builtins.toString cursor.size}
+        '';
+      };
+
+      # Set relevant environment variables for hyprland and aquamarine
+      # See https://wiki.hyprland.org/Configuring/Environment-variables/
+      "uwsm/env-hyprland" = {
+        text = ''
+          #!/usr/bin/env bash
+          export HYPRCURSOR_THEME=${builtins.toString cursor.name}
+          export HYPRCURSOR_SIZE=${builtins.toString cursor.size}
+        '';
+      };
     };
 
     wayland.windowManager.hyprland = {
       enable = true;
       package = hyprland;
-      systemd.enable = true;
+      systemd.enable = false;
+      xwayland.enable = false;
 
       settings = {
         exec-once = [
-          "dbus-update-activation-environment --systemd --all"
-          "systemctl --user import-environment DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP QT_QPA_PLATFORMTHEME"
-          "${pkgs.swww}/bin/swww init"
-          "${pkgs.hyprpanel}/bin/hyprpanel"
-          "hyprctl setcursor ${cursor.name} ${builtins.toString cursor.size}"
-          "wl-paste --type text --watch cliphist store"
-          "wl-paste --type image --watch cliphist store"
+          "uwsm app -- ${pkgs.swww}/bin/swww-daemon"
+          "uwsm app -- ${pkgs.hyprpanel}/bin/hyprpanel"
+          "uwsm app -- wl-paste --type text --watch cliphist store"
+          "uwsm app -- wl-paste --type image --watch cliphist store"
+          "uwsm app -- hyprctl setcursor ${cursor.name} ${builtins.toString cursor.size}"
         ];
 
         monitor = [
@@ -158,6 +182,7 @@ in {
           (fregex "xdg-desktop-portal-gnome")
           (fregex "transmission-gtk")
           (fregex "com.github.Aylur.ags")
+          "workspace 2 silent, class:^(firefox)$"
           "workspace 3 silent, title:^(Spotify Premium)$"
           "workspace 3 silent, class:^(Slack)$"
           "workspace 3 silent, initialTitle:^(Slack)$"
@@ -186,6 +211,13 @@ in {
           (pin "as_toolbar" "zoom")
           # Inhibit Screen Locking/Sleeping during video calls/watching videos
           (inhibitfocus "Zoom Meeting")
+
+          # Autostart workspace placement
+          "workspace 2 silent, class:neovim"
+          "workspace 2 silent, class:firefox"
+          "workspace 3 silent, class:Slack"
+          "workspace 3 silent, class:spotify"
+          "workspace 4 silent, class:chromium-browser"
         ];
 
         bind = let

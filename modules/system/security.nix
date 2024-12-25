@@ -122,7 +122,6 @@ in {
       # Setup the Gnome Keyring
       services.gnome.gnome-keyring.enable = true;
       programs.seahorse.enable = true;
-      security.pam.services.keybase.enableGnomeKeyring = true;
 
       # Setup basic log rotation
       services.logrotate.enable = true;
@@ -148,7 +147,7 @@ in {
 
       user.packages = with pkgs; [
         # Setup Keybase for use of storing sensitive credentials
-        kbfs
+        # kbfs
         openssl
         # Security scanning tools
         # Disable until grype can actually build in nixos
@@ -174,7 +173,10 @@ in {
         '')
         nix-tree
       ];
-      services.keybase.enable = true;
+
+      # Enable Keybase
+      # services.keybase.enable = true;
+      # security.pam.services.keybase.enableGnomeKeyring = true;
 
       #
       # Systemd Hardening
@@ -408,35 +410,35 @@ in {
     # This produces a package called "sensitive" that can be ran at anytime to sync
     # credentials from the sensitive repo
 
-    (mkIf (cfg.copySensitive != {})
-      (let
-        sensitive = pkgs.writeScriptBin "sensitive" ''
-          #!/usr/bin/env bash
-          echo "Checking if sensitive repo is setup"
-          if [[ ! -d /etc/sensitive ]]; then
-            echo "[sensitive] cloning sensitive config from keybase"
-            ${pkgs.git}/bin/git clone keybase://private/jordanfaust/sensitive /etc/sensitive
-            if [[ $? -eq 0 ]]; then
-              echo "[sensitive] clone complete"
-            else
-              echo "[sensitive] clone failed, login to keybase required"
-            fi
-          fi
-          if [[ -d /etc/sensitive ]]; then
-            echo "[sensitive] Copying sensitive credentials"
-            ${concatStringsSep "\n"
-            (mapAttrsToList (name: script: ''
-                echo "[${name}]"
-                ${script}
-              '')
-              cfg.copySensitive)}
-          fi
-        '';
-      in {
-        user.packages = [sensitive];
-        system.userActivationScripts.sensitive = ''
-          [ -z "$NORELOAD" ] && ${sensitive}/bin/sensitive
-        '';
-      }))
+    # (mkIf (cfg.copySensitive != {})
+    #   (let
+    #     sensitive = pkgs.writeScriptBin "sensitive" ''
+    #       #!/usr/bin/env bash
+    #       echo "Checking if sensitive repo is setup"
+    #       if [[ ! -d /etc/sensitive ]]; then
+    #         echo "[sensitive] cloning sensitive config from keybase"
+    #         ${pkgs.git}/bin/git clone keybase://private/jordanfaust/sensitive /etc/sensitive
+    #         if [[ $? -eq 0 ]]; then
+    #           echo "[sensitive] clone complete"
+    #         else
+    #           echo "[sensitive] clone failed, login to keybase required"
+    #         fi
+    #       fi
+    #       if [[ -d /etc/sensitive ]]; then
+    #         echo "[sensitive] Copying sensitive credentials"
+    #         ${concatStringsSep "\n"
+    #         (mapAttrsToList (name: script: ''
+    #             echo "[${name}]"
+    #             ${script}
+    #           '')
+    #           cfg.copySensitive)}
+    #       fi
+    #     '';
+    #   in {
+    #     user.packages = [sensitive];
+    #     system.userActivationScripts.sensitive = ''
+    #       [ -z "$NORELOAD" ] && ${sensitive}/bin/sensitive
+    #     '';
+    #   }))
   ];
 }

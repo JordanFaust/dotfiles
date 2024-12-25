@@ -23,6 +23,9 @@ in {
     # Enable Hyprland
     programs.hyprland = {
       enable = true;
+
+      xwayland.enable = false;
+      withUWSM = true;
       package = inputs.hyprland.packages.${pkgs.system}.hyprland;
       portalPackage = inputs.hyprland.packages."${pkgs.system}".xdg-desktop-portal-hyprland;
     };
@@ -83,7 +86,7 @@ in {
 
       # Gnome stuff
       loupe
-      adwaita-icon-theme
+      # adwaita-icon-theme
       nautilus
       baobab
       # gnome-calendar
@@ -99,12 +102,6 @@ in {
     ];
 
     services = {
-      redshift.enable = true;
-
-      # xserver = {
-      #   enable = true;
-      # };
-
       displayManager = {
         defaultSession = "hyprland";
       };
@@ -114,11 +111,8 @@ in {
       upower.enable = true;
       accounts-daemon.enable = true;
       gnome = {
-        # evolution-data-server.enable = true;
         glib-networking.enable = true;
         gnome-keyring.enable = true;
-        # gnome-online-accounts.enable = true;
-        at-spi2-core.enable = true;
       };
     };
 

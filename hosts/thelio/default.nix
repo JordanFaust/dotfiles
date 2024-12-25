@@ -27,6 +27,10 @@
     services = {
       ssh.enable = true;
       docker.enable = true;
+      dbus = {
+        enable = true;
+        implementation = "broker";
+      };
     };
     theme = {
       active = "catppuccin";

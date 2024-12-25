@@ -6,7 +6,6 @@
 let
   cfg = config.modules.desktop.hyprland;
 in {
-  # imports = [inputs.hyprlock.homeManagerModules.default];
   options = {};
 
   config = lib.mkIf (cfg.enable) {
@@ -66,7 +65,7 @@ in {
             text_align = "center";
             color = "rgb(ded8d7)";
             font_size = 84;
-            font_family = "Cascadia Code Normal";
+            font_family = "MonoLisa Variable Regular";
             position = "0, 100";
             halign = "center";
             valign = "center";
@@ -77,7 +76,7 @@ in {
             text = "Hey <span text_transform=\"capitalize\" size=\"larger\">$USER</span>";
             color = "rgb(ded8d7)";
             font_size = 20;
-            font_family = "Cascadia Code Normal";
+            font_family = "MonoLisa Variable Regular";
             position = "0, 0";
             halign = "center";
             valign = "center";
@@ -88,7 +87,7 @@ in {
             text = "Type to unlock!";
             color = "rgb(ded8d7)";
             font_size = 16;
-            font_family = "Cascadia Code Normal";
+            font_family = "MonoLisa Variable Regular";
             position = "0, 32";
             halign = "center";
             valign = "bottom";

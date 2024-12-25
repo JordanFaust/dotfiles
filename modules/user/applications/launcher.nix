@@ -2,7 +2,6 @@
   config,
   lib,
   pkgs,
-  osConfig,
   ...
 }:
 with lib;
@@ -46,7 +45,7 @@ in {
       packages = with pkgs; [
         (writeScriptBin "rofi" ''
           #!${stdenv.shell}
-          exec ${pkgs.rofi-wayland}/bin/rofi -terminal xst -m -1 "$@"
+          exec ${rofi-wayland}/bin/rofi -terminal ${kitty}/bin/kitty -m -1 "$@"
         '')
       ];
     };

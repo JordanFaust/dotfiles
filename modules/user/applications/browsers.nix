@@ -14,10 +14,86 @@ with lib;
 with lib.my; let
   cfg = config.modules.applications.browsers;
   minimal = config.modules.minimal;
+  firefoxPrivateDesktop = pkgs.makeDesktopItem {
+    name = "firefox-private";
+    desktopName = "Firefox (Private)";
+    genericName = "Open a private Firefox window";
+    icon = "firefox";
+    exec = "${pkgs.firefox-bin}/bin/firefox --private-window";
+    categories = ["Network" "WebBrowser"];
+  };
+  firefoxDesktop = pkgs.makeDesktopItem {
+    categories = ["Network" "WebBrowser"];
+    name = "firefox";
+    desktopName = "Firefox";
+    genericName = "Web Browser";
+    icon = "firefox";
+    exec = "uwsm app -- ${pkgs.firefox-bin}/bin/firefox --new-window %U";
+    mimeTypes = [
+      "text/html"
+      "text/xml"
+      "application/xhtml+xml"
+      "application/vnd.mozilla.xul+xml"
+      "x-scheme-handler/http"
+      "x-scheme-handler/https"
+    ];
+    startupNotify = true;
+    startupWMClass = "firefox";
+    terminal = false;
+
+    actions = {
+      "new-private-window" = {
+        exec = "uwsm app -- ${pkgs.firefox-bin}/bin/firefox --private-window %U";
+        name = "New Private Window";
+      };
+      "new-window" = {
+        exec = "uwsm app -- ${pkgs.firefox-bin}/bin/firefox --new-window %U";
+        name = "New Window";
+      };
+      "profile-manager-window" = {
+        exec = "uwsm app -- ${pkgs.firefox-bin}/bin/firefox --ProfileManager";
+        name = "Profile Manager";
+      };
+    };
+  };
+  chromiumDesktop = pkgs.makeDesktopItem {
+    categories = ["Network" "WebBrowser"];
+    name = "chromium";
+    desktopName = "Chromium";
+    genericName = "Web Browser";
+    icon = "chromium";
+    exec = "uwsm app -- ${pkgs.chromium}/bin/chromium %U";
+    mimeTypes = [
+      "text/html"
+      "text/xml"
+      "application/pdf"
+      "application/rdf+xml"
+      "application/rss+xml"
+      "application/xhtml+xml"
+      "application/xhtml_xml"
+      "application/xml"
+      "x-scheme-handler/http"
+      "x-scheme-handler/https"
+    ];
+    startupNotify = true;
+    startupWMClass = "firefox";
+    terminal = false;
+
+    actions = {
+      "new-private-window" = {
+        exec = "uwsm app -- ${pkgs.chromium}/bin/chromium --incognito";
+        name = "New Private Window";
+      };
+      "new-window" = {
+        exec = "uwsm app -- ${pkgs.chromium}/bin/chromium";
+        name = "New Window";
+      };
+    };
+  };
 in {
   options.modules.applications.browsers = lib.mkOption {
     description = ''
-      Configurations for instant messangers, such as slack.
+      Configurations for web browsers, such as firefox.
     '';
     type = with lib.types;
       nullOr (submoduleWith {
@@ -60,16 +136,9 @@ in {
   config = mkIf (!minimal && cfg.enable) {
     home = {
       packages = with pkgs; [
-        firefox-bin
-        (makeDesktopItem {
-          name = "firefox-private";
-          desktopName = "Firefox (Private)";
-          genericName = "Open a private Firefox window";
-          icon = "firefox";
-          exec = "${firefox-bin}/bin/firefox --private-window";
-          categories = ["Network"];
-        })
-        chromium
+        firefoxDesktop
+        firefoxPrivateDesktop
+        chromiumDesktop
       ];
 
       sessionVariables = {
@@ -90,9 +159,11 @@ in {
       };
     };
 
-    # Prevent auto-creation of ~/Desktop. The trailing slash is necessary; see
-    # https://bugzilla.mozilla.org/show_bug.cgi?id=1082717
-    # env.XDG_DESKTOP_DIR = "$HOME/";
+    # Add firefox as a startup application
+    xdg.configFile = {
+      "autostart/firefox.desktop".source = "${firefoxDesktop}/share/applications/firefox.desktop";
+      "autostart/chromium.desktop".source = "${chromiumDesktop}/share/applications/chromium.desktop";
+    };
 
     # Use a stable profile name so we can target it in themes
     home.file = let

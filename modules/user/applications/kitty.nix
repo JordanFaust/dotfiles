@@ -2,12 +2,19 @@
   config,
   lib,
   pkgs,
-  inputs,
   ...
 }:
 with lib;
 with lib.my; let
   cfg = config.modules.applications.kitty;
+  desktop = pkgs.makeDesktopItem {
+    name = "Kitty";
+    desktopName = "Kitty";
+    genericName = "Terminal emulator";
+    icon = "utilities-terminal";
+    exec = "uwsm app -- ${pkgs.kitty}/bin/kitty -e bash -c \"(tmux ls | grep -qEv 'attached|scratch' && tmux at) || tmux\"";
+    categories = ["Development" "System" "Utility"];
+  };
 in {
   options.modules.applications.kitty = mkOption {
     description = ''
@@ -36,22 +43,19 @@ in {
     # '';
 
     home = {
-      packages = with pkgs; [
-        kitty
-        (makeDesktopItem {
-          name = "Kitty";
-          desktopName = "Kitty";
-          genericName = "Kitty terminal";
-          icon = "utilities-terminal";
-          exec = "${kitty}/bin/kitty";
-          categories = ["Development" "System" "Utility"];
-        })
+      packages = [
+        desktop
       ];
 
       sessionVariables = {
         TERMINAL = "kitty";
         TERM = "kitty";
       };
+    };
+
+    # Add Kitty as a startup application
+    xdg.configFile = {
+      "autostart/kitty.desktop".source = "${desktop}/share/applications/Kitty.desktop";
     };
   };
 }
