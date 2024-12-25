@@ -12,8 +12,6 @@ with lib.my; let
     desktopName = "Neovim";
     genericName = "Text Editor";
     icon = "nvim";
-    # KITTY_ENABLE_WAYLAND must be set here or integrations with wayland, such as copy/paste, won't work
-    # exec = "";
     exec = "uwsm app -- ${pkgs.kitty}/bin/kitty --title Neovim --class neovim -e nvim %F";
     categories = ["Utility" "TextEditor"];
   };
