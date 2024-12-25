@@ -82,7 +82,7 @@ in {
           export UWSM_FINALIZE_VARNAMES="''${UWSM_FINALIZE_VARNAMES} WAYLAND_DISPLAY"
           export GTK_THEME=${gtkTheme}
           export XCURSOR_THEME=${builtins.toString cursor.name}
-          export XCURSOR_SIZE=24
+          export XCURSOR_SIZE=${builtins.toString cursor.size}
         '';
       };
 
@@ -109,7 +109,7 @@ in {
           "uwsm app -- ${pkgs.hyprpanel}/bin/hyprpanel"
           "uwsm app -- wl-paste --type text --watch cliphist store"
           "uwsm app -- wl-paste --type image --watch cliphist store"
-          "hyprctl setcursor ${cursor.name} ${builtins.toString cursor.size}"
+          "uwsm app -- hyprctl setcursor ${cursor.name} ${builtins.toString cursor.size}"
         ];
 
         monitor = [
@@ -182,6 +182,7 @@ in {
           (fregex "xdg-desktop-portal-gnome")
           (fregex "transmission-gtk")
           (fregex "com.github.Aylur.ags")
+          "workspace 2 silent, class:^(firefox)$"
           "workspace 3 silent, title:^(Spotify Premium)$"
           "workspace 3 silent, class:^(Slack)$"
           "workspace 3 silent, initialTitle:^(Slack)$"
@@ -210,6 +211,13 @@ in {
           (pin "as_toolbar" "zoom")
           # Inhibit Screen Locking/Sleeping during video calls/watching videos
           (inhibitfocus "Zoom Meeting")
+
+          # Autostart workspace placement
+          "workspace 2 silent, class:neovim"
+          "workspace 2 silent, class:firefox"
+          "workspace 3 silent, class:Slack"
+          "workspace 3 silent, class:spotify"
+          "workspace 4 silent, class:chromium-browser"
         ];
 
         bind = let

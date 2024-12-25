@@ -2,14 +2,12 @@
   config,
   lib,
   pkgs,
-  inputs,
   osConfig,
   ...
 }:
 with lib;
 with lib.my; let
   cfg = config.modules.applications.graphics;
-  minimal = config.modules.minimal;
 in {
   options.modules.applications.graphics = mkOption {
     description = ''

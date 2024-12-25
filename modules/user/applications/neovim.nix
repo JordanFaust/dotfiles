@@ -2,12 +2,19 @@
   config,
   lib,
   pkgs,
-  inputs,
   ...
 }:
 with lib;
 with lib.my; let
   cfg = config.modules.applications.neovim;
+  desktop = pkgs.makeDesktopItem {
+    name = "Neovim";
+    desktopName = "Neovim";
+    genericName = "Text Editor";
+    icon = "nvim";
+    exec = "uwsm app -- ${pkgs.kitty}/bin/kitty --title Neovim --class neovim -e nvim %F";
+    categories = ["Utility" "TextEditor"];
+  };
 in {
   options.modules.applications.neovim = mkOption {
     description = ''
@@ -59,45 +66,16 @@ in {
         # Code Snippet Image Generator
         codesnap
 
-        (makeDesktopItem {
-          name = "Neovim";
-          desktopName = "Neovim";
-          genericName = "Text Editor";
-          icon = "nvim";
-          # KITTY_ENABLE_WAYLAND must be set here or integrations with wayland, such as copy/paste, won't work
-          exec = "bash -c \"KITTY_ENABLE_WAYLAND=1; ${kitty}/bin/kitty --title Neovim --class neovim -e nvim %F\"";
-          categories = ["Utility" "TextEditor"];
-        })
+        # desktop
+        desktop
       ];
     };
 
     xdg.configFile = {
-      "neovide/config.toml".source = (pkgs.formats.toml {}).generate "config.toml" {
-        #
-        # Monaspace
-        #
-        # font = {
-        #   normal = [
-        #     {
-        #       family = "Monaspace Neon";
-        #       style = "Normal";
-        #     }
-        #   ];
-        #   bold = {
-        #     family = "Monaspace Neon Var";
-        #     style = "ExtraBold";
-        #   };
-        #   italic = {
-        #     family = "Monaspace Radon Var";
-        #     style = "Italic SemiBold";
-        #   };
-        #   bold_italic = {
-        #     family = "Monaspace Radon Var";
-        #     style = "Italic ExtraBold";
-        #   };
-        #   size = 16;
-        # };
+      # Add Neovim as a startup application
+      "autostart/neovim.desktop".source = "${desktop}/share/applications/Neovim.desktop";
 
+      "neovide/config.toml".source = (pkgs.formats.toml {}).generate "config.toml" {
         #
         # MonoLisa
         #
@@ -126,29 +104,6 @@ in {
           };
           size = 16;
         };
-        # font.features = {
-        #   MonoLisa = [ "+ss01" ];
-        # };
-
-        # font = {
-        #   normal = {
-        #     family = "Cascadia Code";
-        #     style = "Medium";
-        #   };
-        #   bold = {
-        #     family = "Cascadia Code";
-        #     style = "Bold";
-        #   };
-        #   italic = {
-        #     family = "Victor Mono";
-        #     style = "Italic SemiBold";
-        #   };
-        #   bold_italic = {
-        #     family = "Victor Mono";
-        #     style = "Bold Italic";
-        #   };
-        #   size = 14;
-        # };
       };
     };
   };

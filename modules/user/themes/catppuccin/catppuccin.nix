@@ -137,7 +137,7 @@ in {
       cursor = {
         name = "catppuccin-macchiato-red-cursors";
         package = pkgs.catppuccin-cursors.macchiatoRed;
-        size = 36;
+        size = 32;
       };
 
       qt = {
