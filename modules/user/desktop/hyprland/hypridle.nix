@@ -39,5 +39,9 @@ in {
         ];
       };
     };
+
+    # No loger needed after https://github.com/NixOS/nixpkgs/pull/355416/files
+    systemd.user.services.hypridle.Install.WantedBy = [ "wayland-session@Hyprland.target" ];
+    systemd.user.services.hypridle.Unit.After = [ "wayland-session@Hyprland.target" ];
   };
 }

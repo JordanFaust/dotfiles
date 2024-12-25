@@ -10,8 +10,6 @@ with lib;
 with lib.my; let
   cfg = config.modules.themes.catppuccin;
   gtk-theme = "Catppuccin-Macchiato-Compact-Rosewater-Dark";
-  cursor-theme = "Qogir";
-  cursor-package = pkgs.qogir-icon-theme;
 in {
   options.modules.themes.catppuccin = mkOption {
     description = ''

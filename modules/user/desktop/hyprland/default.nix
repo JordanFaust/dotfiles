@@ -8,6 +8,7 @@
 with lib;
 with lib.my; let
   cfg = config.modules.desktop.hyprland;
+
   hyprland = inputs.hyprland.packages.${pkgs.system}.hyprland;
 
   yt = pkgs.writeShellScript "yt" ''
@@ -18,6 +19,8 @@ with lib.my; let
   playerctl = "${pkgs.playerctl}/bin/playerctl";
   brightnessctl = "${pkgs.brightnessctl}/bin/brightnessctl";
   pactl = "${pkgs.pulseaudio}/bin/pactl";
+
+  gtkTheme = config.modules.desktop.gtk.name;
 
   cursor = {
     name = config.modules.desktop.gtk.cursor.name;
@@ -69,6 +72,19 @@ in {
           "org.freedesktop.impl.portal.FileChooser" = "kde";
         };
       };
+
+      # Set relevant environment variables outside of the hyprland.conf directory.
+      # See https://wiki.hyprland.org/Configuring/Environment-variables/
+      "uwsm/env" = {
+
+        text = ''
+          #!/usr/bin/env bash
+          export UWSM_FINALIZE_VARNAMES="''${UWSM_FINALIZE_VARNAMES} WAYLAND_DISPLAY"
+          export GTK_THEME=${gtkTheme}
+          export XCURSOR_THEME=${builtins.toString cursor.name}
+          export XCURSOR_SIZE=${builtins.toString cursor.size}
+        '';
+      };
     };
 
     wayland.windowManager.hyprland = {
@@ -85,7 +101,7 @@ in {
           "uwsm app -- ${pkgs.hyprpanel}/bin/hyprpanel"
           "uwsm app -- wl-paste --type text --watch cliphist store"
           "uwsm app -- wl-paste --type image --watch cliphist store"
-          # "hyprctl setcursor ${cursor.name} ${builtins.toString cursor.size}"
+          "hyprctl setcursor ${cursor.name} ${builtins.toString cursor.size}"
         ];
 
         monitor = [

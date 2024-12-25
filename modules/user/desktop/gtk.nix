@@ -2,16 +2,11 @@
   config,
   lib,
   pkgs,
-  inputs,
-  osConfig,
   ...
 }:
 with lib;
 with lib.my; let
   cfg = config.modules.desktop.gtk;
-  cursor-theme = "Qogir";
-  cursor-package = pkgs.qogir-icon-theme;
-  qtTheme = strings.concatStrings (strings.splitString "-" cfg.qt.name);
 in {
   options.modules.desktop.gtk = mkOption {
     description = ''
@@ -41,7 +36,7 @@ in {
                 default = "Adwaita";
                 defaultText = literalExpression ''"Adwaita"'';
                 example = literalExpression ''"Yaru"'';
-                description = "Name of the cursor theme within the package.";
+                description = "Name of the theme within the package.";
               };
 
               #
@@ -54,7 +49,7 @@ in {
                   defaultText = literalExpression "null";
                   example = literalExpression "pkgs.yaru-theme";
                   description = ''
-                    Package providing the curosr theme. This package will be installed to your profile.
+                    Package providing the cursor theme. This package will be installed to your profile.
                     If `null` then the cursor theme is assumed to already be available.
                   '';
                 };
