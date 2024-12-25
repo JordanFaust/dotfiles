@@ -72,6 +72,42 @@ in {
               };
 
               #
+              # Font Configuration
+              #
+              font = {
+                name = mkOption {
+                  type = with types; str;
+                  default = "MonoLisa Variable Regular";
+                  defaultText = literalExpression ''"MonoLisa Variable Regular"'';
+                  example = literalExpression ''"Yaru"'';
+                  description = "Name of the font to use for GTK applications.";
+                };
+              };
+
+              #
+              # Icon Theme Configuration
+              #
+              icon = {
+                package = mkOption {
+                  type = with types; nullOr package;
+                  default = "Papirus";
+                  defaultText = literalExpression ''"Papirus"'';
+                  example = literalExpression "pkgs.yaru-theme";
+                  description = ''
+                    Package providing the icon theme. This package will be installed to your profile.
+                    If `null` then the cursor theme is assumed to already be available.
+                  '';
+                };
+                name = mkOption {
+                  type = with types; str;
+                  default = "Papirus";
+                  defaultText = literalExpression ''"Papirus"'';
+                  example = literalExpression ''"Yaru"'';
+                  description = "Name of the icon theme within the package.";
+                };
+              };
+
+              #
               # QT Theme Configuration
               #
               qt = {
@@ -146,7 +182,7 @@ in {
 
     gtk = {
       enable = cfg.enable;
-      font.name = "Cascadia Code Regular";
+      font.name = cfg.font.name;
       theme = {
         name = cfg.name;
         package = cfg.package;
@@ -158,7 +194,8 @@ in {
         size = cfg.cursor.size;
       };
 
-      iconTheme.name = "MoreWaita";
+      iconTheme.name = cfg.icon.name;
+      iconTheme.package = cfg.icon.package;
 
       gtk3.extraConfig = {
         "gtk-application-prefer-dark-theme" = "1";

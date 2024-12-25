@@ -9,7 +9,6 @@
 with lib;
 with lib.my; let
   cfg = config.modules.themes.catppuccin;
-  gtk-theme = "Catppuccin-Macchiato-Compact-Rosewater-Dark";
 in {
   options.modules.themes.catppuccin = mkOption {
     description = ''
@@ -38,9 +37,6 @@ in {
   config = lib.mkIf (cfg.enable) {
     home = {
       packages = with pkgs; [
-        paper-icon-theme # for rofi
-        papirus-icon-theme # dunst
-        adwaita-icon-theme
         # TODO replace pamixer with amixer
         # misc
         gpick
@@ -52,9 +48,8 @@ in {
         # Fix broken nerd fonts
         nerdfix
 
-        adw-gtk3
+        # adw-gtk3
         font-awesome
-        morewaita-icon-theme
         cantarell-fonts
 
         (catppuccin-kde.override {
@@ -76,7 +71,7 @@ in {
         inputs.private-fonts.packages.${system}.monolisa-variable
         # monaspace
         # General Sans Fonts
-        open-sans
+        # open-sans
 
         siji
         nerd-fonts.caskaydia-cove
@@ -126,12 +121,22 @@ in {
 
     modules.desktop.gtk = {
       enable = true;
-      name = gtk-theme;
-      package = pkgs.stable.catppuccin-gtk.override {
-        accents = ["rosewater"];
+      name = "Catppuccin-GTK-Red-Dark-Compact-Macchiato";
+      package = pkgs.magnetic-catppuccin-gtk.override {
+        accent = ["red"];
         size = "compact";
-        tweaks = ["rimless" "black"];
-        variant = "macchiato";
+        tweaks = ["macchiato"];
+        shade = "dark";
+      };
+
+      font.name = "MonoLisa Variable Regular";
+
+      icon = {
+        name = "Papirus";
+        package = pkgs.catppuccin-papirus-folders.override {
+          accent = "red";
+          flavor = "macchiato";
+        };
       };
 
       cursor = {
@@ -143,7 +148,7 @@ in {
       qt = {
         style = "kvantum";
         platformTheme = "qt5ct";
-        name = "Catppuccin-Macchiato-Rosewater";
+        name = "catppuccin-macchiato-rosewater";
         package = pkgs.catppuccin-kvantum.override {
           accent = "rosewater";
           variant = "macchiato";

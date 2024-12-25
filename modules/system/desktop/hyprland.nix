@@ -86,7 +86,7 @@ in {
 
       # Gnome stuff
       loupe
-      adwaita-icon-theme
+      # adwaita-icon-theme
       nautilus
       baobab
       # gnome-calendar
