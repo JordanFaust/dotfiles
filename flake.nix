@@ -25,7 +25,7 @@
     hyprland-plugins.inputs.hyprland.follows = "hyprland";
     hyprlock.url = "github:hyprwm/hyprlock";
     hypridle.url = "github:hyprwm/hypridle";
-    hyprpanel.url = "github:Jas-SinghFSU/HyprPanel/955eed6c60a3ea5d6b0b1b8b7086cffbae984277";
+    hyprpanel.url = "github:Jas-SinghFSU/HyprPanel";
 
     agenix.url = "github:ryantm/agenix";
     agenix.inputs.nixpkgs.follows = "nixpkgs";
@@ -53,7 +53,6 @@
     inherit (lib.my) mapModules mapModulesRec mapHosts;
 
     system = "x86_64-linux";
-    username = "jordan";
 
     mkPkgs = pkgs: extraOverlays:
       import pkgs {
@@ -111,16 +110,6 @@
 
     devShell."${system}" =
       import ./shell.nix {inherit pkgs;};
-
-    # templates =
-    #   {
-    #     full = {
-    #       path = ./.;
-    #       description = "A grossly incandescent nixos config";
-    #     };
-    #   }
-    #   // import ./templates;
-    # defaultTemplate = self.templates.full;
 
     defaultApp."${system}" = {
       type = "app";

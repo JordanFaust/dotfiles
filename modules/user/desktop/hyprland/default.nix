@@ -200,6 +200,7 @@ in {
           (f "zoom_linux_float_message_reminder" "zoom")
           (f "as_toolbar" "zoom")
           (f "app.zoom.us is sharing your screen." "")
+          (f "GlobalProtect Login" "gpauth")
           # Pin the floating video window and make it follow the current workspace
           (pin "zoom_linux_float_video_window" "zoom")
           # Pin the floating message reminder and make it follow the current workspace

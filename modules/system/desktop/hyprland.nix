@@ -108,7 +108,7 @@ in {
 
       # AGS and Gnome services
       gvfs.enable = true;
-      upower.enable = true;
+      upower.enable = false;
       accounts-daemon.enable = true;
       gnome = {
         glib-networking.enable = true;

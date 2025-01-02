@@ -2,7 +2,8 @@
 @import "config.rasi"
 
 textbox-icon {
-  str: "  ";
+  /* str: "  "; */
+  str: " 󰣆 ";
 }
 
 prompt {
