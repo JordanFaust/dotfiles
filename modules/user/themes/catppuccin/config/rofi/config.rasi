@@ -13,22 +13,21 @@ configuration {
 }
 
 * {
-  accent:   #ff777a;
-  bg:       #152733;
-  bg-light: #24455b;
-  bg-focus: #24455b;
-  bg-dark:  #152733;
-  fg:       #ded8d7;
-  fg-list:  #ded8d7;
-  on:       #8BD49C;
+  accent:   #ED8796;
+  bg:       #1e2030;
+  bg-light: #24273a;
+  bg-focus: #24273a;
+  bg-dark:  #181926;
+  fg:       #cad3f5;
+  fg-list:  #cad3f5;
+  on:       #a6da95;
   off:      #cc6666;
 
-  magenta: #325f7d;
-  blue:    #4684ae;
+  magenta: #7dc4e4;
+  blue:    #8aadf4;
 
   text-font:      "MonoLisa Variable Regular 15";
   text-font-mono: "MonoLisa Variable Regular 13";
-  /* icon-font:      "Hurmit Nerd Font Mono 26"; */
   icon-font:      "FontAwesome 20";
 
   background-color: transparent;
@@ -60,18 +59,6 @@ listview {
   /* Remove strange gap between listview and inputbar */
   margin: -2px 0 0;
 }
-
-/*
-  TODO Not supported in stable branch of rofi
-  @media only (max-height: 1080px) {
-    window {
-      y-offset: -30%;
-    }
-    listview {
-      lines: 14;
-    }
-  }
-*/
 
 scrollbar {
   handle-width: 1px;

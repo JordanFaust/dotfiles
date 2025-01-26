@@ -13,10 +13,10 @@ in {
     home = {
       packages = with pkgs; [
         # Add AWS V2 CLI
-        stable.awscli2
-        stable.aws-vault
-        stable.ssm-agent
-        stable.ssm-session-manager-plugin
+        awscli2
+        aws-vault
+        ssm-agent
+        ssm-session-manager-plugin
 
         # Performance Monitoring
         bmon
@@ -28,6 +28,7 @@ in {
         kubectl
         kind
         krew
+        k9s
         argo
         argocd
 

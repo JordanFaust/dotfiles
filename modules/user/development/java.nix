@@ -31,8 +31,10 @@ in {
   config = lib.mkIf (!minimal && cfg.enable) {
     home = {
       packages = with pkgs; [
-        jdk17
-        # jdt-language-server
+        # jdk17
+        jdk21
+        jdt-language-server
+        gradle
       ];
     };
   };

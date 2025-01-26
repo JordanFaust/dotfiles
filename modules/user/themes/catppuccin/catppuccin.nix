@@ -39,7 +39,7 @@ in {
       packages = with pkgs; [
         # TODO replace pamixer with amixer
         # misc
-        gpick
+        # gpick
         neofetch
         # Dunst + EWW
         recode

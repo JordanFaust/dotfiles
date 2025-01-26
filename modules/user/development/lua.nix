@@ -33,7 +33,8 @@ in {
   config = lib.mkIf (!minimal && cfg.enable) {
     home = {
       packages = with pkgs; [
-        lua
+        lua54Packages.busted
+        lua54Packages.lua
         # luajit
         luaformatter
         sumneko-lua-language-server

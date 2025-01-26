@@ -113,7 +113,6 @@ with lib.my; {
     in {
       trusted-users = users;
       allowed-users = users;
-      experimental-features = "nix-command flakes";
       auto-optimise-store = true;
     };
 

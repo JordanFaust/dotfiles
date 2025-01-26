@@ -43,6 +43,7 @@ in {
     home = {
       sessionVariables = {
         EDITOR = "nvim";
+        MANPAGER = "nvim -c Man!";
       };
 
       packages = with pkgs; [

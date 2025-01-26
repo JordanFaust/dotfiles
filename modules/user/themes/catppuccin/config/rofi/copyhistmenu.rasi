@@ -8,3 +8,8 @@ textbox-icon {
 prompt {
   enabled: false;
 }
+
+listview {
+  /* reverse: true; */
+  columns: 1;
+}

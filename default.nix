@@ -27,7 +27,6 @@ with lib.my; {
     registryInputs = mapAttrs (_: v: {flake = v;}) filteredInputs;
   in {
     package = pkgs.nixVersions.stable;
-    extraOptions = "experimental-features = nix-command flakes";
     nixPath =
       nixPathInputs
       ++ [
@@ -36,13 +35,16 @@ with lib.my; {
       ];
     registry = registryInputs // {dotfiles.flake = inputs.self;};
     settings = {
+      auto-optimise-store = true;
+      experimental-features = ["nix-command" "flakes"];
       substituters = [
         "https://nix-community.cachix.org"
+        "https://hyprland.cachix.org"
       ];
       trusted-public-keys = [
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+        "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jlBMioiJM7ypFP8PwtkuGc="
       ];
-      auto-optimise-store = true;
     };
   };
   system.configurationRevision = with inputs; mkIf (self ? rev) self.rev;
@@ -67,11 +69,6 @@ with lib.my; {
       systemd-boot.configurationLimit = 10;
       systemd-boot.enable = mkDefault true;
     };
-    # TODO pull in better themes:
-    # http://blog.sidhartharya.com/using-custom-plymouth-theme-on-nixos/
-    # plymouth = {
-    #   enable = true;
-    # };
   };
 
   # Just the bear necessities...

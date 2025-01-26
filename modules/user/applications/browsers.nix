@@ -28,7 +28,7 @@ with lib.my; let
     desktopName = "Firefox";
     genericName = "Web Browser";
     icon = "firefox";
-    exec = "uwsm app -- ${pkgs.firefox-bin}/bin/firefox --new-window %U";
+    exec = "uwsm app -- ${pkgs.firefox-bin}/bin/firefox %U";
     mimeTypes = [
       "text/html"
       "text/xml"
@@ -47,7 +47,7 @@ with lib.my; let
         name = "New Private Window";
       };
       "new-window" = {
-        exec = "uwsm app -- ${pkgs.firefox-bin}/bin/firefox --new-window %U";
+        exec = "uwsm app -- ${pkgs.firefox-bin}/bin/firefox %U";
         name = "New Window";
       };
       "profile-manager-window" = {
