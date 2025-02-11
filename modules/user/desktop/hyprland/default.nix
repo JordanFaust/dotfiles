@@ -1,6 +1,5 @@
 {
   config,
-  inputs,
   pkgs,
   lib,
   ...
@@ -8,8 +7,6 @@
 with lib;
 with lib.my; let
   cfg = config.modules.desktop.hyprland;
-
-  hyprland = inputs.hyprland.packages.${pkgs.system}.hyprland;
 
   yt = pkgs.writeShellScript "yt" ''
     notify-send "Opening video" "$(wl-paste)"
@@ -99,7 +96,6 @@ in {
 
     wayland.windowManager.hyprland = {
       enable = true;
-      package = hyprland;
       systemd.enable = false;
       xwayland.enable = false;
 

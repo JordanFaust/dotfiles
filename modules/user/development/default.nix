@@ -43,6 +43,7 @@ in {
         postman
         httpie
         insomnia
+        regclient
 
         # Terraform
         terraform
