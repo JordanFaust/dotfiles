@@ -227,11 +227,11 @@ in {
           arr = [1 2 3 4 5];
         in
           [
-            ",Home, exec, grim -g \"$(slurp)\""
-            "Super, Home, exec, grim -g \"$(slurp -d)\" - | wl-copy"
+            ",Home, exec, uwsm app -- grim -g \"$(slurp)\""
+            "Super, Home, exec, uwsm app -- grim -g \"$(slurp -d)\" - | wl-copy"
 
             # Launch Applicaitons Shortcuts
-            "SUPER, Return, exec, kitty -e bash -c \"(tmux ls | grep -qEv 'attached|scratch' && tmux at) || tmux\""
+            "SUPER, Return, exec, uwsm app -- kitty -e bash -c \"(tmux ls | grep -qEv 'attached|scratch' && tmux at) || tmux\""
             "SUPER, Space, exec, $DOTFILES_BIN/rofi/appmenu"
 
             # Copy History Menu

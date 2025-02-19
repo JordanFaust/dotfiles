@@ -55,6 +55,7 @@ in {
         linkerd
         consul
         deck
+        socat
 
         # Devbox
         devbox

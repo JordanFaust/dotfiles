@@ -1,6 +1,7 @@
 {
   stdenv,
   lib,
+  inputs,
   makeWrapper,
   dpkg,
   fetchurl,
@@ -10,7 +11,8 @@
   lttng-ust,
   libpulseaudio,
   gtk3,
-  openssl_1_1,
+  # openssl_1_1,
+  openssl_legacy,
   icu70,
   webkitgtk_4_0,
   librsvg,
@@ -23,7 +25,6 @@
   hiredis,
   xcbutil,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "aws-workspaces";
   version = "4.7.0.4312";
@@ -53,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     lttng-ust
     libpulseaudio
     gtk3
-    openssl_1_1.out
+    openssl_legacy.out
     icu70
     webkitgtk_4_0
     librsvg
