@@ -63,7 +63,7 @@ with lib.my; {
 
   # Use the latest kernel
   boot = {
-    kernelPackages = mkDefault pkgs.linuxKernel.packages.linux_6_5;
+    kernelPackages = mkDefault pkgs.linuxKernel.packages.linux_6_12;
     loader = {
       efi.canTouchEfiVariables = mkDefault true;
       systemd-boot.configurationLimit = 10;
