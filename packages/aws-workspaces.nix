@@ -1,3 +1,4 @@
+# see https://github.com/NixOS/nixpkgs/blob/88a55dffa4d44d294c74c298daf75824dc0aafb5/pkgs/by-name/aw/aws-workspaces/package.nix#L98
 {
   stdenv,
   lib,

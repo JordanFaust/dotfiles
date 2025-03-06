@@ -12,7 +12,7 @@ with lib.my; let
     desktopName = "Neovim";
     genericName = "Text Editor";
     icon = "nvim";
-    exec = "uwsm app -- ${pkgs.kitty}/bin/kitty --title Neovim --class neovim -e nvim %F";
+    exec = "uwsm app -- ${pkgs.kitty}/bin/kitty --title Neovim --class neovim --hold zsh -c \"nvim %F\"";
     categories = ["Utility" "TextEditor"];
   };
 in {

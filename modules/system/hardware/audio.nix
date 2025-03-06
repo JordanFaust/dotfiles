@@ -1,8 +1,6 @@
 {
-  options,
   config,
   lib,
-  pkgs,
   ...
 }:
 with lib;
@@ -23,6 +21,12 @@ in {
       pulse.enable = true;
       jack.enable = true;
       wireplumber.enable = true;
+
+      extraConfig.pipewire = {
+        "10-min-quantum" = {
+          "default.clock.min-quantum" = 1024;
+        };
+      };
     };
 
     services.udev.extraRules = ''
