@@ -131,6 +131,7 @@ in {
         ${concatMapStrings (path: "source '${path}'\n") cfg.envFiles}
         ${cfg.envInit}
         export ANTHROPIC_API_KEY="$(cat /etc/sensitive/anthropic)"
+        export OPENAI_API_KEY="$(cat /etc/sensitive/openai)"
       '';
     };
   };

@@ -25,6 +25,7 @@
       zsh.enable = true;
     };
     services = {
+      ai.enable = true;
       ssh.enable = true;
       docker.enable = true;
       dbus = {

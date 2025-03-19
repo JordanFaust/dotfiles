@@ -35,7 +35,7 @@ in {
       packages = with pkgs; [
         nodejs_20
         corepack
-        my.wrangler
+        # my.wrangler
         nodePackages.typescript
         cypress
 

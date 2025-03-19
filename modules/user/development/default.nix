@@ -51,6 +51,7 @@ in {
         terraform-docs
 
         # Networking API Tools
+        cfssl
         istioctl
         linkerd
         consul

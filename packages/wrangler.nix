@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  inputs,
   fetchFromGitHub,
   makeWrapper,
   nodejs,
