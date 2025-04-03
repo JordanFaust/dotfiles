@@ -166,23 +166,12 @@ in {
         windowrule = let
           fregex = regex: "float, ^(${regex})$";
         in [
-          (fregex "org.gnome.Calculator")
-          (fregex "org.gnome.Nautilus")
-          (fregex "pavucontrol")
-          (fregex "nm-connection-editor")
-          (fregex "blueberry.py")
-          (fregex "org.gnome.Settings")
-          (fregex "org.gnome.design.Palette")
-          (fregex "Color Picker")
-          (fregex "xdg-desktop-portal")
-          (fregex "xdg-desktop-portal-gnome")
-          (fregex "transmission-gtk")
-          (fregex "com.github.Aylur.ags")
-          "workspace 2 silent, class:^(firefox)$"
-          "workspace 3 silent, title:^(Spotify Premium)$"
-          "workspace 3 silent, class:^(Slack)$"
-          "workspace 3 silent, initialTitle:^(Slack)$"
-          "workspace 5 silent, title:^(Zoom Workplace - Licensed account)$"
+          # (fregex "org.gnome.Settings")
+          # (fregex "org.gnome.design.Palette")
+          # (fregex "Color Picker")
+          # (fregex "xdg-desktop-portal")
+          # (fregex "xdg-desktop-portal-gnome")
+          # (fregex "com.github.Aylur.ags")
           "workspace stayfocused, title:MainPicker"
         ];
 

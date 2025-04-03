@@ -188,7 +188,7 @@ in {
         "browser.download.dir" = "${username}/downloads";
         # Don't use the built-in password manager. A nixos user is more likely
         # using an external one (you are using one, right?).
-        "signon.rememberSignons" = false;
+        # "signon.rememberSignons" = false;
         # Do not check if Firefox is the default browser
         "browser.shell.checkDefaultBrowser" = false;
         # Disable the "new tab page" feature and show a blank tab instead
