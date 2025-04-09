@@ -70,6 +70,15 @@
     background:  var(--dark-base) !important;
 }
 
+#sidebar-box {
+  padding-right: 0 !important;
+  padding-bottom: 0 !important;
+  :root[lwt-sidebar="dark"] & {
+    color-scheme: var(--dark-base) !important;
+    background: var(--dark-base) !important;
+  }
+}
+
 #all-tabs{
    margin: 10px var(--distance-from-edge);
 }
@@ -305,3 +314,4 @@ tab-item.active.contextual-identity-firefox-container-4 {
 #all-tabs {
     border: none !important;
 }
+
