@@ -62,7 +62,7 @@ with lib.my; let
     desktopName = "Chromium";
     genericName = "Web Browser";
     icon = "chromium";
-    exec = "uwsm app -- ${pkgs.chromium}/bin/chromium %U";
+    exec = "uwsm app -- ${pkgs.chromium}/bin/chromium --enable-features=UseOzonePlatform,WebRTCPipeWireCapturer --ozone-platform=wayland %U";
     mimeTypes = [
       "text/html"
       "text/xml"
@@ -76,7 +76,7 @@ with lib.my; let
       "x-scheme-handler/https"
     ];
     startupNotify = true;
-    startupWMClass = "firefox";
+    startupWMClass = "chromium";
     terminal = false;
 
     actions = {

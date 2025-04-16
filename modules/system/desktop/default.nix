@@ -31,7 +31,7 @@ in {
     ];
 
     user.packages = with pkgs; [
-      libsForQt5.qtstyleplugin-kvantum # SVG-based Qt5 theme engine plus a config tool and extra theme
+      # libsForQt5.qtstyleplugin-kvantum # SVG-based Qt5 theme engine plus a config tool and extra theme
 
       # Performance Monitoring
       bmon

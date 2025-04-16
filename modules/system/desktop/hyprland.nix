@@ -32,6 +32,7 @@ in {
       extraPortals = with pkgs; [
         xdg-desktop-portal-gtk
       ];
+      config.common.default = "*";
     };
 
     security = {
@@ -46,6 +47,10 @@ in {
       KITTY_ENABLE_WAYLAND = "1";
       MOZ_ENABLE_WAYLAND = "1";
       QT_QPA_PLATFORM = "wayland";
+      CHROME_WRAPPER = "1";
+      CHROME_EXTRA_ARGS = "--enable-features=UseOzonePlatform --ozone-platform=wayland";
+      GDK_BACKEND = "wayland";
+      QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
     };
 
     # Install required packages for this window manager
@@ -53,11 +58,12 @@ in {
       # Required for XDG Portal Hyprland
       # Uncomment once hyprland-picker incompatibility is fixed
       kdePackages.qtwayland
+      kdePackages.qt6ct
       # (builtins.getFlake "github:NixOS/nixpkgs/a3ed7406349a9335cb4c2a71369b697cecd9d351").legacyPackages.${pkgs.system}.kdePackages.qtwayland
-      # qt6Packages.qtstyleplugin-kvantum
-      libsForQt5.qt5.qtwayland
+      qt6Packages.qtstyleplugin-kvantum
+      # libsForQt5.qt5.qtwayland
       # Ensure support for both qt5ct and qt6ct via kvantume
-      libsForQt5.qt5ct
+      # libsForQt5.qt5ct
 
       # Notifications
       libnotify

@@ -132,6 +132,8 @@ in {
         ${cfg.envInit}
         export ANTHROPIC_API_KEY="$(cat /etc/sensitive/anthropic)"
         export OPENAI_API_KEY="$(cat /etc/sensitive/openai)"
+        export GEMINI_API_KEY="$(cat /etc/sensitive/gemini)"
+        export TAVILY_API_KEY="$(cat /etc/sensitive/tavily)"
       '';
     };
   };
