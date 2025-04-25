@@ -73,7 +73,7 @@ in {
     home = {
       packages = with pkgs; [
         # zoom-us
-        zoomDesktop
+        # zoomDesktop
         # pinnedZoomPkgs.zoom-us
       ];
     };
