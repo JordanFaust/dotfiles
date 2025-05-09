@@ -36,6 +36,7 @@ in {
         nodejs_20
         corepack
         # my.wrangler
+        inputs.wrangler.packages.${pkgs.system}.wrangler
         nodePackages.typescript
         cypress
 

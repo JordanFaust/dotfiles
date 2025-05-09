@@ -26,6 +26,9 @@
     agenix.url = "github:ryantm/agenix";
     agenix.inputs.nixpkgs.follows = "nixpkgs";
 
+    # Wrangler Latest
+    wrangler.url = "github:ryand56/wrangler";
+
     nixos-hardware.url = "github:nixos/nixos-hardware";
 
     # FLake Formatter
@@ -73,6 +76,18 @@
         };
       });
   in rec {
+    # Cachix Substituters
+    nix.settings = {
+      substituters = [
+        "https://wrangler.cachix.org"
+        "https://hyprland.cachix.org"
+      ];
+      trusted-public-keys = [
+        "wrangler.cachix.org-1:N/FIcG2qBQcolSpklb2IMDbsfjZKWg+ctxx0mSMXdSs="
+        "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
+      ];
+    };
+
     lib = lib.my;
 
     overlay = final: prev: {
