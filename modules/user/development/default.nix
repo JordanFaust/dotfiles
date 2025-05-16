@@ -29,6 +29,7 @@ in {
         kubectl
         kind
         krew
+        kubectl-view-allocations
         k9s
         argo
         argocd

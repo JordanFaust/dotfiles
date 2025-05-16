@@ -72,25 +72,6 @@ in {
       ];
     };
 
-    programs.vscode = {
-      enable = true;
-      profiles = {
-        default = {
-          userSettings = {
-            # Theme
-            "workbench.colorTheme" = "Catppuccin Mocha";
-          };
-          extensions = with pkgs.vscode-extensions; [
-            # Theme
-            catppuccin.catppuccin-vsc
-            catppuccin.catppuccin-vsc-icons
-            # Neovim
-            vscodevim.vim
-          ];
-        };
-      };
-    };
-
     xdg.configFile = {
       # Add Neovim as a startup application
       "autostart/neovim.desktop".source = "${desktop}/share/applications/Neovim.desktop";
