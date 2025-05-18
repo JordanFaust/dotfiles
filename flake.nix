@@ -35,6 +35,9 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Catppuccin
+    catppuccin.url = "github:catppuccin/nix";
+
     nixos-hardware.url = "github:nixos/nixos-hardware";
 
     # FLake Formatter

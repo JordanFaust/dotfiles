@@ -209,7 +209,7 @@ in {
     qt = {
       enable = cfg.enable;
       platformTheme = {
-        name = "qtct";
+        name = "kvantum";
       };
       style = {
         name = "kvantum";

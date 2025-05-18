@@ -13,7 +13,9 @@ with lib.my; let
 in {
   imports =
     # Space to include configuration that must run first
-    []
+    [
+      inputs.catppuccin.homeModules.catppuccin
+    ]
     # # All my personal modules
     ++ (mapModulesRec'
       (toString ../../modules/user)
