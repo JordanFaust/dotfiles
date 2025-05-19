@@ -1,4 +1,4 @@
-{}: {
+{ ... }: {
   programs.vscode.profiles.default.keybindings = [
     {
       command = "editor.toggleFold";

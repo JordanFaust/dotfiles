@@ -9,6 +9,8 @@ in {
   options = {};
 
   config = lib.mkIf (cfg.enable) {
+    # We are manually apply this theme
+    catppuccin.hyprlock.enable = false;
     programs.hyprlock = {
       enable = true;
       settings = {

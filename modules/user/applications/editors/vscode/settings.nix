@@ -1,4 +1,4 @@
-{}: {
+{ ... }: {
   programs.vscode.profiles.default.userSettings = {
     #
     # General Settings
@@ -74,7 +74,7 @@
     editor.cursorWidth = 5;
     editor.fontLigatures = true;
     editor.fontSize = 14;
-    # editor.fontWeight = "400";
+    editor.fontWeight = "400";
     editor.formatOnSave = true;
     editor.inlineSuggest.enabled = true;
     editor.insertSpaces = false;
@@ -160,13 +160,22 @@
     # Which Key
     #
     whichkey.sortOrder = "alphabetically";
-
+    whichkey.delay = 400;
     whichkey.bindings = [
+      # {
+      #   key = " ";
+      #   name = "Commands";
+      #   type = "command";
+      #   command = "workbench.action.showCommands";
+      # }
       {
         key = " ";
-        name = "Commands";
+        name = "Last editor";
         type = "command";
-        command = "workbench.action.showCommands";
+        commands = [
+          "workbench.action.quickOpenPreviousRecentlyUsedEditorInGroup"
+          "list.select"
+        ];
       }
       {
         key = "\t"; # Represents the Tab character
