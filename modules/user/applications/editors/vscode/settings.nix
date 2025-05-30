@@ -88,6 +88,9 @@
     editor.semanticTokenColorCustomizations = {
       enabled = true;
     };
+    workbench.view.showQuietly = {
+      workbench.panel.output = true;
+    };
 
     # Zen Mode
     zenMode.fullScreen = false;

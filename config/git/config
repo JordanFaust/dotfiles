@@ -1,25 +1,82 @@
 [user]
 	name = Jordan Faust
 	email = jordan.faust@procore.com
+
 [commit]
 	gpgSign = false
+
 [tag]
 	gpgSign = false
+
 [core]
+  autocrlf = input # keep newlines as in input
+  compression = 9 # trade cpu for network
 	whitespace = trailing-space
+
+[advice] # disable advices
+  addEmptyPathspec = false
+  pushNonFastForward = false
+  statusHints = false
+
+[blame]
+  coloring = highlightRecent
+  date = relative
+
+[diff]
+  context = 3 # less context in diffs
+  renames = copies # detect copies as renames
+  interHunkContext = 10 # merge near hunks
+
 [init]
 	defaultBranch = main
+
+[log]
+  abbrevCommit = true # short commits
+  graphColors = blue,yellow,cyan,magenta,green,red
+
+[status]
+  branch = true
+  short = true
+  showStash = true
+  showUntrackedFiles = all # show untracked files
+
+[pager]
+  branch = false # no need to page branch output
+  diff = diff-so-fancy | $PAGER # use diff-so-fancy for diffs
+
+[push]
+  autoSetupRemote = true # easier to push new branches
+  default = current # push only current branch
+  followTags = true # push tags with branches
+  gpgSign = false # don't sign pushes
+
+[pull]
+	rebase = true
+
+[rebase]
+  autoStash = true # stash changes before rebasing
+
+[color "blame"]
+  highlightRecent = black bold,1 year ago,white,1 month ago,default,7 days ago,blue
+
+[color "branch"]
+  current  = magenta
+  local    = default
+  remote   = yellow
+  upstream = green
+  plain    = blue
+
+[color "diff"]
+  meta       = black bold
+  frag       = magenta
+  context    = white
+  whitespace = yellow reverse
+
 [github]
 	user = JordanFaust
 [gitlab]
 	user = JordanFaust
-[push]
-	autoSquash = true
-[push]
-	default = current
-	# gpgSign = if-asked
-[pull]
-	rebase = true
+
 [alias]
 	unadd = reset HEAD
 	# data analysis
@@ -35,17 +92,3 @@
 #     insteadOf = gh:
 [url "git@github.com:"]
         insteadOf = https://github.com/
-# [url "git@github.com:"]
-#     insteadOf = ssh+gh:
-# [url "git@github.com:JordanFaust/"]
-#     insteadOf = gh:/
-# [url "https://gitlab.com/"]
-#     insteadOf = gl:
-# [url "https://gist.github.com/"]
-#     insteadOf = gist:
-# [url "https://bitbucket.org/"]
-#     insteadOf = bb:
-[diff "lisp"]
-	xfuncname = "^(((;;;+ )|\\(|([ \t]+\\(((cl-|el-patch-)?def(un|var|macro|method|custom)|gb/))).*)$"
-[diff "org"]
-	xfuncname = "^(\\*+ +.*)$"
