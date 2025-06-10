@@ -25,8 +25,6 @@
 
     # we try to make semantic highlighting look good
     editor.semanticHighlighting.enabled = true;
-    # prevent VSCode from modifying the terminal colors
-    terminal.integrated.minimumContrastRatio = 1;
     # make the window's titlebar use the workbench colors
     # window.titleBarStyle = "custom";
 
@@ -45,6 +43,7 @@
     #
     terminal.integrated.fontSize = 14;
     terminal.integrated.sendKeybindingsToShell = true;
+    # terminal.integrated.minimumContrastRatio = 1;
 
     #
     # Editor
@@ -113,9 +112,9 @@
     #
 
     # Go
-    gopls = {
-      ui.semanticTokens = true;
-    };
+    # gopls = {
+    #   ui.semanticTokens = true;
+    # };
 
     # Javascript
     javascript.validate.enable = false;
@@ -389,6 +388,19 @@
             name = "Pull Request";
             type = "command";
             command = "workbench.view.extension.github-pull-request";
+          }
+        ];
+      }
+      {
+        key = "p";
+        name = "+Project";
+        type = "bindings";
+        bindings = [
+          {
+            key = "p";
+            name = "Switch project";
+            type = "command";
+            command = "workbench.action.openRecent";
           }
         ];
       }

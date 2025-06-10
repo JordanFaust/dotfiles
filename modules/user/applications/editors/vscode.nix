@@ -42,6 +42,9 @@ in {
         fzf
         ripgrep
         bat
+
+        # CursoR AI
+        code-cursor
       ];
 
     };
@@ -86,7 +89,9 @@ in {
               # Extensions
               vspacecode.whichkey
               # Development
-              ms-azuretools.vscode-docker
+              ms-azuretools.vscode-docker # Docker
+              bbenoist.nix # Nix
+              golang.go # Go
             ]
             ++ (with pkgs.vscode-marketplace; [
               # jellydn.fzf-picker

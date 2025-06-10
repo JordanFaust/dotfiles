@@ -75,6 +75,7 @@ in {
       grim
 
       # System Control Utilities
+      xdg-utils
       pavucontrol
       brightnessctl
       wayshot
