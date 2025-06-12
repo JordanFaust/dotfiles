@@ -87,11 +87,12 @@ in {
               asvetliakov.vscode-neovim
               # Search Extensions
               # Extensions
-              vspacecode.whichkey
+              # vspacecode.whichkey
               # Development
               ms-azuretools.vscode-docker # Docker
               bbenoist.nix # Nix
               golang.go # Go
+              sumneko.lua # lua
             ]
             ++ (with pkgs.vscode-marketplace; [
               # jellydn.fzf-picker

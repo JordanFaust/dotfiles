@@ -7,6 +7,9 @@
     workbench.settings.editor = "json"; # Show setting in json as default
     # Comment below to show status bar
     workbench.statusBar.visible = false;
+    # Cursor resolution for activity bar navigation
+    # workbench.activityBar.orientation = "veritical";
+    # workbench.activityBar.location = "default";
 
     #
     # Window Settings
@@ -50,7 +53,7 @@
     #
 
     # Font
-    editor.fontFamily = "MonoLisa Variable, OperatorMonoLig Nerd Font, JetBrainsMono Nerd Font Mono, Menlo, Monaco, 'Courier New', monospacere";
+    editor.fontFamily = "MonoLisa Variable Medium, OperatorMonoLig Nerd Font, JetBrainsMono Nerd Font Mono, Menlo, Monaco, 'Courier New', monospacere";
     editor.inlayHints.fontFamily = "MonoLisa Variable Medium";
     editor.codeLensFontFamily = "MonoLisa Variable Medium";
     terminal.integrated.fontFamily = "MonoLisa Variable Medium";
@@ -73,7 +76,7 @@
     editor.cursorWidth = 5;
     editor.fontLigatures = true;
     editor.fontSize = 14;
-    editor.fontWeight = "400";
+    editor.fontWeight = "800";
     editor.formatOnSave = true;
     editor.inlineSuggest.enabled = true;
     editor.insertSpaces = false;
@@ -161,489 +164,544 @@
     #
     # Which Key
     #
-    whichkey.sortOrder = "alphabetically";
-    whichkey.delay = 400;
-    whichkey.bindings = [
-      # {
-      #   key = " ";
-      #   name = "Commands";
-      #   type = "command";
-      #   command = "workbench.action.showCommands";
-      # }
-      {
-        key = " ";
-        name = "Last editor";
-        type = "command";
-        commands = [
-          "workbench.action.quickOpenPreviousRecentlyUsedEditorInGroup"
-          "list.select"
-        ];
-      }
-      {
-        key = "\t"; # Represents the Tab character
-        name = "Last editor";
-        type = "commands";
-        commands = [
-          "workbench.action.quickOpenPreviousRecentlyUsedEditorInGroup"
-          "list.select"
-        ];
-      }
-      {
-        key = "?";
-        name = "Search keybindings";
-        type = "command";
-        command = "whichkey.searchBindings";
-      }
-      {
-        key = ".";
-        name = "Repeat most recent action";
-        type = "command";
-        command = "whichkey.repeatMostRecent";
-      }
-      {
-        key = "b";
-        name = "+Buffers/Editors";
-        type = "bindings";
-        bindings = [
-          {
-            key = "d";
-            name = "Close active editor";
-            type = "command";
-            command = "workbench.action.closeActiveEditor";
-          }
-          {
-            key = "o";
-            name = "Close active editor"; # Name seems incorrect, likely means "Close other editors"
-            type = "command";
-            command = "workbench.action.closeOtherEditors";
-          }
-        ];
-      }
-      {
-        key = "c";
-        name = "+Code";
-        type = "bindings";
-        bindings = [
-          {
-            key = "a";
-            name = "Code Action";
-            type = "command";
-            command = "editor.action.codeAction";
-          }
-          {
-            key = "A";
-            name = "Source action";
-            type = "command";
-            command = "editor.action.sourceAction";
-          }
-          {
-            key = "i";
-            name = "Organize Imports";
-            type = "command";
-            command = "editor.action.organizeImports";
-          }
-          {
-            key = "r";
-            name = "Rename";
-            type = "command";
-            command = "editor.action.rename";
-          }
-          {
-            key = "R";
-            name = "Refactor";
-            type = "command";
-            command = "editor.action.Refactor";
-          }
-          {
-            key = "f";
-            name = "Format";
-            type = "command";
-            command = "editor.action.formatDocument";
-          }
-          {
-            key = "=";
-            name = "Format selection";
-            type = "command";
-            command = "editor.action.formatSelection";
-          }
-          {
-            key = ".";
-            name = "Quick Fix";
-            type = "command";
-            command = "editor.action.quickFix";
-          }
-        ];
-      }
-      {
-        key = "x";
-        name = "+Errors";
-        type = "bindings";
-        bindings = [
-          {
-            key = "x";
-            name = "List errors";
-            type = "command";
-            command = "workbench.actions.view.problems";
-          }
-          {
-            key = "n";
-            name = "Next error";
-            type = "command";
-            command = "editor.action.marker.next";
-          }
-          {
-            key = "p";
-            name = "Previous error";
-            type = "command";
-            command = "editor.action.marker.prev";
-          }
-        ];
-      }
-      {
-        key = "f";
-        name = "+File";
-        type = "bindings";
-        bindings = [
-          {
-            key = "a";
-            name = "Show all opened files";
-            type = "command";
-            command = "workbench.action.showAllEditors";
-          }
-          {
-            key = "e";
-            name = "Show active in explorer";
-            type = "command";
-            command = "workbench.action.toggleSidebarVisibility";
-          }
-          {
-            key = "f";
-            name = "Quick Open file";
-            type = "command";
-            command = "fzf-picker.findFiles";
-          }
-          {
-            key = "F";
-            name = "Open file in folder";
-            type = "command";
-            command = "workbench.action.files.openFileFolder";
-          }
-          {
-            key = "n";
-            name = "New Untitled";
-            type = "command";
-            command = "workbench.action.files.newUntitledFile";
-          }
-          {
-            key = "p";
-            name = "Switch project";
-            type = "command";
-            command = "workbench.action.openRecent";
-          }
-          {
-            key = "s";
-            name = "Save file";
-            type = "command";
-            command = "workbench.action.files.save";
-          }
-          {
-            key = "S";
-            name = "Save all files";
-            type = "command";
-            command = "workbench.action.files.saveAll";
-          }
-          {
-            key = "w";
-            name = "Open active in new window";
-            type = "command";
-            command = "workbench.action.files.showOpenedFileInNewWindow";
-          }
-        ];
-      }
-      {
-        key = "g";
-        name = "+Git";
-        type = "bindings";
-        bindings = [
-          {
-            key = "f";
-            name = "Fetch";
-            type = "command";
-            command = "git.fetch";
-          }
-          {
-            key = "i";
-            name = "Init";
-            type = "command";
-            command = "git.init";
-          }
-          {
-            key = "s";
-            name = "Git status";
-            type = "command";
-            command = "workbench.view.scm";
-          }
-          {
-            key = "r";
-            name = "Pull Request";
-            type = "command";
-            command = "workbench.view.extension.github-pull-request";
-          }
-        ];
-      }
-      {
-        key = "p";
-        name = "+Project";
-        type = "bindings";
-        bindings = [
-          {
-            key = "p";
-            name = "Switch project";
-            type = "command";
-            command = "workbench.action.openRecent";
-          }
-        ];
-      }
-      {
-        key = "s";
-        name = "+Search/Symbol";
-        type = "bindings";
-        bindings = [
-          {
-            key = "s";
-            name = "Symbol in file";
-            type = "command";
-            command = "workbench.action.gotoSymbol";
-          }
-          {
-            key = "S";
-            name = "All symbols in workspace";
-            type = "command";
-            command = "workbench.action.showAllSymbols";
-          }
-          {
-            key = "w";
-            name = "Search word in a project";
-            type = "commands";
-            commands = [
-              "editor.action.addSelectionToNextFindMatch"
-              "workbench.action.findInFiles"
-            ];
-          }
-          {
-            key = "r";
-            name = "Search all references";
-            type = "command";
-            command = "editor.action.referenceSearch.trigger";
-          }
-          {
-            key = "R";
-            name = "Search all references in side bar";
-            type = "command";
-            command = "references-view.find";
-          }
-        ];
-      }
-      {
-        key = "u";
-        name = "+UI";
-        type = "bindings";
-        bindings = [
-          {
-            key = "c";
-            name = "Select theme color";
-            type = "command";
-            command = "workbench.action.selectTheme";
-          }
-          {
-            key = "x";
-            name = "Show extensions";
-            type = "command";
-            command = "workbench.view.extensions";
-          }
-          {
-            key = "o";
-            name = "Show output";
-            type = "command";
-            command = "workbench.action.output.toggleOutput";
-          }
-          {
-            key = "d";
-            name = "Show debug console";
-            type = "command";
-            command = "workbench.debug.action.toggleRepl";
-          }
-        ];
-      }
-      {
-        key = "t";
-        name = "+Toggles";
-        type = "bindings";
-        bindings = [
-          {
-            key = "c";
-            name = "Toggle find case sensitive";
-            type = "command";
-            command = "toggleFindCaseSensitive";
-          }
-          {
-            key = "r";
-            name = "Toggle screencast record";
-            type = "command";
-            command = "workbench.action.toggleScreencastMode";
-          }
-          {
-            key = "s";
-            name = "Toggle status bar";
-            type = "command";
-            command = "workbench.action.toggleStatusbarVisibility";
-          }
-          {
-            key = "w";
-            name = "Toggle ignore trim whitespace in diff";
-            type = "command";
-            command = "toggle.diff.ignoreTrimWhitespace";
-          }
-          {
-            key = "W";
-            name = "Toggle word wrap";
-            type = "command";
-            command = "editor.action.toggleWordWrap";
-          }
-        ];
-      }
-      {
-        key = "w";
-        name = "+Window";
-        type = "bindings";
-        bindings = [
-          {
-            key = "-";
-            name = "Split editor below";
-            type = "command";
-            command = "workbench.action.splitEditorDown";
-          }
-          {
-            key = "/";
-            name = "Split editor right";
-            type = "command";
-            command = "workbench.action.splitEditor";
-          }
-          {
-            key = "t";
-            name = "Toggle editor group sizes";
-            type = "command";
-            command = "workbench.action.toggleEditorWidths";
-          }
-          {
-            key = "m";
-            name = "Maximize editor group";
-            type = "command";
-            command = "workbench.action.minimizeOtherEditors";
-          }
-          # Keep 'j' for down - Matches your request
-          {
-            key = "j";
-            name = "Navigate down";
-            type = "command";
-            command = "workbench.action.navigateDown";
-          }
-          # Keep 'k' for up - Matches your request
-          {
-            key = "k";
-            name = "Navigate up";
-            type = "command";
-            command = "workbench.action.navigateUp";
-          }
-          # Modify 'h' to navigate RIGHT - Swapping command
-          {
-            key = "h";
-            name = "Navigate right"; # Updated name
-            type = "command";
-            command = "workbench.action.navigateRight"; # Updated command
-          }
-          # Modify 'l' to navigate LEFT - Swapping command
-          {
-            key = "l";
-            name = "Navigate left"; # Updated name
-            type = "command";
-            command = "workbench.action.navigateLeft"; # Updated command
-          }
-        ];
-      }
-      {
-        key = "z";
-        name = "+Folding";
-        type = "bindings";
-        bindings = [
-          {
-            key = "a";
-            name = "Toggle: around a point";
-            type = "command";
-            command = "editor.toggleFold";
-          }
-          {
-            key = "c";
-            name = "Close: at a point";
-            type = "command";
-            command = "editor.fold";
-          }
-          {
-            key = "b";
-            name = "Close: all block comments";
-            type = "command";
-            command = "editor.foldAllBlockComments";
-          }
-          {
-            key = "g";
-            name = "Close: all regions";
-            type = "command";
-            command = "editor.foldAllMarkerRegions";
-          }
-          {
-            key = "m";
-            name = "Close: all";
-            type = "command";
-            command = "editor.foldAll";
-          }
-          {
-            key = "o";
-            name = "Open: at a point";
-            type = "command";
-            command = "editor.unfold";
-          }
-          {
-            key = "O";
-            name = "Open: recursively";
-            type = "command";
-            command = "editor.unfoldRecursively";
-          }
-          {
-            key = "G";
-            name = "Open: all regions";
-            type = "command";
-            command = "editor.unfoldAllMarkerRegions";
-          }
-          {
-            key = "r";
-            name = "Open: all";
-            type = "command";
-            command = "editor.unfoldAll";
-          }
-        ];
-      }
-      {
-        key = "!";
-        name = "Show terminal";
-        type = "command";
-        command = "workbench.action.terminal.focus";
-      }
-      {
-        key = "/";
-        name = "Search in a project";
-        type = "command";
-        command = "workbench.action.findInFiles";
-      }
-    ];
+  #   whichkey.sortOrder = "alphabetically";
+  #   whichkey.delay = 400;
+  #   whichkey.bindings = [
+  #     # {
+  #     #   key = " ";
+  #     #   name = "Commands";
+  #     #   type = "command";
+  #     #   command = "workbench.action.showCommands";
+  #     # }
+  #     {
+  #       key = " ";
+  #       name = "Last editor";
+  #       type = "command";
+  #       commands = [
+  #         "workbench.action.quickOpenPreviousRecentlyUsedEditorInGroup"
+  #         "list.select"
+  #       ];
+  #     }
+  #     {
+  #       key = "\t"; # Represents the Tab character
+  #       name = "Last editor";
+  #       type = "commands";
+  #       commands = [
+  #         "workbench.action.quickOpenPreviousRecentlyUsedEditorInGroup"
+  #         "list.select"
+  #       ];
+  #     }
+  #     {
+  #       key = "?";
+  #       name = "Search keybindings";
+  #       type = "command";
+  #       command = "whichkey.searchBindings";
+  #     }
+  #     {
+  #       key = ".";
+  #       name = "Repeat most recent action";
+  #       type = "command";
+  #       command = "whichkey.repeatMostRecent";
+  #     }
+  #     # Buffer|Editor navigation
+  #     {
+  #       key = "1";
+  #       name = "Open editor at index 1";
+  #       type = "command";
+  #       command = "workbench.action.openEditorAtIndex1";
+  #     }
+  #     {
+  #       key = "2";
+  #       name = "Open editor at index 2";
+  #       type = "command";
+  #       command = "workbench.action.openEditorAtIndex2";
+  #     }
+  #     {
+  #       key = "3";
+  #       name = "Open editor at index 3";
+  #       type = "command";
+  #       command = "workbench.action.openEditorAtIndex3";
+  #     }
+  #     {
+  #       key = "4";
+  #       name = "Open editor at index 4";
+  #       type = "command";
+  #       command = "workbench.action.openEditorAtIndex4";
+  #     }
+  #     {
+  #       key = "5";
+  #       name = "Open editor at index 5";
+  #       type = "command";
+  #       command = "workbench.action.openEditorAtIndex5";
+  #     }
+  #     {
+  #       key = "6";
+  #       name = "Open editor at index 6";
+  #       type = "command";
+  #       command = "workbench.action.openEditorAtIndex6";
+  #     }
+  #     {
+  #       key = "7";
+  #       name = "Open editor at index 7";
+  #       type = "command";
+  #       command = "workbench.action.openEditorAtIndex7";
+  #     }
+  #     # AI Interactions
+  #     {
+  #       key = "a";
+  #       name = "AI";
+  #       type = "bindings";
+  #       bindings = [
+  #         {
+  #           key = "a";
+  #           name = "Toggle Cursor Chat";
+  #           type = "command";
+  #           command = "composer.startComposerPrompt";
+  #         }
+  #       ];
+  #     }
+  #     {
+  #       key = "b";
+  #       name = "+Buffers/Editors";
+  #       type = "bindings";
+  #       bindings = [
+  #         {
+  #           key = "d";
+  #           name = "Close active editor";
+  #           type = "command";
+  #           command = "workbench.action.closeActiveEditor";
+  #         }
+  #         {
+  #           key = "o";
+  #           name = "Close active editor"; # Name seems incorrect, likely means "Close other editors"
+  #           type = "command";
+  #           command = "workbench.action.closeOtherEditors";
+  #         }
+  #       ];
+  #     }
+  #     {
+  #       key = "c";
+  #       name = "+Code";
+  #       type = "bindings";
+  #       bindings = [
+  #         {
+  #           key = "a";
+  #           name = "Code Action";
+  #           type = "command";
+  #           command = "editor.action.codeAction";
+  #         }
+  #         {
+  #           key = "A";
+  #           name = "Source action";
+  #           type = "command";
+  #           command = "editor.action.sourceAction";
+  #         }
+  #         {
+  #           key = "i";
+  #           name = "Organize Imports";
+  #           type = "command";
+  #           command = "editor.action.organizeImports";
+  #         }
+  #         {
+  #           key = "r";
+  #           name = "Rename";
+  #           type = "command";
+  #           command = "editor.action.rename";
+  #         }
+  #         {
+  #           key = "R";
+  #           name = "Refactor";
+  #           type = "command";
+  #           command = "editor.action.Refactor";
+  #         }
+  #         {
+  #           key = "f";
+  #           name = "Format";
+  #           type = "command";
+  #           command = "editor.action.formatDocument";
+  #         }
+  #         {
+  #           key = "=";
+  #           name = "Format selection";
+  #           type = "command";
+  #           command = "editor.action.formatSelection";
+  #         }
+  #         {
+  #           key = ".";
+  #           name = "Quick Fix";
+  #           type = "command";
+  #           command = "editor.action.quickFix";
+  #         }
+  #       ];
+  #     }
+  #     {
+  #       key = "x";
+  #       name = "+Errors";
+  #       type = "bindings";
+  #       bindings = [
+  #         {
+  #           key = "x";
+  #           name = "List errors";
+  #           type = "command";
+  #           command = "workbench.actions.view.problems";
+  #         }
+  #         {
+  #           key = "n";
+  #           name = "Next error";
+  #           type = "command";
+  #           command = "editor.action.marker.next";
+  #         }
+  #         {
+  #           key = "p";
+  #           name = "Previous error";
+  #           type = "command";
+  #           command = "editor.action.marker.prev";
+  #         }
+  #       ];
+  #     }
+  #     {
+  #       key = "f";
+  #       name = "+File";
+  #       type = "bindings";
+  #       bindings = [
+  #         {
+  #           key = "a";
+  #           name = "Show all opened files";
+  #           type = "command";
+  #           command = "workbench.action.showAllEditors";
+  #         }
+  #         {
+  #           key = "e";
+  #           name = "Show active in explorer";
+  #           type = "command";
+  #           command = "workbench.files.action.showActiveFileInExplorer";
+  #         }
+  #         {
+  #           key = "f";
+  #           name = "Quick Open file";
+  #           type = "command";
+  #           command = "workbench.action.quickOpen";
+  #         }
+  #         {
+  #           key = "F";
+  #           name = "Open file in folder";
+  #           type = "command";
+  #           command = "workbench.action.files.openFileFolder";
+  #         }
+  #         {
+  #           key = "n";
+  #           name = "New Untitled";
+  #           type = "command";
+  #           command = "workbench.action.files.newUntitledFile";
+  #         }
+  #         {
+  #           key = "p";
+  #           name = "Switch project";
+  #           type = "command";
+  #           command = "workbench.action.openRecent";
+  #         }
+  #         {
+  #           key = "s";
+  #           name = "Save file";
+  #           type = "command";
+  #           command = "workbench.action.files.save";
+  #         }
+  #         {
+  #           key = "S";
+  #           name = "Save all files";
+  #           type = "command";
+  #           command = "workbench.action.files.saveAll";
+  #         }
+  #         {
+  #           key = "w";
+  #           name = "Open active in new window";
+  #           type = "command";
+  #           command = "workbench.action.files.showOpenedFileInNewWindow";
+  #         }
+  #       ];
+  #     }
+  #     {
+  #       key = "g";
+  #       name = "+Git";
+  #       type = "bindings";
+  #       bindings = [
+  #         {
+  #           key = "f";
+  #           name = "Fetch";
+  #           type = "command";
+  #           command = "git.fetch";
+  #         }
+  #         {
+  #           key = "i";
+  #           name = "Init";
+  #           type = "command";
+  #           command = "git.init";
+  #         }
+  #         {
+  #           key = "s";
+  #           name = "Git status";
+  #           type = "command";
+  #           command = "workbench.view.scm";
+  #         }
+  #         {
+  #           key = "r";
+  #           name = "Pull Request";
+  #           type = "command";
+  #           command = "workbench.view.extension.github-pull-request";
+  #         }
+  #       ];
+  #     }
+  #     {
+  #       key = "p";
+  #       name = "+Project";
+  #       type = "bindings";
+  #       bindings = [
+  #         {
+  #           key = "p";
+  #           name = "Switch project";
+  #           type = "command";
+  #           command = "workbench.action.openRecent";
+  #         }
+  #       ];
+  #     }
+  #     {
+  #       key = "s";
+  #       name = "+Search/Symbol";
+  #       type = "bindings";
+  #       bindings = [
+  #         {
+  #           key = "s";
+  #           name = "Symbol in file";
+  #           type = "command";
+  #           command = "workbench.action.gotoSymbol";
+  #         }
+  #         {
+  #           key = "S";
+  #           name = "All symbols in workspace";
+  #           type = "command";
+  #           command = "workbench.action.showAllSymbols";
+  #         }
+  #         {
+  #           key = "w";
+  #           name = "Search word in a project";
+  #           type = "commands";
+  #           commands = [
+  #             "editor.action.addSelectionToNextFindMatch"
+  #             "workbench.action.findInFiles"
+  #           ];
+  #         }
+  #         {
+  #           key = "r";
+  #           name = "Search all references";
+  #           type = "command";
+  #           command = "editor.action.referenceSearch.trigger";
+  #         }
+  #         {
+  #           key = "R";
+  #           name = "Search all references in side bar";
+  #           type = "command";
+  #           command = "references-view.find";
+  #         }
+  #       ];
+  #     }
+  #     {
+  #       key = "u";
+  #       name = "+UI";
+  #       type = "bindings";
+  #       bindings = [
+  #         {
+  #           key = "c";
+  #           name = "Select theme color";
+  #           type = "command";
+  #           command = "workbench.action.selectTheme";
+  #         }
+  #         {
+  #           key = "x";
+  #           name = "Show extensions";
+  #           type = "command";
+  #           command = "workbench.view.extensions";
+  #         }
+  #         {
+  #           key = "o";
+  #           name = "Show output";
+  #           type = "command";
+  #           command = "workbench.action.output.toggleOutput";
+  #         }
+  #         {
+  #           key = "d";
+  #           name = "Show debug console";
+  #           type = "command";
+  #           command = "workbench.debug.action.toggleRepl";
+  #         }
+  #       ];
+  #     }
+  #     {
+  #       key = "t";
+  #       name = "+Toggles";
+  #       type = "bindings";
+  #       bindings = [
+  #         {
+  #           key = "c";
+  #           name = "Toggle find case sensitive";
+  #           type = "command";
+  #           command = "toggleFindCaseSensitive";
+  #         }
+  #         {
+  #           key = "r";
+  #           name = "Toggle screencast record";
+  #           type = "command";
+  #           command = "workbench.action.toggleScreencastMode";
+  #         }
+  #         {
+  #           key = "s";
+  #           name = "Toggle status bar";
+  #           type = "command";
+  #           command = "workbench.action.toggleStatusbarVisibility";
+  #         }
+  #         {
+  #           key = "w";
+  #           name = "Toggle ignore trim whitespace in diff";
+  #           type = "command";
+  #           command = "toggle.diff.ignoreTrimWhitespace";
+  #         }
+  #         {
+  #           key = "W";
+  #           name = "Toggle word wrap";
+  #           type = "command";
+  #           command = "editor.action.toggleWordWrap";
+  #         }
+  #       ];
+  #     }
+  #     {
+  #       key = "w";
+  #       name = "+Window";
+  #       type = "bindings";
+  #       bindings = [
+  #         {
+  #           key = "-";
+  #           name = "Split editor below";
+  #           type = "command";
+  #           command = "workbench.action.splitEditorDown";
+  #         }
+  #         {
+  #           key = "/";
+  #           name = "Split editor right";
+  #           type = "command";
+  #           command = "workbench.action.splitEditor";
+  #         }
+  #         {
+  #           key = "t";
+  #           name = "Toggle editor group sizes";
+  #           type = "command";
+  #           command = "workbench.action.toggleEditorWidths";
+  #         }
+  #         {
+  #           key = "m";
+  #           name = "Maximize editor group";
+  #           type = "command";
+  #           command = "workbench.action.minimizeOtherEditors";
+  #         }
+  #         # Keep 'j' for down - Matches your request
+  #         {
+  #           key = "j";
+  #           name = "Navigate down";
+  #           type = "command";
+  #           command = "workbench.action.navigateDown";
+  #         }
+  #         # Keep 'k' for up - Matches your request
+  #         {
+  #           key = "k";
+  #           name = "Navigate up";
+  #           type = "command";
+  #           command = "workbench.action.navigateUp";
+  #         }
+  #         {
+  #           key = "h";
+  #           name = "Navigate left";
+  #           type = "command";
+  #           command = "workbench.action.navigateLeft";
+  #         }
+  #         {
+  #           key = "l";
+  #           name = "Navigate right";
+  #           type = "command";
+  #           command = "workbench.action.navigateRight";
+  #         }
+  #       ];
+  #     }
+  #     {
+  #       key = "z";
+  #       name = "+Folding";
+  #       type = "bindings";
+  #       bindings = [
+  #         {
+  #           key = "a";
+  #           name = "Toggle: around a point";
+  #           type = "command";
+  #           command = "editor.toggleFold";
+  #         }
+  #         {
+  #           key = "c";
+  #           name = "Close: at a point";
+  #           type = "command";
+  #           command = "editor.fold";
+  #         }
+  #         {
+  #           key = "b";
+  #           name = "Close: all block comments";
+  #           type = "command";
+  #           command = "editor.foldAllBlockComments";
+  #         }
+  #         {
+  #           key = "g";
+  #           name = "Close: all regions";
+  #           type = "command";
+  #           command = "editor.foldAllMarkerRegions";
+  #         }
+  #         {
+  #           key = "m";
+  #           name = "Close: all";
+  #           type = "command";
+  #           command = "editor.foldAll";
+  #         }
+  #         {
+  #           key = "o";
+  #           name = "Open: at a point";
+  #           type = "command";
+  #           command = "editor.unfold";
+  #         }
+  #         {
+  #           key = "O";
+  #           name = "Open: recursively";
+  #           type = "command";
+  #           command = "editor.unfoldRecursively";
+  #         }
+  #         {
+  #           key = "G";
+  #           name = "Open: all regions";
+  #           type = "command";
+  #           command = "editor.unfoldAllMarkerRegions";
+  #         }
+  #         {
+  #           key = "r";
+  #           name = "Open: all";
+  #           type = "command";
+  #           command = "editor.unfoldAll";
+  #         }
+  #       ];
+  #     }
+  #     {
+  #       key = "!";
+  #       name = "Show terminal";
+  #       type = "command";
+  #       command = "workbench.action.terminal.focus";
+  #     }
+  #     {
+  #       key = "/";
+  #       name = "Search in a project";
+  #       type = "command";
+  #       command = "workbench.action.findInFiles";
+  #     }
+  #   ];
   };
 }

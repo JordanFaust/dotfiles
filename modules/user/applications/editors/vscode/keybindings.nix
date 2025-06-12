@@ -77,11 +77,11 @@
     }
     # TODO: Wait for this to resolve https://github.com/usernamehw/vscode-error-lens/issues/208
     # Setup which-key
-    {
-      key = "ctrl+space"; # Disable Spotlight and use Raycast with Alt+space, refer https://manual.raycast.com/hotkey
-      command = "whichkey.show";
-      when = "editorTextFocus";
-    }
+    # {
+    #   key = "ctrl+space"; # Disable Spotlight and use Raycast with Alt+space, refer https://manual.raycast.com/hotkey
+    #   command = "whichkey.show";
+    #   when = "editorTextFocus";
+    # }
     # Toggle full screen
     {
       key = "ctrl+k f";
@@ -132,17 +132,97 @@
       command = "workbench.action.toggleSidebarVisibility";
       when = "explorerViewletVisible"; # Only active when the Explorer is visible
     }
+    {
+      key = "ctrl+g";
+      command = "aichat.close-sidebar";
+      when = "chatIsEnabled && inChat";
+    }
     # Set whichkey root trigger
-    {
-      key = "space";
-      command = "whichkey.show";
-      when = "editorTextFocus && neovim.mode == normal";
-    }
-    # Toggle explorer
-    {
-      key = "space+f+e";
-      command = "workbench.action.toggleSidebarVisibility";
-      when = "sideBarVisible";
-    }
+    # {
+    #   key = "space";
+    #   command = "whichkey.show";
+    #   when = "editorTextFocus && neovim.mode == normal";
+    # }
+    # # Toggle explorer
+    # {
+    #   key = "space+f+e";
+    #   command = "workbench.action.toggleSidebarVisibility";
+    #   when = "sideBarVisible";
+    # }
+    # # --- 1. Go to Editor / "Buffer" Number (<leader> + <number>) ---
+    # {
+    #   key = "space 1";
+    #   command = "workbench.action.openEditorAtIndex1";
+    #   when = "editorTextFocus && neovim.mode == normal";
+    # }
+    # {
+    #   key = "space 2";
+    #   command = "workbench.action.openEditorAtIndex2";
+    #   when = "editorTextFocus && neovim.mode == normal";
+    # }
+    # {
+    #   key = "space 3";
+    #   command = "workbench.action.openEditorAtIndex3";
+    #   when = "editorTextFocus && neovim.mode == normal";
+    # }
+    # {
+    #   key = "space 4";
+    #   command = "workbench.action.openEditorAtIndex4";
+    #   when = "editorTextFocus && neovim.mode == normal";
+    # }
+    # {
+    #   key = "space 5";
+    #   command = "workbench.action.openEditorAtIndex5";
+    #   when = "editorTextFocus && neovim.mode == normal";
+    # }
+    # {
+    #   key = "space 6";
+    #   command = "workbench.action.openEditorAtIndex6";
+    #   when = "editorTextFocus && neovim.mode == normal";
+    # }
+    # {
+    #   key = "space 7";
+    #   command = "workbench.action.openEditorAtIndex7";
+    #   when = "editorTextFocus && neovim.mode == normal";
+    # }
+    # {
+    #   key = "space 8";
+    #   command = "workbench.action.openEditorAtIndex8";
+    #   when = "editorTextFocus && neovim.mode == normal";
+    # }
+    # {
+    #   key = "space 9";
+    #   command = "workbench.action.openEditorAtIndex9";
+    #   when = "editorTextFocus && neovim.mode == normal";
+    # }
+    #
+    # # --- 2. Toggle Cursor Chat Window (<leader> + a + a) ---
+    # {
+    #   key = "space a a";
+    #   command = "workbench.action.cursor.chat.toggle";
+    #   when = "editorTextFocus && neovim.mode == normal";
+    # }
+    #
+    # # --- 3. Workbench Navigation (<leader> + w + <key>) ---
+    # {
+    #   key = "space w l";
+    #   command = "workbench.action.navigateRight";
+    #   when = "editorTextFocus && neovim.mode == normal";
+    # }
+    # {
+    #   key = "space w h";
+    #   command = "workbench.action.navigateLeft";
+    #   when = "editorTextFocus && neovim.mode == normal";
+    # }
+    # {
+    #   key = "space w j";
+    #   command = "workbench.action.navigateDown";
+    #   when = "editorTextFocus && neovim.mode == normal";
+    # }
+    # {
+    #   key = "space w k";
+    #   command = "workbench.action.navigateUp";
+    #   when = "editorTextFocus && neovim.mode == normal";
+    # }
   ];
 }

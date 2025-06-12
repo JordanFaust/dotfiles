@@ -37,7 +37,7 @@ in {
         corepack
         # my.wrangler
         inputs.wrangler.packages.${pkgs.system}.wrangler
-        nodePackages.typescript
+        # typescript
         cypress
 
         biome
