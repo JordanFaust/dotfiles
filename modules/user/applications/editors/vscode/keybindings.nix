@@ -1,55 +1,5 @@
 { ... }: {
   programs.vscode.profiles.default.keybindings = [
-    {
-      command = "editor.toggleFold";
-      key = "z a";
-      when = "editorTextFocus && neovim.mode == normal";
-    }
-    {
-      command = "editor.unfoldAll";
-      key = "z shift+r";
-      when = "editorTextFocus && neovim.mode == normal";
-    }
-    {
-      command = "editor.foldAll";
-      key = "z shift+m";
-      when = "editorTextFocus && neovim.mode == normal";
-    }
-    {
-      command = "editor.unfold";
-      key = "z o";
-      when = "editorTextFocus && neovim.mode == normal";
-    }
-    {
-      command = "editor.unfoldRecursively";
-      key = "z shift+o";
-      when = "editorTextFocus && neovim.mode == normal";
-    }
-    {
-      command = "editor.fold";
-      key = "z c";
-      when = "editorTextFocus && neovim.mode == normal";
-    }
-    {
-      command = "editor.foldRecursively";
-      key = "z shift+c";
-      when = "editorTextFocus && neovim.mode == normal";
-    }
-    {
-      command = "editor.foldAllExcept";
-      key = "z shift+v";
-      when = "editorTextFocus && neovim.mode == normal";
-    }
-    {
-      command = "editor.gotoNextFold";
-      key = "z j";
-      when = "editorTextFocus && neovim.mode == normal";
-    }
-    {
-      command = "editor.gotoPreviousFold";
-      key = "z k";
-      when = "editorTextFocus && neovim.mode == normal";
-    }
     #  Use single tab
     {
       key = "ctrl+k shift+t";
@@ -97,17 +47,11 @@
       key = "ctrl+k shift+v";
       command = "versionlens.icons.showVersionLenses";
     }
-    # Chat on terminal
-    {
-      key = "ctrl+shift+k";
-      command = "cursorai.action.generateInTerminal";
-      when = "terminalFocus && terminalHasBeenCreated || terminalFocus && terminalProcessSupported";
-    }
-    {
-      key = "ctrl+k";
-      command = "-cursorai.action.generateInTerminal";
-      when = "terminalFocus && terminalHasBeenCreated || terminalFocus && terminalProcessSupported";
-    }
+
+    #
+    # Ctrl+G Universal Escape Implementation
+    #
+
     # Example: Remove the default "Go to Line..." binding for Ctrl+G
     {
       key = "ctrl+g";
@@ -116,86 +60,174 @@
       # in specific contexts (e.g., only when editing text)
       # when = "editorTextFocus";
     }
-    # Use ctrl+g to escape
+    # Use ctrl+g to escape in Neovim normal mode
     {
       key = "ctrl+g";
       command = "vscode-neovim.escape";
       when = "editorTextFocus && neovim.mode == normal";
     }
+    # Close Quick Open
     {
       key = "ctrl+g";
       command = "workbench.action.closeQuickOpen";
       when = "inQuickOpen";
     }
+    # Close sidebar when Explorer is visible
     {
       key = "ctrl+g";
       command = "workbench.action.toggleSidebarVisibility";
-      when = "explorerViewletVisible"; # Only active when the Explorer is visible
+      # only active when the Explorer is visible and focused
+      when = "sideBarVisible";
     }
+    # Close sidebar when visible but not focused (universal sidebar closer)
+    {
+      key = "ctrl+g";
+      command = "workbench.action.toggleSidebarVisibility";
+      when = "editorTextFocus && sideBarVisible && !sideBarFocus";
+    }
+    # Close AI chat when in chat context
     {
       key = "ctrl+g";
       command = "aichat.close-sidebar";
       when = "chatIsEnabled && inChat";
     }
-    # Set whichkey root trigger
-    # {
-    #   key = "space";
-    #   command = "whichkey.show";
-    #   when = "editorTextFocus && neovim.mode == normal";
-    # }
-    # # Toggle explorer
-    # {
-    #   key = "space+f+e";
-    #   command = "workbench.action.toggleSidebarVisibility";
-    #   when = "sideBarVisible";
-    # }
-    # # --- 1. Go to Editor / "Buffer" Number (<leader> + <number>) ---
-    # {
-    #   key = "space 1";
-    #   command = "workbench.action.openEditorAtIndex1";
-    #   when = "editorTextFocus && neovim.mode == normal";
-    # }
-    # {
-    #   key = "space 2";
-    #   command = "workbench.action.openEditorAtIndex2";
-    #   when = "editorTextFocus && neovim.mode == normal";
-    # }
-    # {
-    #   key = "space 3";
-    #   command = "workbench.action.openEditorAtIndex3";
-    #   when = "editorTextFocus && neovim.mode == normal";
-    # }
-    # {
-    #   key = "space 4";
-    #   command = "workbench.action.openEditorAtIndex4";
-    #   when = "editorTextFocus && neovim.mode == normal";
-    # }
-    # {
-    #   key = "space 5";
-    #   command = "workbench.action.openEditorAtIndex5";
-    #   when = "editorTextFocus && neovim.mode == normal";
-    # }
-    # {
-    #   key = "space 6";
-    #   command = "workbench.action.openEditorAtIndex6";
-    #   when = "editorTextFocus && neovim.mode == normal";
-    # }
-    # {
-    #   key = "space 7";
-    #   command = "workbench.action.openEditorAtIndex7";
-    #   when = "editorTextFocus && neovim.mode == normal";
-    # }
-    # {
-    #   key = "space 8";
-    #   command = "workbench.action.openEditorAtIndex8";
-    #   when = "editorTextFocus && neovim.mode == normal";
-    # }
-    # {
-    #   key = "space 9";
-    #   command = "workbench.action.openEditorAtIndex9";
-    #   when = "editorTextFocus && neovim.mode == normal";
-    # }
+    # Close any focused panel (terminal, output, problems, etc.) and return to editor
+    {
+      key = "ctrl+g";
+      command = "workbench.action.closePanel";
+      when = "panelFocus";
+    }
+    # Close panel when visible but not focused (e.g., test panel visible while editing)
+    {
+      key = "ctrl+g";
+      command = "workbench.action.closePanel";
+      when = "editorTextFocus && panelVisible && !panelFocus";
+    }
+    # Close terminal and return focus to editor
+    {
+      key = "ctrl+g";
+      command = "workbench.action.closePanel";
+      when = "terminalFocus";
+    }
+    # Close search view and return to editor
+    {
+      key = "ctrl+g";
+      command = "workbench.action.focusActiveEditorGroup";
+      when = "searchViewletVisible && searchViewletFocus";
+    }
+    # Close any sidebar view and return to editor
+    {
+      key = "ctrl+g";
+      command = "workbench.action.focusActiveEditorGroup";
+      when = "sideBarFocus";
+    }
+    # Close command palette
+    {
+      key = "ctrl+g";
+      command = "workbench.action.closeQuickOpen";
+      when = "commandPaletteFocus";
+    }
+    # Close any notification and return to editor
+    {
+      key = "ctrl+g";
+      command = "notifications.hideToasts";
+      when = "notificationFocus";
+    }
+    # Close find widget in editor
+    {
+      key = "ctrl+g";
+      command = "closeFindWidget";
+      when = "editorFocus && findWidgetVisible";
+    }
+    # Close peek view (references, definitions, etc.)
+    {
+      key = "ctrl+g";
+      command = "closeReferenceSearch";
+      when = "referenceSearchVisible";
+    }
+    # Close problems view and return to editor
+    {
+      key = "ctrl+g";
+      command = "workbench.action.closePanel";
+      when = "problemsViewFocus";
+    }
+    # Close output view and return to editor
+    {
+      key = "ctrl+g";
+      command = "workbench.action.closePanel";
+      when = "outputViewFocus";
+    }
+    # Close test results view and return to editor
+    {
+      key = "ctrl+g";
+      command = "workbench.action.closePanel";
+      when = "testResultsViewFocus";
+    }
+
     #
+    # Enhanced Focus Management
+    #
+
+    # Universal "return to editor" binding
+    {
+      key = "ctrl+0";
+      command = "workbench.action.focusActiveEditorGroup";
+    }
+    # Quick sidebar toggle that maintains editor focus
+    {
+      key = "ctrl+k e";
+      command = "workbench.action.toggleSidebarVisibility";
+    }
+    # Focus terminal without toggling
+    {
+      key = "ctrl+k t";
+      command = "workbench.action.terminal.focus";
+    }
+    # Focus explorer without toggling
+    {
+      key = "ctrl+k shift+e";
+      command = "workbench.view.explorer";
+    }
+
+    #
+    # Cursor-Specific AI Feature Bindings
+    #
+
+    # Cursor Chat - New chat
+    {
+      key = "ctrl+k c";
+      command = "aichat.newchataction";
+    }
+    # Cursor Composer - Start composer prompt
+    {
+      key = "ctrl+k i";
+      command = "composer.startComposerPrompt";
+      when = "editorTextFocus";
+    }
+    # Cursor Chat - Toggle sidebar
+    {
+      key = "ctrl+k shift+c";
+      command = "aichat.toggle-sidebar";
+    }
+    # Cursor - Apply AI suggestion (if available)
+    {
+      key = "ctrl+k a";
+      command = "aichat.apply-suggestion";
+      when = "editorTextFocus";
+    }
+    # Cursor - Explain code selection
+    {
+      key = "ctrl+k x";
+      command = "aichat.explain-selection";
+      when = "editorHasSelection";
+    }
+    # Cursor - Generate code from comment
+    {
+      key = "ctrl+k shift+g";
+      command = "aichat.generate-from-comment";
+      when = "editorTextFocus";
+    }
+
     # # --- 2. Toggle Cursor Chat Window (<leader> + a + a) ---
     # {
     #   key = "space a a";
