@@ -3,7 +3,6 @@
   lib,
   pkgs,
   inputs,
-  osConfig,
   ...
 }:
 with lib;
@@ -37,9 +36,7 @@ in {
         deno
         nodejs_20
         corepack
-        # my.wrangler
         inputs.wrangler.packages.${pkgs.system}.wrangler
-        # typescript
         cypress
 
         biome
