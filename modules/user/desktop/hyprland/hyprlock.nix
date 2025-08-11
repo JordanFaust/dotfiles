@@ -16,10 +16,10 @@ in {
       settings = {
         # General Configuraiton
         general = {
-          grace = 1;
+          # grace = 1;
           ignore_empty_input = true;
           text_trim = false;
-          disable_loading_bar = true;
+          # disable_loading_bar = true;
         };
 
         # Background Configuration

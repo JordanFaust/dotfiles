@@ -49,7 +49,7 @@ in {
       fd
       fzf
       jq
-      yq
+      yq-go
       ripgrep
       tldr
     ];

@@ -34,12 +34,12 @@ in {
     home = {
       packages = with pkgs; [
         # The specific language version
-        ruby_3_2
+        ruby
         # Global gems
         rubyPackages.pry
         rubyPackages.pry-doc
-        rubyPackages_3_2.solargraph
-        rubyPackages_3_2.rubocop
+        rubyPackages.solargraph
+        # rubyPackages_3_2.rubocop
         # RE2 regular expression library used for a few Ruby depependnecies
         re2
         # needed for YAML c dependnecies
@@ -48,14 +48,14 @@ in {
         #  bundle config build.psych --with-yaml-0.1-dir=$(nix eval nixpkgs#libyaml.outPath --raw)
         libyaml
         bundix
-        my.ruby-lsp
+        # my.ruby-lsp
       ];
 
-      sessionVariables = {
-        GEM_PATH = "${pkgs.ruby_3_2}/lib/ruby/gems/3.2.0";
-      };
-
-      sessionPath = ["${pkgs.ruby_3_2}/lib/ruby/gems/3.2.0"];
+      # sessionVariables = {
+      #   GEM_PATH = "${pkgs.ruby_3_2}/lib/ruby/gems/3.2.0";
+      # };
+      #
+      # sessionPath = ["${pkgs.ruby_3_2}/lib/ruby/gems/3.2.0"];
     };
   };
 }

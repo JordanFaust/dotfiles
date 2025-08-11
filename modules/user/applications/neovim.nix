@@ -69,6 +69,9 @@ in {
 
         # desktop
         desktop
+
+        # AI Intergrations
+        claude-code
       ];
     };
 

@@ -324,6 +324,9 @@ in {
         "extensions.formautofill.heuristics.enabled" = false;
       };
     in {
+      # Make sure the desktop files are in the right place for dbus
+      ".local/share/applications/firefox.desktop".source = "${firefoxDesktop}/share/applications/firefox.desktop";
+
       "${cfgPath}/profiles.ini".text = ''
         [Profile0]
         Name=default

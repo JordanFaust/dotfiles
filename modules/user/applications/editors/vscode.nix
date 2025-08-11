@@ -53,16 +53,20 @@ in {
       enable = true;
       # optionally configure the extension settings, defaults are shown below:
       vscode = {
-        accent = "pink";
-        settings = {
-          boldKeywords = true;
-          italicComments = true;
-          italicKeywords = true;
-          colorOverrides = {};
-          customUIColors = {};
-          workbenchMode = "default";
-          bracketMode = "rainbow";
-          extraBordersEnabled = false;
+        profiles = {
+          default = {
+            accent = "pink";
+            settings = {
+              boldKeywords = true;
+              italicComments = true;
+              italicKeywords = true;
+              colorOverrides = {};
+              customUIColors = {};
+              workbenchMode = "default";
+              bracketMode = "rainbow";
+              extraBordersEnabled = false;
+            };
+          };
         };
       };
     };
@@ -81,8 +85,8 @@ in {
           extensions = with pkgs.vscode-extensions;
             [
               # Theme
-              catppuccin.catppuccin-vsc
-              catppuccin.catppuccin-vsc-icons
+              # catppuccin.catppuccin-vsc
+              # catppuccin.catppuccin-vsc-icons
               # Neovim
               asvetliakov.vscode-neovim
               # Search Extensions

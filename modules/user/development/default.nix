@@ -17,7 +17,6 @@ in {
         aws-vault
         ssm-agent
         ssm-session-manager-plugin
-        my.aws-workspaces
 
         # Performance Monitoring
         bmon
@@ -46,6 +45,7 @@ in {
         httpie
         insomnia
         regclient
+        circleci-cli
 
         # Terraform
         terraform

@@ -13,3 +13,5 @@ doom.d/secrets/*
 .vagrant*
 
 reports/*
+
+http_cache.sqlite

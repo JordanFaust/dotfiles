@@ -72,7 +72,6 @@
 
     pkgs = mkPkgs nixpkgs [
       self.overlay
-      inputs.hyprpanel.overlay
       inputs.nix-vscode-extensions.overlays.default
     ];
     pkgs' = mkPkgs nixpkgs-unstable [];
