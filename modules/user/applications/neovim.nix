@@ -48,7 +48,6 @@ in {
 
       packages = with pkgs; [
         editorconfig-core-c
-        deno
         # deno-webkit
         # neovim-nightly
         neovim

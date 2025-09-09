@@ -160,13 +160,13 @@ in {
         GTK_THEME = cfg.name;
       };
 
-      pointerCursor = {
-        name = "${cfg.cursor.name}";
-        package = cfg.cursor.package;
-        size = cfg.cursor.size;
-
-        gtk.enable = cfg.enable;
-      };
+      # pointerCursor = {
+      #   name = "${cfg.cursor.name}";
+      #   package = cfg.cursor.package;
+      #   size = cfg.cursor.size;
+      #
+      #   gtk.enable = cfg.enable;
+      # };
 
       file = {
         ".local/share/Kvantum/${cfg.qt.name}".source = "${cfg.qt.package}/share/Kvantum/${cfg.qt.name}";
@@ -183,19 +183,19 @@ in {
     gtk = {
       enable = cfg.enable;
       font.name = cfg.font.name;
-      theme = {
-        name = cfg.name;
-        package = cfg.package;
-      };
-
-      cursorTheme = {
-        name = cfg.cursor.name;
-        package = cfg.cursor.package;
-        size = cfg.cursor.size;
-      };
-
-      iconTheme.name = cfg.icon.name;
-      iconTheme.package = cfg.icon.package;
+      # theme = {
+      #   name = cfg.name;
+      #   package = cfg.package;
+      # };
+      #
+      # cursorTheme = {
+      #   name = cfg.cursor.name;
+      #   package = cfg.cursor.package;
+      #   size = cfg.cursor.size;
+      # };
+      #
+      # iconTheme.name = cfg.icon.name;
+      # iconTheme.package = cfg.icon.package;
 
       gtk3.extraConfig = {
         "gtk-application-prefer-dark-theme" = "1";

@@ -33,6 +33,8 @@ in {
   config = lib.mkIf (!minimal && cfg.enable) {
     home = {
       packages = with pkgs; [
+        bun
+        deno
         nodejs_20
         corepack
         # my.wrangler
