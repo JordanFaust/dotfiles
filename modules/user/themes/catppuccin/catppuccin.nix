@@ -98,6 +98,17 @@ in {
       };
     };
 
+    catppuccin = {
+      enable = true;
+      accent = "rosewater";
+      flavor = "macchiato";
+
+      gtk = {
+        icon.enable = true;
+      };
+      cursors.enable = true;
+    };
+
     # Enable fontconfig to discover fonts added as home.packages above
     fonts.fontconfig.enable = true;
 
@@ -132,7 +143,7 @@ in {
       font.name = "MonoLisa Variable Regular";
 
       icon = {
-        name = "Papirus";
+        name = "Papirus-Dark";
         package = pkgs.catppuccin-papirus-folders.override {
           accent = "red";
           flavor = "macchiato";

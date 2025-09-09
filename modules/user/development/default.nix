@@ -17,7 +17,6 @@ in {
         aws-vault
         ssm-agent
         ssm-session-manager-plugin
-        my.aws-workspaces
 
         # Performance Monitoring
         bmon
@@ -29,6 +28,7 @@ in {
         kubectl
         kind
         krew
+        kubectl-view-allocations
         k9s
         argo
         argocd
@@ -45,6 +45,7 @@ in {
         httpie
         insomnia
         regclient
+        circleci-cli
 
         # Terraform
         terraform

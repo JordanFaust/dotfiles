@@ -29,6 +29,15 @@
     # Wrangler Latest
     wrangler.url = "github:ryand56/wrangler";
 
+    # VSCode
+    nix-vscode-extensions = {
+      url = "github:nix-community/nix-vscode-extensions";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    # Catppuccin
+    catppuccin.url = "github:catppuccin/nix";
+
     nixos-hardware.url = "github:nixos/nixos-hardware";
 
     # FLake Formatter
@@ -47,6 +56,7 @@
     nixpkgs-unstable,
     home-manager,
     alejandra,
+    nix-vscode-extensions,
     ...
   }: let
     inherit (lib.my) mapModules mapModulesRec mapHosts;
@@ -62,7 +72,7 @@
 
     pkgs = mkPkgs nixpkgs [
       self.overlay
-      inputs.hyprpanel.overlay
+      inputs.nix-vscode-extensions.overlays.default
     ];
     pkgs' = mkPkgs nixpkgs-unstable [];
     pkgs-stable' = mkPkgs nixpkgs-stable [];

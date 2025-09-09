@@ -80,8 +80,8 @@ in {
         (
           if cfg.raster.enable
           then [
-            krita
-            gimp
+            # krita
+            # gimp
             # gimpPlugins.resynthesizer  # content-aware scaling in gimp
           ]
           else []

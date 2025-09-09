@@ -27,13 +27,13 @@ in {
           }
           # Screen Off
           {
-            timeout = 1000;
+            timeout = 1800;
             on-timeout = "${pkgs.hyprland}/bin/hyprctl dispatch dpms off";
             on-resume = "${pkgs.hyprland}/bin/hyprctl dispatch dpms on";
           }
           # System Idle
           {
-            timeout = 1800;
+            timeout = 3600;
             on-timeout = "systemctl suspend";
           }
         ];

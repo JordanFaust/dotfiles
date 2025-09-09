@@ -13,9 +13,15 @@
 }: let
   pythonPackages = python3Packages;
 in
-  python3Packages.buildPythonApplication rec {
+  python3Packages.buildPythonApplication {
     pname = "gp-saml-gui";
     version = "1.0.10";
+
+    pyproject = true;
+
+    build-system = with python3Packages; [
+      setuptools
+    ];
 
     src = fetchFromGitHub {
       owner = "dlenski";

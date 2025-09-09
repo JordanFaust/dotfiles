@@ -76,6 +76,7 @@ with lib.my; {
     bind
     cached-nix-shell
     git
+    diff-so-fancy
     vim
     wget
     gnumake

@@ -33,7 +33,7 @@ in {
       (pkgs.writeScriptBin "greetd-test" ''
         ${config.services.greetd.settings.default_session.command}
       '')
-      greetd.regreet
+      regreet
     ];
     # # Use the Regreet greetd theme
     programs.regreet = {
@@ -47,10 +47,7 @@ in {
 
         gtk = {
           application_prefer_dark_theme = true;
-          cursor_theme_name = config.user-options.gtk.cursorTheme.name;
           font_name = config.user-options.gtk.font.name;
-          icon_theme_name = config.user-options.gtk.iconTheme.name;
-          theme_name = config.user-options.gtk.theme.name;
         };
       };
     };

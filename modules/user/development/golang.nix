@@ -37,6 +37,7 @@ in {
         go
         # LSP
         gopls
+        delve
         # protoc
         protobuf
         protobufc
