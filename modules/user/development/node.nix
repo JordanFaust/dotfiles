@@ -34,10 +34,12 @@ in {
       packages = with pkgs; [
         bun
         deno
-        nodejs_20
+        nodejs_22
         corepack
         inputs.wrangler.packages.${pkgs.system}.wrangler
         cypress
+        playwright
+        playwright-driver.browsers
 
         biome
         # pkgs.turbo
@@ -58,6 +60,8 @@ in {
         NPM_CONFIG_TMP = "$XDG_RUNTIME_DIR/npm";
         NPM_CONFIG_PREFIX = "$XDG_CACHE_HOME/npm";
         NODE_REPL_HISTORY = "$XDG_CACHE_HOME/node/repl_history";
+        PLAYWRIGHT_BROWSERS_PATH= "${pkgs.playwright-driver.browsers}";
+        # PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS = "true";
       };
     };
   };
