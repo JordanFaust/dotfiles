@@ -4,7 +4,6 @@
 ForwardAgent yes
 ServerAliveInterval 5
 StrictHostKeyChecking no
-IdentityFile ~/.ssh/aws_key
 ControlMaster auto
 ControlPath ~/.ssh/shared_conn-%C
 ControlPersist 10m

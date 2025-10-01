@@ -46,6 +46,7 @@ in {
         insomnia
         regclient
         circleci-cli
+        yajsv
 
         # Terraform
         terraform

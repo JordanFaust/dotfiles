@@ -1,13 +1,10 @@
 {
-  lib,
   inputs,
-  python3,
   python3Packages,
   fetchFromGitHub,
   glib-networking,
   gtk3,
   gobject-introspection,
-  makeWrapper,
   webkitgtk,
   wrapGAppsHook,
 }: let
