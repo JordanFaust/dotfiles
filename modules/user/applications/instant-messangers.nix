@@ -14,7 +14,7 @@ with lib.my; let
     genericName = "Slack Client for Linux";
     icon = "slack";
     categories = ["GNOME" "GTK" "Network" "InstantMessaging"];
-    exec = "uwsm app -- ${pkgs.slack}/bin/slack -s %U";
+    exec = "uwsm app -- ${pkgs.slack}/bin/slack --enable-features=UseOzonePlatform --ozone-platform=wayland -s %U";
     mimeTypes = [ "x-scheme-handler/slack" ];
     startupNotify = true;
     startupWMClass = "Slack";
