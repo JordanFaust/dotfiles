@@ -15,17 +15,17 @@ in {
 
   config = mkIf cfg.enable {
     user.packages = with pkgs; [
-      ollama
-      goose-cli
+      # ollama
+      # goose-cli
       python311Packages.uv
     ];
     # Enable ollama locally and configure the models that are pulled by default
-    services.ollama = {
-      enable = true;
-      loadModels = [
-        "llama3.2"
-        "nomic-embed-text"
-      ];
-    };
+    # services.ollama = {
+    #   enable = true;
+    #   loadModels = [
+    #     "llama3.2"
+    #     "nomic-embed-text"
+    #   ];
+    # };
   };
 }

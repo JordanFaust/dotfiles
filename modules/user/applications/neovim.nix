@@ -56,6 +56,10 @@ in {
 
         # Neovim Addon Dependencies
         ranger
+        tree-sitter
+        markdownlint-cli2
+        marksman
+        prettier
 
         # Image preview
         chafa
