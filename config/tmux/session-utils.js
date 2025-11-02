@@ -110,22 +110,23 @@ export function selectProjectWithFZF() {
       "--layout=reverse-list", // Puts prompt at bottom
       "--info=right", // Show count on right side
       "--ansi",
-      "--border=rounded",
-      "--margin=1",
-      "--padding=1,2,1,2", // Reduce bottom padding due to FZF limitations
-      '--header="● current  ○ existing  ◦ available"',
-      "--header-first",
-      "--color=fg:#cad3f5,bg:#24273a,hl:#8aadf4", // text, base, blue
+      "--border=none",
+      "--margin=0",
+      "--padding=0,0,0,0", // Reduce bottom padding due to FZF limitations
+      "--no-scrollbar",
+      // "--color=fg:#cad3f5,bg:#24273a,hl:#8aadf4", // text, base, blue
       "--color=fg+:#cad3f5,bg+:#2c3047,hl+:#8aadf4", // text, custom prompt background, blue
       "--color=info:#8aadf4,prompt:#8aadf4:bold,pointer:#ed8796", // blue, blue bold, red
-      "--color=marker:#a6da95,spinner:#ed8796,header:#c6a0f6", // green, red, mauve
-      "--color=gutter:#2c3047", // custom prompt background color
+      "--color=marker:#a6da95,spinner:#ed8796", // green, red
+      "--color=gutter:#24273a",
+      "--color=prompt:#eed49f,input-bg:#24273a", // text, base, blue
       "--pointer=▶",
       "--marker=✓",
       "--with-nth=1,2", // Show only status and name
       "--nth=2", // Search on project name (2nd column)
       `--preview="node ${previewScript} {3}"`, // Preview using the 3rd column (raw path)
       "--preview-window=right:50%:wrap", // Preview on right side, 50% width, wrap text
+      "--preview-border=none",
     ].join(" ");
 
     const result = execSync(`node "${scriptPath}" detailed | ${fzfCommand}`, {
@@ -136,7 +137,7 @@ export function selectProjectWithFZF() {
     // Extract just the project name from the space-delimited line
     const parts = result.trim().split(/\s+/);
     // Strip ANSI codes from the project name (2nd column)
-    const projectName = parts[1].replace(/\x1b\[[0-9;]*m/g, '');
+    const projectName = parts[1].replace(/\x1b\[[0-9;]*m/g, "");
     return projectName;
   } catch (error) {
     // User cancelled or FZF not available
