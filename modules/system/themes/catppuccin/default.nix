@@ -1,10 +1,7 @@
 # modules/themes/catppuccin/default.nix --- a pokemon and keyboard inspired theme
 {
-  options,
   config,
   lib,
-  pkgs,
-  inputs,
   ...
 }:
 with lib;

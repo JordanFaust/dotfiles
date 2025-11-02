@@ -21,7 +21,12 @@ export _FASD_VIMINFO="$XDG_CACHE_HOME/viminfo"
 
 # fzf
 if (( $+commands[fd] )); then
-  export FZF_DEFAULT_OPTS="--reverse --ansi"
+  export FZF_DEFAULT_OPTS='
+  --layout=reverse --info=inline --ansi
+  --border=rounded --margin=20%,20%
+  --padding=1
+  --height=40%
+  '
   export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='ctrl-r:toggle-header'"
   export FZF_DEFAULT_COMMAND="fd ."
   export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"

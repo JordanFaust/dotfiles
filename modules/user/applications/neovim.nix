@@ -12,7 +12,7 @@ with lib.my; let
     desktopName = "Neovim";
     genericName = "Text Editor";
     icon = "nvim";
-    exec = "uwsm app -- ${pkgs.kitty}/bin/kitty --title Neovim --class neovim --hold zsh -c \"nvim\"";
+    exec = "uwsm app -- ${pkgs.kitty}/bin/kitty --title Neovim --class neovim --hold -e bash -c \"(tmux ls | grep -qEv 'attached|scratch' && tmux at) || tmux\"";
     categories = ["Utility" "TextEditor"];
   };
 in {
