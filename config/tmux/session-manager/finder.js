@@ -9,6 +9,7 @@ import { execSync } from "child_process";
 import fs from "fs";
 import os from "os";
 import path from "path";
+import { getRecentlyAccessedSessions } from "./tracker.js";
 
 /**
  * Configuration for directory search paths
@@ -38,19 +39,19 @@ function discoverGitRepositories() {
   const repositories = [];
 
   // Always include /etc/dotfiles if it exists and is a git repository
-  const dotfilesPath = '/etc/dotfiles';
+  const dotfilesPath = "/etc/dotfiles";
   if (fs.existsSync(dotfilesPath) && isGitRepository(dotfilesPath)) {
     repositories.push({
-      name: 'dotfiles',
+      name: "dotfiles",
       path: dotfilesPath,
     });
   }
 
   // Always include ~/.config/nvim if it exists and is a git repository
-  const nvimPath = path.join(os.homedir(), '.config/nvim');
+  const nvimPath = path.join(os.homedir(), ".config/nvim");
   if (fs.existsSync(nvimPath) && isGitRepository(nvimPath)) {
     repositories.push({
-      name: 'nvim',
+      name: "nvim",
       path: nvimPath,
     });
   }
@@ -120,20 +121,63 @@ function getExistingSessions() {
 }
 
 /**
- * Sorts repositories putting the current session first
+ * Ordered session sorting: current session -> active sessions -> recently accessed -> alphabetical
  * @param {Array<{name: string, path: string}>} repositories - Array of repositories
  * @param {string|null} currentSession - Current session name
+ * @param {string[]} existingSessions - Array of existing session names
  * @returns {Array<{name: string, path: string}>} Sorted repositories
  */
-function sortRepositoriesByCurrentSession(repositories, currentSession) {
-  if (!currentSession) {
-    return repositories;
+function sortRepositories(repositories, currentSession, existingSessions) {
+  const recentlyAccessed = getRecentlyAccessedSessions();
+
+  // Create priority groups
+  const current = [];
+  const activeOther = [];
+  const recentlyAccessedSessions = [];
+  const alphabetical = [];
+
+  for (const repo of repositories) {
+    if (repo.name === currentSession) {
+      current.push(repo);
+    } else if (existingSessions.includes(repo.name)) {
+      activeOther.push(repo);
+    } else if (recentlyAccessed.includes(repo.name)) {
+      recentlyAccessedSessions.push(repo);
+    } else {
+      alphabetical.push(repo);
+    }
   }
 
-  const currentRepo = repositories.find((repo) => repo.name === currentSession);
-  const otherRepos = repositories.filter((repo) => repo.name !== currentSession);
+  // Sort active sessions by recent access (most recent first)
+  activeOther.sort((a, b) => {
+    const aIndex = recentlyAccessed.indexOf(a.name);
+    const bIndex = recentlyAccessed.indexOf(b.name);
 
-  return currentRepo ? [currentRepo, ...otherRepos] : repositories;
+    // If both are in recent list, sort by recency
+    if (aIndex !== -1 && bIndex !== -1) {
+      return aIndex - bIndex; // Lower index = more recent
+    }
+
+    // If only one is in recent list, prioritize it
+    if (aIndex !== -1) return -1;
+    if (bIndex !== -1) return 1;
+
+    // Both not in recent list, sort alphabetically
+    return a.name.localeCompare(b.name);
+  });
+
+  // Sort recently accessed sessions by their position in recent list
+  recentlyAccessedSessions.sort((a, b) => {
+    const aIndex = recentlyAccessed.indexOf(a.name);
+    const bIndex = recentlyAccessed.indexOf(b.name);
+    return aIndex - bIndex;
+  });
+
+  // Sort alphabetical group
+  alphabetical.sort((a, b) => a.name.localeCompare(b.name));
+
+  // Combine all groups in priority order
+  return [...current, ...activeOther, ...recentlyAccessedSessions, ...alphabetical];
 }
 
 /**
@@ -145,8 +189,7 @@ function sortRepositoriesByCurrentSession(repositories, currentSession) {
  */
 function formatRepositoriesForFZF(repositories, currentSession, existingSessions) {
   // Find the longest project name for consistent padding
-  const maxNameLength = Math.max(...repositories.map(repo => repo.name.length));
-  const nameWidth = Math.max(maxNameLength + 2, 25); // At least 25 chars
+  const maxNameLength = Math.max(...repositories.map((repo) => repo.name.length));
 
   return repositories.map((repo) => {
     const isCurrentSession = repo.name === currentSession;
@@ -175,30 +218,22 @@ function formatRepositoriesForFZF(repositories, currentSession, existingSessions
 }
 
 /**
- * Main function to discover repositories and output for FZF
- * @param {string} [mode='simple'] - Output mode: 'simple' for names only, 'detailed' for formatted output
+ * Discovers all projects along with existing TMUX sessions and outputs for FZF
  */
-function main(mode = "simple") {
+function main() {
   const repositories = discoverGitRepositories();
   const currentSession = getCurrentSession();
   const existingSessions = getExistingSessions();
-  const sortedRepositories = sortRepositoriesByCurrentSession(repositories, currentSession);
+  const sortedRepositories = sortRepositories(repositories, currentSession, existingSessions);
 
-  if (mode === "detailed") {
-    // Output formatted information for enhanced FZF display
-    const formattedLines = formatRepositoriesForFZF(
-      sortedRepositories,
-      currentSession,
-      existingSessions
-    );
-    for (const line of formattedLines) {
-      console.log(line);
-    }
-  } else {
-    // Output repository names only for simple mode
-    for (const repo of sortedRepositories) {
-      console.log(repo.name);
-    }
+  // Output formatted information for enhanced FZF display
+  const formattedLines = formatRepositoriesForFZF(
+    sortedRepositories,
+    currentSession,
+    existingSessions
+  );
+  for (const line of formattedLines) {
+    console.log(line);
   }
 }
 
@@ -207,7 +242,5 @@ export { discoverGitRepositories, getCurrentSession, getExistingSessions, isGitR
 
 // Run main function if this file is executed directly
 if (process.argv[1] === new URL(import.meta.url).pathname) {
-  const mode = process.argv[2] || "simple";
-  main(mode);
+  main();
 }
-

@@ -1,12 +1,14 @@
+#!/usr/bin/env node
+
 /**
- * TMUX Session Management Utilities
- * Contains all the session management functions
+ * TMUX Session Manager CLI
+ * Modular CLI for session management with chainable commands
  */
 
-import fs from "fs";
-import path from "path";
 import { execSync } from "child_process";
-import { discoverGitRepositories, getExistingSessions } from "./session-finder.js";
+import path from "path";
+import { discoverGitRepositories, getExistingSessions } from "./finder.js";
+import { recordSessionAccess } from "./tracker.js";
 
 /**
  * Creates a new TMUX session with the specified configuration
@@ -14,7 +16,7 @@ import { discoverGitRepositories, getExistingSessions } from "./session-finder.j
  * @param {string} projectPath - Root directory path for the project
  * @returns {boolean} True if session was created successfully
  */
-export function createSession(sessionName, projectPath) {
+function createSession(sessionName, projectPath) {
   try {
     // Create new session with first window (nvim)
     execSync(`tmux new-session -d -s "${sessionName}" -c "${projectPath}" -n nvim`);
@@ -94,34 +96,30 @@ export function findProjectPath(projectName) {
  */
 export function selectProjectWithFZF() {
   try {
-    const scriptPath = path.join(
-      path.dirname(new URL(import.meta.url).pathname),
-      "session-finder.js"
-    );
-
-    const previewScript = path.join(
-      path.dirname(new URL(import.meta.url).pathname),
-      "project-preview.js"
-    );
+    const scriptPath = path.join(path.dirname(new URL(import.meta.url).pathname), "finder.js");
+    const previewScript = path.join(path.dirname(new URL(import.meta.url).pathname), "preview.js");
 
     const fzfCommand = [
       "fzf",
       '--prompt="  "', // Search icon with space
       "--layout=reverse-list", // Puts prompt at bottom
-      "--info=right", // Show count on right side
+      "--info=inline-right", // Show count on right side
       "--ansi",
       "--border=none",
       "--margin=0",
       "--padding=0,0,0,0", // Reduce bottom padding due to FZF limitations
       "--no-scrollbar",
-      // "--color=fg:#cad3f5,bg:#24273a,hl:#8aadf4", // text, base, blue
+      "--no-hscroll",
+      "--no-mouse",
+      "--separator=' '",
       "--color=fg+:#cad3f5,bg+:#2c3047,hl+:#8aadf4", // text, custom prompt background, blue
       "--color=info:#8aadf4,prompt:#8aadf4:bold,pointer:#ed8796", // blue, blue bold, red
       "--color=marker:#a6da95,spinner:#ed8796", // green, red
       "--color=gutter:#24273a",
-      "--color=prompt:#eed49f,input-bg:#24273a", // text, base, blue
+      "--color=prompt:#eed49f,input-bg:#2c3047",
       "--pointer=▶",
       "--marker=✓",
+      "--highlight-line",
       "--with-nth=1,2", // Show only status and name
       "--nth=2", // Search on project name (2nd column)
       `--preview="node ${previewScript} {3}"`, // Preview using the 3rd column (raw path)
@@ -160,6 +158,9 @@ export function main(projectName) {
     }
   }
 
+  // Record session access for tracking
+  recordSessionAccess(projectName);
+
   // Check if session already exists
   if (sessionExists(projectName)) {
     console.log(`Attaching to existing session: ${projectName}`);
@@ -185,4 +186,121 @@ export function main(projectName) {
     console.error(`Failed to create session "${projectName}".`);
     process.exit(1);
   }
+}
+
+/**
+ * CLI Commands
+ */
+
+// CLI argument parsing
+const [, , command, ...args] = process.argv;
+
+function showHelp() {
+  console.log(`
+TMUX Session Manager CLI
+
+Usage: cli.js <command> [options]
+
+Commands:
+  fzf [project]     Run the full FZF interface (default)
+  finder [mode]     Run session finder (modes: simple, detailed)
+  preview <path>    Run project preview for given path
+  tracker <action>  Session tracking operations
+  session <name>    Manage specific session
+  help              Show this help
+
+Examples:
+  cli.js fzf                    # Interactive session selection
+  cli.js finder detailed        # List sessions with formatting
+  cli.js preview /path/to/proj  # Preview project directory
+  cli.js tracker list           # List recent sessions
+  cli.js session myproject      # Create/attach to session
+`);
+}
+
+function runFinder(mode = "detailed") {
+  // Import and run finder
+  const scriptPath = path.join(path.dirname(new URL(import.meta.url).pathname), "finder.js");
+  try {
+    const result = execSync(`node "${scriptPath}" ${mode}`, {
+      encoding: "utf8",
+      stdio: ["inherit", "pipe", "inherit"],
+    });
+    process.stdout.write(result);
+  } catch (error) {
+    process.exit(error.status || 1);
+  }
+}
+
+function runPreview(projectPath) {
+  if (!projectPath) {
+    console.error("Error: Project path required for preview command");
+    console.error("Usage: cli.js preview <path>");
+    process.exit(1);
+  }
+
+  const scriptPath = path.join(path.dirname(new URL(import.meta.url).pathname), "preview.js");
+  try {
+    execSync(`node "${scriptPath}" "${projectPath}"`, {
+      stdio: "inherit",
+    });
+  } catch (error) {
+    process.exit(error.status || 1);
+  }
+}
+
+function runTracker(action, ...trackerArgs) {
+  const scriptPath = path.join(path.dirname(new URL(import.meta.url).pathname), "tracker.js");
+  try {
+    const fullArgs = action ? [action, ...trackerArgs] : [];
+    execSync(`node "${scriptPath}" ${fullArgs.join(" ")}`, {
+      stdio: "inherit",
+    });
+  } catch (error) {
+    process.exit(error.status || 1);
+  }
+}
+
+function runFZF(projectName) {
+  if (projectName) {
+    // Direct session management
+    main(projectName);
+  } else {
+    // Interactive FZF selection
+    main();
+  }
+}
+
+// Command routing
+switch (command) {
+  case "finder":
+    runFinder(args[0]);
+    break;
+
+  case "preview":
+    runPreview(args[0]);
+    break;
+
+  case "tracker":
+    runTracker(args[0], ...args.slice(1));
+    break;
+
+  case "session":
+    runFZF(args[0]);
+    break;
+
+  case "fzf":
+  case undefined:
+    // Default command - run FZF interface
+    runFZF(args[0]);
+    break;
+
+  case "help":
+  case "--help":
+  case "-h":
+    showHelp();
+    break;
+
+  default:
+    runFZF(args[0]);
 }

@@ -17,75 +17,70 @@ import path from "path";
 function formatItem(itemPath, itemName) {
   try {
     const stats = fs.lstatSync(itemPath);
-    let icon = "";
+    let icon = "";
     let color = "";
 
     if (stats.isDirectory()) {
       // Directory icons and colors
       if (itemName === ".git") {
-        icon = ""; // Git icon
+        icon = ""; // Git icon
         color = "\x1b[38;2;237;135;150m"; // red
       } else if (itemName === "node_modules") {
-        icon = ""; // Node.js icon
+        icon = ""; // Node.js icon
         color = "\x1b[38;2;166;218;149m"; // green
       } else if (itemName.startsWith(".")) {
-        icon = ""; // Hidden folder icon
+        icon = ""; // Regular folder icon
         color = "\x1b[38;2;110;115;141m"; // overlay0 (dim)
       } else {
-        icon = ""; // Regular folder icon
+        icon = ""; // Regular folder icon
         color = "\x1b[38;2;138;173;244m"; // blue
       }
-    } else if (stats.isSymbolicLink()) {
-      icon = ""; // Link icon
-      color = "\x1b[38;2;245;169;127m"; // peach
     } else {
       // File icons based on extension
       const ext = path.extname(itemName).toLowerCase();
       switch (ext) {
         case ".js":
         case ".mjs":
+          icon = "";
+          color = "\x1b[38;2;238;212;159m"; // yellow
+          break;
         case ".ts":
-          icon = "";
+          icon = "";
           color = "\x1b[38;2;238;212;159m"; // yellow
           break;
         case ".json":
-          icon = "";
+          icon = "";
           color = "\x1b[38;2;238;212;159m"; // yellow
           break;
         case ".md":
         case ".markdown":
-          icon = "";
+          icon = "";
           color = "\x1b[38;2;138;173;244m"; // blue
           break;
         case ".lua":
-          icon = "";
+          icon = "";
           color = "\x1b[38;2;138;173;244m"; // blue
           break;
         case ".nix":
-          icon = "";
+          icon = "";
           color = "\x1b[38;2;183;189;248m"; // lavender
           break;
         case ".lock":
-          icon = "";
+          icon = "";
           color = "\x1b[38;2;110;115;141m"; // overlay0 (dim)
           break;
         case ".gitignore":
         case ".gitattributes":
-          icon = "";
+          icon = "";
           color = "\x1b[38;2;237;135;150m"; // red
           break;
         default:
-          if (itemName.startsWith(".")) {
-            icon = ""; // Hidden file
-            color = "\x1b[38;2;110;115;141m"; // overlay0 (dim)
-          } else {
-            icon = ""; // Regular file
-            color = "\x1b[38;2;202;211;245m"; // text
-          }
+          icon = ""; // Regular file
+          color = "\x1b[38;2;202;211;245m"; // text
       }
     }
 
-    return `${icon} ${color}${itemName}\x1b[0m`;
+    return `${color}${icon} ${itemName}\x1b[0m`;
   } catch (error) {
     return `  \x1b[38;2;110;115;141m${itemName}\x1b[0m`; // dim for error items
   }
@@ -144,4 +139,3 @@ if (!projectPath) {
 }
 
 previewProject(projectPath);
-
