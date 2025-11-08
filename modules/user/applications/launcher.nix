@@ -45,7 +45,7 @@ in {
       packages = with pkgs; [
         (writeScriptBin "rofi" ''
           #!${stdenv.shell}
-          exec ${rofi-wayland}/bin/rofi -terminal ${kitty}/bin/kitty -m -1 "$@"
+          exec ${rofi}/bin/rofi -terminal ${kitty}/bin/kitty -m -1 "$@"
         '')
       ];
     };

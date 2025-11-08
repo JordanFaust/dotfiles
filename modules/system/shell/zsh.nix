@@ -111,7 +111,7 @@ in {
         ${cfg.rcInit}
       '';
 
-      "zsh/.zshenv" = { source = "${configDir}/zsh/.zshenv"; };
+      "zsh/.zshenv" = {source = "${configDir}/zsh/.zshenv";};
 
       # Why am I creating extra.zsh{rc,env} when I could be using extraInit?
       # Because extraInit generates those files in /etc/profile, and mine just
@@ -134,6 +134,8 @@ in {
         export OPENAI_API_KEY="$(cat /etc/sensitive/openai)"
         export GEMINI_API_KEY="$(cat /etc/sensitive/gemini)"
         export TAVILY_API_KEY="$(cat /etc/sensitive/tavily)"
+        export ARTIFACTORY_USERNAME="$(cat /etc/sensitive/artifactory | cut -d':' -f1)"
+        export ARTIFACTORY_PASSWORD="$(cat /etc/sensitive/artifactory | cut -d':' -f2)"
       '';
     };
   };

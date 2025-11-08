@@ -5,8 +5,7 @@
   lib,
   system,
   ...
-}:
-let
+}: let
   cfg = config.modules.desktop.hyprland;
 in {
   options = {};
@@ -33,7 +32,7 @@ in {
           }
           # System Idle
           {
-            timeout = 3600;
+            timeout = 5400;
             on-timeout = "systemctl suspend";
           }
         ];
@@ -41,7 +40,7 @@ in {
     };
 
     # No loger needed after https://github.com/NixOS/nixpkgs/pull/355416/files
-    systemd.user.services.hypridle.Install.WantedBy = [ "wayland-session@Hyprland.target" ];
-    systemd.user.services.hypridle.Unit.After = [ "wayland-session@Hyprland.target" ];
+    systemd.user.services.hypridle.Install.WantedBy = ["wayland-session@Hyprland.target"];
+    systemd.user.services.hypridle.Unit.After = ["wayland-session@Hyprland.target"];
   };
 }
