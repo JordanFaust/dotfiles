@@ -36,8 +36,6 @@ in {
         # Local Dev
         kubernetes-helm
         helm-ls
-        kustomize
-        skaffold
         tilt
         k3d
         lens
@@ -47,6 +45,7 @@ in {
         regclient
         circleci-cli
         yajsv
+        cloc
 
         # Terraform
         terraform
