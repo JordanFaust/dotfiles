@@ -15,7 +15,7 @@ in {
         # Add AWS V2 CLI
         awscli2
         aws-vault
-        ssm-agent
+        amazon-ssm-agent
         ssm-session-manager-plugin
 
         # Performance Monitoring
@@ -30,7 +30,7 @@ in {
         krew
         kubectl-view-allocations
         k9s
-        argo
+        argo-workflows
         argocd
 
         # Local Dev

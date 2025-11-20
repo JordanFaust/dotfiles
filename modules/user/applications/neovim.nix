@@ -59,7 +59,7 @@ in {
         tree-sitter
         markdownlint-cli2
         marksman
-        prettier
+        # prettier
 
         # Image preview
         chafa

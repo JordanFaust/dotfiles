@@ -12,7 +12,7 @@ with lib.my; let
     desktopName = "Kitty";
     genericName = "Terminal emulator";
     icon = "utilities-terminal";
-    exec = "uwsm app -- ${pkgs.kitty}/bin/kitty -e bash -c \"(tmux ls | grep -qEv 'attached|scratch' && tmux at) || tmux\"";
+    exec = "uwsm app -- ${pkgs.kitty}/bin/kitty";
     categories = ["Development" "System" "Utility"];
   };
 in {
@@ -45,6 +45,7 @@ in {
     home = {
       packages = [
         desktop
+        pkgs.ghostty
       ];
 
       sessionVariables = {

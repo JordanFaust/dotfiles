@@ -37,7 +37,7 @@ in {
         lua54Packages.lua
         # luajit
         luaformatter
-        sumneko-lua-language-server
+        lua-language-server
         stylua
         lua54Packages.luarocks
         # luaPackages.moonscript
