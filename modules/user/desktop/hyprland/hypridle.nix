@@ -10,7 +10,7 @@
 in {
   options = {};
 
-  config = lib.mkIf (cfg.enable) {
+  config = lib.mkIf cfg.enable {
     services.hypridle = {
       enable = true;
 

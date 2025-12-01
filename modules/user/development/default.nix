@@ -13,7 +13,7 @@ in {
     home = {
       packages = with pkgs; [
         # Add AWS V2 CLI
-        # awscli2
+        awscli2
         aws-vault
         amazon-ssm-agent
         ssm-session-manager-plugin

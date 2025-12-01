@@ -7,7 +7,7 @@
 with lib;
 with lib.my; let
   cfg = config.modules.shell.tmux;
-  configDir = config.dotfiles.configDir;
+  inherit (config.dotfiles) configDir;
 in {
   options.modules.shell.tmux = with types; {
     enable = mkBoolOpt false;

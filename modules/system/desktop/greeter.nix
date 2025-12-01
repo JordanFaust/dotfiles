@@ -4,8 +4,7 @@
   pkgs,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.modules.desktop.greeter;
 in {
   options.modules.desktop.greeter = mkOption {
@@ -27,7 +26,7 @@ in {
     };
   };
 
-  config = mkIf (cfg.enable) {
+  config = mkIf cfg.enable {
     user.packages = with pkgs; [
       # Script that executes the configures greetd configuration for testing
       (pkgs.writeScriptBin "greetd-test" ''

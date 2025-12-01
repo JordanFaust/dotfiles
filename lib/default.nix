@@ -17,9 +17,8 @@
   };
 
   mylib = makeExtensible (self:
-    with self;
-      mapModules ./.
-      (file: import file {inherit self lib pkgs inputs home-manager;}));
+    mapModules ./.
+    (file: import file {inherit self lib pkgs inputs home-manager;}));
 in
   mylib.extend
   (self: super:

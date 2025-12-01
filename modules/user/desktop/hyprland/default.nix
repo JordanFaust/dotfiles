@@ -20,8 +20,8 @@ with lib.my; let
   gtkTheme = config.modules.desktop.gtk.name;
 
   cursor = {
-    name = config.modules.desktop.gtk.cursor.name;
-    size = config.modules.desktop.gtk.cursor.size;
+    inherit (config.modules.desktop.gtk.cursor) name;
+    inherit (config.modules.desktop.gtk.cursor) size;
   };
 in {
   options.modules.desktop.hyprland = mkOption {
@@ -47,7 +47,7 @@ in {
     };
   };
 
-  config = lib.mkIf (cfg.enable) {
+  config = lib.mkIf cfg.enable {
     # Disabled, along with most gnome dependencies to reduce install size and CVEs
     # xdg.desktopEntries."org.gnome.Settings" = {
     #   name = "Settings";

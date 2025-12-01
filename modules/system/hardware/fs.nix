@@ -1,6 +1,5 @@
 {
   config,
-  options,
   lib,
   pkgs,
   ...
@@ -35,9 +34,11 @@ in {
 
     (mkIf cfg.zfs.enable (mkMerge [
       {
-        boot.loader.grub.copyKernels = true;
-        boot.supportedFilesystems = ["zfs"];
-        boot.zfs.devNodes = "/dev/disk/by-partuuid";
+        boot = {
+          loader.grub.copyKernels = true;
+          supportedFilesystems = ["zfs"];
+          zfs.devNodes = "/dev/disk/by-partuuid";
+        };
         services.zfs.autoScrub.enable = true;
       }
 

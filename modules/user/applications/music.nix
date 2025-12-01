@@ -7,7 +7,6 @@
 with lib;
 with lib.my; let
   cfg = config.modules.applications.music;
-  minimal = config.modules.minimal;
   desktop = pkgs.makeDesktopItem {
     name = "Spotify";
     desktopName = "spotify";
@@ -15,11 +14,12 @@ with lib.my; let
     icon = "spotify-client";
     categories = ["Audio" "Music" "Player" "AudioVideo"];
     exec = "uwsm app -- ${pkgs.spotify}/bin/spotify %U";
-    mimeTypes = [ "x-scheme-handler/spotify" ];
+    mimeTypes = ["x-scheme-handler/spotify"];
     startupNotify = true;
     startupWMClass = "spotify";
     terminal = false;
   };
+  inherit (config.modules) minimal;
 in {
   options.modules.applications.music = mkOption {
     description = ''

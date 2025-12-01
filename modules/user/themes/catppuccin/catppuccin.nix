@@ -34,7 +34,7 @@ in {
     default = {};
   };
   #
-  config = lib.mkIf (cfg.enable) {
+  config = lib.mkIf cfg.enable {
     home = {
       packages = with pkgs; [
         # TODO replace pamixer with amixer

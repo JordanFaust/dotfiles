@@ -7,7 +7,7 @@
 with lib;
 with lib.my; let
   cfg = config.modules.development.java;
-  minimal = config.modules.minimal;
+  inherit (config.modules) minimal;
 in {
   options.modules.development.java = mkOption {
     description = ''

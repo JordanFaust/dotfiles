@@ -7,7 +7,7 @@
 with lib;
 with lib.my; let
   cfg = config.modules.applications.launcher;
-  minimal = config.modules.minimal;
+  inherit (config.modules) minimal;
 in {
   options.modules.applications.launcher = mkOption {
     description = ''

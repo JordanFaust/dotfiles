@@ -150,7 +150,7 @@ in {
     default = {};
   };
 
-  config = lib.mkIf (cfg.enable) {
+  config = lib.mkIf cfg.enable {
     home = {
       packages = with pkgs; [
         dconf-editor
@@ -181,7 +181,8 @@ in {
     };
 
     gtk = {
-      enable = cfg.enable;
+      inherit (cfg) enable;
+
       font.name = cfg.font.name;
       # theme = {
       #   name = cfg.name;
@@ -207,13 +208,13 @@ in {
     };
 
     qt = {
-      enable = cfg.enable;
+      inherit (cfg) enable;
       platformTheme = {
         name = "kvantum";
       };
       style = {
+        inherit (cfg.qt) package;
         name = "kvantum";
-        package = cfg.qt.package;
       };
     };
   };

@@ -2,14 +2,12 @@
   config,
   lib,
   pkgs,
-  inputs,
-  osConfig,
   ...
 }:
 with lib;
 with lib.my; let
   cfg = config.modules.development.python;
-  minimal = config.modules.minimal;
+  inherit (config.modules) minimal;
 in {
   options.modules.development.python = mkOption {
     description = ''

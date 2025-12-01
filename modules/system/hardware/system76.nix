@@ -12,9 +12,13 @@ in {
   };
 
   config = mkIf cfg.enable {
-    hardware.system76.kernel-modules.enable = true;
-    hardware.system76.firmware-daemon.enable = true;
-    hardware.system76.power-daemon.enable = true;
-    hardware.system76.enableAll = true;
+    hardware = {
+      system76 = {
+        kernel-modules.enable = true;
+        firmware-daemon.enable = true;
+        power-daemon.enable = true;
+        enableAll = true;
+      };
+    };
   };
 }

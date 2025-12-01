@@ -2,13 +2,12 @@
   config,
   lib,
   ...
-}:
-let
+}: let
   cfg = config.modules.desktop.hyprland;
 in {
   options = {};
 
-  config = lib.mkIf (cfg.enable) {
+  config = lib.mkIf cfg.enable {
     # We are manually apply this theme
     catppuccin.hyprlock.enable = false;
     programs.hyprlock = {
@@ -90,33 +89,32 @@ in {
         image = [
           # PFP Image
           {
-              path = "$HOME/.face";
-              size = "140";
-              rounding = "-1";
-              border_size = "3";
-              border_color = "rgba(ded8d7FF)";
-              position = "10, 10";
-              halign = "left";
-              valign = "bottom";
-              zindex = "3";
+            path = "$HOME/.face";
+            size = "140";
+            rounding = "-1";
+            border_size = "3";
+            border_color = "rgba(ded8d7FF)";
+            position = "10, 10";
+            halign = "left";
+            valign = "bottom";
+            zindex = "3";
           }
         ];
 
         label = [
-
-         # Lock Icon
+          # Lock Icon
           {
-              text = " ";
-              shadow_passes = "1";
-              shadow_boost = "0.5";
-              color = "rgba(ded8d7FF)";
-              shadow_color = "rgba(ded8d7AA)";
-              font_size = "20";
-              font_family = "Font Awesome 6 Free Solid";
-              position = "0, -140";
-              halign = "center";
-              valign = "top";
-              zindex = "2";
+            text = " ";
+            shadow_passes = "1";
+            shadow_boost = "0.5";
+            color = "rgba(ded8d7FF)";
+            shadow_color = "rgba(ded8d7AA)";
+            font_size = "20";
+            font_family = "Font Awesome 6 Free Solid";
+            position = "0, -140";
+            halign = "center";
+            valign = "top";
+            zindex = "2";
           }
           # Current Time
           {
@@ -180,5 +178,3 @@ in {
     };
   };
 }
-
-

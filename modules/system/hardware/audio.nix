@@ -12,8 +12,9 @@ in {
   };
 
   config = mkIf cfg.enable {
-    services.pulseaudio.enable = false;
-    security.rtkit.enable = true;
+    services = {
+      pulseaudio.enable = false;
+    };
     services.pipewire = {
       enable = true;
       alsa.enable = true;
@@ -34,6 +35,7 @@ in {
       KERNEL=="hpet", GROUP="audio"
     '';
 
+    security.rtkit.enable = true;
     security.pam.loginLimits = [
       {
         domain = "@audio";
