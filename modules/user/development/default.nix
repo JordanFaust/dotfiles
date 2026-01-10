@@ -6,7 +6,7 @@
 }:
 with lib;
 with lib.my; let
-  minimal = config.modules.minimal;
+  inherit (config.modules) minimal;
 in {
   config = lib.mkIf (!minimal) {
     # These are some common dev tools that are required
@@ -47,6 +47,7 @@ in {
         yajsv
         cloc
         statix
+        graphviz
 
         # Terraform
         terraform

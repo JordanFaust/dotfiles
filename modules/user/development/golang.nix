@@ -41,6 +41,8 @@ in {
         protobufc
         # Buf CLI
         buf
+        # Golang dot visualization/exploration
+        go-callvis
       ];
 
       sessionVariables = {

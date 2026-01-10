@@ -34,6 +34,7 @@ in {
         python3
         python3Packages.pip
         yamllint
+        uv
         # python37Packages.pylint
       ];
 

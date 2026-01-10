@@ -36,7 +36,7 @@ in {
         bun
         deno
         nodejs_22
-        corepack
+        yarn
         inputs.wrangler.packages.${pkgs.system}.wrangler
         cypress
         playwright.browsers

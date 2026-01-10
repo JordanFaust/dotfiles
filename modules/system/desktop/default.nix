@@ -30,6 +30,11 @@ in {
       }
     ];
 
+    # Enable nix-ld for easier binary compatibility
+    # Note: this is only used to get around AI/python tooling ecosystem. When possible,
+    # we should prefer proper nixpkgs packages.
+    programs.nix-ld.enable = true;
+
     user.packages = with pkgs; [
       # libsForQt5.qtstyleplugin-kvantum # SVG-based Qt5 theme engine plus a config tool and extra theme
 
@@ -37,10 +42,6 @@ in {
       bmon
       btop
       htop
-
-      ##
-      ## Ricing Packages
-      ##
 
       # NixOS Config Testing
       # vagrant
