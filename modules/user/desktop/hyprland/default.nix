@@ -163,18 +163,6 @@ in {
           "5, monitor:HDMI-A-1"
         ];
 
-        windowrule = let
-          fregex = regex: "float, ^(${regex})$";
-        in [
-          # (fregex "org.gnome.Settings")
-          # (fregex "org.gnome.design.Palette")
-          # (fregex "Color Picker")
-          # (fregex "xdg-desktop-portal")
-          # (fregex "xdg-desktop-portal-gnome")
-          # (fregex "com.github.Aylur.ags")
-          "workspace stayfocused, title:MainPicker"
-        ];
-
         windowrulev2 = let
           f = title: class: "float, title:^(${title})$, class:^(${class})$";
           pin = title: class: "pin, title:^(${title})$ class:^(${class})$";

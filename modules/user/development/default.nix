@@ -56,6 +56,7 @@ in {
         # Networking API Tools
         cfssl
         istioctl
+        egctl
         linkerd
         consul
         deck
