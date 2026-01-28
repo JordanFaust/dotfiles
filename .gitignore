@@ -15,3 +15,5 @@ doom.d/secrets/*
 reports/*
 
 http_cache.sqlite
+.serena
+.claude/settings.local.json
