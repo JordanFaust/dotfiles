@@ -14,16 +14,8 @@
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/e914322a-3bba-4275-aa72-44ba48c43f6e";
+    { device = "/dev/disk/by-uuid/4e08b681-9940-46e6-90cb-5aa47592492a";
       fsType = "ext4";
-    };
-
-  boot.initrd.luks.devices."cryptroot".device = "/dev/disk/by-uuid/4e75cffe-e5ca-45b3-9519-3948716782ea";
-
-  fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/4A00-C9AB";
-      fsType = "vfat";
-      options = [ "fmask=0022" "dmask=0022" ];
     };
 
   swapDevices = [ ];
