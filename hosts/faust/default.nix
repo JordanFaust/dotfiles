@@ -32,9 +32,9 @@
         implementation = "broker";
       };
     };
-    # theme = {
-    #  active = "catppuccin";
-    #};
+    theme = {
+      active = "catppuccin";
+    };
 
     # Hardware
     hardware = {
