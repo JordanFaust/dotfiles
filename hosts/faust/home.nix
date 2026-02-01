@@ -45,4 +45,7 @@ in {
       streaming.enable = true;
     };
   };
+
+  # Remap Caps Lock to Control
+  wayland.windowManager.hyprland.settings.input.kb_options = "ctrl:nocaps";
 }
