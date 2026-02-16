@@ -77,6 +77,10 @@ function discoverGitRepositories() {
       name: "dotfiles",
       path: dotfilesPath,
     });
+
+    // Discover worktrees for dotfiles
+    const dotfilesWorktrees = discoverWorktrees(dotfilesPath, "dotfiles");
+    repositories.push(...dotfilesWorktrees);
   }
 
   // Always include ~/.config/nvim if it exists and is a git repository
@@ -86,6 +90,10 @@ function discoverGitRepositories() {
       name: "nvim",
       path: nvimPath,
     });
+
+    // Discover worktrees for nvim
+    const nvimWorktrees = discoverWorktrees(nvimPath, "nvim");
+    repositories.push(...nvimWorktrees);
   }
 
   for (const searchPath of SEARCH_PATHS) {
