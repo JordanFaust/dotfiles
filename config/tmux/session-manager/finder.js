@@ -113,6 +113,10 @@ function discoverGitRepositories() {
               name: entry.name,
               path: fullPath,
             });
+
+            // Discover worktrees for this repository
+            const repoWorktrees = discoverWorktrees(fullPath, entry.name);
+            repositories.push(...repoWorktrees);
           }
         }
       }
