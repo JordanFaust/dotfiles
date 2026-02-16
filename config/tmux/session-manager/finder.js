@@ -253,8 +253,15 @@ function formatRepositoriesForFZF(repositories, currentSession, existingSessions
       nameColor = "\x1b[38;2;202;211;245m"; // text (#cad3f5) = 202,211,245
     }
 
-    // Format with space delimiter
-    const coloredName = `${nameColor}${repo.name}\x1b[0m`;
+    // Format display name with bracket notation for worktrees
+    let displayName = repo.name;
+    if (repo.name.includes('/')) {
+      const [parent, worktree] = repo.name.split('/');
+      displayName = `${parent} [${worktree}]`;
+    }
+
+    // Format with space delimiter and colored display name
+    const coloredName = `${nameColor}${displayName}\x1b[0m`;
 
     // Use space delimiter with status, name, and raw path
     return `${status} ${coloredName} ${repo.path}`;
