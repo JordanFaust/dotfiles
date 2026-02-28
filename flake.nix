@@ -109,7 +109,10 @@
       # swapping pack to stable
       unstable = pkgs';
       stable = pkgs-stable';
-      my = self.packages."${linuxSystem}";
+      my =
+        if final.stdenv.hostPlatform.system == linuxSystem
+        then self.packages."${linuxSystem}"
+        else {};
     };
 
     overlays =
