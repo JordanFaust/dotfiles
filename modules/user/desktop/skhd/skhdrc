@@ -1,0 +1,12 @@
+# skhdrc — skhd hotkey daemon configuration
+# Docs: https://github.com/koekeishiya/skhd
+#
+# Most keybindings are handled in AeroSpace (aerospace.toml).
+# Use skhd for system-level bindings that AeroSpace cannot handle,
+# such as launching applications or triggering shell scripts.
+
+# Application launcher — terminal
+# alt - return : open -n -a kitty
+
+# Screenshot to clipboard
+# cmd + shift - 3 : screencapture -c -x ~/Pictures/screenshot-$(date +%Y%m%d-%H%M%S).png
