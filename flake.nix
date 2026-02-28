@@ -136,7 +136,8 @@
     nixosConfigurations =
       mapHosts ./hosts/nixos {};
 
-    darwinConfigurations = {};
+    darwinConfigurations =
+      mapDarwinHosts ./hosts/darwin {pkgs = pkgs-darwin;};
 
     devShell."${linuxSystem}" =
       import ./shell.nix {inherit pkgs;};
