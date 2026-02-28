@@ -1,13 +1,14 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }: let
   cfg = config.modules.desktop.hyprland;
 in {
   options = {};
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (cfg.enable && pkgs.stdenv.isLinux) {
     # We are manually apply this theme
     catppuccin.hyprlock.enable = false;
     programs.hyprlock = {

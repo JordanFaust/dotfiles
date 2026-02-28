@@ -36,62 +36,48 @@ in {
   #
   config = lib.mkIf cfg.enable {
     home = {
-      packages = with pkgs; [
-        # TODO replace pamixer with amixer
-        # misc
-        # gpick
-        neofetch
-        # Dunst + EWW
-        recode
-        # Added utilities used in rice scripts
-        moreutils
-        # Fix broken nerd fonts
-        nerdfix
-
-        # adw-gtk3
-        font-awesome
-        cantarell-fonts
-
-        (catppuccin-kde.override {
-          flavour = ["macchiato"];
-          accents = ["rosewater"];
-        })
-
-        #
-        # Font Config
-        #
-
-        fontforge
-        # General Coding Fonts
-        jetbrains-mono
-        fira-code
-        fira-code-symbols
-        cascadia-code
-        victor-mono
-        inputs.private-fonts.packages.${system}.monolisa-variable
-        # monaspace
-        # General Sans Fonts
-        # open-sans
-
-        siji
-        nerd-fonts.caskaydia-cove
-        nerd-fonts.symbols-only
-        # Icon Fonts
-        my.nonicons
-      ];
+      packages = with pkgs;
+        [
+          # Cross-platform packages
+          neofetch
+          recode
+          moreutils
+          font-awesome
+          jetbrains-mono
+          fira-code
+          fira-code-symbols
+          cascadia-code
+          victor-mono
+          inputs.private-fonts.packages.${system}.monolisa-variable
+          nerd-fonts.caskaydia-cove
+          nerd-fonts.symbols-only
+          my.nonicons
+        ]
+        ++ lib.optionals pkgs.stdenv.isLinux [
+          # Linux-only: KDE, GTK fonts, font tools, status bar icons
+          nerdfix
+          cantarell-fonts
+          (catppuccin-kde.override {
+            flavour = ["macchiato"];
+            accents = ["rosewater"];
+          })
+          fontforge
+          siji
+        ];
 
       file = {
-        # Avatar/Face jpg
-        ".face" = {source = ./assets/dalle-nixos-profile.jpg;};
-
-        # Firefox configuration
+        # Firefox configuration (cross-platform)
         ".mozilla/firefox/jordan.default" = {
           source = ./config/firefox;
           recursive = true;
         };
+      }
+      // lib.optionalAttrs pkgs.stdenv.isLinux {
+        # Avatar/Face jpg (used by Linux lockscreen/GTK)
+        ".face" = {source = ./assets/dalle-nixos-profile.jpg;};
       };
 
-      sessionVariables = {
+      sessionVariables = lib.mkIf pkgs.stdenv.isLinux {
         QT_SCALE_FACTOR = "2.6";
         ELM_SCALE = "2.6";
         GDK_SCALE = "0.5";
@@ -103,34 +89,35 @@ in {
       accent = "rosewater";
       flavor = "macchiato";
 
-      gtk = {
-        icon.enable = true;
-      };
-      cursors.enable = true;
+      gtk.icon.enable = pkgs.stdenv.isLinux;
+      cursors.enable = pkgs.stdenv.isLinux;
     };
 
     # Enable fontconfig to discover fonts added as home.packages above
     fonts.fontconfig.enable = true;
 
-    xdg.configFile = {
-      # Background Image
-      "background" = {source = "${osConfig.dotfiles.configDir}/themes/catppuccin/background.jpg";};
-      # Lockscreen Image
-      "lockscreen" = {source = "${osConfig.dotfiles.configDir}/themes/catppuccin/doggocat.png";};
-      # Rofi Themes
-      "rofi/theme" = {
-        source = ./config/rofi;
-        recursive = true;
+    xdg.configFile =
+      {
+        # Kitty Config/Theme (cross-platform)
+        "kitty" = {
+          source = ./config/kitty;
+          recursive = true;
+        };
+        "kitty/themes/catppuccin-macchiato.conf".source = ./config/kitty/themes/catppuccin-macchiato.conf;
+      }
+      // lib.optionalAttrs pkgs.stdenv.isLinux {
+        # Background Image
+        "background" = {source = "${osConfig.dotfiles.configDir}/themes/catppuccin/background.jpg";};
+        # Lockscreen Image
+        "lockscreen" = {source = "${osConfig.dotfiles.configDir}/themes/catppuccin/doggocat.png";};
+        # Rofi Themes (Linux-only)
+        "rofi/theme" = {
+          source = ./config/rofi;
+          recursive = true;
+        };
       };
-      # Kitty Config/Theme
-      "kitty" = {
-        source = ./config/kitty;
-        recursive = true;
-      };
-      "kitty/themes/catppuccin-macchiato.conf".source = ./config/kitty/themes/catppuccin-macchiato.conf;
-    };
 
-    modules.desktop.gtk = {
+    modules.desktop.gtk = lib.mkIf pkgs.stdenv.isLinux {
       enable = true;
       name = "Catppuccin-GTK-Red-Dark-Compact-Macchiato";
       package = pkgs.magnetic-catppuccin-gtk.override {
