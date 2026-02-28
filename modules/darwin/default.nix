@@ -18,8 +18,8 @@
   # Leave the Nix daemon entirely to Determinate Nix — do not conflict.
   # Do not set nix.package here; Determinate manages it.
 
-  # Touch ID for sudo
-  security.pam.enableSudoTouchIdAuth = true;
+  # Touch ID for sudo (nix-darwin >= 2024 uses pam.services.sudo_local)
+  security.pam.services.sudo_local.touchIdAuth = true;
 
   environment.systemPackages = with pkgs; [
     git
