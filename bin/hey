@@ -1,5 +1,4 @@
-#!/usr/bin/env cached-nix-shell
-#! nix-shell -p ruby_3_2 -i "ruby -S" --quiet
+#!/usr/bin/env ruby
 
 # vi: set ft=ruby :
 DESC = <<~DESC

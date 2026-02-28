@@ -1,7 +1,7 @@
 {
   config,
   lib,
-  pkgs,
+  # pkgs,
   ...
 }:
 with lib;
@@ -14,11 +14,10 @@ in {
   };
 
   config = mkIf cfg.enable {
-    user.packages = with pkgs; [
-      # ollama
-      # goose-cli
-      python311Packages.uv
-    ];
+    # user.packages = with pkgs; [
+    #   # ollama
+    #   # goose-cli
+    # ];
     # Enable ollama locally and configure the models that are pulled by default
     # services.ollama = {
     #   enable = true;

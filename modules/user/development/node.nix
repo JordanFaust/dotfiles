@@ -8,7 +8,8 @@
 with lib;
 with lib.my; let
   cfg = config.modules.development.node;
-  minimal = config.modules.minimal;
+  inherit (config.modules) minimal;
+  # inherit (stdenv)
 in {
   options.modules.development.node = mkOption {
     description = ''
@@ -35,13 +36,13 @@ in {
         bun
         deno
         nodejs_22
-        corepack
+        yarn
         inputs.wrangler.packages.${pkgs.system}.wrangler
         cypress
         playwright.browsers
 
         biome
-        # pkgs.turbo
+        turbo
         # (builtins.getFlake "github:NixOS/nixpkgs/8dfad603247387df1df4826b8bea58efc5d012d8").legacyPackages.${pkgs.system}.turbo
       ];
 
@@ -59,7 +60,7 @@ in {
         NPM_CONFIG_TMP = "$XDG_RUNTIME_DIR/npm";
         NPM_CONFIG_PREFIX = "$XDG_CACHE_HOME/npm";
         NODE_REPL_HISTORY = "$XDG_CACHE_HOME/node/repl_history";
-        PLAYWRIGHT_BROWSERS_PATH= "${pkgs.playwright.browsers}";
+        PLAYWRIGHT_BROWSERS_PATH = "${pkgs.playwright.browsers}";
       };
     };
   };

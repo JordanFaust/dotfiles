@@ -32,6 +32,38 @@ function isGitRepository(dirPath) {
 }
 
 /**
+ * Discovers worktrees for a given git repository
+ * @param {string} repoPath - Path to the main git repository
+ * @param {string} repoName - Name of the main repository
+ * @returns {Array<{name: string, path: string}>} Array of worktrees
+ */
+function discoverWorktrees(repoPath, repoName) {
+  const worktrees = [];
+  const worktreesDir = path.join(repoPath, '.worktrees');
+
+  try {
+    if (!fs.existsSync(worktreesDir)) {
+      return worktrees;
+    }
+
+    const entries = fs.readdirSync(worktreesDir, { withFileTypes: true });
+
+    for (const entry of entries) {
+      if (entry.isDirectory()) {
+        worktrees.push({
+          name: `${repoName}/${entry.name}`,
+          path: path.join(worktreesDir, entry.name)
+        });
+      }
+    }
+  } catch (error) {
+    // Skip worktrees directory if we can't read it
+  }
+
+  return worktrees;
+}
+
+/**
  * Discovers all git repositories in the specified search paths
  * @returns {Array<{name: string, path: string}>} Array of git repositories
  */
@@ -45,6 +77,10 @@ function discoverGitRepositories() {
       name: "dotfiles",
       path: dotfilesPath,
     });
+
+    // Discover worktrees for dotfiles
+    const dotfilesWorktrees = discoverWorktrees(dotfilesPath, "dotfiles");
+    repositories.push(...dotfilesWorktrees);
   }
 
   // Always include ~/.config/nvim if it exists and is a git repository
@@ -54,6 +90,10 @@ function discoverGitRepositories() {
       name: "nvim",
       path: nvimPath,
     });
+
+    // Discover worktrees for nvim
+    const nvimWorktrees = discoverWorktrees(nvimPath, "nvim");
+    repositories.push(...nvimWorktrees);
   }
 
   for (const searchPath of SEARCH_PATHS) {
@@ -73,6 +113,10 @@ function discoverGitRepositories() {
               name: entry.name,
               path: fullPath,
             });
+
+            // Discover worktrees for this repository
+            const repoWorktrees = discoverWorktrees(fullPath, entry.name);
+            repositories.push(...repoWorktrees);
           }
         }
       }
@@ -209,10 +253,10 @@ function formatRepositoriesForFZF(repositories, currentSession, existingSessions
       nameColor = "\x1b[38;2;202;211;245m"; // text (#cad3f5) = 202,211,245
     }
 
-    // Format with space delimiter
+    // Format display name (keep slash notation for worktrees)
     const coloredName = `${nameColor}${repo.name}\x1b[0m`;
 
-    // Use space delimiter with status, name, and raw path
+    // Format with space delimiter
     return `${status} ${coloredName} ${repo.path}`;
   });
 }

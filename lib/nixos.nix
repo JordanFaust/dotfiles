@@ -9,10 +9,9 @@ with lib;
 with lib.my; let
   sys = "x86_64-linux";
 in {
-  mkHost = path: attrs @ {system ? sys, ...}:
-    let
-      specialArgs = {lib = lib; inputs = inputs; system = system; home-manager = home-manager;};
-    in
+  mkHost = path: attrs @ {system ? sys, ...}: let
+    specialArgs = {inherit lib inputs system home-manager;};
+  in
     nixosSystem {
       inherit system;
       specialArgs = {inherit (specialArgs) lib inputs system home-manager;};
@@ -34,12 +33,14 @@ in {
         # target user will land home package configurations.
         home-manager.nixosModules.home-manager
         {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.users.jordan = import "${path}/home.nix";
-          # home-manager.users.modules = modules;
+          home-manager = {
+            useGlobalPkgs = true;
+            useUserPackages = true;
+            users.jordan = import "${path}/home.nix";
+            # home-manager.users.modules = modules;
 
-          home-manager.extraSpecialArgs = {inherit (specialArgs) inputs system;};
+            extraSpecialArgs = {inherit (specialArgs) inputs system;};
+          };
         }
         # import the configuration within the target host directory. This will start by
         # evaluating the ./host/path/default.nix which should include the appropriate imports

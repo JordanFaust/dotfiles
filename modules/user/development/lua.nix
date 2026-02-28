@@ -2,14 +2,12 @@
   config,
   lib,
   pkgs,
-  inputs,
-  osConfig,
   ...
 }:
 with lib;
 with lib.my; let
   cfg = config.modules.development.lua;
-  minimal = config.modules.minimal;
+  inherit (config.modules) minimal;
 in {
   options.modules.development.lua = mkOption {
     description = ''
@@ -37,7 +35,7 @@ in {
         lua54Packages.lua
         # luajit
         luaformatter
-        sumneko-lua-language-server
+        lua-language-server
         stylua
         lua54Packages.luarocks
         # luaPackages.moonscript

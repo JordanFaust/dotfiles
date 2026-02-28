@@ -27,7 +27,7 @@ in {
     };
   };
 
-  config = lib.mkIf (cfg.enable) {
+  config = lib.mkIf cfg.enable {
     # Enable DConf for configuration of systems
     modules.desktop.dconf.enable = true;
 

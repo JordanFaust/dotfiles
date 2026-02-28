@@ -13,7 +13,9 @@ with lib.my; let
 in {
   imports =
     # Space to include configuration that must run first
-    []
+    [
+      inputs.catppuccin.homeModules.catppuccin
+    ]
     # # All my personal modules
     ++ (mapModulesRec'
       (toString ../../modules/user)
@@ -43,4 +45,7 @@ in {
       streaming.enable = true;
     };
   };
+
+  # Remap Caps Lock to Control
+  wayland.windowManager.hyprland.settings.input.kb_options = "ctrl:nocaps";
 }

@@ -12,8 +12,9 @@
 }:
 with lib;
 with lib.my; let
+  inherit (config.modules) minimal;
+
   cfg = config.modules.applications.browsers;
-  minimal = config.modules.minimal;
   firefoxPrivateDesktop = pkgs.makeDesktopItem {
     name = "firefox-private";
     desktopName = "Firefox (Private)";
@@ -135,7 +136,7 @@ in {
 
   config = mkIf (!minimal && cfg.enable) {
     home = {
-      packages = with pkgs; [
+      packages = [
         firefoxDesktop
         firefoxPrivateDesktop
         chromiumDesktop

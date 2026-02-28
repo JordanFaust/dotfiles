@@ -10,7 +10,6 @@
 with lib;
 with lib.my; let
   cfg = config.modules.applications.streaming;
-  minimal = config.modules.minimal;
   # # Configure allow unfree for the pinned packages sha
   # mkPkgs = pkgs:
   #   import pkgs {
@@ -40,6 +39,7 @@ with lib.my; let
     startupWMClass = "zoom";
     terminal = false;
   };
+  inherit (config.modules) minimal;
 in {
   options.modules.applications.streaming = mkOption {
     description = ''
@@ -71,7 +71,7 @@ in {
   config = lib.mkIf (!minimal && cfg.enable) {
     # Force Zoom to open in the browser until issues are resolved
     home = {
-      packages = with pkgs; [
+      packages = [
         # zoom-us
         # zoomDesktop
         # pinnedZoomPkgs.zoom-us
@@ -84,7 +84,7 @@ in {
     };
 
     programs.obs-studio = {
-      enable = cfg.obs.enable;
+      inherit (cfg.obs) enable;
       plugins = with pkgs.obs-studio-plugins; [
         wlrobs
         obs-backgroundremoval

@@ -20,8 +20,8 @@ with lib.my; let
   gtkTheme = config.modules.desktop.gtk.name;
 
   cursor = {
-    name = config.modules.desktop.gtk.cursor.name;
-    size = config.modules.desktop.gtk.cursor.size;
+    inherit (config.modules.desktop.gtk.cursor) name;
+    inherit (config.modules.desktop.gtk.cursor) size;
   };
 in {
   options.modules.desktop.hyprland = mkOption {
@@ -47,7 +47,7 @@ in {
     };
   };
 
-  config = lib.mkIf (cfg.enable) {
+  config = lib.mkIf cfg.enable {
     # Disabled, along with most gnome dependencies to reduce install size and CVEs
     # xdg.desktopEntries."org.gnome.Settings" = {
     #   name = "Settings";
@@ -164,21 +164,9 @@ in {
         ];
 
         windowrule = let
-          fregex = regex: "float, ^(${regex})$";
-        in [
-          # (fregex "org.gnome.Settings")
-          # (fregex "org.gnome.design.Palette")
-          # (fregex "Color Picker")
-          # (fregex "xdg-desktop-portal")
-          # (fregex "xdg-desktop-portal-gnome")
-          # (fregex "com.github.Aylur.ags")
-          "workspace stayfocused, title:MainPicker"
-        ];
-
-        windowrulev2 = let
-          f = title: class: "float, title:^(${title})$, class:^(${class})$";
-          pin = title: class: "pin, title:^(${title})$ class:^(${class})$";
-          inhibitfocus = regex: "idleinhibit focus,title:^(${regex})$";
+          f = title: class: "match:title ^(${title})$, match:class ^(${class})$, float on";
+          pin = title: class: "match:title ^(${title})$, match:class ^(${class})$, pin on";
+          inhibitfocus = regex: "match:title ^(${regex})$, idle_inhibit focus";
         in [
           # Make sure that the zoom toolbar and video window are floating
           (f "zoom_linux_float_video_window" "zoom")
@@ -193,17 +181,17 @@ in {
           (pin "zoom_linux_float_message_reminder" "zoom")
           # First move the toolbar so it doesn't disappear behind AGS bar
           # Pin the floating toolbar and make it follow the current workspace
-          "move 1498 58, title:^(as_toolbar)$, class:^(zoom)$"
+          "match:title ^(as_toolbar)$, match:class ^(zoom)$, move 1498 58"
           (pin "as_toolbar" "zoom")
           # Inhibit Screen Locking/Sleeping during video calls/watching videos
           (inhibitfocus "Zoom Meeting")
 
           # Autostart workspace placement
-          "workspace 2 silent, class:neovim"
-          "workspace 2 silent, class:firefox"
-          "workspace 3 silent, class:Slack"
-          "workspace 3 silent, class:spotify"
-          "workspace 4 silent, class:chromium-browser"
+          "match:class neovim, workspace 2 silent"
+          "match:class firefox, workspace 2 silent"
+          "match:class Slack, workspace 3 silent"
+          "match:class spotify, workspace 3 silent"
+          "match:class chromium-browser, workspace 4 silent"
         ];
 
         bind = let

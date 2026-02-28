@@ -7,7 +7,6 @@
 with lib;
 with lib.my; let
   cfg = config.modules.applications.instant-messangers;
-  minimal = config.modules.minimal;
   desktop = pkgs.makeDesktopItem {
     name = "Slack";
     desktopName = "Slack";
@@ -15,10 +14,11 @@ with lib.my; let
     icon = "slack";
     categories = ["GNOME" "GTK" "Network" "InstantMessaging"];
     exec = "uwsm app -- ${pkgs.slack}/bin/slack --enable-features=UseOzonePlatform --ozone-platform=wayland -s %U";
-    mimeTypes = [ "x-scheme-handler/slack" ];
+    mimeTypes = ["x-scheme-handler/slack"];
     startupNotify = true;
     startupWMClass = "Slack";
   };
+  inherit (config.modules) minimal;
 in {
   options.modules.applications.instant-messangers = mkOption {
     description = ''
@@ -53,7 +53,7 @@ in {
   # Add configured instant messangers if this isn't a minimal install and instant messangers are enabled.
   config = mkIf (!minimal && cfg.enable) {
     home = {
-      packages =[
+      packages = [
         desktop
       ];
     };

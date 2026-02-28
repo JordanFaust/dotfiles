@@ -2,14 +2,12 @@
   config,
   lib,
   pkgs,
-  inputs,
-  osConfig,
   ...
 }:
 with lib;
 with lib.my; let
   cfg = config.modules.development.golang;
-  minimal = config.modules.minimal;
+  inherit (config.modules) minimal;
 in {
   options.modules.development.golang = mkOption {
     description = ''
@@ -43,6 +41,8 @@ in {
         protobufc
         # Buf CLI
         buf
+        # Golang dot visualization/exploration
+        go-callvis
       ];
 
       sessionVariables = {

@@ -14,9 +14,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    services.dbus = {
-      implementation = cfg.implementation;
-      apparmor = cfg.apparmor;
-    };
+    services.dbus.implementation = cfg.implementation;
+    services.dbus.apparmor = cfg.apparmor;
   };
 }

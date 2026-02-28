@@ -7,7 +7,7 @@
 with lib;
 with lib.my; let
   cfg = config.modules.shell.git;
-  configDir = config.dotfiles.configDir;
+  inherit (config.dotfiles) configDir;
 in {
   options.modules.shell.git = {
     enable = mkBoolOpt false;
@@ -15,11 +15,11 @@ in {
 
   config = mkIf cfg.enable {
     user.packages = with pkgs; [
-      gitAndTools.gh
-      gitAndTools.git-open
-      gitAndTools.diff-so-fancy
+      gh
+      git-open
+      diff-so-fancy
       (mkIf config.modules.shell.gnupg.enable
-        gitAndTools.git-crypt)
+        git-crypt)
       act
     ];
 

@@ -1,5 +1,4 @@
 {
-  options,
   config,
   lib,
   pkgs,
@@ -8,7 +7,7 @@
 with lib;
 with lib.my; let
   cfg = config.modules.services.docker;
-  configDir = config.dotfiles.configDir;
+  inherit (config.dotfiles) configDir;
 in {
   options.modules.services.docker = {
     enable = mkBoolOpt false;

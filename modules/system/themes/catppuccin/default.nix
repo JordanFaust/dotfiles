@@ -7,7 +7,7 @@
 with lib;
 with lib.my; let
   cfg = config.modules.theme;
-  configDir = config.dotfiles.configDir;
+  inherit (config.dotfiles) configDir;
   # catppuccin-ags = pkgs.callPackage ./ags/ags.nix {};
 in {
   config = mkIf (cfg.active == "catppuccin") (mkMerge [
@@ -43,11 +43,12 @@ in {
             brightmagenta = "#B7BDF8";
             brightcyan = "#91D7E3";
             white = "#ded8d7";
-
-            types.fg = "#ded8d7";
-            types.bg = "#24273A";
-            types.panelbg = "#1E2030";
-            types.border = "#F5A97F";
+            types = {
+              fg = "#ded8d7";
+              bg = "#24273A";
+              panelbg = "#1E2030";
+              border = "#F5A97F";
+            };
           };
         };
 
