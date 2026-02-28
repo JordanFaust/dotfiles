@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 with lib.hm.gvariant; let
@@ -25,7 +26,7 @@ in {
     };
   };
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (cfg.enable && pkgs.stdenv.isLinux) {
     dconf.settings = {
       "org/gnome/desktop/interface" = {
         show-battery-percentage = true;

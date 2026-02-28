@@ -1,13 +1,17 @@
 {
   username,
+  pkgs,
   ...
 }:
 let
-  homeDirectory = "/home/${username}";
+  homeDirectory =
+    if pkgs.stdenv.isDarwin
+    then "/Users/${username}"
+    else "/home/${username}";
 in {
   news.display = "show";
 
-  targets.genericLinux.enable = true;
+  targets.genericLinux.enable = pkgs.stdenv.isLinux;
 
   home = {
     inherit username homeDirectory;
