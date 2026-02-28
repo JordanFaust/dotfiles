@@ -18,7 +18,7 @@ in {
     ]
     # # All my personal modules
     ++ (mapModulesRec'
-      (toString ../../modules/user)
+      (toString ../../../modules/user)
       (path: import path {inherit pkgs inputs config lib username osConfig system;}));
 
   modules = {
@@ -45,7 +45,4 @@ in {
       streaming.enable = true;
     };
   };
-
-  # Remap Caps Lock to Control
-  wayland.windowManager.hyprland.settings.input.kb_options = "ctrl:nocaps";
 }

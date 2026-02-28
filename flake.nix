@@ -127,7 +127,7 @@
     # Host Configuration
     #
     nixosConfigurations =
-      mapHosts ./hosts {};
+      mapHosts ./hosts/nixos {};
 
     devShell."${system}" =
       import ./shell.nix {inherit pkgs;};

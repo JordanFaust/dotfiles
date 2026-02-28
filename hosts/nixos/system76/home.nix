@@ -17,7 +17,7 @@ in {
     []
     # # All my personal modules
     ++ (mapModulesRec'
-      (toString ../../modules/user)
+      (toString ../../../modules/user)
       (path: import path {inherit pkgs inputs config lib username osConfig;}));
 
   modules = {
