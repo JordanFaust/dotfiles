@@ -14,6 +14,8 @@ with lib;
 with lib.my; let
   username = "jordan";
 in {
+  home.stateVersion = "24.11";
+
   imports =
     [inputs.catppuccin.homeModules.catppuccin]
     ++ (mapModulesRec'

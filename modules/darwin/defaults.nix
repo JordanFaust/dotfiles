@@ -8,7 +8,7 @@
     NSGlobalDomain = {
       # Fastest key repeat (helps with vim-style navigation)
       KeyRepeat = 1;
-      InitialKeyRepeatDelay = 10;
+      InitialKeyRepeat = 10;
       # Expand save and print panels by default
       NSNavPanelExpandedStateForSaveMode = true;
       PMPrintingExpandedStateForPrint = true;
