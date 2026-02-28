@@ -26,19 +26,75 @@ dotfiles over there.
 
 ------
 
-|                |                                                          |
-|----------------|----------------------------------------------------------|
-| **Shell:**     | zsh + zgenom                                             |
-| **DE:**        | Hyprland (Wayland)                                       |
-| **Editor:**    | [neovim](https://neovim.io/)                                                 |
-| **Terminal:**  | kitty                                                    |
-| **Launcher:**  | rofi                                                     |
-| **Browser:**   | firefox                                                  |
-| **GTK Theme:** | [Catppuccin](https://github.com/catppuccin/gtk)          |
+|                | NixOS                                 | macOS                                                     |
+|----------------|---------------------------------------|-----------------------------------------------------------|
+| **Shell**      | zsh + zgenom                          | zsh + zgenom                                              |
+| **WM**         | [Hyprland](https://hyprland.org/)     | [AeroSpace](https://nikitabobko.github.io/AeroSpace/)     |
+| **Hotkeys**    | Hyprland binds                        | [skhd](https://github.com/koekeishiya/skhd)               |
+| **Editor**     | [neovim](https://neovim.io/)          | [neovim](https://neovim.io/)                              |
+| **Terminal**   | kitty                                 | kitty                                                     |
+| **Browser**    | firefox                               | firefox                                                   |
+| **Theme**      | Catppuccin Mocha                      | Catppuccin Mocha                                          |
 
 -----
 
-## Quick start
+## Quick start (macOS / Darwin)
+
+For Apple Silicon Macs using [Determinate Nix](https://determinate.systems/) + nix-darwin.
+
+### Prerequisites
+
+**1. Install Determinate Nix** (works on company-managed Macs):
+```sh
+curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install
+```
+
+**2. Install Homebrew** (required for GUI app casks):
+```sh
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+### Bootstrap
+
+```sh
+# Clone dotfiles (nix expects them at /etc/dotfiles)
+sudo git clone https://github.com/JordanFaust/dotfiles /etc/dotfiles
+cd /etc/dotfiles
+
+# Bootstrap nix-darwin for the first time (nix-darwin not yet on PATH)
+nix run nix-darwin -- switch --flake .#work
+```
+
+The hostname `work` maps to `hosts/darwin/work/`. Edit `hosts/darwin/work/home.nix` to
+enable/disable modules before bootstrapping, and add any work-specific Homebrew
+casks to `hosts/darwin/work/default.nix`.
+
+### Subsequent rebuilds
+
+```sh
+darwin-rebuild switch --flake /etc/dotfiles#work
+```
+
+Or via the `hey` script:
+```sh
+hey rebuild
+```
+
+### Adding GUI apps (Homebrew casks)
+
+Edit `hosts/darwin/work/default.nix` and add to `homebrew.casks`:
+```nix
+homebrew.casks = [
+  "zoom"
+  "slack"
+  "1password"
+];
+```
+Then run `darwin-rebuild switch --flake /etc/dotfiles#work`.
+
+---
+
+## Quick start (NixOS)
 
 1. Acquire NixOS 21.11 or newer:
    ```sh
