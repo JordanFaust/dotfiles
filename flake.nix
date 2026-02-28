@@ -13,6 +13,10 @@
     # Follow the latest and greatest by default
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-24.11";
+    nix-darwin = {
+      url = "github:lnl7/nix-darwin";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -55,27 +59,27 @@
     nixpkgs-stable,
     nixpkgs-unstable,
     home-manager,
+    nix-darwin,
     alejandra,
     nix-vscode-extensions,
     ...
   }: let
-    inherit (lib.my) mapModules mapModulesRec mapHosts;
+    inherit (lib.my) mapModules mapModulesRec mapHosts mapDarwinHosts;
 
-    system = "x86_64-linux";
+    linuxSystem  = "x86_64-linux";
+    darwinSystem = "aarch64-darwin";
 
-    mkPkgs = pkgs: extraOverlays:
+    mkPkgs = system: pkgs: extraOverlays:
       import pkgs {
         inherit system;
         config.allowUnfree = true;
         overlays = extraOverlays ++ (lib.attrValues self.overlays);
       };
 
-    pkgs = mkPkgs nixpkgs [
-      self.overlay
-      inputs.nix-vscode-extensions.overlays.default
-    ];
-    pkgs' = mkPkgs nixpkgs-unstable [];
-    pkgs-stable' = mkPkgs nixpkgs-stable [];
+    pkgs        = mkPkgs linuxSystem  nixpkgs [ self.overlay inputs.nix-vscode-extensions.overlays.default ];
+    pkgs'       = mkPkgs linuxSystem  nixpkgs-unstable [];
+    pkgs-stable' = mkPkgs linuxSystem nixpkgs-stable [];
+    pkgs-darwin  = mkPkgs darwinSystem nixpkgs [ self.overlay inputs.nix-vscode-extensions.overlays.default ];
 
     lib =
       nixpkgs.lib.extend
@@ -105,7 +109,7 @@
       # swapping pack to stable
       unstable = pkgs';
       stable = pkgs-stable';
-      my = self.packages."${system}";
+      my = self.packages."${linuxSystem}";
     };
 
     overlays =
@@ -114,7 +118,7 @@
     #
     # Custom Packages
     #
-    packages."${system}" =
+    packages."${linuxSystem}" =
       mapModules ./packages (p: pkgs.callPackage p {inherit inputs;});
 
     #
@@ -129,10 +133,12 @@
     nixosConfigurations =
       mapHosts ./hosts/nixos {};
 
-    devShell."${system}" =
+    darwinConfigurations = {};
+
+    devShell."${linuxSystem}" =
       import ./shell.nix {inherit pkgs;};
 
-    defaultApp."${system}" = {
+    defaultApp."${linuxSystem}" = {
       type = "app";
       program = ./bin/hey;
     };
