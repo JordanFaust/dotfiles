@@ -16,8 +16,6 @@
 
   # Host-specific Homebrew additions (supplements modules/darwin/homebrew.nix).
   homebrew.casks = [
-    # Add work-specific GUI apps here as needed, e.g.:
-    # "zoom"
-    # "slack"
+    "raycast"
   ];
 }
