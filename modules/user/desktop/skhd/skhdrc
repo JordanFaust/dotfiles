@@ -1,12 +1,11 @@
 # skhdrc — skhd hotkey daemon configuration
 # Docs: https://github.com/koekeishiya/skhd
 #
-# Most keybindings are handled in AeroSpace (aerospace.toml).
-# Use skhd for system-level bindings that AeroSpace cannot handle,
-# such as launching applications or triggering shell scripts.
+# cmd-space is configured directly in Raycast preferences (replaces Spotlight).
+# Screenshots mirror Hyprland: Home = region to file, shift+Home = region to clipboard.
 
-# Application launcher — terminal
-# alt - return : open -n -a kitty
+# Screenshot region to file — matches Hyprland: Home
+home : screencapture -is ~/Pictures/screenshot-$(date +%Y%m%d-%H%M%S).png
 
-# Screenshot to clipboard
-# cmd + shift - 3 : screencapture -c -x ~/Pictures/screenshot-$(date +%Y%m%d-%H%M%S).png
+# Screenshot region to clipboard — matches Hyprland: SUPER+Home
+shift - home : screencapture -ic
