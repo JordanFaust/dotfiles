@@ -12,7 +12,12 @@
       # Expand save and print panels by default
       NSNavPanelExpandedStateForSaveMode = true;
       PMPrintingExpandedStateForPrint = true;
+      # Dark mode — matches Catppuccin Macchiato dark theme used on NixOS/Hyprland
+      AppleInterfaceStyle = "Dark";
     };
+
+    # Reduce transparency for cleaner, more opaque windows (closer to Hyprland feel)
+    universalaccess.reduceTransparency = true;
 
     dock = {
       autohide = true;
