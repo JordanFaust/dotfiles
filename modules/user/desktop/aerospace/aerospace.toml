@@ -45,8 +45,8 @@ cmd-ctrl-j = 'resize height +50'
 cmd-slash = 'layout tiles horizontal vertical'
 cmd-comma = 'layout accordion horizontal vertical'
 
-# Toggle split — matches SUPER+P
-cmd-p = 'toggle-split'
+# Toggle split orientation — matches SUPER+P
+cmd-p = 'layout horizontal vertical'
 
 # Fullscreen — matches SUPER+SHIFT+F (cmd-f reserved for Find in apps)
 cmd-shift-f = 'macos-native-fullscreen'
