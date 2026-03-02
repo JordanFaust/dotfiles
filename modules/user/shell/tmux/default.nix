@@ -86,6 +86,7 @@ in {
       aggressiveResize = false;
       focusEvents = true;
       disableConfirmationPrompt = true;
+      terminal = "tmux-256color";
 
       plugins = with pkgs.tmuxPlugins; [
         copycat
@@ -95,7 +96,7 @@ in {
       ];
 
       extraConfig = ''
-        set -sg terminal-overrides ",*:RGB"
+        set -ag terminal-overrides ",xterm-256color:RGB"
 
         # Window management
         setw -g allow-rename off
