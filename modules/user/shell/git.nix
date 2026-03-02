@@ -35,7 +35,7 @@ in {
     programs.git = {
       enable = true;
 
-      extraConfig = {
+      settings = {
         user = {
           name = "Jordan Faust";
           email = "jordan.faust@procore.com";
@@ -111,13 +111,12 @@ in {
           process = "git-lfs filter-process";
           clean = "git-lfs clean -- %f";
         };
-      };
-
-      aliases = {
-        unadd = "reset HEAD";
-        ranked-authors = "!git authors | sort | uniq -c | sort -n";
-        emails = "!git log --format=\"%aE\" | sort -u";
-        email-domains = "!git log --format=\"%aE\" | awk -F'@' '{print $2}' | sort -u";
+        alias = {
+          unadd = "reset HEAD";
+          ranked-authors = "!git authors | sort | uniq -c | sort -n";
+          emails = "!git log --format=\"%aE\" | sort -u";
+          email-domains = "!git log --format=\"%aE\" | awk -F'@' '{print $2}' | sort -u";
+        };
       };
 
       ignores = [
@@ -160,7 +159,7 @@ in {
     };
 
     # Shell aliases and fzf integration (from former config/git/aliases.zsh)
-    programs.zsh.initExtra = lib.mkAfter ''
+    programs.zsh.initContent = lib.mkOrder 1500 ''
       g() { [[ $# = 0 ]] && git status --short . || git $*; }
 
       alias cdg='cd $(git rev-parse --show-toplevel)'

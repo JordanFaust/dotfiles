@@ -51,7 +51,7 @@ in {
       recursive = true;
     };
 
-    programs.zsh.initExtra = ''
+    programs.zsh.initContent = ''
       alias ta='tmux attach'
       alias tl='tmux ls'
 

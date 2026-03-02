@@ -12,7 +12,7 @@ with lib.my; let
   zshEnabled = config.modules.shell.zsh != null && config.modules.shell.zsh.enable;
 in {
   config = mkIf (dockerEnabled && zshEnabled) {
-    programs.zsh.initExtra = mkAfter ''
+    programs.zsh.initContent = mkOrder 1500 ''
       ## Docker aliases (from modules/user/services/docker.nix)
       alias dk=docker
       alias dkc=docker-compose

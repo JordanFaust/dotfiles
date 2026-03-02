@@ -51,7 +51,7 @@ in {
 
     programs.zsh = {
       enable = true;
-      dotDir = ".config/zsh";
+      dotDir = "${config.xdg.configHome}/zsh";
 
       history = {
         path = "${config.xdg.cacheHome}/zsh/zhistory";
@@ -107,7 +107,7 @@ in {
         export ARTIFACTORY_PASSWORD="$(cat /etc/sensitive/artifactory 2>/dev/null | cut -d':' -f2)"
       '';
 
-      initExtra = ''
+      initContent = ''
         ## Plugins
         export ZGEN_AUTOLOAD_COMPINIT=0
         export ZVM_INIT_MODE=sourcing

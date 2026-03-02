@@ -120,7 +120,7 @@ in {
       };
 
     # Source p10k prompt when zsh module is enabled
-    programs.zsh.initExtra = lib.mkIf (config.modules.shell.zsh != null && config.modules.shell.zsh.enable) (lib.mkAfter ''
+    programs.zsh.initContent = lib.mkIf (config.modules.shell.zsh != null && config.modules.shell.zsh.enable) (lib.mkOrder 1500 ''
       [[ ! -f ${config.xdg.configHome}/zsh/.p10k.zsh ]] || source ${config.xdg.configHome}/zsh/.p10k.zsh
     '');
 
