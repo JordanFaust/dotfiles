@@ -74,7 +74,7 @@ in {
         };
         pager = {
           branch = false;
-          diff = "diff-so-fancy | $$PAGER";
+          diff = "diff-so-fancy | $PAGER";
         };
         push = {
           autoSetupRemote = true;
