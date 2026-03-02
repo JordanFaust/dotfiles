@@ -28,15 +28,18 @@ in {
       gh
       git-open
       diff-so-fancy
+      git-extras
       act
     ] ++ lib.optionals gnupgEnabled [git-crypt];
 
     programs.git = {
       enable = true;
-      userName = "Jordan Faust";
-      userEmail = "jordan.faust@procore.com";
 
       extraConfig = {
+        user = {
+          name = "Jordan Faust";
+          email = "jordan.faust@procore.com";
+        };
         commit.gpgSign = false;
         tag.gpgSign = false;
         core = {
