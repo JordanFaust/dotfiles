@@ -5,6 +5,7 @@
   lib,
   home-manager,
   osConfig,
+  system,
   ...
 }:
 with lib;
@@ -14,11 +15,13 @@ with lib.my; let
 in {
   imports =
     # Space to include configuraton that must run first
-    []
+    [
+      inputs.catppuccin.homeModules.catppuccin
+    ]
     # # All my personal modules
     ++ (mapModulesRec'
       (toString ../../../modules/user)
-      (path: import path {inherit pkgs inputs config lib username osConfig;}));
+      (path: import path {inherit pkgs inputs config lib username osConfig system;}));
 
   modules = {
     # Enable all standardized components for a full development workstation.
