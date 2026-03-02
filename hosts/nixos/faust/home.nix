@@ -25,7 +25,7 @@ in {
     # Enable all standardized components for a full development workstation.
     workstation.enable = true;
 
-    shell = { direnv.enable = true; };
+    shell = { direnv.enable = true; git.enable = true; };
 
     #
     # Desktop and Window Manager Configuration
