@@ -42,5 +42,7 @@ in {
       golang.enable = true;
       rust.enable = true;
     };
+
+    services.docker.enable = true;
   };
 }

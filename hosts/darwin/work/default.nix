@@ -18,4 +18,8 @@
   homebrew.casks = [
     "raycast"
   ];
+
+  modules = {
+    services.docker.enable = true;
+  };
 }
