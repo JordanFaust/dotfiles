@@ -41,7 +41,7 @@ in {
         }
 
         dke() {
-          dk exec -it "$1" "''${@:1}"
+          dk exec -it "$1" "''${@:2}"
         }
       '';
     })
@@ -69,9 +69,9 @@ in {
             "--foreground"
           ];
           RunAtLoad = true;
-          KeepAlive = true;
-          StandardOutPath = "/tmp/colima.log";
-          StandardErrorPath = "/tmp/colima.log";
+          KeepAlive = {SuccessfulExit = true;};
+          StandardOutPath = "/tmp/colima-jordan.log";
+          StandardErrorPath = "/tmp/colima-jordan.log";
         };
       };
     })
