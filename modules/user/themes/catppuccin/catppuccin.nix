@@ -104,6 +104,8 @@ in {
           recursive = true;
         };
         "kitty/themes/catppuccin-macchiato.conf".source = ./config/kitty/themes/catppuccin-macchiato.conf;
+        # Powerlevel10k prompt (cross-platform, used when zsh module enabled)
+        "zsh/.p10k.zsh".source = ./config/zsh/.p10k.zsh;
       }
       // lib.optionalAttrs pkgs.stdenv.isLinux {
         # Background Image
@@ -116,6 +118,16 @@ in {
           recursive = true;
         };
       };
+
+    # Source p10k prompt when zsh module is enabled
+    programs.zsh.initExtra = lib.mkIf (config.modules.shell.zsh != null && config.modules.shell.zsh.enable) (lib.mkAfter ''
+      [[ ! -f ${config.xdg.configHome}/zsh/.p10k.zsh ]] || source ${config.xdg.configHome}/zsh/.p10k.zsh
+    '');
+
+    # Apply catppuccin tmux theme when tmux module is enabled
+    programs.tmux.extraConfig = lib.mkIf (config.modules.shell.tmux != null && config.modules.shell.tmux.enable) (lib.mkAfter ''
+      source-file ${./config/tmux.conf}
+    '');
 
     modules.desktop.gtk = lib.mkIf pkgs.stdenv.isLinux {
       enable = true;
