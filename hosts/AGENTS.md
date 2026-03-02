@@ -90,6 +90,10 @@ in {
     "zoom"
     "slack"
   ];
+
+  modules = {
+    services.docker.enable = true;
+  };
 }
 ```
 

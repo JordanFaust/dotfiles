@@ -43,6 +43,8 @@ in {
       rust.enable = true;
     };
 
-    services.docker.enable = true;
+    services = {
+      docker.enable = true;
+    };
   };
 }
