@@ -1,33 +1,79 @@
-# Docker zsh aliases — injected when system docker module is enabled.
-# System packages (docker, docker-compose, etc.) come from modules/system/services/docker.nix.
+# Docker user module — shell aliases (both platforms) + colima config (Darwin only).
+# System packages come from:
+#   NixOS  → modules/system/services/docker.nix
+#   Darwin → modules/darwin/services/docker.nix
 {
   config,
   lib,
-  osConfig,
+  pkgs,
   ...
 }:
 with lib;
 with lib.my; let
-  dockerEnabled = osConfig.modules.services.docker.enable or false;
-  zshEnabled = config.modules.shell.zsh != null && config.modules.shell.zsh.enable;
+  cfg = config.modules.services.docker;
 in {
-  config = mkIf (dockerEnabled && zshEnabled) {
-    programs.zsh.initContent = mkOrder 1500 ''
-      ## Docker aliases (from modules/user/services/docker.nix)
-      alias dk=docker
-      alias dkc=docker-compose
-      alias dkm=docker-machine
-      alias dkl='dk logs'
-      alias dkcl='dkc logs'
-
-      dkclr() {
-        dk stop $(docker ps -a -q)
-        dk rm $(docker ps -a -q)
-      }
-
-      dke() {
-        dk exec -it "$1" "''${@:1}"
-      }
-    '';
+  options.modules.services.docker = mkOption {
+    description = "Docker shell integration and (on Darwin) Colima VM configuration.";
+    type = with lib.types;
+      nullOr (submoduleWith {
+        modules = [
+          {
+            options.enable = mkEnableOption "docker";
+          }
+        ];
+      });
+    default = {};
   };
+
+  config = mkMerge [
+    # Cross-platform aliases — active on both NixOS and Darwin when enabled.
+    (mkIf cfg.enable {
+      programs.zsh.initContent = mkOrder 1500 ''
+        ## Docker aliases
+        alias dk=docker
+        alias dkc=docker-compose
+        alias dkl='dk logs'
+        alias dkcl='dkc logs'
+
+        dkclr() {
+          dk stop $(docker ps -a -q)
+          dk rm $(docker ps -a -q)
+        }
+
+        dke() {
+          dk exec -it "$1" "''${@:1}"
+        }
+      '';
+    })
+
+    # Darwin only — deploy colima config file and auto-start launchd agent.
+    (mkIf (cfg.enable && pkgs.stdenv.isDarwin) {
+      # cpu: 0 and memory: 0 = use all available resources (colima convention).
+      # vmType: vz uses Apple's Virtualization Framework (Apple Silicon) for
+      # better performance over QEMU. virtiofs gives native-speed bind mounts.
+      home.file.".colima/default/colima.yaml".text = ''
+        cpu: 0
+        memory: 0
+        disk: 60
+        vmType: vz
+        rosetta: false
+        mountType: virtiofs
+      '';
+
+      launchd.agents.colima = {
+        enable = true;
+        config = {
+          ProgramArguments = [
+            "${pkgs.colima}/bin/colima"
+            "start"
+            "--foreground"
+          ];
+          RunAtLoad = true;
+          KeepAlive = true;
+          StandardOutPath = "/tmp/colima.log";
+          StandardErrorPath = "/tmp/colima.log";
+        };
+      };
+    })
+  ];
 }

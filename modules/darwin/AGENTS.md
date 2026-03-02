@@ -14,9 +14,11 @@ Only Darwin hosts evaluate this. NixOS builds never see it.
 
 ```
 modules/darwin/
-├── default.nix    # Entry point — imports homebrew.nix + defaults.nix, sets stateVersion
-├── homebrew.nix   # Declarative Homebrew (shared across all Darwin hosts)
-└── defaults.nix   # macOS system preferences (dock, finder, keyboard, quarantine)
+├── default.nix        # Entry point — imports all below, sets stateVersion
+├── homebrew.nix       # Declarative Homebrew (shared across all Darwin hosts)
+├── defaults.nix       # macOS system preferences (dock, finder, keyboard, quarantine)
+└── services/
+    └── docker.nix     # Docker via Colima (installs colima + docker CLI tools)
 ```
 
 ## Conventions
