@@ -13,6 +13,7 @@
   imports = [
     ./homebrew.nix
     ./defaults.nix
+    ./services/docker.nix
   ];
 
   # Leave the Nix daemon entirely to Determinate Nix — do not conflict.
