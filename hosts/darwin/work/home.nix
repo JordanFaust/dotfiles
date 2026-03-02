@@ -25,7 +25,7 @@ in {
   modules = {
     workstation.enable = true;
 
-    shell = { direnv.enable = true; git.enable = true; };
+    shell = { direnv.enable = true; git.enable = true; gnupg.enable = true; };
 
     desktop = {
       aerospace.enable = true;
