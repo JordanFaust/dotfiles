@@ -25,6 +25,8 @@ in {
   modules = {
     workstation.enable = true;
 
+    shell = { direnv.enable = true; };
+
     desktop = {
       aerospace.enable = true;
       skhd.enable = true;
