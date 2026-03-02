@@ -52,8 +52,8 @@ in {
           };
         };
 
-        shell.zsh.rcFiles = ["${configDir}/zsh/.p10k.zsh"];
-        shell.tmux.rcFiles = [./config/tmux.conf];
+        # p10k and tmux theme config moved to modules/user/themes/catppuccin/catppuccin.nix
+        # using programs.zsh.initExtra and programs.tmux.extraConfig (Task 7)
         # desktop.browsers = {
         #   firefox.userChrome = concatMapStringsSep "\n" readFile [
         #     ./config/firefox/userChrome.css
