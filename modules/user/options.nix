@@ -3,15 +3,6 @@ with lib;
 with lib.my; {
   options = {
     modules = {
-      # Shell module options (direnv, etc.) — freeform allows shell/*.nix sub-options
-      shell = lib.mkOption {
-        type = lib.types.submodule {
-          freeformType = lib.types.attrs;
-        };
-        default = {};
-        description = "Shell module enable flags";
-      };
-
       # Minimal will reduce the packages, services, and programs configured to the minimal
       # set needed for a VM or a live boot disk image.
       minimal = lib.mkOption {
