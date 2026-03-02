@@ -24,7 +24,7 @@ in {
     # Enable all standardized components for a full development workstation.
     workstation.enable = true;
 
-    shell = { direnv.enable = true; git.enable = true; gnupg.enable = true; tmux.enable = true; };
+    shell = { direnv.enable = true; git.enable = true; gnupg.enable = true; tmux.enable = true; zsh.enable = true; };
 
     #
     # Desktop and Window Manager Configuration

@@ -48,7 +48,7 @@ in {
 
       # Run locally installed bin-script, e.g. n coffee file.coffee
       shellAliases = {
-        n = "PATH=\"$(${node}/bin/npm bin):$PATH\"";
+        n = "PATH=\"$(${pkgs.nodejs_22}/bin/npm bin):$PATH\"";
         ya = "yarn";
       };
 
