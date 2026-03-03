@@ -99,7 +99,6 @@ in {
         _source $ZDOTDIR/local.zshenv
 
         # Sensitive API keys (read from /etc/sensitive at runtime — NOT Nix interpolation)
-        export ANTHROPIC_API_KEY="$(cat /etc/sensitive/anthropic 2>/dev/null)"
         export OPENAI_API_KEY="$(cat /etc/sensitive/openai 2>/dev/null)"
         export GEMINI_API_KEY="$(cat /etc/sensitive/gemini 2>/dev/null)"
         export TAVILY_API_KEY="$(cat /etc/sensitive/tavily 2>/dev/null)"
