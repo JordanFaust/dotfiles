@@ -34,7 +34,11 @@ in {
     default = {};
   };
   #
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf cfg.enable (let
+    systemStr = pkgs.stdenv.hostPlatform.system;
+    privateFontsPkgs = inputs.private-fonts.packages or {};
+    monolisa = lib.optional (privateFontsPkgs ? ${systemStr}) privateFontsPkgs.${systemStr}.monolisa-variable;
+  in {
     home = {
       packages = with pkgs;
         [
@@ -48,10 +52,10 @@ in {
           fira-code-symbols
           cascadia-code
           victor-mono
-          # inputs.private-fonts.packages.${system}.monolisa-variable
           nerd-fonts.caskaydia-cove
           nerd-fonts.symbols-only
         ]
+        ++ monolisa
         ++ lib.optionals pkgs.stdenv.isLinux [
           my.nonicons
           # Linux-only: KDE, GTK fonts, font tools, status bar icons
@@ -165,5 +169,5 @@ in {
         };
       };
     };
-  };
+  });
 }

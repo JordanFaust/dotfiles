@@ -32,23 +32,21 @@ sudo chown $(whoami) /etc/dotfiles
 git clone https://github.com/JordanFaust/dotfiles /etc/dotfiles
 ```
 
-### 4. Configure SSH for root (required for private flake inputs)
+### 4. Private flake inputs (e.g. `private-fonts`)
 
-nix-darwin's system activation runs as `root`, so Nix fetches private SSH flake
-inputs (like `private-fonts`) using root's SSH config. On a fresh Mac, root has
-no SSH keys or known hosts configured.
+The flake pulls a private repo over `git+ssh`. The **Nix daemon** (not your `sudo` session) performs the fetch, so it never sees your SSH agent and root's home is read-only on macOS — copying keys into `/var/root` is not an option.
+
+**Workaround:** fetch the input as your user so the store and lock file are populated; then the daemon can use the existing store paths when you run `darwin-rebuild`.
+
+**Before the first bootstrap (and whenever `private-fonts` or the lock file changes), run as your user** (no sudo):
 
 ```sh
-sudo mkdir -p /root/.ssh && sudo chmod 700 /root/.ssh
-
-# Trust GitHub's host key as root
-sudo ssh-keyscan -H github.com | sudo tee /root/.ssh/known_hosts
-sudo chmod 600 /root/.ssh/known_hosts
-
-# Use your existing SSH key (adjust filename if yours differs)
-printf "Host github.com\n  User git\n  IdentityFile /Users/jordan.faust/.ssh/id_ed25519\n  StrictHostKeyChecking accept-new\n" | sudo tee /root/.ssh/config
-sudo chmod 600 /root/.ssh/config
+cd /etc/dotfiles
+ssh-add -l || ssh-add   # ensure your GitHub key is in the agent
+nix flake update private-fonts
 ```
+
+Then run the bootstrap (step 5) as usual. For subsequent rebuilds, run `nix flake update private-fonts` as your user first if you've changed the flake or lock file; otherwise `sudo darwin-rebuild switch` alone is enough.
 
 ### 5. Bootstrap nix-darwin
 
@@ -73,9 +71,20 @@ Some macOS defaults (keyboard repeat speed, dock changes) require a logout or re
 
 ## Subsequent rebuilds
 
+If you changed the flake or lock file (or get "Permission denied" when fetching `private-fonts`), update the private input as your user first:
+
+```sh
+cd /etc/dotfiles
+nix flake update private-fonts   # uses your SSH; no sudo
+```
+
+Then run the switch (as root):
+
 ```sh
 sudo darwin-rebuild switch --flake /etc/dotfiles#work
 ```
+
+If nothing changed in the flake inputs, `sudo darwin-rebuild switch` alone is enough.
 
 ## Customization
 
@@ -114,6 +123,8 @@ homebrew.casks = [
 
 ## Notes
 
+- **“Git tree has uncommitted changes”:** Normal when you have local edits. Nix still uses your working tree; you can ignore the warning or commit before switching for a clean evaluation.
 - **Nix daemon:** Managed by Determinate Nix — do not set `nix.package` or `nix.settings` in nix-darwin config, it will conflict.
+- **Private flake inputs (SSH):** The Nix daemon does the fetch and has no access to your SSH agent. Run `nix flake update private-fonts` as your user (no sudo) so the store and lock file are populated; then `sudo darwin-rebuild switch` will use the existing store paths.
 - **Homebrew cleanup:** `onActivation.cleanup = "zap"` removes casks not listed in config. Set to `"none"` temporarily if you need to test without removing apps.
 - **Touch ID sudo:** Enabled via `security.pam.services.sudo_local.touchIdAuth = true`. This survives macOS updates (unlike the manual `/etc/pam.d/sudo` edit).

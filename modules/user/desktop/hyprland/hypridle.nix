@@ -3,7 +3,6 @@
   inputs,
   pkgs,
   lib,
-  system,
   ...
 }: let
   cfg = config.modules.desktop.hyprland;
@@ -21,7 +20,7 @@ in {
           # Lock Screen Timeout
           {
             timeout = 900;
-            on-timeout = "uwsm app -- ${lib.getExe inputs.hyprlock.packages.${system}.default}";
+            on-timeout = "uwsm app -- ${lib.getExe inputs.hyprlock.packages.${pkgs.stdenv.hostPlatform.system}.default}";
             on-resume = "${lib.getExe pkgs.libnotify} Unlocked!";
           }
           # Screen Off

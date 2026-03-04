@@ -38,7 +38,7 @@ in {
           deno
           nodejs_22
           yarn
-          inputs.wrangler.packages.${pkgs.system}.wrangler
+          inputs.wrangler.packages.${pkgs.stdenv.hostPlatform.system}.wrangler
           biome
           turbo
         ]

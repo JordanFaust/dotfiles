@@ -686,6 +686,27 @@
         "type": "github"
       }
     },
+    "private-fonts": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1772642792,
+        "narHash": "sha256-r8fXMAABKC4flvv8w9ox0qUhBXULMnlBo+u+gk2+sWU=",
+        "ref": "main",
+        "rev": "d93e8e897c5c0646b9af2c2eed76cf2b0e96e04a",
+        "revCount": 5,
+        "type": "git",
+        "url": "ssh://git@github.com/JordanFaust/private-fonts.git"
+      },
+      "original": {
+        "ref": "main",
+        "type": "git",
+        "url": "ssh://git@github.com/JordanFaust/private-fonts.git"
+      }
+    },
     "root": {
       "inputs": {
         "agenix": "agenix",
@@ -701,6 +722,7 @@
         "nixpkgs": "nixpkgs_5",
         "nixpkgs-stable": "nixpkgs-stable",
         "nixpkgs-unstable": "nixpkgs-unstable",
+        "private-fonts": "private-fonts",
         "wrangler": "wrangler"
       }
     },

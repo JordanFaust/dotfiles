@@ -49,8 +49,8 @@
     alejandra.inputs.nixpkgs.follows = "nixpkgs";
 
     # Private fonts
-    # private-fonts.url = "git+ssh://git@github.com/JordanFaust/private-fonts.git?ref=main";
-    # private-fonts.inputs.nixpkgs.follows = "nixpkgs";
+    private-fonts.url = "git+ssh://git@github.com/JordanFaust/private-fonts.git?ref=main";
+    private-fonts.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = inputs @ {
