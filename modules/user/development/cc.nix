@@ -34,7 +34,7 @@ in {
         # clang
         gcc
         bear
-        gdb
+        # gdb
         cmake
         llvmPackages.libcxx
         libllvm

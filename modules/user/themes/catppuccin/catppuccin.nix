@@ -48,7 +48,7 @@ in {
           fira-code-symbols
           cascadia-code
           victor-mono
-          inputs.private-fonts.packages.${system}.monolisa-variable
+          # inputs.private-fonts.packages.${system}.monolisa-variable
           nerd-fonts.caskaydia-cove
           nerd-fonts.symbols-only
         ]

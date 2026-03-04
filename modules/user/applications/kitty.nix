@@ -43,7 +43,7 @@ in {
         # Linux: custom .desktop wrapper only — avoids duplicate entry in rofi
         then [desktop pkgs.ghostty]
         # macOS: install directly (no rofi, no duplicate concern)
-        else [pkgs.kitty pkgs.ghostty];
+        else [pkgs.kitty];
 
       sessionVariables = {
         TERMINAL = "kitty";
