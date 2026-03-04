@@ -107,7 +107,7 @@ nix build .#nixosConfigurations.faust.config.system.build.toplevel --dry-run
 
 # Verify Darwin config evaluates
 nix eval .#darwinConfigurations.work.config.networking.hostName
-nix eval .#darwinConfigurations.work.config.home-manager.users.jordan.home.homeDirectory
+nix eval .#darwinConfigurations.work.config.home-manager.users."jordan.faust".home.homeDirectory
 
 # Check flake structure loads
 nix flake show
@@ -121,4 +121,4 @@ nix flake check
 | Platform | First time | Subsequent |
 |----------|-----------|-----------|
 | NixOS | `nixos-install --flake .#<host>` | `nixos-rebuild switch --flake .#<host>` or `hey rebuild` |
-| macOS | `nix run nix-darwin -- switch --flake .#work` | `darwin-rebuild switch --flake /etc/dotfiles#work` |
+| macOS | `sudo nix run nix-darwin -- switch --flake .#work` | `sudo darwin-rebuild switch --flake /etc/dotfiles#work` |

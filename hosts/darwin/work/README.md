@@ -32,13 +32,32 @@ sudo chown $(whoami) /etc/dotfiles
 git clone https://github.com/JordanFaust/dotfiles /etc/dotfiles
 ```
 
-### 4. Bootstrap nix-darwin
+### 4. Configure SSH for root (required for private flake inputs)
 
-First-time only — `darwin-rebuild` doesn't exist yet, so use `nix run`:
+nix-darwin's system activation runs as `root`, so Nix fetches private SSH flake
+inputs (like `private-fonts`) using root's SSH config. On a fresh Mac, root has
+no SSH keys or known hosts configured.
+
+```sh
+sudo mkdir -p /root/.ssh && sudo chmod 700 /root/.ssh
+
+# Trust GitHub's host key as root
+sudo ssh-keyscan -H github.com | sudo tee /root/.ssh/known_hosts
+sudo chmod 600 /root/.ssh/known_hosts
+
+# Use your existing SSH key (adjust filename if yours differs)
+printf "Host github.com\n  User git\n  IdentityFile /Users/jordan.faust/.ssh/id_ed25519\n  StrictHostKeyChecking accept-new\n" | sudo tee /root/.ssh/config
+sudo chmod 600 /root/.ssh/config
+```
+
+### 5. Bootstrap nix-darwin
+
+First-time only — `darwin-rebuild` doesn't exist yet, so use `nix run`.
+System activation requires `sudo`:
 
 ```sh
 cd /etc/dotfiles
-nix run nix-darwin -- switch --flake .#work
+sudo nix run nix-darwin -- switch --flake .#work
 ```
 
 This will:
@@ -48,14 +67,14 @@ This will:
 - Install Homebrew casks listed in `default.nix`
 - Activate your Home Manager config (AeroSpace, skhd, neovim, zsh, etc.)
 
-### 5. Restart
+### 6. Restart
 
 Some macOS defaults (keyboard repeat speed, dock changes) require a logout or reboot to take full effect.
 
 ## Subsequent rebuilds
 
 ```sh
-darwin-rebuild switch --flake /etc/dotfiles#work
+sudo darwin-rebuild switch --flake /etc/dotfiles#work
 ```
 
 ## Customization

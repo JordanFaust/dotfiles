@@ -29,10 +29,9 @@ in {
   };
 
   config = mkIf cfg.enable {
-    home.packages = with pkgs; [
-      gnupg
-      tomb
-    ];
+    home.packages = with pkgs;
+      [gnupg]
+      ++ lib.optionals pkgs.stdenv.isLinux [tomb];
 
     home.sessionVariables.GNUPGHOME = "${config.xdg.configHome}/gnupg";
 
