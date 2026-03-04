@@ -59,9 +59,9 @@ in {
     home = {
       packages = with pkgs;
         (
-          if cfg.tools.enable
+          if (cfg.tools.enable && pkgs.stdenv.isLinux)
           then [
-            font-manager # so many damned fonts...
+            font-manager # GTK app — pulls in webkitgtk, Linux only
             # imagemagick # for image manipulation from the shell
           ]
           else []
