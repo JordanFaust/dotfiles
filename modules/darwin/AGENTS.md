@@ -23,7 +23,7 @@ modules/darwin/
 
 ## Conventions
 
-- Do **not** set `nix.package` or `nix.settings` — Determinate Nix manages the daemon.
+- `nix.enable = false` is set in `default.nix` — this disables nix-darwin's Nix management entirely so Determinate Nix can own the daemon. Do **not** remove it or set `nix.package`/`nix.settings`, or activation will abort with "Determinate detected".
 - System packages go in `default.nix` under `environment.systemPackages`.
 - Host-specific casks belong in `hosts/darwin/<host>/default.nix` as `homebrew.casks = [...]` — merged with the shared list here by nix-darwin's module system.
 

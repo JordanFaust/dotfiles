@@ -66,7 +66,10 @@ networking.hostName = mkDefault (removeSuffix ".nix" (baseNameOf path));
 
 ### 4. Darwin system modules must not conflict with Determinate Nix
 
-Do **not** set `nix.package` or `nix.settings` in `modules/darwin/`. Determinate Nix manages the daemon. Conflicting causes activation failures.
+`modules/darwin/default.nix` sets `nix.enable = false` to disable nix-darwin's own
+Nix management entirely. Determinate Nix manages the daemon. Do **not** set
+`nix.package` or `nix.settings` — doing so causes "Determinate detected, aborting
+activation" on switch.
 
 ### 5. nix-darwin API (current)
 

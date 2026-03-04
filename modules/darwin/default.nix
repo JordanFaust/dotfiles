@@ -16,8 +16,10 @@
     ./services/docker.nix
   ];
 
-  # Leave the Nix daemon entirely to Determinate Nix — do not conflict.
-  # Do not set nix.package here; Determinate manages it.
+  # Determinate Nix manages the daemon — disable nix-darwin's own Nix management
+  # entirely to prevent the "Determinate detected, aborting activation" error.
+  # nix.package, nix.settings, and nix.enable must not be set here.
+  nix.enable = false;
 
   # Touch ID for sudo (nix-darwin >= 2024 uses pam.services.sudo_local)
   security.pam.services.sudo_local.touchIdAuth = true;
