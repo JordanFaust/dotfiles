@@ -27,16 +27,16 @@ in {
     };
   };
 
-  # Always enable vpn, no matter the installation
-  config = mkIf cfg.enable {
+  # VPN tooling is Linux-only: openconnect links against webkitgtk (broken on Darwin),
+  # and gpauth/gpclient are Linux-specific GlobalProtect wrappers.
+  # On macOS, GlobalProtect is installed via the native corporate app or MDM.
+  config = mkIf (cfg.enable && pkgs.stdenv.isLinux) {
     home = {
-      packages = with pkgs;
-        [openconnect]
-        ++ lib.optionals pkgs.stdenv.isLinux [
-          # gpauth and gpclient are Linux-only GlobalProtect tools
-          gpauth
-          gpclient
-        ];
+      packages = with pkgs; [
+        openconnect
+        gpauth
+        gpclient
+      ];
 
       sessionVariables = {
         TERMINAL = "kitty";
