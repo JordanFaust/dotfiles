@@ -136,18 +136,18 @@ in {
 
   config = mkIf (!minimal && cfg.enable) {
     home = {
-      packages = [
+      packages = lib.optionals pkgs.stdenv.isLinux [
         firefoxDesktop
         firefoxPrivateDesktop
         chromiumDesktop
       ];
 
-      sessionVariables = {
+      sessionVariables = lib.mkIf pkgs.stdenv.isLinux {
         DEFAULT_BROWSER = "${pkgs.firefox-bin}/bin/firefox";
       };
     };
 
-    xdg.mimeApps = {
+    xdg.mimeApps = lib.mkIf pkgs.stdenv.isLinux {
       enable = true;
 
       defaultApplications = {
@@ -160,8 +160,8 @@ in {
       };
     };
 
-    # Add firefox as a startup application
-    xdg.configFile = {
+    # Add firefox as a startup application (Linux only — autostart is an XDG/Linux concept)
+    xdg.configFile = lib.mkIf pkgs.stdenv.isLinux {
       "autostart/firefox.desktop".source = "${firefoxDesktop}/share/applications/firefox.desktop";
       "autostart/chromium.desktop".source = "${chromiumDesktop}/share/applications/chromium.desktop";
     };
@@ -324,10 +324,12 @@ in {
         "extensions.formautofill.creditCards.enabled" = false;
         "extensions.formautofill.heuristics.enabled" = false;
       };
-    in {
-      # Make sure the desktop files are in the right place for dbus
-      ".local/share/applications/firefox.desktop".source = "${firefoxDesktop}/share/applications/firefox.desktop";
-
+    in
+      lib.optionalAttrs pkgs.stdenv.isLinux {
+        # Make sure the desktop files are in the right place for dbus
+        ".local/share/applications/firefox.desktop".source = "${firefoxDesktop}/share/applications/firefox.desktop";
+      }
+      // {
       "${cfgPath}/profiles.ini".text = ''
         [Profile0]
         Name=default

@@ -51,9 +51,9 @@ in {
           inputs.private-fonts.packages.${system}.monolisa-variable
           nerd-fonts.caskaydia-cove
           nerd-fonts.symbols-only
-          my.nonicons
         ]
         ++ lib.optionals pkgs.stdenv.isLinux [
+          my.nonicons
           # Linux-only: KDE, GTK fonts, font tools, status bar icons
           nerdfix
           cantarell-fonts

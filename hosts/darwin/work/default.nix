@@ -4,7 +4,7 @@
 # Activate with: darwin-rebuild switch --flake .#work
 {pkgs, ...}: {
   # User account — name must match the macOS account name exactly.
-  users.users.jordan = {
+  users.users."jordan.faust" = {
     home = "/Users/jordan.faust";
     shell = pkgs.zsh;
   };
