@@ -16,8 +16,10 @@
       AppleInterfaceStyle = "Dark";
     };
 
-    # Reduce transparency for cleaner, more opaque windows (closer to Hyprland feel)
-    universalaccess.reduceTransparency = true;
+    # universalaccess.reduceTransparency is intentionally omitted —
+    # com.apple.universalaccess is SIP-protected on macOS 13+; writing to it
+    # without Accessibility entitlements fails even as root.
+    # Set manually: System Settings → Accessibility → Display → Reduce Transparency.
 
     dock = {
       autohide = true;
