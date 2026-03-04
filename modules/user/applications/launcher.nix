@@ -40,7 +40,8 @@ in {
   };
 
   # Add configured launchers if this isn't a minimal install and launchers are enabled.
-  config = mkIf (!minimal && cfg.enable) {
+  # rofi is Linux/X11/Wayland only — not available on macOS.
+  config = mkIf (!minimal && cfg.enable && pkgs.stdenv.isLinux) {
     home = {
       packages = with pkgs; [
         (writeScriptBin "rofi" ''

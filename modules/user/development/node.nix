@@ -32,19 +32,21 @@ in {
 
   config = lib.mkIf (!minimal && cfg.enable) {
     home = {
-      packages = with pkgs; [
-        bun
-        deno
-        nodejs_22
-        yarn
-        inputs.wrangler.packages.${pkgs.system}.wrangler
-        cypress
-        playwright.browsers
-
-        biome
-        turbo
-        # (builtins.getFlake "github:NixOS/nixpkgs/8dfad603247387df1df4826b8bea58efc5d012d8").legacyPackages.${pkgs.system}.turbo
-      ];
+      packages = with pkgs;
+        [
+          bun
+          deno
+          nodejs_22
+          yarn
+          inputs.wrangler.packages.${pkgs.system}.wrangler
+          biome
+          turbo
+        ]
+        ++ lib.optionals pkgs.stdenv.isLinux [
+          # cypress and playwright browsers are not available on aarch64-darwin
+          cypress
+          playwright.browsers
+        ];
 
       # Run locally installed bin-script, e.g. n coffee file.coffee
       shellAliases = {

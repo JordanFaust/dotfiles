@@ -88,7 +88,7 @@ in {
         );
     };
 
-    xdg.configFile = mkIf cfg.raster.enable {
+    xdg.configFile = mkIf (cfg.raster.enable && pkgs.stdenv.isLinux) {
       "GIMP/2.10" = {
         source = "${osConfig.dotfiles.configDir}/gimp";
         recursive = true;

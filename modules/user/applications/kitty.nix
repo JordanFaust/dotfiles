@@ -37,16 +37,13 @@ in {
 
   # Always enable kitty, no matter the installation
   config = mkIf cfg.enable {
-    # # We want better tmux integration since that is my primary driver
-    # modules.shell.zsh.rcInit = ''
-    #   [ "$TERM" = xterm-256color ] && export TERM=screen-256color
-    # '';
-
     home = {
-      packages = [
-        desktop
-        pkgs.ghostty
-      ];
+      packages =
+        if pkgs.stdenv.isLinux
+        # Linux: custom .desktop wrapper only — avoids duplicate entry in rofi
+        then [desktop pkgs.ghostty]
+        # macOS: install directly (no rofi, no duplicate concern)
+        else [pkgs.kitty pkgs.ghostty];
 
       sessionVariables = {
         TERMINAL = "kitty";
@@ -54,8 +51,8 @@ in {
       };
     };
 
-    # Add Kitty as a startup application
-    xdg.configFile = {
+    # Desktop item and autostart are Linux/XDG only
+    xdg.configFile = lib.mkIf pkgs.stdenv.isLinux {
       "autostart/kitty.desktop".source = "${desktop}/share/applications/Kitty.desktop";
     };
   };

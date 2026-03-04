@@ -30,11 +30,13 @@ in {
   # Always enable vpn, no matter the installation
   config = mkIf cfg.enable {
     home = {
-      packages = with pkgs; [
-        openconnect
-        gpauth
-        gpclient
-      ];
+      packages = with pkgs;
+        [openconnect]
+        ++ lib.optionals pkgs.stdenv.isLinux [
+          # gpauth and gpclient are Linux-only GlobalProtect tools
+          gpauth
+          gpclient
+        ];
 
       sessionVariables = {
         TERMINAL = "kitty";

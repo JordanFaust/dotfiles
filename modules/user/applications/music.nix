@@ -44,17 +44,15 @@ in {
   };
 
   config = mkIf (!minimal && cfg.enable) {
-    home = {
-      packages = [
-        # spotify-tui is fine for selecting and playing music, but incomplete. We
-        # still occasionally need the official client for more sophisticated
-        # search and the "made for you" playlists.
-        desktop
-      ];
-    };
+    home.packages =
+      if pkgs.stdenv.isLinux
+      # Linux: custom .desktop wrapper only — avoids duplicate entry in rofi
+      then [desktop]
+      # macOS: install directly (no rofi, no duplicate concern)
+      else [pkgs.spotify];
 
-    # Add Spotify as a startup application
-    xdg.configFile = {
+    # Autostart is Linux/XDG only
+    xdg.configFile = lib.mkIf pkgs.stdenv.isLinux {
       "autostart/spotify.desktop".source = "${desktop}/share/applications/Spotify.desktop";
     };
   };
