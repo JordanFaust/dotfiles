@@ -168,7 +168,6 @@ in {
 
     # Use a stable profile name so we can target it in themes
     home.file = let
-      cfgPath = ".mozilla/firefox";
       settings = {
         # Default to dark theme in DevTools panel
         "devtools.theme" = "dark";
@@ -325,40 +324,87 @@ in {
         "extensions.formautofill.heuristics.enabled" = false;
       };
     in
-      lib.optionalAttrs pkgs.stdenv.isLinux {
-        # Make sure the desktop files are in the right place for dbus
-        ".local/share/applications/firefox.desktop".source = "${firefoxDesktop}/share/applications/firefox.desktop";
-      }
-      // {
-      "${cfgPath}/profiles.ini".text = ''
-        [Profile0]
-        Name=default
-        IsRelative=1
-        Path=${cfg.firefox.profileName}.default
-        Default=1
+      let
+        # Profile content always lives at ~/.mozilla/firefox/<name>.default — no spaces,
+        # works identically on Linux and macOS via home.file symlinks.
+        profileRoot = ".mozilla/firefox/${cfg.firefox.profileName}.default";
+      in
+        lib.optionalAttrs pkgs.stdenv.isLinux {
+          # Make sure the desktop files are in the right place for dbus
+          ".local/share/applications/firefox.desktop".source = "${firefoxDesktop}/share/applications/firefox.desktop";
+        }
+        # Linux: profiles.ini lives alongside the profile; a symlink works fine there.
+        // lib.optionalAttrs pkgs.stdenv.isLinux {
+          ".mozilla/firefox/profiles.ini".text = ''
+            [Profile0]
+            Name=default
+            IsRelative=1
+            Path=${cfg.firefox.profileName}.default
+            Default=1
 
-        [General]
-        StartWithLastProfile=1
-        Version=2
-      '';
+            [General]
+            StartWithLastProfile=1
+            Version=2
+          '';
+        }
+        // {
+        "${profileRoot}/user.js" = mkIf (settings != {} || cfg.firefox.extraConfig != "") {
+          text = ''
+            ${concatStrings (mapAttrsToList (name: value: ''
+                user_pref("${name}", ${builtins.toJSON value});
+              '')
+              settings)}
+            ${cfg.firefox.extraConfig}
+          '';
+        };
 
-      "${cfgPath}/${cfg.firefox.profileName}.default/user.js" = mkIf (settings != {} || cfg.firefox.extraConfig != "") {
-        text = ''
-          ${concatStrings (mapAttrsToList (name: value: ''
-              user_pref("${name}", ${builtins.toJSON value});
-            '')
-            settings)}
-          ${cfg.firefox.extraConfig}
-        '';
+        "${profileRoot}/chrome/userChrome.css" = mkIf (cfg.firefox.userChrome != "") {
+          text = cfg.firefox.userChrome;
+        };
+
+        "${profileRoot}/chrome/userContent.css" = mkIf (cfg.firefox.userContent != "") {
+          text = cfg.firefox.userContent;
+        };
       };
 
-      "${cfgPath}/${cfg.firefox.profileName}.default/chrome/userChrome.css" = mkIf (cfg.firefox.userChrome != "") {
-        text = cfg.firefox.userChrome;
-      };
+    # macOS: Firefox owns profiles.ini and always rewrites it with an [Install<hash>]
+    # lock on launch — we cannot win that fight. Instead, read Firefox's profiles.ini
+    # at activation time to find the live profile and symlink our managed chrome/ and
+    # user.js into it. Source files live at ~/.mozilla/firefox/<name>.default/ (no
+    # spaces in path) deployed by home.file above and catppuccin.nix.
+    home.activation.firefoxChrome = lib.mkIf pkgs.stdenv.isDarwin (
+      lib.hm.dag.entryAfter ["writeBoundary"] ''
+        ffDir="$HOME/Library/Application Support/Firefox"
+        managedProfile="$HOME/.mozilla/firefox/${cfg.firefox.profileName}.default"
 
-      "${cfgPath}/${cfg.firefox.profileName}.default/chrome/userContent.css" = mkIf (cfg.firefox.userContent != "") {
-        text = cfg.firefox.userContent;
-      };
-    };
+        if [ -f "$ffDir/profiles.ini" ] && [ -d "$managedProfile" ]; then
+          # Parse profiles.ini with pure bash (no external tools — activation PATH is minimal).
+          # Reads the [Install...] section's Default= key, which is the authoritative active
+          # profile on macOS (Firefox always writes and locks this section on launch).
+          profileRel=""
+          inInstall=0
+          while IFS= read -r line; do
+            case "$line" in
+              \[Install*) inInstall=1 ;;
+              \[*)        inInstall=0 ;;
+              Default=*)
+                if [ "$inInstall" = "1" ]; then
+                  profileRel="''${line#Default=}"
+                  break
+                fi
+                ;;
+            esac
+          done < "$ffDir/profiles.ini"
+
+          if [ -n "$profileRel" ]; then
+            activeProfile="$ffDir/$profileRel"
+            rm -rf "$activeProfile/chrome"
+            ln -sf "$managedProfile/chrome" "$activeProfile/chrome"
+            rm -f "$activeProfile/user.js"
+            ln -sf "$managedProfile/user.js" "$activeProfile/user.js"
+          fi
+        fi
+      ''
+    );
   };
 }

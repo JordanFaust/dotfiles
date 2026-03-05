@@ -58,10 +58,12 @@ in {
 
       sessionVariables =
         {
-          NPM_CONFIG_USERCONFIG = "$XDG_CONFIG_HOME/npm/config";
-          NPM_CONFIG_CACHE = "$XDG_CACHE_HOME/npm";
-          NPM_CONFIG_PREFIX = "$XDG_CACHE_HOME/npm";
-          NODE_REPL_HISTORY = "$XDG_CACHE_HOME/node/repl_history";
+          # Use absolute paths so these work when XDG vars aren't set in the
+          # environment (e.g. GUI apps like Cursor that bypass the shell).
+          NPM_CONFIG_USERCONFIG = "${config.xdg.configHome}/npm/config";
+          NPM_CONFIG_CACHE = "${config.xdg.cacheHome}/npm";
+          NPM_CONFIG_PREFIX = "${config.xdg.cacheHome}/npm";
+          NODE_REPL_HISTORY = "${config.xdg.cacheHome}/node/repl_history";
         }
         // lib.optionalAttrs pkgs.stdenv.isLinux {
           # XDG_RUNTIME_DIR is set by systemd on Linux only

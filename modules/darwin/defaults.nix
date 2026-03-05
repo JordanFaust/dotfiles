@@ -38,4 +38,9 @@
     # Disable quarantine dialog for downloaded apps
     LaunchServices.LSQuarantine = false;
   };
+
+  system.keyboard = {
+    enableKeyMapping = true;
+    remapCapsLockToControl = true;
+  };
 }

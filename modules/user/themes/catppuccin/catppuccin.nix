@@ -4,6 +4,7 @@
   pkgs,
   inputs,
   osConfig,
+  username,
   ...
 }:
 with lib;
@@ -70,8 +71,10 @@ in {
         ];
 
       file = {
-        # Firefox configuration (cross-platform)
-        ".mozilla/firefox/jordan.default" = {
+        # Firefox chrome config — always at ~/.mozilla/firefox/<name>.default on both
+        # platforms. On macOS, browsers.nix symlinks chrome/ and user.js from here into
+        # whichever profile Firefox is actually using (detected via home.activation).
+        ".mozilla/firefox/${username}.default" = {
           source = ./config/firefox;
           recursive = true;
         };

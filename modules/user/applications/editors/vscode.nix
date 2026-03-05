@@ -45,6 +45,9 @@ in {
 
         # CursoR AI
         code-cursor
+
+        # Nix formatter — used by the Nix VSCode extension for format-on-save
+        nixfmt-rfc-style
       ];
 
     };

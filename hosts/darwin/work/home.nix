@@ -34,7 +34,6 @@ in {
     };
 
     desktop = {
-      aerospace.enable = true;
       skhd.enable = true;
     };
 

@@ -14,6 +14,7 @@
     ./homebrew.nix
     ./defaults.nix
     ./services/docker.nix
+    ./services/aerospace.nix
   ];
 
   # Determinate Nix manages the daemon — disable nix-darwin's own Nix management

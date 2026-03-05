@@ -94,7 +94,7 @@ If nothing changed in the flake inputs, `sudo darwin-rebuild switch` alone is en
 | `home.nix` | Home Manager modules — enable/disable features |
 | `../../modules/darwin/homebrew.nix` | Shared Homebrew config for all Darwin hosts |
 | `../../modules/darwin/defaults.nix` | Shared macOS system defaults |
-| `../../modules/user/desktop/aerospace/aerospace.toml` | AeroSpace window manager keybindings |
+| `../../modules/darwin/services/aerospace.nix` | AeroSpace window manager keybindings and workspace rules |
 | `../../modules/user/desktop/skhd/skhdrc` | skhd global hotkeys |
 
 ### Adding work GUI apps (Homebrew casks)
@@ -112,14 +112,23 @@ homebrew.casks = [
 
 | Key | Action |
 |-----|--------|
-| `alt-h/j/k/l` | Focus left/down/up/right |
-| `alt-shift-h/j/k/l` | Move window left/down/up/right |
-| `alt-1` through `alt-5` | Switch workspace |
-| `alt-shift-1` through `alt-shift-5` | Move window to workspace |
-| `alt-f` | Fullscreen |
-| `alt-q` | Close window |
-| `alt-/` | Toggle tile layout |
-| `alt-shift-;` | Enter service mode |
+| `cmd-h/j/k/l` | Focus left/down/up/right |
+| `cmd-shift-h/j/k/l` | Move window left/down/up/right |
+| `cmd-ctrl-h/j/k/l` | Resize window |
+| `cmd-backtick` | Focus back-and-forth |
+| `cmd-1` through `cmd-5` | Switch workspace |
+| `cmd-shift-1` through `cmd-shift-5` | Move window to workspace |
+| `cmd-left/right` | Cycle workspaces |
+| `cmd-shift-left/right` | Move window to prev/next workspace |
+| `cmd-f` | Maximize within AeroSpace (no macOS Space) |
+| `cmd-shift-f` | macOS native fullscreen (own Space) |
+| `cmd-q` | Close window |
+| `cmd-enter` | Open Kitty terminal (attaches to/creates tmux session `main`) |
+| `cmd-shift-v` | Raycast clipboard history |
+| `cmd-slash` | Layout: tiles |
+| `cmd-comma` | Layout: accordion |
+| `cmd-p` | Toggle split orientation |
+| `cmd-shift-;` | Enter service mode |
 
 ## Notes
 
