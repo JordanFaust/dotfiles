@@ -13,6 +13,7 @@
   # Host-specific Homebrew additions (supplements modules/darwin/homebrew.nix).
   homebrew.casks = [
     "raycast"
+    "hammerspoon"
   ];
 
   modules = {

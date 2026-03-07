@@ -15,7 +15,7 @@
     # Window Settings
     #
 
-    window.titleBarStyle = "native";
+    window.titleBarStyle = "custom";
     window.customTitleBarVisibility = "never";
     # Increase size of explorer, headers, menus, etc.
     window.zoomLevel = 1.7;

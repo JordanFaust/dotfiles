@@ -35,6 +35,7 @@ in {
 
     desktop = {
       skhd.enable = true;
+      hammerspoon.enable = true;
     };
 
     themes = {

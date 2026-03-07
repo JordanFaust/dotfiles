@@ -136,6 +136,20 @@ in {
       source-file ${./config/tmux.conf}
     '');
 
+    # JankyBorders — active/inactive window border highlighting.
+    # Colors mirror Hyprland's col.active_border / col.inactive_border from the
+    # Catppuccin Macchiato palette. Home-manager owns the launchd agent lifecycle.
+    services.jankyborders = lib.mkIf pkgs.stdenv.isDarwin {
+      enable = true;
+      settings = {
+        active_color   = "0xffEED49F"; # Catppuccin Macchiato Yellow — matches col.active_border
+        inactive_color = "0xff24455b"; # matches col.inactive_border
+        width          = "3.0";        # matches border_size = 3
+        style          = "round";      # matches rounding = 5
+        hidpi          = "on";
+      };
+    };
+
     modules.desktop.gtk = lib.mkIf pkgs.stdenv.isLinux {
       enable = true;
       name = "Catppuccin-GTK-Red-Dark-Compact-Macchiato";
