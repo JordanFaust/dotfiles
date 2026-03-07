@@ -1,5 +1,5 @@
-# Docker user module — shell aliases (both platforms) + colima config (Darwin only).
-# System packages come from:
+# Docker user module — shell aliases (all platforms) and socket env var (Darwin).
+# Service lifecycle and package installation are system concerns handled by:
 #   NixOS  → modules/system/services/docker.nix
 #   Darwin → modules/darwin/services/docker.nix
 {
@@ -13,7 +13,7 @@ with lib.my; let
   cfg = config.modules.services.docker;
 in {
   options.modules.services.docker = mkOption {
-    description = "Docker shell integration and (on Darwin) Colima VM configuration.";
+    description = "Docker shell integration.";
     type = with lib.types;
       nullOr (submoduleWith {
         modules = [
@@ -26,7 +26,6 @@ in {
   };
 
   config = mkMerge [
-    # Cross-platform aliases — active on both NixOS and Darwin when enabled.
     (mkIf cfg.enable {
       programs.zsh.initContent = mkOrder 1500 ''
         ## Docker aliases
@@ -46,34 +45,11 @@ in {
       '';
     })
 
-    # Darwin only — deploy colima config file and auto-start launchd agent.
+    # On Darwin, Colima puts its socket at ~/.colima/default/docker.sock rather
+    # than /var/run/docker.sock. Export DOCKER_HOST so every tool finds it without
+    # needing a manual `docker context use colima`.
     (mkIf (cfg.enable && pkgs.stdenv.isDarwin) {
-      # cpu: 0 and memory: 0 = use all available resources (colima convention).
-      # vmType: vz uses Apple's Virtualization Framework (Apple Silicon) for
-      # better performance over QEMU. virtiofs gives native-speed bind mounts.
-      home.file.".colima/default/colima.yaml".text = ''
-        cpu: 0
-        memory: 0
-        disk: 60
-        vmType: vz
-        rosetta: false
-        mountType: virtiofs
-      '';
-
-      launchd.agents.colima = {
-        enable = true;
-        config = {
-          ProgramArguments = [
-            "${pkgs.colima}/bin/colima"
-            "start"
-            "--foreground"
-          ];
-          RunAtLoad = true;
-          KeepAlive = {SuccessfulExit = true;};
-          StandardOutPath = "/tmp/colima-jordan.log";
-          StandardErrorPath = "/tmp/colima-jordan.log";
-        };
-      };
+      home.sessionVariables.DOCKER_HOST = "unix://${config.home.homeDirectory}/.colima/default/docker.sock";
     })
   ];
 }

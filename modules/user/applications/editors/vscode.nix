@@ -5,9 +5,11 @@
   ...
 }:
 with lib;
-with lib.my; let
+with lib.my;
+let
   cfg = config.modules.applications.vscode;
-in {
+in
+{
   imports = [
     ./vscode/settings.nix
     ./vscode/keybindings.nix
@@ -16,7 +18,8 @@ in {
     description = ''
       The (forced) one and only text editor.
     '';
-    type = with lib.types;
+    type =
+      with lib.types;
       nullOr (submoduleWith {
         modules = [
           {
@@ -47,7 +50,7 @@ in {
         code-cursor
 
         # Nix formatter — used by the Nix VSCode extension for format-on-save
-        nixfmt-rfc-style
+        nixfmt
       ];
 
     };
@@ -63,8 +66,8 @@ in {
               boldKeywords = true;
               italicComments = true;
               italicKeywords = true;
-              colorOverrides = {};
-              customUIColors = {};
+              colorOverrides = { };
+              customUIColors = { };
               workbenchMode = "default";
               bracketMode = "rainbow";
               extraBordersEnabled = false;
@@ -85,7 +88,8 @@ in {
           # enableUpdateCheck = false;
           # enableExtensionUpdateCheck = false;
 
-          extensions = with pkgs.vscode-extensions;
+          extensions =
+            with pkgs.vscode-extensions;
             [
               # Theme
               # catppuccin.catppuccin-vsc
