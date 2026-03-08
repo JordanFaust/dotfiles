@@ -1,53 +1,6 @@
-{ ... }: {
+{ ... }:
+{
   programs.vscode.profiles.default.keybindings = [
-    #  Use single tab
-    {
-      key = "ctrl+k shift+t";
-      command = "workbench.action.showEditorTab";
-    }
-    # Use multiple tabs
-    {
-      key = "ctrl+k shift+m";
-      command = "workbench.action.showMultipleEditorTabs";
-    }
-    # Toggle status bar
-    {
-      key = "ctrl+k shift+s";
-      command = "workbench.action.toggleStatusbarVisibility";
-    }
-    # Toggle record screen cast
-    {
-      key = "ctrl+k shift+r";
-      command = "workbench.action.toggleScreencastMode";
-    }
-    # Toggle error lens - warning
-    {
-      key = "ctrl+k shift+w";
-      command = "errorLens.toggleWarning";
-    }
-    # TODO: Wait for this to resolve https://github.com/usernamehw/vscode-error-lens/issues/208
-    # Setup which-key
-    # {
-    #   key = "ctrl+space"; # Disable Spotlight and use Raycast with Alt+space, refer https://manual.raycast.com/hotkey
-    #   command = "whichkey.show";
-    #   when = "editorTextFocus";
-    # }
-    # Toggle full screen
-    {
-      key = "ctrl+k f";
-      command = "workbench.action.toggleMaximizedPanel";
-    }
-    # Open Github Pull Request
-    {
-      key = "ctrl+k g";
-      command = "workbench.view.extension.github-pull-requests";
-    }
-    # Toggle version lens
-    {
-      key = "ctrl+k shift+v";
-      command = "versionlens.icons.showVersionLenses";
-    }
-
     #
     # Ctrl+G Universal Escape Implementation
     #
@@ -193,38 +146,10 @@
     # Cursor-Specific AI Feature Bindings
     #
 
-    # Cursor Chat - New chat
-    {
-      key = "ctrl+k c";
-      command = "aichat.newchataction";
-    }
     # Cursor Composer - Start composer prompt
     {
       key = "ctrl+k i";
       command = "composer.startComposerPrompt";
-      when = "editorTextFocus";
-    }
-    # Cursor Chat - Toggle sidebar
-    {
-      key = "ctrl+k shift+c";
-      command = "aichat.toggle-sidebar";
-    }
-    # Cursor - Apply AI suggestion (if available)
-    {
-      key = "ctrl+k a";
-      command = "aichat.apply-suggestion";
-      when = "editorTextFocus";
-    }
-    # Cursor - Explain code selection
-    {
-      key = "ctrl+k x";
-      command = "aichat.explain-selection";
-      when = "editorHasSelection";
-    }
-    # Cursor - Generate code from comment
-    {
-      key = "ctrl+k shift+g";
-      command = "aichat.generate-from-comment";
       when = "editorTextFocus";
     }
 
