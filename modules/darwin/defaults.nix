@@ -2,7 +2,7 @@
 #
 # macOS system preferences set declaratively via nix-darwin.
 # Run `darwin-rebuild switch` to apply. Some changes require logout/reboot.
-# Full option list: https://daiderd.com/nix-darwin/manual/index.html#opt-system.defaults
+# Full option list: https://nix-darwin.github.io/nix-darwin/manual/
 {...}: {
   system.defaults = {
     NSGlobalDomain = {
@@ -37,7 +37,25 @@
 
     # Disable quarantine dialog for downloaded apps
     LaunchServices.LSQuarantine = false;
+
+    screensaver = {
+      # Require password immediately after screensaver starts
+      askForPassword = true;
+      askForPasswordDelay = 0;
+    };
+
+    CustomUserPreferences = {
+      # Screensaver idle timeout — 900s = 15 minutes (matches hypridle lock timeout)
+      "com.apple.screensaver".idleTime = 900;
+    };
   };
+
+  # Display sleep must be >= screensaver timeout or the screen turns off before
+  # the screensaver activates. Set to 15 min to match.
+  system.activationScripts.postActivation.text = ''
+    echo "Configuring display sleep timeout..."
+    /usr/bin/pmset -a displaysleep 15
+  '';
 
   system.keyboard = {
     enableKeyMapping = true;

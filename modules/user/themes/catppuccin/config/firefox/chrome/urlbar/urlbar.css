@@ -241,7 +241,7 @@
 
 #urlbar-input,
 .searchbar-textbox {
-    color: var(--lwt-toolbar-field-color) !important;
+    color: var(--light-2) !important;
 }
 
 #urlbar-input::placeholder,

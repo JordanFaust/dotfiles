@@ -14,7 +14,14 @@
     display: none;
 }
 
+#sidebar-box {
+    background-color: var(--dark-base) !important;
+    /* Disable macOS NSVisualEffectView (vibrancy) so background-color takes effect */
+    -moz-appearance: none !important;
+}
+
 #sidebar {
+    background-color: var(--dark-base) !important;
     border-right: solid var(--dividers) var(--sidebar-shadow-color) !important;
 }
 

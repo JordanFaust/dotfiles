@@ -18,7 +18,8 @@ modules/darwin/
 ├── homebrew.nix       # Declarative Homebrew (shared across all Darwin hosts)
 ├── defaults.nix       # macOS system preferences (dock, finder, keyboard, quarantine)
 └── services/
-    └── docker.nix     # Docker via Colima (installs colima + docker CLI tools)
+    ├── aerospace.nix  # AeroSpace tiling WM + skhd hotkey daemon
+    └── docker.nix     # Docker via Colima
 ```
 
 ## Conventions
@@ -62,7 +63,9 @@ homebrew.casks = [ "zoom" "slack" ];
 homebrew.brews = [ ];
 ```
 
-Full option reference: https://daiderd.com/nix-darwin/manual/index.html
+Full option reference (local): `man 5 configuration.nix` after a darwin-rebuild
+Full option reference (web):  https://nix-darwin.github.io/nix-darwin/manual/
+Build HTML docs locally:      `nix build .#darwinConfigurations.work.config.system.build.manual.html --no-link --print-out-paths`
 
 ## Adding a new shared Darwin system module
 

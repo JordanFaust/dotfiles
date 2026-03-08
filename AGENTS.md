@@ -73,6 +73,8 @@ activation" on switch.
 
 ### 5. nix-darwin API (current)
 
+Before adding any macOS system configuration, consult the nix-darwin manual — it covers `system.defaults.*`, `services.*`, `homebrew.*`, `launchd.*`, `security.*`, `networking.*`, and more. See `modules/darwin/AGENTS.md` for how to open it locally.
+
 | Intent | Option |
 |--------|--------|
 | Touch ID for sudo | `security.pam.services.sudo_local.touchIdAuth = true` |
