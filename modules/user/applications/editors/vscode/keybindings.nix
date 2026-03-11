@@ -74,6 +74,46 @@
     }
 
     #
+    # Code Telescope — Global pickers (work from any focus context)
+    # Mirrors leader-key bindings in vscode.lua but accessible everywhere.
+    #
+
+    {
+      key = "ctrl+alt+f";
+      command = "code-telescope.fuzzy.file";
+    }
+    {
+      key = "ctrl+alt+g";
+      command = "code-telescope.fuzzy.wsText";
+    }
+    {
+      key = "ctrl+alt+r";
+      command = "code-telescope.fuzzy.recentFiles";
+    }
+    {
+      key = "ctrl+alt+s";
+      command = "code-telescope.fuzzy.wsSymbols";
+    }
+    {
+      key = "ctrl+alt+u";
+      command = "code-telescope.fuzzy.documentSymbols";
+      when = "editorTextFocus";
+    }
+    {
+      key = "ctrl+alt+d";
+      command = "code-telescope.fuzzy.diagnostics";
+    }
+    {
+      key = "ctrl+alt+b";
+      command = "code-telescope.fuzzy.branch";
+    }
+    {
+      key = "ctrl+alt+l";
+      command = "code-telescope.fuzzy.fileText";
+      when = "editorTextFocus";
+    }
+
+    #
     # Focus Management
     #
 

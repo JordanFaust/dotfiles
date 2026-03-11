@@ -104,6 +104,7 @@ in {
         export TAVILY_API_KEY="$(cat /etc/sensitive/tavily 2>/dev/null)"
         export ARTIFACTORY_USERNAME="$(cat /etc/sensitive/artifactory 2>/dev/null | cut -d':' -f1)"
         export ARTIFACTORY_PASSWORD="$(cat /etc/sensitive/artifactory 2>/dev/null | cut -d':' -f2)"
+        export JIRA_API_TOKEN="$(cat /etc/sensitive/jira 2>/dev/null)"
       '';
 
       initContent = ''

@@ -43,6 +43,7 @@ in {
           insomnia
           regclient
           circleci-cli
+          jira-cli-go
           yajsv
           cloc
           statix

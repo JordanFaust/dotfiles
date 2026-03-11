@@ -115,6 +115,16 @@
     typescript.preferences.preferTypeOnlyAutoImports = true;
     typescript.tsdk = "node_modules/typescript/lib";
 
+    #
+    # Code Telescope (Telescope-style fuzzy finder)
+    #
+
+    codeTelescope.layout.mode = "classic";
+    codeTelescope.matching.algorithm = "subsequence";
+    codeTelescope.preview.showLineNumbers = true;
+    codeTelescope.keybindings.close = "ctrl+g";
+    codeTelescope.wsFileFinder.textDisplay = "relative";
+
     # Diff
     diffEditor.codeLens = true;
     diffEditor.hideUnchangedRegions.enabled = true;
