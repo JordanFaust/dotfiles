@@ -6,9 +6,13 @@
 {...}: {
   system.defaults = {
     NSGlobalDomain = {
-      # Fastest key repeat (helps with vim-style navigation)
-      KeyRepeat = 1;
-      InitialKeyRepeat = 10;
+      # Key repeat — dialed back from max (1) to avoid overshooting.
+      # Scale: 1 (fastest) → 15 (slowest). macOS default is 6/25.
+      KeyRepeat = 3;
+      InitialKeyRepeat = 15;
+      # Disable "natural" scroll direction — matches Linux trackpad/wheel behavior
+      # (scroll up = content moves up). macOS default is true (reversed).
+      "com.apple.swipescrolldirection" = false;
       # Expand save and print panels by default
       NSNavPanelExpandedStateForSaveMode = true;
       PMPrintingExpandedStateForPrint = true;
