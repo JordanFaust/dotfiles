@@ -28,7 +28,10 @@
     # Terminal
     #
 
-    terminal.integrated.fontSize = 14;
+    terminal.integrated.fontSize = 15;
+    terminal.integrated.fontWeight = "500";
+    terminal.integrated.fontWeightBold = "700";
+    terminal.integrated.lineHeight = 1.5;
     terminal.integrated.sendKeybindingsToShell = true;
 
     #
@@ -59,14 +62,14 @@
     editor.cursorStyle = "line";
     editor.cursorWidth = 5;
     editor.fontLigatures = true;
-    editor.fontSize = 14;
-    editor.fontWeight = "bold";
+    editor.fontSize = 15;
+    editor.fontWeight = "500";
     editor.formatOnSave = true;
     editor.inlineSuggest.enabled = true;
     editor.insertSpaces = false;
     editor.largeFileOptimizations = false;
     editor.letterSpacing = 0.5;
-    editor.lineHeight = 25;
+    editor.lineHeight = 23;
     editor.renderWhitespace = "all";
     editor.suggestSelection = "first";
     editor.tabCompletion = "on";
@@ -149,10 +152,10 @@
       };
     };
 
-    # Exclude Ctrl+E (explorer toggle) and Ctrl+A (agent toggle) from neovim
-    # so VS Code keybindings handle them instead.
+    # Exclude Ctrl+E (explorer toggle), Ctrl+A (agent toggle), Ctrl+H/L
+    # (directional focus nav) from neovim so VS Code keybindings handle them.
     # Default list: ["a", "b", "d", "e", "f", "h", "i", "j", "o", "r", "t", "u", "w"]
-    vscode-neovim.ctrlKeysForNormalMode = ["b" "d" "f" "h" "i" "j" "o" "r" "t" "u" "w"];
-    vscode-neovim.ctrlKeysForInsertMode = ["d" "h" "j" "o" "r" "t" "u" "w"];
+    vscode-neovim.ctrlKeysForNormalMode = ["b" "d" "f" "i" "j" "o" "r" "t" "u" "w"];
+    vscode-neovim.ctrlKeysForInsertMode = ["d" "j" "o" "r" "t" "u" "w"];
   };
 }

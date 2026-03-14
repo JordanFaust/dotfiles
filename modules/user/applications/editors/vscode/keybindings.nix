@@ -127,5 +127,66 @@
       key = "ctrl+k t";
       command = "workbench.action.terminal.focus";
     }
+
+    #
+    # Ctrl+H / Ctrl+L — Directional focus navigation
+    # Mirrors neovim's Ctrl+H/L split navigation across VS Code's layout:
+    # Sidebar ↔ Editor Group(s) ↔ Auxiliary Bar (agent panel)
+    #
+    #  Ctrl+H ←                          → Ctrl+L
+    # ┌─────────┐    ┌──────────────┐    ┌─────────────┐
+    # │ Sidebar │ ↔  │ Editor Group │ ↔  │ Agent Panel │
+    # │ (Ctrl+E)│    │   1  2  ...  │    │   (Ctrl+A)  │
+    # └─────────┘    └──────────────┘    └─────────────┘
+
+    # Unbind defaults (find/replace and select-line)
+    {
+      key = "ctrl+h";
+      command = "-editor.action.startFindReplaceAction";
+    }
+    {
+      key = "ctrl+l";
+      command = "-expandLineSelection";
+    }
+
+    # Ctrl+H — Navigate left
+    # From auxiliary bar → editor
+    {
+      key = "ctrl+h";
+      command = "workbench.action.focusFirstEditorGroup";
+      when = "auxiliaryBarFocus";
+    }
+    # From editor → previous editor group (if split)
+    {
+      key = "ctrl+h";
+      command = "workbench.action.focusLeftGroup";
+      when = "editorFocus && activeEditorGroupIndex > 1";
+    }
+    # From editor (leftmost group) → sidebar
+    {
+      key = "ctrl+h";
+      command = "workbench.action.focusSideBar";
+      when = "editorFocus && activeEditorGroupIndex == 1 && sideBarVisible";
+    }
+
+    # Ctrl+L — Navigate right
+    # From sidebar → first editor group
+    {
+      key = "ctrl+l";
+      command = "workbench.action.focusFirstEditorGroup";
+      when = "sideBarFocus";
+    }
+    # From editor → next editor group (if split)
+    {
+      key = "ctrl+l";
+      command = "workbench.action.focusRightGroup";
+      when = "editorFocus && activeEditorGroupIndex < editorGroupCount";
+    }
+    # From editor (rightmost group) → auxiliary bar (agent panel)
+    {
+      key = "ctrl+l";
+      command = "workbench.action.focusAuxiliaryBar";
+      when = "editorFocus && activeEditorGroupIndex == editorGroupCount && auxiliaryBarVisible";
+    }
   ];
 }
