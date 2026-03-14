@@ -1,82 +1,89 @@
 { ... }:
 {
   programs.vscode.profiles.default.keybindings = [
-    #
-    # Ctrl+E — Toggle Explorer (unified sidebar)
-    #
 
+    # ──────────────────────────────────────────────────────────────────────────
+    # Panel Toggles
+    # ──────────────────────────────────────────────────────────────────────────
+
+    # Ctrl+E — Toggle Explorer (sidebar)
     {
       key = "ctrl+e";
       command = "workbench.action.toggleSidebarVisibility";
     }
 
-    #
     # Ctrl+A — Toggle Agent View (auxiliary bar / right panel)
-    #
-
     {
       key = "ctrl+a";
       command = "workbench.action.toggleAuxiliaryBar";
     }
 
+    # Ctrl+K T — Toggle Terminal
     #
-    # Ctrl+G — Universal Escape / Dismiss
+    # sendKeybindingsToShell=true (required for vscode-neovim) forwards bare key
+    # events to the shell before VS Code sees them. Chords always skip the shell
+    # regardless of that setting, so a chord is the only reliable toggle from
+    # either editor or terminal focus.
+    {
+      key = "ctrl+k t";
+      command = "workbench.action.terminal.toggleTerminal";
+    }
+
+    # ──────────────────────────────────────────────────────────────────────────
+    # Universal Escape — Ctrl+G
     #
-    # Emacs-inspired escape hatch: dismiss whatever UI element has focus
-    # and return to the editor. Replaces the default "Go to Line..." binding.
-    #
+    # Emacs-inspired escape hatch: dismiss whatever UI element has focus and
+    # return to the editor. Replaces the default "Go to Line..." binding.
+    # Each when clause targets a specific surface; VS Code matches the first
+    # rule that applies (evaluated bottom-to-top in the full ruleset).
+    # ──────────────────────────────────────────────────────────────────────────
 
     {
       key = "ctrl+g";
       command = "-workbench.action.gotoLine";
     }
-    # Dismiss quick open / command palette
     {
       key = "ctrl+g";
       command = "workbench.action.closeQuickOpen";
       when = "inQuickOpen";
     }
-    # Close find widget
     {
       key = "ctrl+g";
       command = "closeFindWidget";
       when = "editorFocus && findWidgetVisible";
     }
-    # Close peek view (references, definitions)
     {
       key = "ctrl+g";
       command = "closeReferenceSearch";
       when = "referenceSearchVisible";
     }
-    # Dismiss notifications
     {
       key = "ctrl+g";
       command = "notifications.hideToasts";
       when = "notificationFocus";
     }
-    # Close panel (terminal, output, problems, test results)
     {
       key = "ctrl+g";
       command = "workbench.action.closePanel";
       when = "panelFocus";
     }
-    # Return to editor from sidebar
     {
       key = "ctrl+g";
       command = "workbench.action.focusActiveEditorGroup";
       when = "sideBarFocus";
     }
-    # Return to editor from auxiliary bar (agent panel)
     {
       key = "ctrl+g";
       command = "workbench.action.focusActiveEditorGroup";
       when = "auxiliaryBarFocus";
     }
 
+    # ──────────────────────────────────────────────────────────────────────────
+    # Fuzzy Finders — Code Telescope
     #
-    # Code Telescope — Global pickers (work from any focus context)
-    # Mirrors leader-key bindings in vscode.lua but accessible everywhere.
-    #
+    # Global pickers accessible from any focus context. Mirrors leader-key
+    # bindings in vscode.lua but available without entering normal mode.
+    # ──────────────────────────────────────────────────────────────────────────
 
     {
       key = "ctrl+alt+f";
@@ -113,23 +120,18 @@
       when = "editorTextFocus";
     }
 
-    #
+    # ──────────────────────────────────────────────────────────────────────────
     # Focus Management
-    #
+    # ──────────────────────────────────────────────────────────────────────────
 
     # Return to editor from anywhere
     {
       key = "ctrl+0";
       command = "workbench.action.focusActiveEditorGroup";
     }
-    # Focus terminal
-    {
-      key = "ctrl+k t";
-      command = "workbench.action.terminal.focus";
-    }
 
-    #
     # Ctrl+H / Ctrl+L — Directional focus navigation
+    #
     # Mirrors neovim's Ctrl+H/L split navigation across VS Code's layout:
     # Sidebar ↔ Editor Group(s) ↔ Auxiliary Bar (agent panel)
     #
@@ -150,19 +152,16 @@
     }
 
     # Ctrl+H — Navigate left
-    # From auxiliary bar → editor
     {
       key = "ctrl+h";
       command = "workbench.action.focusFirstEditorGroup";
       when = "auxiliaryBarFocus";
     }
-    # From editor → previous editor group (if split)
     {
       key = "ctrl+h";
       command = "workbench.action.focusLeftGroup";
       when = "editorFocus && activeEditorGroupIndex > 1";
     }
-    # From editor (leftmost group) → sidebar
     {
       key = "ctrl+h";
       command = "workbench.action.focusSideBar";
@@ -170,23 +169,21 @@
     }
 
     # Ctrl+L — Navigate right
-    # From sidebar → first editor group
     {
       key = "ctrl+l";
       command = "workbench.action.focusFirstEditorGroup";
       when = "sideBarFocus";
     }
-    # From editor → next editor group (if split)
     {
       key = "ctrl+l";
       command = "workbench.action.focusRightGroup";
       when = "editorFocus && activeEditorGroupIndex < editorGroupCount";
     }
-    # From editor (rightmost group) → auxiliary bar (agent panel)
     {
       key = "ctrl+l";
       command = "workbench.action.focusAuxiliaryBar";
       when = "editorFocus && activeEditorGroupIndex == editorGroupCount && auxiliaryBarVisible";
     }
+
   ];
 }
