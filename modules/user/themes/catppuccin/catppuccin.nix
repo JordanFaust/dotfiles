@@ -91,6 +91,18 @@ in {
       };
     };
 
+    home.activation = lib.mkIf pkgs.stdenv.isDarwin {
+      setWallpaper = lib.hm.dag.entryAfter ["writeBoundary"] ''
+        run /usr/bin/osascript -e '
+          tell application "System Events"
+            tell every desktop
+              set picture to "${./background.jpg}"
+            end tell
+          end tell
+        ' || true
+      '';
+    };
+
     catppuccin = {
       enable = true;
       accent = "rosewater";
