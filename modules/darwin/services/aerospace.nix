@@ -22,12 +22,14 @@
       # Mouse follows focus when the active monitor changes
       on-focused-monitor-changed = [ "move-mouse monitor-lazy-center" ];
 
-      exec.on-workspace-change = [
-        "sketchybar"
-        "--trigger"
-        "aerospace_workspace_change"
-        "FOCUSED_WORKSPACE=%s"
-        "PREV_WORKSPACE=%u"
+      # Notify sketchybar on every workspace switch.
+      # nix-darwin's AeroSpace module exposes this as a flat key that takes a
+      # shell-style command list. AeroSpace sets $AEROSPACE_FOCUSED_WORKSPACE
+      # and $AEROSPACE_PREV_WORKSPACE before executing the command.
+      exec-on-workspace-change = [
+        "/bin/bash"
+        "-c"
+        "sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE PREV_WORKSPACE=$AEROSPACE_PREV_WORKSPACE"
       ];
 
       # Gap configuration — mirrors Hyprland's gaps_in = 14 / gaps_out = 28
