@@ -36,6 +36,7 @@ in {
     desktop = {
       skhd.enable = true;
       hammerspoon.enable = true;
+      sketchybar.enable = true;
     };
 
     themes = {
