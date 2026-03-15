@@ -22,6 +22,14 @@
       # Mouse follows focus when the active monitor changes
       on-focused-monitor-changed = [ "move-mouse monitor-lazy-center" ];
 
+      exec.on-workspace-change = [
+        "sketchybar"
+        "--trigger"
+        "aerospace_workspace_change"
+        "FOCUSED_WORKSPACE=%s"
+        "PREV_WORKSPACE=%u"
+      ];
+
       # Gap configuration — mirrors Hyprland's gaps_in = 14 / gaps_out = 28
       gaps = {
         inner.horizontal = 14;
@@ -29,7 +37,7 @@
         outer = {
           left = 28;
           right = 28;
-          top = 28;
+          top = 64;
           bottom = 28;
         };
       };
