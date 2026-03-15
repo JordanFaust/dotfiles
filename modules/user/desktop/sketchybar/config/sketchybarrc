@@ -1,27 +1,38 @@
 #!/usr/bin/env bash
-# Catppuccin Macchiato sketchybar configuration
-# Layout: center [workspaces] | right [network] [battery] [clock]
+# Catppuccin Macchiato sketchybar — v2
+# Layout: left [dashboard, front_app] | center [workspaces] | right [network, battery, clock]
 
 PLUGIN_DIR="$CONFIG_DIR/plugins"
-
-# Ensure plugin scripts are executable after nix store copy
 chmod +x "$PLUGIN_DIR"/*.sh 2>/dev/null || true
 
 ############################################################
-# Colors — Catppuccin Macchiato
+# Colors — Catppuccin Macchiato (0xffRRGGBB)
 ############################################################
 BASE=0xff24273a
 SURFACE0=0xff363a4f
 SURFACE1=0xff494d64
 OVERLAY0=0xff6e738d
+SUBTEXT1=0xffb8c0e0
 TEXT=0xffcad3f5
 ROSEWATER=0xfff4dbd6
+MAUVE=0xffc6a0f6
+RED=0xffed8796
+PEACH=0xfffab387
 YELLOW=0xffeed49f
-BLUE=0xff8aadf4
 GREEN=0xffa6da95
+SAPPHIRE=0xff7dc4e4
+BLUE=0xff8aadf4
+LAVENDER=0xffb7bdf8
+
+# Per-workspace accent colors — from hyprpanel workspaceIconMap
+WS1_COLOR=$TEXT      # #cad3f5
+WS2_COLOR=$SAPPHIRE  # #7dc4e4
+WS3_COLOR=$GREEN     # #a6da95
+WS4_COLOR=$LAVENDER  # #b7bdf8
+WS5_COLOR=$YELLOW    # #eed49f
 
 ############################################################
-# Bar appearance
+# Bar
 ############################################################
 sketchybar --bar \
   height=36 \
@@ -38,71 +49,160 @@ sketchybar --bar \
   notch_width=0
 
 ############################################################
-# Default item appearance
+# Defaults
 ############################################################
 sketchybar --default \
-  icon.font="MonoLisa Variable Regular:Regular:13.0" \
+  icon.font="MonoLisa Variable Regular:Regular:14.0" \
   label.font="MonoLisa Variable Regular:Regular:13.0" \
   icon.color=$TEXT \
   label.color=$TEXT \
-  icon.padding_left=6 \
+  icon.padding_left=8 \
   icon.padding_right=4 \
-  label.padding_left=4 \
-  label.padding_right=6 \
+  label.padding_left=2 \
+  label.padding_right=8 \
   background.corner_radius=6 \
-  background.height=26
+  background.height=26 \
+  background.padding_left=4 \
+  background.padding_right=4
 
 ############################################################
-# AeroSpace workspace event
+# AeroSpace event
 ############################################################
 sketchybar --add event aerospace_workspace_change
 
 ############################################################
-# Workspaces — center (mirrors hyprpanel layout)
+# LEFT — Dashboard icon
 ############################################################
-for sid in 1 2 3 4 5; do
-  sketchybar --add item "space.$sid" center \
-    --set "space.$sid" \
-      icon="$sid" \
-      icon.font="MonoLisa Variable Regular:Bold:14.0" \
+sketchybar --add item dashboard left \
+  --set dashboard \
+    icon="󰣇" \
+    icon.font="MonoLisa Variable Regular:Regular:16.0" \
+    icon.color=$MAUVE \
+    icon.padding_left=8 \
+    icon.padding_right=8 \
+    label.drawing=off \
+    background.color=$SURFACE0 \
+    background.corner_radius=6 \
+    background.height=26 \
+    background.padding_left=4 \
+    background.padding_right=4 \
+    click_script="open -a 'Raycast' 2>/dev/null || true"
+
+############################################################
+# LEFT — Active window / front app
+############################################################
+sketchybar --add item front_app left \
+  --set front_app \
+    icon="󰣆" \
+    icon.font="MonoLisa Variable Regular:Regular:14.0" \
+    icon.color=$SUBTEXT1 \
+    label="Desktop" \
+    label.font="MonoLisa Variable Regular:Regular:13.0" \
+    label.color=$TEXT \
+    icon.padding_left=8 \
+    icon.padding_right=6 \
+    label.padding_left=0 \
+    label.padding_right=8 \
+    background.color=$SURFACE0 \
+    background.corner_radius=6 \
+    background.height=26 \
+    background.padding_left=4 \
+    background.padding_right=4 \
+    script="$PLUGIN_DIR/front_app.sh" \
+  --subscribe front_app front_app_switched
+
+############################################################
+# CENTER — Workspaces with per-workspace icons + colors
+############################################################
+declare -a WS_ICONS=("" "󰅩" "󰒱" "󰃽" "")
+declare -a WS_COLORS=($WS1_COLOR $WS2_COLOR $WS3_COLOR $WS4_COLOR $WS5_COLOR)
+# Semi-transparent tint for active workspace background (alpha ~0x30 = ~19%)
+declare -a WS_BG=(0x30cad3f5 0x307dc4e4 0x30a6da95 0x30b7bdf8 0x30eed49f)
+
+for i in 1 2 3 4 5; do
+  IDX=$((i - 1))
+  ICON="${WS_ICONS[$IDX]}"
+  COLOR="${WS_COLORS[$IDX]}"
+  BG="${WS_BG[$IDX]}"
+
+  sketchybar --add item "space.$i" center \
+    --set "space.$i" \
+      icon="$ICON" \
+      icon.font="MonoLisa Variable Regular:Regular:15.0" \
       icon.color=$OVERLAY0 \
       label.drawing=off \
       background.color=$SURFACE0 \
       background.corner_radius=6 \
       background.height=26 \
+      background.border_width=0 \
       background.padding_left=2 \
       background.padding_right=2 \
-      script="$PLUGIN_DIR/aerospace.sh $sid" \
-      click_script="aerospace workspace $sid" \
-    --subscribe "space.$sid" aerospace_workspace_change
+      script="$PLUGIN_DIR/aerospace.sh $i" \
+      click_script="aerospace workspace $i" \
+    --subscribe "space.$i" aerospace_workspace_change
 done
 
 ############################################################
-# Right side — clock, battery, network (rightmost first)
+# RIGHT — Network (each item has its own pill background)
 ############################################################
-
-# Clock
-sketchybar --add item clock right \
-  --set clock \
-    icon="󰥔" \
-    icon.color=$ROSEWATER \
-    update_freq=1 \
-    script="$PLUGIN_DIR/clock.sh"
-
-# Battery
-sketchybar --add item battery right \
-  --set battery \
-    update_freq=120 \
-    script="$PLUGIN_DIR/battery.sh" \
-  --subscribe battery power_source_change system_woke
-
-# Network
 sketchybar --add item network right \
   --set network \
+    icon.color=$BLUE \
+    icon.padding_left=8 \
+    icon.padding_right=4 \
+    label.padding_left=2 \
+    label.padding_right=8 \
+    background.color=$SURFACE0 \
+    background.corner_radius=6 \
+    background.height=26 \
+    background.padding_left=4 \
+    background.padding_right=4 \
     update_freq=30 \
     script="$PLUGIN_DIR/network.sh"
 
 ############################################################
-# Initial update
+# RIGHT — Battery
+############################################################
+sketchybar --add item battery right \
+  --set battery \
+    icon.padding_left=8 \
+    icon.padding_right=4 \
+    label.padding_left=2 \
+    label.padding_right=8 \
+    background.color=$SURFACE0 \
+    background.corner_radius=6 \
+    background.height=26 \
+    background.padding_left=4 \
+    background.padding_right=4 \
+    update_freq=120 \
+    script="$PLUGIN_DIR/battery.sh" \
+  --subscribe battery power_source_change system_woke
+
+############################################################
+# RIGHT — Clock
+############################################################
+sketchybar --add item clock right \
+  --set clock \
+    icon="󰥔" \
+    icon.color=$ROSEWATER \
+    icon.padding_left=8 \
+    icon.padding_right=4 \
+    label.padding_left=2 \
+    label.padding_right=8 \
+    background.color=$SURFACE0 \
+    background.corner_radius=6 \
+    background.height=26 \
+    background.padding_left=4 \
+    background.padding_right=4 \
+    update_freq=1 \
+    script="$PLUGIN_DIR/clock.sh"
+
+############################################################
+# Initial state
 ############################################################
 sketchybar --update
+# Trigger workspace state so icons/colors initialize immediately
+FOCUSED_WS=$(aerospace list-workspaces --focused 2>/dev/null || echo "1")
+sketchybar --trigger aerospace_workspace_change \
+  FOCUSED_WORKSPACE="$FOCUSED_WS" \
+  PREV_WORKSPACE=""
