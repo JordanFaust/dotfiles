@@ -18,6 +18,8 @@
       PMPrintingExpandedStateForPrint = true;
       # Dark mode — matches Catppuccin Macchiato dark theme used on NixOS/Hyprland
       AppleInterfaceStyle = "Dark";
+      # Hide native menu bar so sketchybar can own the top of the screen
+      _HIHideMenuBar = true;
     };
 
     # universalaccess.reduceTransparency is intentionally omitted —
