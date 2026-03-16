@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Catppuccin Macchiato sketchybar
-# Layout: left [dashboard, client.1–8] | center [workspaces 1–5] | right [network, battery, clock]
+# Layout: left [dashboard, front_app] | center [workspaces 1–5] | right [network, battery, clock]
 
 PLUGIN_DIR="$CONFIG_DIR/plugins"
 chmod +x "$PLUGIN_DIR"/*.sh 2>/dev/null || true
@@ -82,33 +82,28 @@ sketchybar --add item dashboard left \
     click_script="open -a 'Raycast' 2>/dev/null || true"
 
 ############################################################
-# LEFT — Client window slots
-# Each item owns its own script and event subscriptions — same pattern as
-# workspace items. Items with drawing=off don't run scripts, so we cannot
-# use a hidden orchestrator; each slot must subscribe independently.
+# LEFT — Focused app title (HyprPanel-style windowtitle)
 ############################################################
-for i in 1 2 3 4 5 6 7 8; do
-  sketchybar --add item "client.$i" left \
-    --set "client.$i" \
-      icon="" \
-      label="" \
-      icon.font="Symbols Nerd Font Mono:Regular:16.0" \
-      icon.color=$SUBTEXT1 \
-      label.font="MonoLisa Variable Regular:Bold:16.0" \
-      label.color=$TEXT \
-      icon.padding_left=0 \
-      icon.padding_right=0 \
-      label.padding_left=0 \
-      label.padding_right=0 \
-      background.drawing=off \
-      background.color=$SURFACE0 \
-      background.corner_radius=8 \
-      background.height=32 \
-      background.padding_left=0 \
-      background.padding_right=0 \
-      script="$PLUGIN_DIR/clients.sh $i" \
-    --subscribe "client.$i" aerospace_workspace_change
-done
+sketchybar --add item front_app left \
+  --set front_app \
+    icon="󰣇" \
+    icon.font="Symbols Nerd Font Mono:Regular:18.0" \
+    icon.color=$SUBTEXT1 \
+    icon.padding_left=8 \
+    icon.padding_right=4 \
+    label="Desktop" \
+    label.font="MonoLisa Variable Regular:Bold:16.0" \
+    label.color=$TEXT \
+    label.padding_left=2 \
+    label.padding_right=8 \
+    background.color=$SURFACE0 \
+    background.corner_radius=8 \
+    background.height=32 \
+    background.padding_left=4 \
+    background.padding_right=4 \
+    update_freq=3 \
+    script="$PLUGIN_DIR/front_app.sh" \
+  --subscribe front_app front_app_switched
 
 ############################################################
 # CENTER — Workspaces with per-workspace icons + colors

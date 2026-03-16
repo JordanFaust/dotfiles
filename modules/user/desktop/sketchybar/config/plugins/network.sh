@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# Try Wi-Fi first (en0), then ethernet (en1).
-SSID=$(networksetup -getairportnetwork en0 2>/dev/null | awk -F': ' '{print $2}')
-
-if [ -n "$SSID" ] && [ "$SSID" != "You are not associated with an AirPort network." ]; then
+# Detect connection status without SSID.
+# macOS 26 Tahoe redacts SSID from all CLI tools unless the calling process
+# has Location Services entitlements, which unsigned shell scripts never get.
+if ifconfig en0 2>/dev/null | grep -q 'inet '; then
   sketchybar --set "$NAME" \
     icon="󰤨" \
     icon.color=0xff8aadf4 \
-    label="$SSID"
+    label="Wi-Fi"
 elif ifconfig en1 2>/dev/null | grep -q "status: active"; then
   sketchybar --set "$NAME" \
     icon="󰈀" \
