@@ -45,16 +45,21 @@ if [ -z "${AEROSPACE:-}" ]; then
   hide; exit 0
 fi
 
+STATEFILE=/tmp/sketchybar-aerospace-ws
 log "aerospace=$AEROSPACE NAME=$NAME FOCUSED_WORKSPACE=${FOCUSED_WORKSPACE:-<unset>} SENDER=${SENDER:-<unset>}"
 
-FOCUSED="${FOCUSED_WORKSPACE}"
-if [ -z "$FOCUSED" ]; then
-  FOCUSED=$("$AEROSPACE" list-workspaces --focused 2>&1 | tr -d '[:space:]')
-  log "queried focused workspace -> '$FOCUSED'"
+if [ -n "$FOCUSED_WORKSPACE" ]; then
+  # Event path: save workspace for future non-event calls
+  FOCUSED="$FOCUSED_WORKSPACE"
+  echo "$FOCUSED" > "$STATEFILE"
+else
+  # Non-event path (shouldn't happen without update_freq, but handle gracefully)
+  FOCUSED=$(cat "$STATEFILE" 2>/dev/null)
+  log "using cached workspace -> '${FOCUSED:-none}'"
 fi
 
 if [ -z "$FOCUSED" ]; then
-  log "no focused workspace returned — hiding"
+  log "no workspace available — hiding"
   hide; exit 0
 fi
 

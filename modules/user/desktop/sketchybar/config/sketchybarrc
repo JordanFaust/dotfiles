@@ -106,7 +106,6 @@ for i in 1 2 3 4 5 6 7 8; do
       background.height=32 \
       background.padding_left=0 \
       background.padding_right=0 \
-      update_freq=10 \
       script="$PLUGIN_DIR/clients.sh $i" \
     --subscribe "client.$i" aerospace_workspace_change
 done
@@ -153,6 +152,7 @@ sketchybar --add item network right \
     icon.color=$BLUE \
     icon.padding_left=8 \
     icon.padding_right=4 \
+    label.font="MonoLisa Variable Regular:Bold:16.0" \
     label.padding_left=2 \
     label.padding_right=8 \
     background.color=$SURFACE0 \
@@ -172,6 +172,7 @@ sketchybar --add item battery right \
     icon.padding_right=4 \
     label.padding_left=2 \
     label.padding_right=8 \
+    label.font="MonoLisa Variable Regular:Bold:16.0" \
     background.color=$SURFACE0 \
     background.corner_radius=8 \
     background.height=32 \
@@ -190,6 +191,7 @@ sketchybar --add item clock right \
     icon.color=$ROSEWATER \
     icon.padding_left=8 \
     icon.padding_right=4 \
+    label.font="MonoLisa Variable Regular:Bold:16.0" \
     label.padding_left=2 \
     label.padding_right=8 \
     background.color=$SURFACE0 \
