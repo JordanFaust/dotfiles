@@ -39,14 +39,14 @@
     #
 
     # Font
-    editor.fontFamily = "MonoLisa Variable";
+    editor.fontFamily = "MonoLisa Variable, Symbols Nerd Font Mono";
     editor.inlayHints.fontFamily = "MonoLisa Variable";
     editor.codeLensFontFamily = "MonoLisa Variable";
     editor.inlineSuggest.fontFamily = "MonoLisa Variable";
-    terminal.integrated.fontFamily = "MonoLisa Variable";
+    terminal.integrated.fontFamily = "MonoLisa Variable, Symbols Nerd Font Mono";
     scm.inputFontFamily = "MonoLisa Variable";
     chat.editor.fontFamily = "MonoLisa Variable";
-    debug.console.fontFamily = "MonoLisa Variable";
+    debug.console.fontFamily = "MonoLisa Variable, Symbols Nerd Font Mono";
     notebook.output.fontFamily = "MonoLisa Variable";
     markdown.preview.fontFamily = "MonoLisa Variable";
     workbench.fontAliasing = "antialiased";
