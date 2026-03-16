@@ -23,23 +23,23 @@
       on-focused-monitor-changed = [ "move-mouse monitor-lazy-center" ];
 
       # Notify sketchybar on every workspace switch.
-      # nix-darwin's AeroSpace module exposes this as a flat key that takes a
-      # shell-style command list. AeroSpace sets $AEROSPACE_FOCUSED_WORKSPACE
-      # and $AEROSPACE_PREV_WORKSPACE before executing the command.
+      # AeroSpace runs as a launchd service with a minimal PATH that excludes
+      # nix binary directories. We prepend the nix-darwin per-user profile so
+      # the bare `sketchybar` resolves reliably.
       exec-on-workspace-change = [
         "/bin/bash"
         "-c"
-        "sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE PREV_WORKSPACE=$AEROSPACE_PREV_WORKSPACE"
+        "export PATH=\"/etc/profiles/per-user/jordan.faust/bin:$PATH\"; sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE PREV_WORKSPACE=$AEROSPACE_PREV_WORKSPACE"
       ];
 
       # Gap configuration — mirrors Hyprland's gaps_in = 14 / gaps_out = 28
       gaps = {
-        inner.horizontal = 14;
-        inner.vertical = 14;
+        inner.horizontal = 28;
+        inner.vertical = 28;
         outer = {
           left = 28;
           right = 28;
-          top = 72;
+          top = 48;
           bottom = 28;
         };
       };
