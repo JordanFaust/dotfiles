@@ -7,9 +7,9 @@ fi
 APP="${APP:-Desktop}"
 
 case "$APP" in
-  kitty|Kitty)                            ICON="" ;;
+  kitty|Kitty)                            ICON="󰆍" ;;
   Firefox)                                ICON="󰈹" ;;
-  Neovim|nvim)                            ICON="" ;;
+  Neovim|nvim)                            ICON="" ;;
   Slack)                                  ICON="󰒱" ;;
   Spotify)                                ICON="󰓇" ;;
   "Visual Studio Code"|Code)              ICON="󰨞" ;;
@@ -19,7 +19,7 @@ case "$APP" in
   Safari)                                 ICON="" ;;
   Finder)                                 ICON="󰀶" ;;
   "System Settings"|"System Preferences") ICON="󰒓" ;;
-  Terminal|iTerm2)                        ICON="" ;;
+  Terminal|iTerm2)                        ICON="" ;;
   Raycast)                                ICON="󱗖" ;;
   "Desktop"|"")                          ICON="󰣇" ; APP="Desktop" ;;
   *)                                      ICON="󰣆" ;;
