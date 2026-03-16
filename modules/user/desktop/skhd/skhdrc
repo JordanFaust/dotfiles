@@ -9,3 +9,7 @@ home : screencapture -is ~/Pictures/screenshot-$(date +%Y%m%d-%H%M%S).png
 
 # Screenshot region to clipboard — matches Hyprland: SUPER+Home
 shift - home : screencapture -ic
+
+# Copy/paste — Linux terminal muscle memory (ctrl+shift+c/v → cmd+c/v)
+ctrl + shift - c : skhd -k "cmd - c"
+ctrl + shift - v : skhd -k "cmd - v"
