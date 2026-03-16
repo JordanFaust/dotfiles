@@ -76,7 +76,7 @@
         "cmd-p" = "layout horizontal vertical";
 
         # Maximize within AeroSpace (no macOS Space) — matches SUPER+F in Hyprland
-        "cmd-f" = "fullscreen";
+        "cmd-ctrl-f" = "fullscreen";
         # macOS native fullscreen (creates its own Space) — matches SUPER+SHIFT+F
         "cmd-shift-f" = "macos-native-fullscreen";
 
@@ -99,11 +99,11 @@
         "cmd-5" = "workspace 5";
 
         # Move window to workspace — matches SUPER+CTRL+1-5
-        "cmd-shift-1" = "move-node-to-workspace 1";
-        "cmd-shift-2" = "move-node-to-workspace 2";
-        "cmd-shift-3" = "move-node-to-workspace 3";
-        "cmd-shift-4" = "move-node-to-workspace 4";
-        "cmd-shift-5" = "move-node-to-workspace 5";
+        "cmd-ctrl-1" = "move-node-to-workspace 1";
+        "cmd-ctrl-2" = "move-node-to-workspace 2";
+        "cmd-ctrl-3" = "move-node-to-workspace 3";
+        "cmd-ctrl-4" = "move-node-to-workspace 4";
+        "cmd-ctrl-5" = "move-node-to-workspace 5";
 
         # Workspace cycling — matches SUPER+left/right
         "cmd-left" = "workspace prev";
