@@ -112,7 +112,9 @@ in {
       cursors.enable = pkgs.stdenv.isLinux;
     };
 
-    # Enable fontconfig to discover fonts added as home.packages above
+    # Enable fontconfig to discover fonts added as home.packages above.
+    # On macOS, fontconfig-aware apps (Kitty, some CLI tools) use this.
+    # Native CoreText apps (sketchybar) use fonts.packages in darwin/default.nix.
     fonts.fontconfig.enable = true;
 
     xdg.configFile =
@@ -125,6 +127,24 @@ in {
         "kitty/themes/catppuccin-macchiato.conf".source = ./config/kitty/themes/catppuccin-macchiato.conf;
         # Powerlevel10k prompt (cross-platform, used when zsh module enabled)
         "zsh/.p10k.zsh".source = ./config/zsh/.p10k.zsh;
+        # Fontconfig fallback chain: MonoLisa → Symbols Nerd Font Mono.
+        # Mirrors the NixOS approach — fontconfig-aware apps automatically fill
+        # missing glyphs (Nerd Font PUA codepoints) from the Symbols font when
+        # MonoLisa is the configured font family.
+        "fontconfig/conf.d/99-nerd-font-fallback.conf".text = ''
+          <?xml version="1.0"?>
+          <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+          <fontconfig>
+            <alias>
+              <family>MonoLisa Variable Regular</family>
+              <prefer>
+                <family>MonoLisa Variable Regular</family>
+                <family>Symbols Nerd Font Mono</family>
+                <family>Symbols Nerd Font</family>
+              </prefer>
+            </alias>
+          </fontconfig>
+        '';
       }
       // lib.optionalAttrs pkgs.stdenv.isLinux {
         # Background Image

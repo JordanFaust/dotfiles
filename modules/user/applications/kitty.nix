@@ -47,7 +47,11 @@ in {
 
       sessionVariables = {
         TERMINAL = "kitty";
-        TERM = "kitty";
+        # TERM is intentionally not set here — the terminal emulator sets it when
+        # it spawns a shell. Setting it globally breaks tools (like hm-session-vars.sh)
+        # that run outside of an actual kitty window and can't find the terminfo entry.
+        # Expose kitty's bundled terminfo so xterm-kitty is resolvable system-wide.
+        TERMINFO_DIRS = "${pkgs.kitty.terminfo}/share/terminfo";
       };
     };
 

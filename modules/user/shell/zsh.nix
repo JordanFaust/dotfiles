@@ -69,7 +69,7 @@ in {
       envExtra = ''
         function _cache {
           (( $+commands[$1] )) || return 1
-          local cache_dir="$XDG_CACHE_HOME/''${SHELL##*/}"
+          local cache_dir="''${XDG_CACHE_HOME:-$HOME/.cache}/''${SHELL##*/}"
           local cache="$cache_dir/$1"
           if [[ ! -f $cache || ! -s $cache ]]; then
               echo "Caching $1"

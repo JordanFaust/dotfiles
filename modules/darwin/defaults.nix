@@ -10,6 +10,9 @@
       # Scale: 1 (fastest) → 15 (slowest). macOS default is 6/25.
       KeyRepeat = 3;
       InitialKeyRepeat = 15;
+      # macOS defaults to showing a character picker on long-press (press-and-hold),
+      # which completely suppresses key repeat. Must be false for KeyRepeat to work.
+      ApplePressAndHoldEnabled = false;
       # Disable "natural" scroll direction — matches Linux trackpad/wheel behavior
       # (scroll up = content moves up). macOS default is true (reversed).
       "com.apple.swipescrolldirection" = false;
