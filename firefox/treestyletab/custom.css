@@ -149,11 +149,6 @@ tab-item:not(.active):hover {
     background: var(--red);
 }
 
-tab-item:hover tab-closebox {
-    right: 10px;
-    opacity: 1;
-}
-
 tab-item:not(.pinned) tab-closebox {
     position: absolute;
     margin-top: 2px;
@@ -165,6 +160,11 @@ tab-item:not(.pinned) tab-closebox {
     padding-left: 2px;
     background: var(--light-4);
     transition   : all var(--animation-duration) var(--ease-out);
+}
+
+tab-item:hover tab-closebox {
+    right: 10px;
+    opacity: 1;
 }
 
 .sound-button:after {
@@ -310,6 +310,3 @@ tab-item.active.contextual-identity-firefox-container-3 {
 tab-item.active.contextual-identity-firefox-container-4 {
    background: linear-gradient(to right, #ED8796 , #D53F8C) !important;
 }
-
-/***********************************/
-
