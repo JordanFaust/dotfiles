@@ -23,7 +23,7 @@
       AppleInterfaceStyle = "Dark";
       # Show native menu bar alongside sketchybar while sketchybar is WIP.
       # Once sketchybar fully replaces the menu bar, flip back to true.
-      _HIHideMenuBar = false;
+      _HIHideMenuBar = true;
     };
 
     # universalaccess.reduceTransparency is intentionally omitted —
