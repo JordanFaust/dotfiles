@@ -105,18 +105,41 @@ function discoverGitRepositories() {
       const entries = fs.readdirSync(searchPath, { withFileTypes: true });
 
       for (const entry of entries) {
-        if (entry.isDirectory()) {
-          const fullPath = path.join(searchPath, entry.name);
+        if (!entry.isDirectory()) continue;
 
-          if (isGitRepository(fullPath)) {
-            repositories.push({
-              name: entry.name,
-              path: fullPath,
-            });
+        const fullPath = path.join(searchPath, entry.name);
 
-            // Discover worktrees for this repository
-            const repoWorktrees = discoverWorktrees(fullPath, entry.name);
-            repositories.push(...repoWorktrees);
+        if (isGitRepository(fullPath)) {
+          repositories.push({
+            name: entry.name,
+            path: fullPath,
+          });
+
+          const repoWorktrees = discoverWorktrees(fullPath, entry.name);
+          repositories.push(...repoWorktrees);
+        } else {
+          // Scan one level deeper for user/org directories (e.g. ~/github.com/{user}/{project})
+          try {
+            const subEntries = fs.readdirSync(fullPath, { withFileTypes: true });
+
+            for (const subEntry of subEntries) {
+              if (!subEntry.isDirectory()) continue;
+
+              const subFullPath = path.join(fullPath, subEntry.name);
+
+              if (isGitRepository(subFullPath)) {
+                const repoName = `${entry.name}/${subEntry.name}`;
+                repositories.push({
+                  name: repoName,
+                  path: subFullPath,
+                });
+
+                const repoWorktrees = discoverWorktrees(subFullPath, repoName);
+                repositories.push(...repoWorktrees);
+              }
+            }
+          } catch (error) {
+            // Skip subdirectories we can't read
           }
         }
       }
