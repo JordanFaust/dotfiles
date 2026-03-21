@@ -1,4 +1,5 @@
-{ ... }: {
+{ ... }:
+{
   programs.vscode.profiles.default.userSettings = {
     #
     # General Settings
@@ -33,6 +34,21 @@
     terminal.integrated.fontWeightBold = "700";
     terminal.integrated.lineHeight = 1.5;
     terminal.integrated.sendKeybindingsToShell = true;
+    "terminal.integrated.profiles.osx" = {
+      tmux = {
+        path = "tmux";
+        args = [
+          "new-session"
+          "-A"
+          "-s"
+          "\${workspaceFolderBasename}"
+        ];
+      };
+    };
+    "terminal.integrated.defaultProfile.osx" = "tmux";
+    "terminal.integrated.automationProfile.osx" = {
+      path = "/bin/zsh";
+    };
 
     #
     # Editor
@@ -94,8 +110,8 @@
     explorer.confirmDelete = false;
     explorer.compactFolders = false;
     explorer.confirmDragAndDrop = false;
-    errorLens.enabledDiagnosticLevels = ["error"];
-    errorLens.excludeBySource = ["cSpell"];
+    errorLens.enabledDiagnosticLevels = [ "error" ];
+    errorLens.excludeBySource = [ "cSpell" ];
 
     #
     # Languages
@@ -155,7 +171,26 @@
     # Exclude Ctrl+E (explorer toggle), Ctrl+A (agent toggle), Ctrl+H/L
     # (directional focus nav) from neovim so VS Code keybindings handle them.
     # Default list: ["a", "b", "d", "e", "f", "h", "i", "j", "o", "r", "t", "u", "w"]
-    vscode-neovim.ctrlKeysForNormalMode = ["b" "d" "f" "i" "j" "o" "r" "t" "u" "w"];
-    vscode-neovim.ctrlKeysForInsertMode = ["d" "j" "o" "r" "t" "u" "w"];
+    vscode-neovim.ctrlKeysForNormalMode = [
+      "b"
+      "d"
+      "f"
+      "i"
+      "j"
+      "o"
+      "r"
+      "t"
+      "u"
+      "w"
+    ];
+    vscode-neovim.ctrlKeysForInsertMode = [
+      "d"
+      "j"
+      "o"
+      "r"
+      "t"
+      "u"
+      "w"
+    ];
   };
 }

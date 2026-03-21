@@ -18,15 +18,30 @@
       command = "workbench.action.toggleAuxiliaryBar";
     }
 
-    # Ctrl+K T — Toggle Terminal
+    # Ctrl+K T — Focus Terminal (opens panel if hidden)
+    # Ctrl+K E — Focus Editor
+    # Ctrl+K F — Toggle fullscreen terminal panel
     #
-    # sendKeybindingsToShell=true (required for vscode-neovim) forwards bare key
-    # events to the shell before VS Code sees them. Chords always skip the shell
-    # regardless of that setting, so a chord is the only reliable toggle from
-    # either editor or terminal focus.
+    # Chords are used because sendKeybindingsToShell=true (required for
+    # vscode-neovim) forwards bare key events to the shell. Chords always
+    # skip the shell regardless of that setting.
     {
       key = "ctrl+k t";
-      command = "workbench.action.terminal.toggleTerminal";
+      command = "workbench.action.terminal.focus";
+      when = "!terminalFocus";
+    }
+    {
+      key = "ctrl+k t";
+      command = "workbench.action.focusActiveEditorGroup";
+      when = "terminalFocus";
+    }
+    {
+      key = "ctrl+k e";
+      command = "workbench.action.focusActiveEditorGroup";
+    }
+    {
+      key = "ctrl+k f";
+      command = "workbench.action.toggleMaximizedPanel";
     }
 
     # ──────────────────────────────────────────────────────────────────────────
