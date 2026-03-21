@@ -44,8 +44,17 @@
     }
     {
       key = "ctrl+k a";
+      command = "runCommands";
+      when = "!auxiliaryBarFocus && agentChatMaximized";
+      args.commands = [
+        "workbench.action.maximizeChatSize"
+        "composer.openAsPane"
+      ];
+    }
+    {
+      key = "ctrl+k a";
       command = "composer.openAsPane";
-      when = "!auxiliaryBarFocus";
+      when = "!auxiliaryBarFocus && !agentChatMaximized";
     }
     {
       key = "ctrl+k a";

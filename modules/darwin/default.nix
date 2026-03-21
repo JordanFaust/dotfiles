@@ -4,7 +4,6 @@
 # NOT under modules/system/ to avoid being auto-imported into NixOS builds
 # by the root default.nix (which does mapModulesRec' ./modules/system).
 {
-  config,
   pkgs,
   lib,
   inputs,
