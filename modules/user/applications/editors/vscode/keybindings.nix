@@ -21,6 +21,7 @@
     # Ctrl+K T — Focus Terminal (opens panel if hidden)
     # Ctrl+K E — Focus Editor
     # Ctrl+K F — Toggle fullscreen terminal panel
+    # Ctrl+K A — Toggle Agent Chat (composer pane)
     #
     # Chords are used because sendKeybindingsToShell=true (required for
     # vscode-neovim) forwards bare key events to the shell. Chords always
@@ -42,6 +43,16 @@
     {
       key = "ctrl+k f";
       command = "workbench.action.toggleMaximizedPanel";
+    }
+    {
+      key = "ctrl+k a";
+      command = "composer.openAsPane";
+      when = "!auxiliaryBarFocus";
+    }
+    {
+      key = "ctrl+k a";
+      command = "workbench.action.terminal.focus";
+      when = "auxiliaryBarFocus";
     }
 
     # ──────────────────────────────────────────────────────────────────────────
@@ -145,59 +156,75 @@
       command = "workbench.action.focusActiveEditorGroup";
     }
 
-    # Ctrl+H / Ctrl+L — Directional focus navigation
+    # Ctrl+K H/J/K/L — Directional focus navigation
     #
-    # Mirrors neovim's Ctrl+H/L split navigation across VS Code's layout:
-    # Sidebar ↔ Editor Group(s) ↔ Auxiliary Bar (agent panel)
+    # Chords bypass sendKeybindingsToShell, so these work from the terminal.
+    # H/L navigate horizontally; J/K navigate vertically between editor
+    # and terminal when the panel is not maximized.
     #
-    #  Ctrl+H ←                          → Ctrl+L
-    # ┌─────────┐    ┌──────────────┐    ┌─────────────┐
-    # │ Sidebar │ ↔  │ Editor Group │ ↔  │ Agent Panel │
-    # │ (Ctrl+E)│    │   1  2  ...  │    │   (Ctrl+A)  │
-    # └─────────┘    └──────────────┘    └─────────────┘
-
-    # Unbind defaults (find/replace and select-line)
+    #  Ctrl+K H ←                    → Ctrl+K L
+    # ┌──────────────────┐    ┌─────────────────────┐
+    # │    Terminal /     │    │      AI Chat        │
+    # │    Editor         │    │     (Ctrl+K A)      │
+    # │   (Ctrl+K T)     │    │                     │
+    # └──────────────────┘    └─────────────────────┘
+    #
+    # When panel is not maximized (editor + terminal both visible):
+    #
+    #              Ctrl+K K ↑
+    #         ┌──────────────────┐
+    #         │     Editor       │
+    #         ├──────────────────┤
+    #         │    Terminal      │
+    #         └──────────────────┘
+    #              Ctrl+K J ↓
     {
-      key = "ctrl+h";
-      command = "-editor.action.startFindReplaceAction";
+      key = "ctrl+k h";
+      command = "workbench.action.terminal.focus";
+      when = "panelMaximized";
     }
     {
-      key = "ctrl+l";
-      command = "-expandLineSelection";
-    }
-
-    # Ctrl+H — Navigate left
-    {
-      key = "ctrl+h";
-      command = "workbench.action.focusFirstEditorGroup";
-      when = "auxiliaryBarFocus";
+      key = "ctrl+k h";
+      command = "workbench.action.focusActiveEditorGroup";
+      when = "!panelMaximized";
     }
     {
-      key = "ctrl+h";
-      command = "workbench.action.focusLeftGroup";
-      when = "editorFocus && activeEditorGroupIndex > 1";
+      key = "ctrl+k ctrl+h";
+      command = "workbench.action.terminal.focus";
+      when = "panelMaximized";
     }
     {
-      key = "ctrl+h";
-      command = "workbench.action.focusSideBar";
-      when = "editorFocus && activeEditorGroupIndex == 1 && sideBarVisible";
-    }
-
-    # Ctrl+L — Navigate right
-    {
-      key = "ctrl+l";
-      command = "workbench.action.focusFirstEditorGroup";
-      when = "sideBarFocus";
+      key = "ctrl+k ctrl+h";
+      command = "workbench.action.focusActiveEditorGroup";
+      when = "!panelMaximized";
     }
     {
-      key = "ctrl+l";
-      command = "workbench.action.focusRightGroup";
-      when = "editorFocus && activeEditorGroupIndex < editorGroupCount";
+      key = "ctrl+k l";
+      command = "composer.openAsPane";
     }
     {
-      key = "ctrl+l";
-      command = "workbench.action.focusAuxiliaryBar";
-      when = "editorFocus && activeEditorGroupIndex == editorGroupCount && auxiliaryBarVisible";
+      key = "ctrl+k ctrl+l";
+      command = "composer.openAsPane";
+    }
+    {
+      key = "ctrl+k k";
+      command = "workbench.action.focusActiveEditorGroup";
+      when = "!panelMaximized && terminalFocus";
+    }
+    {
+      key = "ctrl+k ctrl+k";
+      command = "workbench.action.focusActiveEditorGroup";
+      when = "!panelMaximized && terminalFocus";
+    }
+    {
+      key = "ctrl+k j";
+      command = "workbench.action.terminal.focus";
+      when = "!panelMaximized && editorFocus";
+    }
+    {
+      key = "ctrl+k ctrl+j";
+      command = "workbench.action.terminal.focus";
+      when = "!panelMaximized && editorFocus";
     }
 
   ];
