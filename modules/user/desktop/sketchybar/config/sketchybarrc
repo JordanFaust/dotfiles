@@ -28,7 +28,7 @@ LAVENDER=0xffb7bdf8
 # Bar
 ############################################################
 sketchybar --bar \
-  height=44 \
+  height=53 \
   position=top \
   sticky=true \
   padding_left=12 \
@@ -45,16 +45,17 @@ sketchybar --bar \
 # Defaults
 ############################################################
 sketchybar --default \
-  icon.font="Symbols Nerd Font Mono:Regular:16.0" \
-  label.font="MonoLisa Variable Regular:Bold:16.0" \
+  icon.font="Symbols Nerd Font Mono:Regular:19.0" \
+  label.font="MonoLisa Variable Regular:Bold:19.0" \
   icon.color=$TEXT \
+  icon.y_offset=1 \
   label.color=$TEXT \
   icon.padding_left=8 \
   icon.padding_right=4 \
   label.padding_left=2 \
   label.padding_right=8 \
   background.corner_radius=8 \
-  background.height=32 \
+  background.height=38 \
   background.padding_left=4 \
   background.padding_right=4
 
@@ -69,14 +70,14 @@ sketchybar --add event aerospace_workspace_change
 sketchybar --add item dashboard left \
   --set dashboard \
     icon="󰣇" \
-    icon.font="Symbols Nerd Font Mono:Regular:20.0" \
+    icon.font="Symbols Nerd Font Mono:Regular:24.0" \
     icon.color=$MAUVE \
     icon.padding_left=10 \
     icon.padding_right=10 \
     label.drawing=off \
     background.color=$SURFACE0 \
     background.corner_radius=8 \
-    background.height=32 \
+    background.height=38 \
     background.padding_left=4 \
     background.padding_right=4 \
     click_script="open -a 'Raycast' 2>/dev/null || true"
@@ -87,18 +88,18 @@ sketchybar --add item dashboard left \
 sketchybar --add item front_app left \
   --set front_app \
     icon="󰣇" \
-    icon.font="Symbols Nerd Font Mono:Regular:18.0" \
+    icon.font="Symbols Nerd Font Mono:Regular:22.0" \
     icon.color=$SUBTEXT1 \
     icon.padding_left=8 \
     icon.padding_right=4 \
     label="Desktop" \
-    label.font="MonoLisa Variable Regular:Bold:16.0" \
+    label.font="MonoLisa Variable Regular:Bold:19.0" \
     label.color=$TEXT \
     label.padding_left=2 \
     label.padding_right=8 \
     background.color=$SURFACE0 \
     background.corner_radius=8 \
-    background.height=32 \
+    background.height=38 \
     background.padding_left=4 \
     background.padding_right=4 \
     update_freq=3 \
@@ -107,7 +108,7 @@ sketchybar --add item front_app left \
 
 ############################################################
 # CENTER — Workspaces with per-workspace icons + colors
-# Icon size 18pt — fits comfortably inside a 32pt pill with breathing room.
+# Icon size 24pt — fits comfortably inside a 38pt pill with breathing room.
 ############################################################
 declare -a WS_ICONS=("" "󰅩" "󰒱" "󰃽" "")
 declare -a WS_COLORS=(0xffcad3f5 0xff7dc4e4 0xffa6da95 0xffb7bdf8 0xffeed49f)
@@ -122,7 +123,7 @@ for i in 1 2 3 4 5; do
   sketchybar --add item "space.$i" center \
     --set "space.$i" \
       icon="$ICON" \
-      icon.font="Symbols Nerd Font Mono:Regular:20.0" \
+      icon.font="Symbols Nerd Font Mono:Regular:24.0" \
       icon.color=$OVERLAY0 \
       icon.padding_left=10 \
       icon.padding_right=10 \
@@ -130,7 +131,7 @@ for i in 1 2 3 4 5; do
       background.color=$SURFACE0 \
       background.drawing=on \
       background.corner_radius=8 \
-      background.height=32 \
+      background.height=38 \
       background.border_width=0 \
       background.padding_left=6 \
       background.padding_right=6 \
@@ -148,12 +149,13 @@ sketchybar --add item clock right \
     icon.color=$ROSEWATER \
     icon.padding_left=8 \
     icon.padding_right=4 \
-    label.font="MonoLisa Variable Regular:Bold:16.0" \
+    label.font="MonoLisa Variable Regular:Bold:19.0" \
     label.padding_left=2 \
     label.padding_right=8 \
+    label.width=195 \
     background.color=$SURFACE0 \
     background.corner_radius=8 \
-    background.height=32 \
+    background.height=38 \
     background.padding_left=4 \
     background.padding_right=4 \
     update_freq=1 \
@@ -168,10 +170,10 @@ sketchybar --add item battery right \
     icon.padding_right=4 \
     label.padding_left=2 \
     label.padding_right=8 \
-    label.font="MonoLisa Variable Regular:Bold:16.0" \
+    label.font="MonoLisa Variable Regular:Bold:19.0" \
     background.color=$SURFACE0 \
     background.corner_radius=8 \
-    background.height=32 \
+    background.height=38 \
     background.padding_left=4 \
     background.padding_right=4 \
     update_freq=120 \
@@ -186,12 +188,12 @@ sketchybar --add item network right \
     icon.color=$BLUE \
     icon.padding_left=8 \
     icon.padding_right=4 \
-    label.font="MonoLisa Variable Regular:Bold:16.0" \
+    label.font="MonoLisa Variable Regular:Bold:19.0" \
     label.padding_left=2 \
     label.padding_right=8 \
     background.color=$SURFACE0 \
     background.corner_radius=8 \
-    background.height=32 \
+    background.height=38 \
     background.padding_left=4 \
     background.padding_right=4 \
     update_freq=30 \

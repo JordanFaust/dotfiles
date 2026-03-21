@@ -39,7 +39,7 @@
         outer = {
           left = 28;
           right = 28;
-          top = 48;
+          top = 73;
           bottom = 28;
         };
       };
