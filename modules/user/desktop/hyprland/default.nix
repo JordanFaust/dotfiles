@@ -5,7 +5,8 @@
   ...
 }:
 with lib;
-with lib.my; let
+with lib.my;
+let
   cfg = config.modules.desktop.hyprland;
 
   yt = pkgs.writeShellScript "yt" ''
@@ -23,12 +24,14 @@ with lib.my; let
     inherit (config.modules.desktop.gtk.cursor) name;
     inherit (config.modules.desktop.gtk.cursor) size;
   };
-in {
+in
+{
   options.modules.desktop.hyprland = mkOption {
     description = ''
       Enable the Hyprland Window Manager
     '';
-    type = with lib.types;
+    type =
+      with lib.types;
       nullOr (submoduleWith {
         modules = [
           {
@@ -63,12 +66,14 @@ in {
     ];
 
     xdg.configFile = {
-      "xdg-desktop-portal/hyprland-portals.conf".source = (pkgs.formats.ini {}).generate "hyprland-portals.conf" {
-        preferred = {
-          default = "hyprland;gtk";
-          "org.freedesktop.impl.portal.FileChooser" = "kde";
-        };
-      };
+      "xdg-desktop-portal/hyprland-portals.conf".source =
+        (pkgs.formats.ini { }).generate "hyprland-portals.conf"
+          {
+            preferred = {
+              default = "hyprland;gtk";
+              "org.freedesktop.impl.portal.FileChooser" = "kde";
+            };
+          };
 
       # Set relevant environment variables outside of the hyprland.conf directory for
       # theming, xcursor, nvidia and general toolkit variables.
@@ -163,46 +168,57 @@ in {
           "5, monitor:HDMI-A-1"
         ];
 
-        windowrule = let
-          f = title: class: "match:title ^(${title})$, match:class ^(${class})$, float on";
-          pin = title: class: "match:title ^(${title})$, match:class ^(${class})$, pin on";
-          inhibitfocus = regex: "match:title ^(${regex})$, idle_inhibit focus";
-        in [
-          # Make sure that the zoom toolbar and video window are floating
-          (f "zoom_linux_float_video_window" "zoom")
-          (f "zoom_linux_float_message_reminder" "zoom")
-          (f "as_toolbar" "zoom")
-          (f "app.zoom.us is sharing your screen." "")
-          (f "GlobalProtect Login" "gpauth")
-          # Pin the floating video window and make it follow the current workspace
-          (pin "zoom_linux_float_video_window" "zoom")
-          # Pin the floating message reminder and make it follow the current workspace
-          # Zoom should be smart enough to make sure they don't stack
-          (pin "zoom_linux_float_message_reminder" "zoom")
-          # First move the toolbar so it doesn't disappear behind AGS bar
-          # Pin the floating toolbar and make it follow the current workspace
-          "match:title ^(as_toolbar)$, match:class ^(zoom)$, move 1498 58"
-          (pin "as_toolbar" "zoom")
-          # Inhibit Screen Locking/Sleeping during video calls/watching videos
-          (inhibitfocus "Zoom Meeting")
+        windowrule =
+          let
+            f = title: class: "match:title ^(${title})$, match:class ^(${class})$, float on";
+            pin = title: class: "match:title ^(${title})$, match:class ^(${class})$, pin on";
+            inhibitfocus = regex: "match:title ^(${regex})$, idle_inhibit focus";
+          in
+          [
+            # Make sure that the zoom toolbar and video window are floating
+            (f "zoom_linux_float_video_window" "zoom")
+            (f "zoom_linux_float_message_reminder" "zoom")
+            (f "as_toolbar" "zoom")
+            (f "app.zoom.us is sharing your screen." "")
+            (f "GlobalProtect Login" "gpauth")
+            # Pin the floating video window and make it follow the current workspace
+            (pin "zoom_linux_float_video_window" "zoom")
+            # Pin the floating message reminder and make it follow the current workspace
+            # Zoom should be smart enough to make sure they don't stack
+            (pin "zoom_linux_float_message_reminder" "zoom")
+            # First move the toolbar so it doesn't disappear behind AGS bar
+            # Pin the floating toolbar and make it follow the current workspace
+            "match:title ^(as_toolbar)$, match:class ^(zoom)$, move 1498 58"
+            (pin "as_toolbar" "zoom")
+            # Inhibit Screen Locking/Sleeping during video calls/watching videos
+            (inhibitfocus "Zoom Meeting")
 
-          # Autostart workspace placement
-          "match:class neovim, workspace 2 silent"
-          "match:class firefox, workspace 2 silent"
-          "match:class Slack, workspace 3 silent"
-          "match:class spotify, workspace 3 silent"
-          "match:class chromium-browser, workspace 4 silent"
-        ];
+            # Autostart workspace placement
+            "match:class neovim, workspace 2 silent"
+            "match:class firefox, workspace 2 silent"
+            "match:class Slack, workspace 3 silent"
+            "match:class spotify, workspace 3 silent"
+            "match:class chromium-browser, workspace 4 silent"
+          ];
 
-        bind = let
-          binding = mod: cmd: key: arg: "${mod}, ${key}, ${cmd}, ${arg}";
-          mvfocus = binding "SUPER" "movefocus";
-          ws = binding "SUPER" "workspace";
-          resizeactive = binding "SUPER ALT" "resizeactive";
-          mvactive = binding "SUPER SHIFT" "movewindow";
-          mvtows = binding "SUPER CONTROL" "movetoworkspace";
-          arr = [1 2 3 4 5];
-        in
+        bind =
+          let
+            binding =
+              mod: cmd: key: arg:
+              "${mod}, ${key}, ${cmd}, ${arg}";
+            mvfocus = binding "SUPER" "movefocus";
+            ws = binding "SUPER" "workspace";
+            resizeactive = binding "SUPER ALT" "resizeactive";
+            mvactive = binding "SUPER SHIFT" "movewindow";
+            mvtows = binding "SUPER CONTROL" "movetoworkspace";
+            arr = [
+              1
+              2
+              3
+              4
+              5
+            ];
+          in
           [
             ",Home, exec, uwsm app -- grim -g \"$(slurp)\""
             "Super, Home, exec, uwsm app -- grim -g \"$(slurp -d)\" - | wl-copy"

@@ -1,41 +1,43 @@
-{ ... }:
-{
+_: {
   programs.vscode.profiles.default.userSettings = {
     #
     # General Settings
     #
 
-    workbench.settings.editor = "json";
-    workbench.statusBar.visible = false;
+    workbench = {
+      settings.editor = "json";
+      statusBar.visible = false;
+      colorTheme = "Catppuccin Mocha";
+      iconTheme = "catppuccin-macchiato";
+      sideBar.location = "left";
+      fontAliasing = "antialiased";
+      view.showQuietly = {
+        workbench.panel.output = true;
+      };
+    };
 
     #
     # Window Settings
     #
 
-    window.titleBarStyle = "custom";
-    window.customTitleBarVisibility = "never";
-    window.zoomLevel = 1.7;
-
-    #
-    # Theme
-    #
-
-    workbench.colorTheme = "Catppuccin Mocha";
-    workbench.iconTheme = "catppuccin-macchiato";
-    editor.semanticHighlighting.enabled = true;
-    workbench.sideBar.location = "left";
+    window = {
+      titleBarStyle = "custom";
+      customTitleBarVisibility = "never";
+      zoomLevel = 1.8;
+    };
 
     #
     # Terminal
     #
 
-    terminal.integrated.fontSize = 15;
-    terminal.integrated.fontWeight = "500";
-    terminal.integrated.fontWeightBold = "700";
-    terminal.integrated.lineHeight = 1.5;
-    terminal.integrated.sendKeybindingsToShell = true;
-    "terminal.integrated.profiles.osx" = {
-      tmux = {
+    terminal.integrated = {
+      fontSize = 15;
+      fontWeight = "500";
+      fontWeightBold = "700";
+      fontFamily = "MonoLisa Variable, Symbols Nerd Font Mono";
+      lineHeight = 1.5;
+      sendKeybindingsToShell = true;
+      profiles.osx.tmux = {
         path = "tmux";
         args = [
           "new-session"
@@ -44,109 +46,136 @@
           "\${workspaceFolderBasename}"
         ];
       };
-    };
-    "terminal.integrated.defaultProfile.osx" = "tmux";
-    "terminal.integrated.automationProfile.osx" = {
-      path = "/bin/zsh";
+      defaultProfile.osx = "tmux";
+      automationProfile.osx = {
+        path = "/bin/zsh";
+      };
     };
 
     #
     # Editor
     #
 
-    # Font
-    editor.fontFamily = "MonoLisa Variable, Symbols Nerd Font Mono";
-    editor.inlayHints.fontFamily = "MonoLisa Variable";
-    editor.codeLensFontFamily = "MonoLisa Variable";
-    editor.inlineSuggest.fontFamily = "MonoLisa Variable";
-    terminal.integrated.fontFamily = "MonoLisa Variable, Symbols Nerd Font Mono";
+    editor = {
+      # Font
+      fontFamily = "MonoLisa Variable, Symbols Nerd Font Mono";
+      codeLensFontFamily = "MonoLisa Variable";
+      codeLensFontSize = 12;
+
+      # Inlay hints — smaller than editor text to stay subordinate
+      inlayHints = {
+        fontFamily = "MonoLisa Variable";
+        fontSize = 12;
+        enabled = "on";
+        padding = true;
+      };
+
+      # Inline suggest
+      inlineSuggest = {
+        fontFamily = "MonoLisa Variable";
+        enabled = true;
+      };
+
+      minimap.enabled = false;
+      semanticHighlighting.enabled = true;
+      semanticTokenColorCustomizations.enabled = true;
+
+      # General
+      autoIndent = "full";
+      cursorBlinking = "solid";
+      cursorStyle = "line";
+      cursorWidth = 5;
+      fontLigatures = true;
+      fontSize = 15;
+      fontWeight = "500";
+      formatOnSave = true;
+      insertSpaces = false;
+      largeFileOptimizations = false;
+      letterSpacing = 0.5;
+      lineHeight = 23;
+      renderWhitespace = "all";
+      suggestSelection = "first";
+      tabCompletion = "on";
+      wordSeparators = "/\\()\"':,.;<>~!@#$%^&*|+=[]{}`?-";
+    };
+
+    # Other font overrides
     scm.inputFontFamily = "MonoLisa Variable";
     chat.editor.fontFamily = "MonoLisa Variable";
+    chat.editor.fontSize = 15;
     debug.console.fontFamily = "MonoLisa Variable, Symbols Nerd Font Mono";
+    debug.console.fontSize = 15;
     notebook.output.fontFamily = "MonoLisa Variable";
     markdown.preview.fontFamily = "MonoLisa Variable";
-    workbench.fontAliasing = "antialiased";
-
-    # Inlay hints
-    editor.inlayHints.enabled = "on";
-    editor.inlayHints.padding = true;
-    editor.minimap.enabled = false;
-
-    # General editor settings
-    editor.autoIndent = "full";
-    editor.cursorBlinking = "solid";
-    editor.cursorStyle = "line";
-    editor.cursorWidth = 5;
-    editor.fontLigatures = true;
-    editor.fontSize = 15;
-    editor.fontWeight = "500";
-    editor.formatOnSave = true;
-    editor.inlineSuggest.enabled = true;
-    editor.insertSpaces = false;
-    editor.largeFileOptimizations = false;
-    editor.letterSpacing = 0.5;
-    editor.lineHeight = 23;
-    editor.renderWhitespace = "all";
-    editor.suggestSelection = "first";
-    editor.tabCompletion = "on";
-    editor.wordSeparators = "/\\()\"':,.;<>~!@#$%^&*|+=[]{}`?-";
-    editor.semanticTokenColorCustomizations = {
-      enabled = true;
-    };
-    workbench.view.showQuietly = {
-      workbench.panel.output = true;
-    };
 
     # Zen Mode
-    zenMode.fullScreen = false;
-    zenMode.hideLineNumbers = false;
-    zenMode.centerLayout = false;
-    zenMode.silentNotifications = false;
+    zenMode = {
+      fullScreen = false;
+      hideLineNumbers = false;
+      centerLayout = false;
+      silentNotifications = false;
+    };
 
     #
     # Explorer Settings
     #
 
-    explorer.confirmDelete = false;
-    explorer.compactFolders = false;
-    explorer.confirmDragAndDrop = false;
-    errorLens.enabledDiagnosticLevels = [ "error" ];
-    errorLens.excludeBySource = [ "cSpell" ];
+    explorer = {
+      confirmDelete = false;
+      compactFolders = false;
+      confirmDragAndDrop = false;
+    };
+    errorLens = {
+      enabledDiagnosticLevels = [ "error" ];
+      excludeBySource = [ "cSpell" ];
+    };
 
     #
     # Languages
     #
 
-    # Javascript / Typescript
-    javascript.validate.enable = false;
-    javascript.inlayHints.enumMemberValues.enabled = true;
-    javascript.inlayHints.functionLikeReturnTypes.enabled = true;
-    javascript.inlayHints.parameterNames.enabled = "literals";
-    javascript.inlayHints.variableTypes.enabled = false;
-    javascript.updateImportsOnFileMove.enabled = "always";
-    typescript.enablePromptUseWorkspaceTsdk = true;
-    typescript.inlayHints.enumMemberValues.enabled = true;
-    typescript.inlayHints.functionLikeReturnTypes.enabled = true;
-    typescript.inlayHints.parameterNames.enabled = "literals";
-    typescript.inlayHints.variableTypes.enabled = false;
-    typescript.referencesCodeLens.enabled = true;
-    typescript.updateImportsOnFileMove.enabled = "always";
-    typescript.preferences.preferTypeOnlyAutoImports = true;
-    typescript.tsdk = "node_modules/typescript/lib";
+    javascript = {
+      validate.enable = false;
+      inlayHints = {
+        enumMemberValues.enabled = true;
+        functionLikeReturnTypes.enabled = true;
+        parameterNames.enabled = "literals";
+        variableTypes.enabled = false;
+      };
+      updateImportsOnFileMove.enabled = "always";
+    };
+
+    typescript = {
+      enablePromptUseWorkspaceTsdk = true;
+      inlayHints = {
+        enumMemberValues.enabled = true;
+        functionLikeReturnTypes.enabled = true;
+        parameterNames.enabled = "literals";
+        variableTypes.enabled = false;
+      };
+      referencesCodeLens.enabled = true;
+      updateImportsOnFileMove.enabled = "always";
+      preferences.preferTypeOnlyAutoImports = true;
+      tsdk = "node_modules/typescript/lib";
+    };
 
     #
     # Code Telescope (Telescope-style fuzzy finder)
     #
 
-    codeTelescope.layout.mode = "classic";
-    codeTelescope.matching.algorithm = "subsequence";
-    codeTelescope.preview.showLineNumbers = true;
-    codeTelescope.keybindings.close = "ctrl+g";
-    codeTelescope.wsFileFinder.textDisplay = "relative";
+    codeTelescope = {
+      layout.mode = "classic";
+      matching.algorithm = "subsequence";
+      preview.showLineNumbers = true;
+      keybindings.close = "ctrl+g";
+      wsFileFinder.textDisplay = "relative";
+    };
 
     # Diff
-    diffEditor.codeLens = true;
-    diffEditor.hideUnchangedRegions.enabled = true;
+    diffEditor = {
+      codeLens = true;
+      hideUnchangedRegions.enabled = true;
+    };
 
     # Git
     git.confirmSync = false;
@@ -159,38 +188,35 @@
       "asvetliakov.vscode-neovim" = 1;
     };
 
-    vscode-neovim.compositeKeys = {
-      jj = {
-        command = "vscode-neovim.escape";
-      };
-      jk = {
-        command = "vscode-neovim.escape";
-      };
-    };
-
     # Exclude Ctrl+E (explorer toggle), Ctrl+A (agent toggle), Ctrl+H/L
     # (directional focus nav) from neovim so VS Code keybindings handle them.
     # Default list: ["a", "b", "d", "e", "f", "h", "i", "j", "o", "r", "t", "u", "w"]
-    vscode-neovim.ctrlKeysForNormalMode = [
-      "b"
-      "d"
-      "f"
-      "i"
-      "j"
-      "o"
-      "r"
-      "t"
-      "u"
-      "w"
-    ];
-    vscode-neovim.ctrlKeysForInsertMode = [
-      "d"
-      "j"
-      "o"
-      "r"
-      "t"
-      "u"
-      "w"
-    ];
+    "vscode-neovim" = {
+      compositeKeys = {
+        jj.command = "vscode-neovim.escape";
+        jk.command = "vscode-neovim.escape";
+      };
+      ctrlKeysForNormalMode = [
+        "b"
+        "d"
+        "f"
+        "i"
+        "j"
+        "o"
+        "r"
+        "t"
+        "u"
+        "w"
+      ];
+      ctrlKeysForInsertMode = [
+        "d"
+        "j"
+        "o"
+        "r"
+        "t"
+        "u"
+        "w"
+      ];
+    };
   };
 }
