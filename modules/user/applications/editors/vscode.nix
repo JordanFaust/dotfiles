@@ -10,10 +10,10 @@ let
   cfg = config.modules.applications.vscode;
 in
 {
-  imports = [
-    ./vscode/settings.nix
-    ./vscode/keybindings.nix
-  ];
+  # imports = [
+  #   ./vscode/settings.nix
+  #   ./vscode/keybindings.nix
+  # ];
   options.modules.applications.vscode = mkOption {
     description = ''
       The (forced) one and only text editor.
