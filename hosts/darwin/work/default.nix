@@ -2,8 +2,7 @@
 #
 # nix-darwin system configuration for the work MacBook (Apple Silicon).
 # Activate with: darwin-rebuild switch --flake .#work
-{ pkgs, ... }:
-{
+{pkgs, ...}: {
   # User account — name must match the macOS account name exactly.
   users.users."jordan.faust" = {
     home = "/Users/jordan.faust";

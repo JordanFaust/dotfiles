@@ -8,17 +8,14 @@
   ...
 }:
 with lib;
-with lib.my;
-let
+with lib.my; let
   cfg = config.modules.themes.catppuccin;
-in
-{
+in {
   options.modules.themes.catppuccin = mkOption {
     description = ''
       The GTK configuration for the user.
     '';
-    type =
-      with lib.types;
+    type = with lib.types;
       nullOr (submoduleWith {
         modules = [
           {
@@ -35,21 +32,21 @@ in
           }
         ];
       });
-    default = { };
+    default = {};
   };
   #
   config = lib.mkIf cfg.enable (
     let
       systemStr = pkgs.stdenv.hostPlatform.system;
-      privateFontsPkgs = inputs.private-fonts.packages or { };
-      monolisa = lib.optional (
-        privateFontsPkgs ? ${systemStr}
-      ) privateFontsPkgs.${systemStr}.monolisa-variable;
-    in
-    {
+      privateFontsPkgs = inputs.private-fonts.packages or {};
+      monolisa =
+        lib.optional (
+          privateFontsPkgs ? ${systemStr}
+        )
+        privateFontsPkgs.${systemStr}.monolisa-variable;
+    in {
       home = {
-        packages =
-          with pkgs;
+        packages = with pkgs;
           [
             # Cross-platform packages
             fastfetch
@@ -71,28 +68,29 @@ in
             nerdfix
             cantarell-fonts
             (catppuccin-kde.override {
-              flavour = [ "macchiato" ];
-              accents = [ "rosewater" ];
+              flavour = ["macchiato"];
+              accents = ["rosewater"];
             })
             fontforge
             siji
           ];
 
-        file = {
-          # Firefox chrome config — always at ~/.mozilla/firefox/<name>.default on both
-          # platforms. On macOS, browsers.nix symlinks chrome/ and user.js from here into
-          # whichever profile Firefox is actually using (detected via home.activation).
-          ".mozilla/firefox/${username}.default" = {
-            source = ./config/firefox;
-            recursive = true;
+        file =
+          {
+            # Firefox chrome config — always at ~/.mozilla/firefox/<name>.default on both
+            # platforms. On macOS, browsers.nix symlinks chrome/ and user.js from here into
+            # whichever profile Firefox is actually using (detected via home.activation).
+            ".mozilla/firefox/${username}.default" = {
+              source = ./config/firefox;
+              recursive = true;
+            };
+          }
+          // lib.optionalAttrs pkgs.stdenv.isLinux {
+            # Avatar/Face jpg (used by Linux lockscreen/GTK)
+            ".face" = {
+              source = ./assets/dalle-nixos-profile.jpg;
+            };
           };
-        }
-        // lib.optionalAttrs pkgs.stdenv.isLinux {
-          # Avatar/Face jpg (used by Linux lockscreen/GTK)
-          ".face" = {
-            source = ./assets/dalle-nixos-profile.jpg;
-          };
-        };
 
         sessionVariables = lib.mkIf pkgs.stdenv.isLinux {
           QT_SCALE_FACTOR = "2.6";
@@ -102,7 +100,7 @@ in
       };
 
       home.activation = lib.mkIf pkgs.stdenv.isDarwin {
-        setWallpaper = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+        setWallpaper = lib.hm.dag.entryAfter ["writeBoundary"] ''
           run /usr/bin/osascript -e '
             tell application "System Events"
               tell every desktop
@@ -127,67 +125,68 @@ in
       # Native CoreText apps (sketchybar) use fonts.packages in darwin/default.nix.
       fonts.fontconfig.enable = true;
 
-      xdg.configFile = {
-        # Kitty Config/Theme (cross-platform)
-        "kitty" = {
-          source = ./config/kitty;
-          recursive = true;
-        };
-        "kitty/themes/catppuccin-macchiato.conf".source = ./config/kitty/themes/catppuccin-macchiato.conf;
-        # Powerlevel10k prompt (cross-platform, used when zsh module enabled)
-        "zsh/.p10k.zsh".source = ./config/zsh/.p10k.zsh;
-        # Fontconfig fallback chain: MonoLisa → Symbols Nerd Font Mono.
-        # Mirrors the NixOS approach — fontconfig-aware apps automatically fill
-        # missing glyphs (Nerd Font PUA codepoints) from the Symbols font when
-        # MonoLisa is the configured font family.
-        "fontconfig/conf.d/99-nerd-font-fallback.conf".text = ''
-          <?xml version="1.0"?>
-          <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
-          <fontconfig>
-            <alias>
-              <family>MonoLisa Variable Regular</family>
-              <prefer>
+      xdg.configFile =
+        {
+          # Kitty Config/Theme (cross-platform)
+          "kitty" = {
+            source = ./config/kitty;
+            recursive = true;
+          };
+          "kitty/themes/catppuccin-macchiato.conf".source = ./config/kitty/themes/catppuccin-macchiato.conf;
+          # Powerlevel10k prompt (cross-platform, used when zsh module enabled)
+          "zsh/.p10k.zsh".source = ./config/zsh/.p10k.zsh;
+          # Fontconfig fallback chain: MonoLisa → Symbols Nerd Font Mono.
+          # Mirrors the NixOS approach — fontconfig-aware apps automatically fill
+          # missing glyphs (Nerd Font PUA codepoints) from the Symbols font when
+          # MonoLisa is the configured font family.
+          "fontconfig/conf.d/99-nerd-font-fallback.conf".text = ''
+            <?xml version="1.0"?>
+            <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+            <fontconfig>
+              <alias>
                 <family>MonoLisa Variable Regular</family>
-                <family>Symbols Nerd Font Mono</family>
-                <family>Symbols Nerd Font</family>
-              </prefer>
-            </alias>
-          </fontconfig>
-        '';
-      }
-      // lib.optionalAttrs pkgs.stdenv.isLinux {
-        # Background Image
-        "background" = {
-          source = "${osConfig.dotfiles.configDir}/themes/catppuccin/background.jpg";
+                <prefer>
+                  <family>MonoLisa Variable Regular</family>
+                  <family>Symbols Nerd Font Mono</family>
+                  <family>Symbols Nerd Font</family>
+                </prefer>
+              </alias>
+            </fontconfig>
+          '';
+        }
+        // lib.optionalAttrs pkgs.stdenv.isLinux {
+          # Background Image
+          "background" = {
+            source = "${osConfig.dotfiles.configDir}/themes/catppuccin/background.jpg";
+          };
+          # Lockscreen Image
+          "lockscreen" = {
+            source = "${osConfig.dotfiles.configDir}/themes/catppuccin/doggocat.png";
+          };
+          # Rofi Themes (Linux-only)
+          "rofi/theme" = {
+            source = ./config/rofi;
+            recursive = true;
+          };
         };
-        # Lockscreen Image
-        "lockscreen" = {
-          source = "${osConfig.dotfiles.configDir}/themes/catppuccin/doggocat.png";
-        };
-        # Rofi Themes (Linux-only)
-        "rofi/theme" = {
-          source = ./config/rofi;
-          recursive = true;
-        };
-      };
 
       # Source p10k prompt when zsh module is enabled
       programs.zsh.initContent =
         lib.mkIf (config.modules.shell.zsh != null && config.modules.shell.zsh.enable)
-          (
-            lib.mkOrder 1500 ''
-              [[ ! -f ${config.xdg.configHome}/zsh/.p10k.zsh ]] || source ${config.xdg.configHome}/zsh/.p10k.zsh
-            ''
-          );
+        (
+          lib.mkOrder 1500 ''
+            [[ ! -f ${config.xdg.configHome}/zsh/.p10k.zsh ]] || source ${config.xdg.configHome}/zsh/.p10k.zsh
+          ''
+        );
 
       # Apply catppuccin tmux theme when tmux module is enabled
       programs.tmux.extraConfig =
         lib.mkIf (config.modules.shell.tmux != null && config.modules.shell.tmux.enable)
-          (
-            lib.mkAfter ''
-              source-file ${./config/tmux.conf}
-            ''
-          );
+        (
+          lib.mkAfter ''
+            source-file ${./config/tmux.conf}
+          ''
+        );
 
       # JankyBorders — active/inactive window border highlighting.
       # Colors mirror Hyprland's col.active_border / col.inactive_border from the
@@ -207,9 +206,9 @@ in
         enable = true;
         name = "Catppuccin-GTK-Red-Dark-Compact-Macchiato";
         package = pkgs.magnetic-catppuccin-gtk.override {
-          accent = [ "red" ];
+          accent = ["red"];
           size = "compact";
-          tweaks = [ "macchiato" ];
+          tweaks = ["macchiato"];
           shade = "dark";
         };
 

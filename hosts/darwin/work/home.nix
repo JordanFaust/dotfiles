@@ -17,10 +17,23 @@ in {
   home.stateVersion = "24.11";
 
   imports =
-    [inputs.catppuccin.homeModules.catppuccin]
-    ++ (mapModulesRec'
-      (toString ../../../modules/user)
-      (path: import path {inherit pkgs inputs config lib username osConfig system;}));
+    [
+      inputs.catppuccin.homeModules.catppuccin
+    ]
+    ++ (mapModulesRec' (toString ../../../modules/user) (
+      path:
+        import path {
+          inherit
+            pkgs
+            inputs
+            config
+            lib
+            username
+            osConfig
+            system
+            ;
+        }
+    ));
 
   modules = {
     workstation.enable = true;

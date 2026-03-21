@@ -9,11 +9,11 @@
   lib,
   inputs,
   ...
-}:
-let
+}: let
   privateFontsPkgs = inputs.private-fonts.packages or {};
   # MonoLisa from private flake — available for aarch64-darwin if the input exists.
-  monolisaPkg = lib.optional (privateFontsPkgs ? aarch64-darwin)
+  monolisaPkg =
+    lib.optional (privateFontsPkgs ? aarch64-darwin)
     privateFontsPkgs.aarch64-darwin.monolisa-variable;
 in {
   imports = [
@@ -44,10 +44,12 @@ in {
   # puts fonts into ~/.nix-profile/share/fonts/ which fontconfig reads but
   # CoreText does NOT.  fonts.packages is the nix-darwin equivalent of
   # NixOS's fonts.packages — it registers fonts under /Library/Fonts/Nix Fonts/.
-  fonts.packages = with pkgs; [
-    nerd-fonts.symbols-only   # Nerd Font glyph coverage for sketchybar icons
-    nerd-fonts.caskaydia-cove # CaskaydiaCove NF (monospaced fallback)
-  ] ++ monolisaPkg;           # MonoLisa Variable (private) if available
+  fonts.packages = with pkgs;
+    [
+      nerd-fonts.symbols-only # Nerd Font glyph coverage for sketchybar icons
+      nerd-fonts.caskaydia-cove # CaskaydiaCove NF (monospaced fallback)
+    ]
+    ++ monolisaPkg; # MonoLisa Variable (private) if available
 
   environment.systemPackages = with pkgs; [
     git

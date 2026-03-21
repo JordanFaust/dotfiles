@@ -35,7 +35,7 @@ in {
 
       # jq: used in future plugin expansions (media, etc.)
       # networksetup and pmset are system binaries — included via includeSystemPath
-      extraPackages = with pkgs; [ jq ];
+      extraPackages = with pkgs; [jq];
 
       # includeSystemPath = true (default) adds /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/homebrew/bin
       # This ensures networksetup, pmset, aerospace CLI are all reachable from plugin scripts.

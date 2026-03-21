@@ -5,8 +5,7 @@
   ...
 }:
 with lib;
-with lib.my;
-let
+with lib.my; let
   cfg = config.modules.applications.instant-messangers;
   desktop = pkgs.makeDesktopItem {
     name = "Slack";
@@ -20,19 +19,17 @@ let
       "InstantMessaging"
     ];
     exec = "uwsm app -- ${pkgs.slack}/bin/slack --enable-features=UseOzonePlatform --ozone-platform=wayland -s %U";
-    mimeTypes = [ "x-scheme-handler/slack" ];
+    mimeTypes = ["x-scheme-handler/slack"];
     startupNotify = true;
     startupWMClass = "Slack";
   };
   inherit (config.modules) minimal;
-in
-{
+in {
   options.modules.applications.instant-messangers = mkOption {
     description = ''
       Configurations for instant messangers, such as slack.
     '';
-    type =
-      with lib.types;
+    type = with lib.types;
       nullOr (submoduleWith {
         modules = [
           {
@@ -60,14 +57,11 @@ in
 
   config = mkIf (!minimal && cfg.enable) {
     home.packages =
-      if
-        pkgs.stdenv.isLinux
+      if pkgs.stdenv.isLinux
       # Linux: custom .desktop wrapper only — avoids duplicate entry in rofi
-      then
-        [ desktop ]
+      then [desktop]
       # macOS: managed install, don't use nixpkgs
-      else
-        [ ];
+      else [];
 
     # Autostart is Linux/XDG only
     xdg.configFile = lib.mkIf pkgs.stdenv.isLinux {

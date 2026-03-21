@@ -323,31 +323,30 @@ in {
         "extensions.formautofill.creditCards.enabled" = false;
         "extensions.formautofill.heuristics.enabled" = false;
       };
+    in let
+      # Profile content always lives at ~/.mozilla/firefox/<name>.default — no spaces,
+      # works identically on Linux and macOS via home.file symlinks.
+      profileRoot = ".mozilla/firefox/${cfg.firefox.profileName}.default";
     in
-      let
-        # Profile content always lives at ~/.mozilla/firefox/<name>.default — no spaces,
-        # works identically on Linux and macOS via home.file symlinks.
-        profileRoot = ".mozilla/firefox/${cfg.firefox.profileName}.default";
-      in
-        lib.optionalAttrs pkgs.stdenv.isLinux {
-          # Make sure the desktop files are in the right place for dbus
-          ".local/share/applications/firefox.desktop".source = "${firefoxDesktop}/share/applications/firefox.desktop";
-        }
-        # Linux: profiles.ini lives alongside the profile; a symlink works fine there.
-        // lib.optionalAttrs pkgs.stdenv.isLinux {
-          ".mozilla/firefox/profiles.ini".text = ''
-            [Profile0]
-            Name=default
-            IsRelative=1
-            Path=${cfg.firefox.profileName}.default
-            Default=1
+      lib.optionalAttrs pkgs.stdenv.isLinux {
+        # Make sure the desktop files are in the right place for dbus
+        ".local/share/applications/firefox.desktop".source = "${firefoxDesktop}/share/applications/firefox.desktop";
+      }
+      # Linux: profiles.ini lives alongside the profile; a symlink works fine there.
+      // lib.optionalAttrs pkgs.stdenv.isLinux {
+        ".mozilla/firefox/profiles.ini".text = ''
+          [Profile0]
+          Name=default
+          IsRelative=1
+          Path=${cfg.firefox.profileName}.default
+          Default=1
 
-            [General]
-            StartWithLastProfile=1
-            Version=2
-          '';
-        }
-        // {
+          [General]
+          StartWithLastProfile=1
+          Version=2
+        '';
+      }
+      // {
         "${profileRoot}/user.js" = mkIf (settings != {} || cfg.firefox.extraConfig != "") {
           text = ''
             ${concatStrings (mapAttrsToList (name: value: ''

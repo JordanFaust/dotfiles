@@ -24,13 +24,15 @@ in {
   };
 
   config = mkIf cfg.enable {
-    home.packages = with pkgs; [
-      gh
-      git-open
-      diff-so-fancy
-      git-extras
-      act
-    ] ++ lib.optionals gnupgEnabled [git-crypt];
+    home.packages = with pkgs;
+      [
+        gh
+        git-open
+        diff-so-fancy
+        git-extras
+        act
+      ]
+      ++ lib.optionals gnupgEnabled [git-crypt];
 
     programs.git = {
       enable = true;

@@ -126,8 +126,8 @@ _: {
       confirmDragAndDrop = false;
     };
     errorLens = {
-      enabledDiagnosticLevels = [ "error" ];
-      excludeBySource = [ "cSpell" ];
+      enabledDiagnosticLevels = ["error"];
+      excludeBySource = ["cSpell"];
     };
 
     #
@@ -179,6 +179,16 @@ _: {
 
     # Git
     git.confirmSync = false;
+
+    #
+    # Nix — language server + formatter (alejandra, matching neovim)
+    #
+
+    nix = {
+      enableLanguageServer = true;
+      serverPath = "nil";
+      serverSettings.nil.formatting.command = ["alejandra"];
+    };
 
     #
     # Neovim Settings

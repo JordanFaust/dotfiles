@@ -4,8 +4,7 @@
 # that a proper launch agent is registered. Putting `pkgs.aerospace` in
 # home.packages only installs the CLI; the server (AeroSpace.app) never starts
 # and CLI commands fail to connect.
-{ ... }:
-{
+{...}: {
   # Enable SKHD for coverage of keybinds not supported by AeroSpace
   services.skhd.enable = true;
   services.aerospace = {
@@ -20,7 +19,7 @@
       enable-normalization-opposite-orientation-for-nested-containers = true;
 
       # Mouse follows focus when the active monitor changes
-      on-focused-monitor-changed = [ "move-mouse monitor-lazy-center" ];
+      on-focused-monitor-changed = ["move-mouse monitor-lazy-center"];
 
       # Notify sketchybar on every workspace switch.
       # AeroSpace runs as a launchd service with a minimal PATH that excludes
@@ -47,7 +46,7 @@
       mode.main.binding = {
         # Disable macOS "Hide Others" so cmd-alt-h is fully available
         # See: https://nikitabobko.github.io/AeroSpace/goodies#disable-hide-app
-        "cmd-alt-h" = [ ];
+        "cmd-alt-h" = [];
 
         # Focus movement (vim-style) — matches SUPER+h/j/k/l on Hyprland
         "cmd-h" = "focus left";
@@ -88,8 +87,7 @@
         "cmd-enter" = "exec-and-forget open -na kitty --args -e sh -c 'tmux new-session -A -s main'";
 
         # Clipboard history via Raycast
-        "cmd-shift-v" =
-          "exec-and-forget open \"raycast://extensions/raycast/clipboard-history/clipboard-history\"";
+        "cmd-shift-v" = "exec-and-forget open \"raycast://extensions/raycast/clipboard-history/clipboard-history\"";
 
         # Workspace switching — matches SUPER+1-5
         "cmd-1" = "workspace 1";

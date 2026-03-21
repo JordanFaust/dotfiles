@@ -5,16 +5,13 @@
   ...
 }:
 with lib;
-with lib.my;
-let
+with lib.my; let
   inherit (config.modules) minimal;
-in
-{
+in {
   config = lib.mkIf (!minimal) {
     # These are some common dev tools that are required
     home = {
-      packages =
-        with pkgs;
+      packages = with pkgs;
         [
           # AWS
           awscli2

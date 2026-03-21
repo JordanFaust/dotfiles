@@ -66,7 +66,7 @@
   }: let
     inherit (lib.my) mapModules mapModulesRec mapHosts mapDarwinHosts;
 
-    linuxSystem  = "x86_64-linux";
+    linuxSystem = "x86_64-linux";
     darwinSystem = "aarch64-darwin";
 
     mkPkgs = system: pkgs: extraOverlays:
@@ -76,10 +76,10 @@
         overlays = extraOverlays ++ (lib.attrValues self.overlays);
       };
 
-    pkgs        = mkPkgs linuxSystem  nixpkgs [ self.overlay inputs.nix-vscode-extensions.overlays.default ];
-    pkgs'       = mkPkgs linuxSystem  nixpkgs-unstable [];
+    pkgs = mkPkgs linuxSystem nixpkgs [self.overlay inputs.nix-vscode-extensions.overlays.default];
+    pkgs' = mkPkgs linuxSystem nixpkgs-unstable [];
     pkgs-stable' = mkPkgs linuxSystem nixpkgs-stable [];
-    pkgs-darwin  = mkPkgs darwinSystem nixpkgs [ self.overlay inputs.nix-vscode-extensions.overlays.default ];
+    pkgs-darwin = mkPkgs darwinSystem nixpkgs [self.overlay inputs.nix-vscode-extensions.overlays.default];
 
     lib =
       nixpkgs.lib.extend
@@ -136,8 +136,10 @@
     nixosConfigurations =
       mapHosts ./hosts/nixos {};
 
-    darwinConfigurations =
-      mapDarwinHosts ./hosts/darwin {pkgs = pkgs-darwin; user = "jordan.faust";};
+    darwinConfigurations = mapDarwinHosts ./hosts/darwin {
+      pkgs = pkgs-darwin;
+      user = "jordan.faust";
+    };
 
     devShell."${linuxSystem}" =
       import ./shell.nix {inherit pkgs;};

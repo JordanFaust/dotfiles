@@ -53,10 +53,10 @@ in {
     launchd.agents.hammerspoon = {
       enable = true;
       config = {
-        ProgramArguments = [ "/Applications/Hammerspoon.app/Contents/MacOS/Hammerspoon" ];
+        ProgramArguments = ["/Applications/Hammerspoon.app/Contents/MacOS/Hammerspoon"];
         ProcessType = "Interactive";
         RunAtLoad = true;
-        KeepAlive = { SuccessfulExit = false; };
+        KeepAlive = {SuccessfulExit = false;};
         StandardOutPath = "${config.home.homeDirectory}/Library/Logs/Hammerspoon/hammerspoon.out.log";
         StandardErrorPath = "${config.home.homeDirectory}/Library/Logs/Hammerspoon/hammerspoon.err.log";
       };

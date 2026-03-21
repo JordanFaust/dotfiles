@@ -5,11 +5,9 @@
   ...
 }:
 with lib;
-with lib.my;
-let
+with lib.my; let
   cfg = config.modules.applications.vscode;
-in
-{
+in {
   # imports = [
   #   ./vscode/settings.nix
   #   ./vscode/keybindings.nix
@@ -18,8 +16,7 @@ in
     description = ''
       The (forced) one and only text editor.
     '';
-    type =
-      with lib.types;
+    type = with lib.types;
       nullOr (submoduleWith {
         modules = [
           {
@@ -43,7 +40,7 @@ in
         fzf
         ripgrep
         bat
-        nixfmt
+        alejandra
       ];
     };
 
@@ -57,8 +54,8 @@ in
               boldKeywords = true;
               italicComments = true;
               italicKeywords = true;
-              colorOverrides = { };
-              customUIColors = { };
+              colorOverrides = {};
+              customUIColors = {};
               workbenchMode = "default";
               bracketMode = "rainbow";
               extraBordersEnabled = false;

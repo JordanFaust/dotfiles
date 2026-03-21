@@ -1,7 +1,5 @@
-{ ... }:
-{
+{...}: {
   programs.vscode.profiles.default.keybindings = [
-
     # ──────────────────────────────────────────────────────────────────────────
     # Panel Toggles
     # ──────────────────────────────────────────────────────────────────────────
@@ -226,6 +224,5 @@
       command = "workbench.action.terminal.focus";
       when = "!panelMaximized && editorFocus";
     }
-
   ];
 }

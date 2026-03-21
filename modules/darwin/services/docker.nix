@@ -63,11 +63,16 @@ in {
           "${pkgs.colima}/bin/colima"
           "start"
           "--foreground"
-          "--cpu" (toString cfg.cpu)
-          "--memory" (toString cfg.memory)
-          "--disk" (toString cfg.disk)
-          "--vm-type" cfg.vmType
-          "--mount-type" cfg.mountType
+          "--cpu"
+          (toString cfg.cpu)
+          "--memory"
+          (toString cfg.memory)
+          "--disk"
+          (toString cfg.disk)
+          "--vm-type"
+          cfg.vmType
+          "--mount-type"
+          cfg.mountType
         ];
         EnvironmentVariables = {
           PATH = "${pkgs.docker-client}/bin:${pkgs.lima}/bin:/usr/bin:/bin:/usr/sbin:/sbin";

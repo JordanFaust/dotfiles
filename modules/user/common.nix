@@ -2,8 +2,7 @@
   username,
   pkgs,
   ...
-}:
-let
+}: let
   homeDirectory =
     if pkgs.stdenv.isDarwin
     then "/Users/${username}"
