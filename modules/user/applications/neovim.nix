@@ -5,7 +5,8 @@
   ...
 }:
 with lib;
-with lib.my; let
+with lib.my;
+let
   cfg = config.modules.applications.neovim;
   desktop = pkgs.makeDesktopItem {
     name = "Neovim";
@@ -13,14 +14,19 @@ with lib.my; let
     genericName = "Text Editor";
     icon = "nvim";
     exec = "uwsm app -- ${pkgs.kitty}/bin/kitty --title Neovim --class neovim --hold -e bash -c \"(tmux ls | grep -qEv 'attached|scratch' && tmux at) || tmux\"";
-    categories = ["Utility" "TextEditor"];
+    categories = [
+      "Utility"
+      "TextEditor"
+    ];
   };
-in {
+in
+{
   options.modules.applications.neovim = mkOption {
     description = ''
       The one and only text editor.
     '';
-    type = with lib.types;
+    type =
+      with lib.types;
       nullOr (submoduleWith {
         modules = [
           {
@@ -46,7 +52,8 @@ in {
         MANPAGER = "nvim -c Man!";
       };
 
-      packages = with pkgs;
+      packages =
+        with pkgs;
         [
           editorconfig-core-c
           neovim
@@ -55,7 +62,7 @@ in {
           ranger
           tree-sitter
           markdownlint-cli2
-          marksman
+          # marksman
 
           # Image preview
           chafa
@@ -76,7 +83,7 @@ in {
         source = "${desktop}/share/applications/Neovim.desktop";
       };
 
-      "neovide/config.toml".source = (pkgs.formats.toml {}).generate "config.toml" {
+      "neovide/config.toml".source = (pkgs.formats.toml { }).generate "config.toml" {
         #
         # MonoLisa
         #

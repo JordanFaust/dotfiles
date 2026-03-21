@@ -6,16 +6,19 @@
   ...
 }:
 with lib;
-with lib.my; let
+with lib.my;
+let
   cfg = config.modules.development.node;
   inherit (config.modules) minimal;
   # inherit (stdenv)
-in {
+in
+{
   options.modules.development.node = mkOption {
     description = ''
       Configurations for Node development.
     '';
-    type = with lib.types;
+    type =
+      with lib.types;
       nullOr (submoduleWith {
         modules = [
           {
@@ -32,9 +35,10 @@ in {
 
   config = lib.mkIf (!minimal && cfg.enable) {
     home = {
-      packages = with pkgs;
+      packages =
+        with pkgs;
         [
-          bun
+          # bun
           deno
           nodejs_22
           yarn
@@ -56,22 +60,21 @@ in {
 
       # sessionPath = ["$(${pkgs.yarn}/bin/yarn global bin)"];
 
-      sessionVariables =
-        {
-          # Use absolute paths so these work when XDG vars aren't set in the
-          # environment (e.g. GUI apps like Cursor that bypass the shell).
-          NPM_CONFIG_USERCONFIG = "${config.xdg.configHome}/npm/config";
-          NPM_CONFIG_CACHE = "${config.xdg.cacheHome}/npm";
-          NPM_CONFIG_PREFIX = "${config.xdg.cacheHome}/npm";
-          NODE_REPL_HISTORY = "${config.xdg.cacheHome}/node/repl_history";
-        }
-        // lib.optionalAttrs pkgs.stdenv.isLinux {
-          # XDG_RUNTIME_DIR is set by systemd on Linux only
-          NPM_CONFIG_TMP = "$XDG_RUNTIME_DIR/npm";
-          # playwright.browsers is Linux-only; referencing the store path on Darwin
-          # causes a "store path without context" warning via builtins.toJSON
-          PLAYWRIGHT_BROWSERS_PATH = "${pkgs.playwright.browsers}";
-        };
+      sessionVariables = {
+        # Use absolute paths so these work when XDG vars aren't set in the
+        # environment (e.g. GUI apps like Cursor that bypass the shell).
+        NPM_CONFIG_USERCONFIG = "${config.xdg.configHome}/npm/config";
+        NPM_CONFIG_CACHE = "${config.xdg.cacheHome}/npm";
+        NPM_CONFIG_PREFIX = "${config.xdg.cacheHome}/npm";
+        NODE_REPL_HISTORY = "${config.xdg.cacheHome}/node/repl_history";
+      }
+      // lib.optionalAttrs pkgs.stdenv.isLinux {
+        # XDG_RUNTIME_DIR is set by systemd on Linux only
+        NPM_CONFIG_TMP = "$XDG_RUNTIME_DIR/npm";
+        # playwright.browsers is Linux-only; referencing the store path on Darwin
+        # causes a "store path without context" warning via builtins.toJSON
+        PLAYWRIGHT_BROWSERS_PATH = "${pkgs.playwright.browsers}";
+      };
     };
   };
 }
