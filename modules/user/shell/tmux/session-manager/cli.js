@@ -6,6 +6,7 @@
  */
 
 import { execSync } from "child_process";
+import fs from "fs";
 import path from "path";
 import { discoverGitRepositories, getExistingSessions } from "./finder.js";
 import { recordSessionAccess } from "./tracker.js";
@@ -189,6 +190,65 @@ export function main(projectName) {
 }
 
 /**
+ * Resolves a workspace path to the canonical session name using the same
+ * discovery logic as the FZF finder. Falls back to the directory basename
+ * when the path doesn't match any known repository.
+ * @param {string} workspacePath - Absolute path to the workspace
+ * @returns {string} Canonical session name
+ */
+function resolveSessionName(workspacePath) {
+  const repositories = discoverGitRepositories();
+
+  let resolvedWorkspace;
+  try {
+    resolvedWorkspace = fs.realpathSync(path.resolve(workspacePath));
+  } catch {
+    resolvedWorkspace = path.resolve(workspacePath);
+  }
+
+  const match = repositories.find((repo) => {
+    try {
+      return fs.realpathSync(path.resolve(repo.path)) === resolvedWorkspace;
+    } catch {
+      return path.resolve(repo.path) === resolvedWorkspace;
+    }
+  });
+
+  return match ? match.name : path.basename(workspacePath);
+}
+
+/**
+ * Direct connect: resolves the workspace path to a canonical session name,
+ * then creates or attaches to that session. Intended for editors (VS Code /
+ * Cursor) that know the workspace path but should defer naming to the
+ * session manager's discovery logic.
+ * @param {string} workspacePath - Absolute path to the workspace
+ */
+function connectSession(workspacePath) {
+  if (!workspacePath) {
+    console.error("Error: Workspace path required");
+    console.error("Usage: cli.js connect <path>");
+    process.exit(1);
+  }
+
+  const resolvedPath = path.resolve(workspacePath);
+  const sessionName = resolveSessionName(resolvedPath);
+
+  recordSessionAccess(sessionName);
+
+  if (sessionExists(sessionName)) {
+    attachToSession(sessionName);
+    return;
+  }
+
+  if (createSession(sessionName, resolvedPath)) {
+    attachToSession(sessionName);
+  } else {
+    process.exit(1);
+  }
+}
+
+/**
  * CLI Commands
  */
 
@@ -202,19 +262,22 @@ TMUX Session Manager CLI
 Usage: cli.js <command> [options]
 
 Commands:
-  fzf [project]     Run the full FZF interface (default)
-  finder [mode]     Run session finder (modes: simple, detailed)
-  preview <path>    Run project preview for given path
-  tracker <action>  Session tracking operations
-  session <name>    Manage specific session
-  help              Show this help
+  fzf [project]      Run the full FZF interface (default)
+  connect <path>     Create or attach; derives session name via discovery
+  finder [mode]      Run session finder (modes: simple, detailed)
+  preview <path>     Run project preview for given path
+  tracker <action>   Session tracking operations
+  session <name>     Manage specific session
+  help               Show this help
 
 Examples:
-  cli.js fzf                    # Interactive session selection
-  cli.js finder detailed        # List sessions with formatting
-  cli.js preview /path/to/proj  # Preview project directory
-  cli.js tracker list           # List recent sessions
-  cli.js session myproject      # Create/attach to session
+  cli.js fzf                                         # Interactive session selection
+  cli.js connect ~/github.com/procore/api-gateway    # → session "procore/api-gateway"
+  cli.js connect /etc/dotfiles                       # → session "dotfiles"
+  cli.js finder detailed                             # List sessions with formatting
+  cli.js preview /path/to/proj                       # Preview project directory
+  cli.js tracker list                                # List recent sessions
+  cli.js session myproject                           # Create/attach to session
 `);
 }
 
@@ -283,6 +346,10 @@ switch (command) {
 
   case "tracker":
     runTracker(args[0], ...args.slice(1));
+    break;
+
+  case "connect":
+    connectSession(args[0], args[1]);
     break;
 
   case "session":

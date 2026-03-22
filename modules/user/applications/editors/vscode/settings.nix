@@ -38,12 +38,11 @@ _: {
       lineHeight = 1.5;
       sendKeybindingsToShell = true;
       profiles.osx.tmux = {
-        path = "tmux";
+        path = "node";
         args = [
-          "new-session"
-          "-A"
-          "-s"
-          "\${workspaceFolderBasename}"
+          "\${env:HOME}/.config/tmux/session-manager/cli.js"
+          "connect"
+          "\${workspaceFolder}"
         ];
       };
       defaultProfile.osx = "tmux";
