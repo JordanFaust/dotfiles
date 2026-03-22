@@ -40,6 +40,7 @@
 
     finder = {
       AppleShowAllExtensions = true;
+      AppleShowAllFiles = true;
       # Column view
       FXPreferredViewStyle = "clmv";
       ShowPathbar = true;
