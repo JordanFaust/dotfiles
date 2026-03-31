@@ -29,11 +29,12 @@ in {
   };
 
   config = mkIf cfg.enable {
-    home.packages = with pkgs;
-      [gnupg]
-      ++ lib.optionals pkgs.stdenv.isLinux [tomb];
+    home.packages = lib.optionals pkgs.stdenv.isLinux [pkgs.tomb];
 
-    home.sessionVariables.GNUPGHOME = "${config.xdg.configHome}/gnupg";
+    programs.gpg = {
+      enable = true;
+      homedir = "${config.xdg.configHome}/gnupg";
+    };
 
     services.gpg-agent = lib.mkIf pkgs.stdenv.isLinux {
       enable = true;
