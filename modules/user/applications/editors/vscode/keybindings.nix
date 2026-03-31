@@ -62,6 +62,12 @@
       when = "auxiliaryBarFocus";
     }
 
+    # Ctrl+K R — Open Recent Project / Workspace
+    {
+      key = "ctrl+k r";
+      command = "workbench.action.openRecent";
+    }
+
     # ──────────────────────────────────────────────────────────────────────────
     # Universal Escape — Ctrl+G
     #
