@@ -15,6 +15,26 @@
       # startup via launchd and asserts that this option is absent.
       automatically-unhide-macos-hidden-apps = true;
 
+      default-root-container-layout = "tiles";
+      default-root-container-orientation = "auto";
+
+      # Reset every workspace tree on startup so stale accordion state from a
+      # previous session never carries over.  Visits each workspace, flattens
+      # it back to a single-level tiles container, then returns to workspace 1.
+      after-startup-command = [
+        "workspace 1"
+        "flatten-workspace-tree"
+        "workspace 2"
+        "flatten-workspace-tree"
+        "workspace 3"
+        "flatten-workspace-tree"
+        "workspace 4"
+        "flatten-workspace-tree"
+        "workspace 5"
+        "flatten-workspace-tree"
+        "workspace 1"
+      ];
+
       enable-normalization-flatten-containers = true;
       enable-normalization-opposite-orientation-for-nested-containers = true;
 
@@ -137,6 +157,10 @@
       # Window auto-assignment — mirrors Hyprland windowrule workspace assignments
       on-window-detected = [
         {
+          check-further-callbacks = true;
+          run = "layout tiling";
+        }
+        {
           "if"."app-id" = "net.kovidgoyal.kitty";
           run = "move-node-to-workspace 2";
         }
@@ -159,6 +183,10 @@
         {
           "if"."app-id" = "com.google.Chrome";
           run = "move-node-to-workspace 4";
+        }
+        {
+          "if"."app-id" = "com.okta.mobile";
+          run = "layout floating";
         }
       ];
     };
