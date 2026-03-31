@@ -48,6 +48,7 @@ in {
           cloc
           statix
           graphviz
+          mise
 
           # Terraform
           terraform
