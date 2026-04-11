@@ -1,4 +1,4 @@
-{...}: {
+_: {
   programs.vscode.profiles.default.keybindings = [
     # ──────────────────────────────────────────────────────────────────────────
     # Panel Toggles
@@ -19,7 +19,7 @@
     # Ctrl+K T — Focus Terminal (opens panel if hidden)
     # Ctrl+K E — Focus Editor
     # Ctrl+K F — Toggle fullscreen terminal panel
-    # Ctrl+K A — Toggle Agent Chat (composer pane)
+    # Ctrl+K A — Toggle Agent Chat (see state machine below)
     #
     # Chords are used because sendKeybindingsToShell=true (required for
     # vscode-neovim) forwards bare key events to the shell. Chords always
@@ -42,6 +42,24 @@
       key = "ctrl+k f";
       command = "workbench.action.toggleMaximizedPanel";
     }
+    # Ctrl+K A — Toggle Agent Chat (composer pane)
+    #
+    # State machine (agentChatMaximized × auxiliaryBarFocus):
+    #
+    #  Focused + maximized  → un-maximize (toggle), stay in chat
+    #  Focused + normal     → return focus to terminal
+    #  Unfocused + maximized → un-maximize, then focus chat
+    #  Unfocused + normal   → open/focus chat pane
+    {
+      key = "ctrl+k a";
+      command = "workbench.action.maximizeChatSize";
+      when = "auxiliaryBarFocus && agentChatMaximized";
+    }
+    {
+      key = "ctrl+k a";
+      command = "workbench.action.terminal.focus";
+      when = "auxiliaryBarFocus && !agentChatMaximized";
+    }
     {
       key = "ctrl+k a";
       command = "runCommands";
@@ -55,11 +73,6 @@
       key = "ctrl+k a";
       command = "composer.openAsPane";
       when = "!auxiliaryBarFocus && !agentChatMaximized";
-    }
-    {
-      key = "ctrl+k a";
-      command = "workbench.action.terminal.focus";
-      when = "auxiliaryBarFocus";
     }
 
     # Ctrl+K R — Open Recent Project / Workspace

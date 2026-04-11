@@ -58,24 +58,25 @@ export function sessionExists(sessionName) {
  */
 export function attachToSession(sessionName) {
   try {
-    // Check if we're already in a TMUX session
     const currentSession = process.env.TMUX;
+    // When not in a real TTY (e.g. spawned by Cursor as a subprocess),
+    // tmux will print "open terminal failed: not a terminal" to stderr and
+    // exit non-zero. Suppress output in that case so the caller sees a clean
+    // exit; the session already exists and Cursor handles the PTY itself.
+    const isTTY = process.stdout.isTTY;
+    const stdio = isTTY ? "inherit" : "pipe";
 
     if (currentSession) {
-      // We're in TMUX, switch to the session
-      execSync(`tmux switch-client -t "${sessionName}"`, {
-        stdio: "inherit",
-      });
+      execSync(`tmux switch-client -t "${sessionName}"`, { stdio });
     } else {
-      // We're not in TMUX, attach to the session
-      execSync(`tmux attach-session -t "${sessionName}"`, {
-        stdio: "inherit",
-      });
+      execSync(`tmux attach-session -t "${sessionName}"`, { stdio });
     }
 
     return true;
   } catch (error) {
-    console.error(`Failed to attach to session "${sessionName}":`, error.message);
+    if (process.stdout.isTTY) {
+      console.error(`Failed to attach to session "${sessionName}":`, error.message);
+    }
     return false;
   }
 }
@@ -237,15 +238,19 @@ function connectSession(workspacePath) {
   recordSessionAccess(sessionName);
 
   if (sessionExists(sessionName)) {
+    // attach-session fails when not running in a real TTY (e.g. Cursor spawns
+    // this as a subprocess without a PTY). That's expected — the session
+    // exists, which is all we need; Cursor's terminal profile handles the PTY.
     attachToSession(sessionName);
     return;
   }
 
-  if (createSession(sessionName, resolvedPath)) {
-    attachToSession(sessionName);
-  } else {
+  if (!createSession(sessionName, resolvedPath)) {
     process.exit(1);
   }
+
+  // Same TTY caveat: attach failure is non-fatal once the session is created.
+  attachToSession(sessionName);
 }
 
 /**

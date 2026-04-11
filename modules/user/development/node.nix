@@ -34,7 +34,7 @@ in {
     home = {
       packages = with pkgs;
         [
-          # bun
+          bun
           deno
           nodejs_22
           yarn
