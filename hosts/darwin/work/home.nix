@@ -38,6 +38,10 @@ in {
   modules = {
     workstation.enable = true;
 
+    applications = {
+      cmux.enable = true;
+    };
+
     shell = {
       direnv.enable = true;
       git.enable = true;

@@ -14,6 +14,7 @@
       cleanup = "zap";
     };
     casks = [
+      "cmux"
       # Add work-required GUI apps here, e.g.:
       # "zoom"
       # "slack"
