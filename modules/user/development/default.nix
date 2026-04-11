@@ -25,6 +25,7 @@ in {
           # Kubernetes
           kubectx
           kubectl
+          kustomize
           kind
           krew
           kubectl-view-allocations

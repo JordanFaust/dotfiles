@@ -10,6 +10,25 @@
 with lib;
 with lib.my; let
   cfg = config.modules.services.docker;
+
+  # Generate colima config as JSON (a valid YAML superset) so the provision
+  # scripts and all VM parameters are captured declaratively.
+  colimaConfig = pkgs.writeText "colima-config.yaml" (builtins.toJSON ({
+      inherit (cfg) cpu memory disk vmType mountType;
+      runtime = "docker";
+    }
+    // optionalAttrs (cfg.provision != []) {
+      provision = map (p: {inherit (p) mode script;}) cfg.provision;
+    }));
+
+  # Wrapper that installs the Nix-generated config before starting colima.
+  # Colima's provision section has no CLI flag — it must live in the YAML file.
+  colimaStartScript = pkgs.writeShellScript "colima-start" ''
+    CONFIG_DIR="$HOME/.colima/default"
+    mkdir -p "$CONFIG_DIR"
+    install -m 644 "${colimaConfig}" "$CONFIG_DIR/colima.yaml"
+    exec "${pkgs.colima}/bin/colima" start --foreground
+  '';
 in {
   options.modules.services.docker = {
     enable = mkBoolOpt false;
@@ -40,6 +59,24 @@ in {
       default = "virtiofs";
       description = "Mount type for host volume sharing.";
     };
+
+    provision = mkOption {
+      type = types.listOf (types.submodule {
+        options = {
+          mode = mkOption {
+            type = types.enum ["system" "user"];
+            default = "system";
+            description = "Whether to run the provision script as root (system) or the default user.";
+          };
+          script = mkOption {
+            type = types.lines;
+            description = "Shell script to run inside the Colima VM on start.";
+          };
+        };
+      });
+      default = [];
+      description = "Provisioning scripts to run inside the Colima VM on every start.";
+    };
   };
 
   config = mkIf cfg.enable {
@@ -52,28 +89,13 @@ in {
     ];
 
     # User-session launchd agent — runs as the logged-in user, starts at login.
-    # EnvironmentVariables sets PATH so colima's dependency checks find docker and
-    # lima without a wrapper script (which would show a Nix store path as the
-    # process name in the macOS UI).
+    # A wrapper script installs the Nix-generated colima.yaml (which includes
+    # provision scripts) then execs colima in foreground mode.
     # SuccessfulExit = false: only restart on crash; `colima stop` exits 0 and stays down.
     launchd.user.agents.colima = {
       serviceConfig = {
         Label = "com.github.colima";
-        ProgramArguments = [
-          "${pkgs.colima}/bin/colima"
-          "start"
-          "--foreground"
-          "--cpu"
-          (toString cfg.cpu)
-          "--memory"
-          (toString cfg.memory)
-          "--disk"
-          (toString cfg.disk)
-          "--vm-type"
-          cfg.vmType
-          "--mount-type"
-          cfg.mountType
-        ];
+        ProgramArguments = ["${colimaStartScript}"];
         EnvironmentVariables = {
           PATH = "${pkgs.docker-client}/bin:${pkgs.lima}/bin:/usr/bin:/bin:/usr/sbin:/sbin";
         };

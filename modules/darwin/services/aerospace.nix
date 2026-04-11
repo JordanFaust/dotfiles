@@ -58,7 +58,7 @@
         outer = {
           left = 28;
           right = 28;
-          top = 73;
+          top = 80;
           bottom = 28;
         };
       };

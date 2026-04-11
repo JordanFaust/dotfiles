@@ -22,6 +22,15 @@
       memory = 40;
       disk = 100;
       # vmType and mountType default to vz + virtiofs — best on Apple Silicon.
+      provision = [
+        {
+          mode = "system";
+          script = ''
+            sysctl -w fs.inotify.max_user_instances=8192
+            sysctl -w fs.inotify.max_user_watches=1048576
+          '';
+        }
+      ];
     };
   };
 }
