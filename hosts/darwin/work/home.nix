@@ -62,6 +62,7 @@ in {
     };
 
     development = {
+      ai.enable = true;
       node.enable = true;
       golang.enable = true;
       rust.enable = true;
