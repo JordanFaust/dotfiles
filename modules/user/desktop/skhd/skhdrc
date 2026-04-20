@@ -5,7 +5,7 @@
 # Screenshots mirror Hyprland: Home = region to file, shift+Home = region to clipboard.
 
 # Screenshot region to file — matches Hyprland: Home
-home : screencapture -is ~/Pictures/screenshot-$(date +%Y%m%d-%H%M%S).png
+home : mkdir -p ~/Pictures/Screenshots && screencapture -is ~/Pictures/Screenshots/screenshot-$(date +%Y%m%d-%H%M%S).png
 
 # Screenshot region to clipboard — matches Hyprland: SUPER+Home
 shift - home : screencapture -ic
