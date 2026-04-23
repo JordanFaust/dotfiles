@@ -108,6 +108,11 @@ in {
         export ARTIFACTORY_PASSWORD="$(cat /etc/sensitive/artifactory 2>/dev/null | cut -d':' -f2)"
         export JIRA_API_TOKEN="$(cat /etc/sensitive/jira 2>/dev/null)"
         export SONARQUBE_TOKEN="$(cat /etc/sensitive/sonarqube 2>/dev/null)"
+        export GITHUB_TOKEN="$(gh auth token 2>/dev/null)"
+      '';
+
+      profileExtra = ''
+        eval "$(mise activate zsh --shims)"
       '';
 
       initContent = ''
@@ -355,6 +360,8 @@ in {
         }
 
         ${linuxOnlyInit}
+
+        eval "$(mise activate zsh)"
       '';
 
       shellAliases = {
