@@ -16,6 +16,21 @@ in {
           {
             options = {
               enable = mkEnableOption "tmux";
+              sessionManager = {
+                searchPaths = mkOption {
+                  description = "Search paths for git repository discovery";
+                  type = with lib.types; listOf (submoduleWith {
+                    modules = [{
+                      options = {
+                        path  = mkOption { type = str; description = "Absolute path to search"; };
+                        name  = mkOption { type = str; default = ""; description = "Fixed session name override (optional)"; };
+                        depth = mkOption { type = int; default = 0; description = "0 = directory is itself a repo; 1 = scan one level deep"; };
+                      };
+                    }];
+                  });
+                  default = [];
+                };
+              };
             };
           }
         ];
@@ -23,9 +38,20 @@ in {
     default = {};
   };
 
-  config = mkIf cfg.enable {
+  config = mkIf cfg.enable (let
+    tsmPkg = pkgs.callPackage ../../../../packages/tsm {};
+
+    tomlSearchPaths = lib.concatMapStrings (sp: ''
+      [[search_paths]]
+      path  = "${sp.path}"
+      name  = "${sp.name}"
+      depth = ${toString sp.depth}
+
+    '') cfg.sessionManager.searchPaths;
+  in {
     home.packages = with pkgs; [
       tmate
+      tsmPkg
     ];
 
     home.sessionVariables = {
@@ -36,19 +62,13 @@ in {
 
     home.sessionPath = ["${config.xdg.dataHome}/tmuxifier/bin"];
 
+    xdg.configFile."tmux/tsm.toml" = lib.mkIf (cfg.sessionManager.searchPaths != []) {
+      text = tomlSearchPaths;
+    };
+
     xdg.configFile."tmux/scripts/swap-pane.sh" = {
       source = ./scripts/swap-pane.sh;
       executable = true;
-    };
-
-    xdg.configFile."tmux/scripts/session-manager.sh" = {
-      source = ./scripts/session-manager.sh;
-      executable = true;
-    };
-
-    xdg.configFile."tmux/session-manager" = {
-      source = ./session-manager;
-      recursive = true;
     };
 
     programs.zsh.initContent = ''
@@ -96,6 +116,8 @@ in {
       ];
 
       extraConfig = ''
+        set -g extended-keys on
+        set -ga terminal-features '*:extkeys'
         set -ag terminal-overrides ",xterm-256color:RGB"
 
         # Window management
@@ -135,7 +157,7 @@ in {
         bind M run '$TMUX_HOME/scripts/swap-pane.sh master'
 
         bind f resize-pane -Z
-        bind p display-popup -w "120" -h "25" -y 30 -E '$TMUX_HOME/session-manager/cli.js fzf'
+        bind p display-popup -w "120" -h "25" -y 30 -E 'tsm fzf'
         bind w choose-window
         bind / choose-session
         bind . choose-window
@@ -197,5 +219,5 @@ in {
 
       '';
     };
-  };
+  });
 }
