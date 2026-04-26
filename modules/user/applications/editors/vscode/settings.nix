@@ -38,9 +38,8 @@ _: {
       lineHeight = 1.5;
       sendKeybindingsToShell = true;
       profiles.osx.tmux = {
-        path = "node";
+        path = "tsm";
         args = [
-          "\${env:HOME}/.config/tmux/session-manager/cli.js"
           "connect"
           "\${workspaceFolder}"
         ];
