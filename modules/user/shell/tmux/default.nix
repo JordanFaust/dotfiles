@@ -71,6 +71,11 @@ in {
       executable = true;
     };
 
+    xdg.configFile."tmux/scripts/tsm-fzf.sh" = {
+      source = ./scripts/tsm-fzf.sh;
+      executable = true;
+    };
+
     programs.zsh.initContent = ''
       alias ta='tmux attach'
       alias tl='tmux ls'
@@ -157,7 +162,7 @@ in {
         bind M run '$TMUX_HOME/scripts/swap-pane.sh master'
 
         bind f resize-pane -Z
-        bind p display-popup -w "120" -h "25" -y 30 -E 'tsm fzf'
+        bind p display-popup -w "120" -h "25" -y 30 -E '$TMUX_HOME/scripts/tsm-fzf.sh'
         bind w choose-window
         bind / choose-session
         bind . choose-window

@@ -102,32 +102,11 @@ func runFZF(args []string) {
 		`--preview-border=none`,
 	}
 
-	// Write the repo list to a temp file so fzf can read it via stdin
-	// redirection from the shell. Running fzf through a shell with
-	// cmd.Stdin = os.Stdin (the real PTY) gives fzf proper TTY access for
-	// both rendering and keyboard — the same way the old Node version worked
-	// with execSync(..., { stdio: ["inherit", "pipe", "inherit"] }).
-	listFile, err := os.CreateTemp("", "tsm-list-*")
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "tsm: %v\n", err)
-		return
-	}
-	defer os.Remove(listFile.Name())
-	listFile.WriteString(input)
-	listFile.Close()
+	fzf := exec.Command("fzf", fzfArgs...)
+	fzf.Stdin = strings.NewReader(input)
+	fzf.Stderr = os.Stderr
 
-	// Single-quote each fzf argument for the shell command.
-	escaped := make([]string, len(fzfArgs))
-	for i, a := range fzfArgs {
-		escaped[i] = "'" + strings.ReplaceAll(a, "'", `'\''`) + "'"
-	}
-	shellCmd := "fzf " + strings.Join(escaped, " ") + " < '" + listFile.Name() + "'"
-
-	sh := exec.Command("/bin/sh", "-c", shellCmd)
-	sh.Stdin = os.Stdin   // real terminal — critical for fzf's TTY access
-	sh.Stderr = os.Stderr
-
-	out, err := sh.Output()
+	out, err := fzf.Output()
 	if err != nil {
 		return
 	}
