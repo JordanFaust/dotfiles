@@ -24,9 +24,13 @@ in {
       GOMODCACHE = "${homeDirectory}/.cache/go/pkg/mod";
     };
 
-    sessionPath = [
-      "$HOME/.local/bin"
-    ];
+    sessionPath =
+      [
+        "$HOME/.local/bin"
+      ]
+      ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [
+        "/opt/homebrew/bin"
+      ];
   };
 
   programs.home-manager.enable = true;

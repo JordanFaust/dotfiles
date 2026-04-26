@@ -64,7 +64,7 @@ in {
           chafa
 
           # AI Integrations
-          claude-code
+          # claude-code installed via homebrew (native binary, kept current)
         ]
         ++ lib.optionals pkgs.stdenv.isLinux [
           # Desktop item and code snapshot tool are Linux-only

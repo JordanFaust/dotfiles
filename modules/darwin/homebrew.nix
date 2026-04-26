@@ -4,17 +4,18 @@
 # Homebrew itself must be pre-installed: https://brew.sh
 # All casks and brews listed here are installed on `darwin-rebuild switch`.
 # Apps NOT in this list are removed when cleanup = "zap".
-{...}: {
+_: {
   homebrew = {
     enable = true;
     onActivation = {
       autoUpdate = true;
+      upgrade = true;
       # "zap" removes unlisted casks on activation.
       # Set to "none" temporarily if you want to test without removing apps.
       cleanup = "zap";
     };
     casks = [
-      "cmux"
+      "claude-code@latest"
       # Add work-required GUI apps here, e.g.:
       # "zoom"
       # "slack"

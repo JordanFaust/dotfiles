@@ -23,10 +23,14 @@ with lib.my; let
 
   # Wrapper that installs the Nix-generated config before starting colima.
   # Colima's provision section has no CLI flag — it must live in the YAML file.
+  # Remove stale Lima vz.pid before starting — after an unclean shutdown macOS
+  # recycles PIDs, causing Lima to think the VZ driver is still running and
+  # refusing to start with "vz driver is running but host agent is not".
   colimaStartScript = pkgs.writeShellScript "colima-start" ''
     CONFIG_DIR="$HOME/.colima/default"
     mkdir -p "$CONFIG_DIR"
     install -m 644 "${colimaConfig}" "$CONFIG_DIR/colima.yaml"
+    rm -f "$HOME/.colima/_lima/colima/vz.pid"
     exec "${pkgs.colima}/bin/colima" start --foreground
   '';
 in {
