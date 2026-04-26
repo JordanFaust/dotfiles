@@ -38,15 +38,19 @@ in {
   modules = {
     workstation.enable = true;
 
-    applications = {
-      cmux.enable = true;
-    };
-
     shell = {
       direnv.enable = true;
       git.enable = true;
       gnupg.enable = true;
-      tmux.enable = true;
+      tmux = {
+        enable = true;
+        sessionManager.searchPaths = [
+          { path = "/etc/dotfiles";                                     name = "dotfiles"; depth = 0; }
+          { path = "${config.home.homeDirectory}/.config/nvim";         name = "nvim";     depth = 0; }
+          { path = "/media/procore";                                    name = "";         depth = 1; }
+          { path = "${config.home.homeDirectory}/github.com";           name = "";         depth = 1; }
+        ];
+      };
       zsh.enable = true;
     };
 
