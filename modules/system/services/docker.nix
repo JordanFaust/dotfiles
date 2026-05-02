@@ -7,7 +7,6 @@
 with lib;
 with lib.my; let
   cfg = config.modules.services.docker;
-  inherit (config.dotfiles) configDir;
 in {
   options.modules.services.docker = {
     enable = mkBoolOpt false;
@@ -26,7 +25,7 @@ in {
 
     user.extraGroups = ["docker"];
 
-    modules.shell.zsh.rcFiles = ["${configDir}/docker/aliases.zsh"];
+    # Docker zsh aliases are in modules/user/services/docker.nix (sourced when zsh enabled)
 
     virtualisation = {
       docker = {

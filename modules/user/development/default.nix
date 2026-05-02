@@ -11,75 +11,74 @@ in {
   config = lib.mkIf (!minimal) {
     # These are some common dev tools that are required
     home = {
-      packages = with pkgs; [
-        # Add AWS V2 CLI
-        awscli2
-        aws-vault
-        amazon-ssm-agent
-        ssm-session-manager-plugin
+      packages = with pkgs;
+        [
+          # AWS
+          awscli2
+          aws-vault
+          ssm-session-manager-plugin
 
-        # Performance Monitoring
-        bmon
-        btop
-        htop
+          # Performance Monitoring
+          btop
+          htop
 
-        # Kubernetes
-        kubectx
-        kubectl
-        kind
-        krew
-        kubectl-view-allocations
-        k9s
-        argo-workflows
-        argocd
+          # Kubernetes
+          kubectx
+          kubectl
+          kustomize
+          krew
+          kubectl-view-allocations
+          k9s
+          argo-workflows
+          argocd
 
-        # Local Dev
-        kubernetes-helm
-        helm-ls
-        tilt
-        k3d
-        lens
-        postman
-        httpie
-        insomnia
-        regclient
-        circleci-cli
-        yajsv
-        cloc
-        statix
-        graphviz
+          # Local Dev
+          kubernetes-helm
+          helm-ls
+          tilt
+          k3d
+          lens
+          postman
+          httpie
+          insomnia
+          regclient
+          circleci-cli
+          jira-cli-go
+          yajsv
+          cloc
+          statix
+          graphviz
+          mise
 
-        # Terraform
-        terraform
-        terraform-docs
+          # Terraform
+          terraform
+          terraform-docs
 
-        # Networking API Tools
-        cfssl
-        istioctl
-        egctl
-        linkerd
-        consul
-        deck
-        socat
+          # Networking API Tools
+          cfssl
+          istioctl
+          egctl
+          deck
+          socat
 
-        # Devbox
-        devbox
+          # Devbox
+          devbox
 
-        # Load Testing Tooling
-        k6
+          # Load Testing
+          k6
 
-        # Security
-        jfrog-cli
+          # Security
+          jfrog-cli
 
-        # Steam Run as a last ditch effort
-        steam-run
-
-        # Nix Development
-        nil
-
-        # Markdown
-        marksman
-      ];
+          # Nix Development
+          nil
+        ]
+        ++ lib.optionals pkgs.stdenv.isLinux [
+          # Linux-only: SSM agent daemon, Steam FHS wrapper, Linux network monitor
+          amazon-ssm-agent
+          steam-run
+          bmon
+        ];
 
       shellAliases = {
         k = "kubectl";

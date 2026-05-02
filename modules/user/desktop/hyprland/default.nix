@@ -47,7 +47,7 @@ in {
     };
   };
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (cfg.enable && pkgs.stdenv.isLinux) {
     # Disabled, along with most gnome dependencies to reduce install size and CVEs
     # xdg.desktopEntries."org.gnome.Settings" = {
     #   name = "Settings";
@@ -63,12 +63,14 @@ in {
     ];
 
     xdg.configFile = {
-      "xdg-desktop-portal/hyprland-portals.conf".source = (pkgs.formats.ini {}).generate "hyprland-portals.conf" {
-        preferred = {
-          default = "hyprland;gtk";
-          "org.freedesktop.impl.portal.FileChooser" = "kde";
+      "xdg-desktop-portal/hyprland-portals.conf".source =
+        (pkgs.formats.ini {}).generate "hyprland-portals.conf"
+        {
+          preferred = {
+            default = "hyprland;gtk";
+            "org.freedesktop.impl.portal.FileChooser" = "kde";
+          };
         };
-      };
 
       # Set relevant environment variables outside of the hyprland.conf directory for
       # theming, xcursor, nvidia and general toolkit variables.
@@ -201,7 +203,13 @@ in {
           resizeactive = binding "SUPER ALT" "resizeactive";
           mvactive = binding "SUPER SHIFT" "movewindow";
           mvtows = binding "SUPER CONTROL" "movetoworkspace";
-          arr = [1 2 3 4 5];
+          arr = [
+            1
+            2
+            3
+            4
+            5
+          ];
         in
           [
             ",Home, exec, uwsm app -- grim -g \"$(slurp)\""

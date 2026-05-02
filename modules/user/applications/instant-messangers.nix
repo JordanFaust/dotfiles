@@ -12,7 +12,12 @@ with lib.my; let
     desktopName = "Slack";
     genericName = "Slack Client for Linux";
     icon = "slack";
-    categories = ["GNOME" "GTK" "Network" "InstantMessaging"];
+    categories = [
+      "GNOME"
+      "GTK"
+      "Network"
+      "InstantMessaging"
+    ];
     exec = "uwsm app -- ${pkgs.slack}/bin/slack --enable-features=UseOzonePlatform --ozone-platform=wayland -s %U";
     mimeTypes = ["x-scheme-handler/slack"];
     startupNotify = true;
@@ -50,16 +55,16 @@ in {
     };
   };
 
-  # Add configured instant messangers if this isn't a minimal install and instant messangers are enabled.
   config = mkIf (!minimal && cfg.enable) {
-    home = {
-      packages = [
-        desktop
-      ];
-    };
+    home.packages =
+      if pkgs.stdenv.isLinux
+      # Linux: custom .desktop wrapper only — avoids duplicate entry in rofi
+      then [desktop]
+      # macOS: managed install, don't use nixpkgs
+      else [];
 
-    # Add Slack as a startup application
-    xdg.configFile = {
+    # Autostart is Linux/XDG only
+    xdg.configFile = lib.mkIf pkgs.stdenv.isLinux {
       "autostart/slack.desktop".source = "${desktop}/share/applications/Slack.desktop";
     };
   };

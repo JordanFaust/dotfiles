@@ -1,0 +1,211 @@
+#!/usr/bin/env bash
+# Catppuccin Macchiato sketchybar
+# Layout: left [dashboard, front_app] | center [workspaces 1–5] | right [network, battery, clock]
+
+PLUGIN_DIR="$CONFIG_DIR/plugins"
+chmod +x "$PLUGIN_DIR"/*.sh 2>/dev/null || true
+
+############################################################
+# Colors — Catppuccin Macchiato (0xffRRGGBB)
+############################################################
+BASE=0xff24273a
+SURFACE0=0xff363a4f
+SURFACE1=0xff494d64
+OVERLAY0=0xff6e738d
+SUBTEXT1=0xffb8c0e0
+TEXT=0xffcad3f5
+ROSEWATER=0xfff4dbd6
+MAUVE=0xffc6a0f6
+RED=0xffed8796
+PEACH=0xfffab387
+YELLOW=0xffeed49f
+GREEN=0xffa6da95
+SAPPHIRE=0xff7dc4e4
+BLUE=0xff8aadf4
+LAVENDER=0xffb7bdf8
+
+############################################################
+# Bar
+############################################################
+sketchybar --bar \
+  height=53 \
+  position=top \
+  sticky=true \
+  padding_left=12 \
+  padding_right=12 \
+  color=$BASE \
+  border_width=0 \
+  margin=0 \
+  y_offset=0 \
+  corner_radius=0 \
+  topmost=window \
+  notch_width=0
+
+############################################################
+# Defaults
+############################################################
+sketchybar --default \
+  icon.font="Symbols Nerd Font Mono:Regular:19.0" \
+  label.font="MonoLisa Variable Regular:Bold:19.0" \
+  icon.color=$TEXT \
+  icon.y_offset=1 \
+  label.color=$TEXT \
+  icon.padding_left=8 \
+  icon.padding_right=4 \
+  label.padding_left=2 \
+  label.padding_right=8 \
+  background.corner_radius=8 \
+  background.height=38 \
+  background.padding_left=4 \
+  background.padding_right=4
+
+############################################################
+# AeroSpace event
+############################################################
+sketchybar --add event aerospace_workspace_change
+
+############################################################
+# LEFT — Dashboard icon
+############################################################
+sketchybar --add item dashboard left \
+  --set dashboard \
+    icon="󰣇" \
+    icon.font="Symbols Nerd Font Mono:Regular:24.0" \
+    icon.color=$MAUVE \
+    icon.padding_left=10 \
+    icon.padding_right=10 \
+    label.drawing=off \
+    background.color=$SURFACE0 \
+    background.corner_radius=8 \
+    background.height=38 \
+    background.padding_left=4 \
+    background.padding_right=4 \
+    click_script="open -a 'Raycast' 2>/dev/null || true"
+
+############################################################
+# LEFT — Focused app title (HyprPanel-style windowtitle)
+############################################################
+sketchybar --add item front_app left \
+  --set front_app \
+    icon="󰣇" \
+    icon.font="Symbols Nerd Font Mono:Regular:22.0" \
+    icon.color=$SUBTEXT1 \
+    icon.padding_left=8 \
+    icon.padding_right=4 \
+    label="Desktop" \
+    label.font="MonoLisa Variable Regular:Bold:19.0" \
+    label.color=$TEXT \
+    label.padding_left=2 \
+    label.padding_right=8 \
+    background.color=$SURFACE0 \
+    background.corner_radius=8 \
+    background.height=38 \
+    background.padding_left=4 \
+    background.padding_right=4 \
+    update_freq=3 \
+    script="$PLUGIN_DIR/front_app.sh" \
+  --subscribe front_app front_app_switched
+
+############################################################
+# CENTER — Workspaces with per-workspace icons + colors
+# Icon size 24pt — fits comfortably inside a 38pt pill with breathing room.
+############################################################
+declare -a WS_ICONS=("" "󰅩" "󰒱" "󰃽" "")
+declare -a WS_COLORS=(0xffcad3f5 0xff7dc4e4 0xffa6da95 0xffb7bdf8 0xffeed49f)
+declare -a WS_BG=(0x30cad3f5 0x307dc4e4 0x30a6da95 0x30b7bdf8 0x30eed49f)
+
+for i in 1 2 3 4 5; do
+  IDX=$((i - 1))
+  ICON="${WS_ICONS[$IDX]}"
+  COLOR="${WS_COLORS[$IDX]}"
+  BG="${WS_BG[$IDX]}"
+
+  sketchybar --add item "space.$i" center \
+    --set "space.$i" \
+      icon="$ICON" \
+      icon.font="Symbols Nerd Font Mono:Regular:24.0" \
+      icon.color=$OVERLAY0 \
+      icon.padding_left=10 \
+      icon.padding_right=10 \
+      label.drawing=off \
+      background.color=$SURFACE0 \
+      background.drawing=on \
+      background.corner_radius=8 \
+      background.height=38 \
+      background.border_width=0 \
+      background.padding_left=6 \
+      background.padding_right=6 \
+      script="$PLUGIN_DIR/aerospace.sh $i" \
+      click_script="aerospace workspace $i" \
+    --subscribe "space.$i" aerospace_workspace_change
+done
+
+############################################################
+# RIGHT — Clock (added first = rightmost)
+############################################################
+sketchybar --add item clock right \
+  --set clock \
+    icon="󰥔" \
+    icon.color=$ROSEWATER \
+    icon.padding_left=8 \
+    icon.padding_right=4 \
+    label.font="MonoLisa Variable Regular:Bold:19.0" \
+    label.padding_left=2 \
+    label.padding_right=8 \
+    label.width=195 \
+    background.color=$SURFACE0 \
+    background.corner_radius=8 \
+    background.height=38 \
+    background.padding_left=4 \
+    background.padding_right=4 \
+    update_freq=1 \
+    script="$PLUGIN_DIR/clock.sh"
+
+############################################################
+# RIGHT — Battery
+############################################################
+sketchybar --add item battery right \
+  --set battery \
+    icon.padding_left=8 \
+    icon.padding_right=4 \
+    label.padding_left=2 \
+    label.padding_right=8 \
+    label.font="MonoLisa Variable Regular:Bold:19.0" \
+    background.color=$SURFACE0 \
+    background.corner_radius=8 \
+    background.height=38 \
+    background.padding_left=4 \
+    background.padding_right=4 \
+    update_freq=120 \
+    script="$PLUGIN_DIR/battery.sh" \
+  --subscribe battery power_source_change system_woke
+
+############################################################
+# RIGHT — Network
+############################################################
+sketchybar --add item network right \
+  --set network \
+    icon.color=$BLUE \
+    icon.padding_left=8 \
+    icon.padding_right=4 \
+    label.font="MonoLisa Variable Regular:Bold:19.0" \
+    label.padding_left=2 \
+    label.padding_right=8 \
+    background.color=$SURFACE0 \
+    background.corner_radius=8 \
+    background.height=38 \
+    background.padding_left=4 \
+    background.padding_right=4 \
+    update_freq=30 \
+    script="$PLUGIN_DIR/network.sh"
+
+############################################################
+# Initial state
+############################################################
+sketchybar --update
+
+# Bootstrap workspace highlighting + client list for the current workspace
+FOCUSED_WS=$(aerospace list-workspaces --focused 2>/dev/null || echo "1")
+sketchybar --trigger aerospace_workspace_change \
+  FOCUSED_WORKSPACE="$FOCUSED_WS" \
+  PREV_WORKSPACE=""

@@ -1,260 +1,256 @@
-{ ... }: {
+_: {
   programs.vscode.profiles.default.keybindings = [
-    #  Use single tab
+    # ──────────────────────────────────────────────────────────────────────────
+    # Panel Toggles
+    # ──────────────────────────────────────────────────────────────────────────
+
+    # Ctrl+E — Toggle Explorer (sidebar)
     {
-      key = "ctrl+k shift+t";
-      command = "workbench.action.showEditorTab";
+      key = "ctrl+e";
+      command = "workbench.action.toggleSidebarVisibility";
     }
-    # Use multiple tabs
+
+    # Ctrl+A — Toggle Agent View (auxiliary bar / right panel)
     {
-      key = "ctrl+k shift+m";
-      command = "workbench.action.showMultipleEditorTabs";
+      key = "ctrl+a";
+      command = "workbench.action.toggleAuxiliaryBar";
     }
-    # Toggle status bar
+
+    # Ctrl+K T — Focus Terminal (opens panel if hidden)
+    # Ctrl+K E — Focus Editor
+    # Ctrl+K F — Toggle fullscreen terminal panel
+    # Ctrl+K A — Toggle Agent Chat (see state machine below)
+    #
+    # Chords are used because sendKeybindingsToShell=true (required for
+    # vscode-neovim) forwards bare key events to the shell. Chords always
+    # skip the shell regardless of that setting.
     {
-      key = "ctrl+k shift+s";
-      command = "workbench.action.toggleStatusbarVisibility";
+      key = "ctrl+k t";
+      command = "workbench.action.terminal.focus";
+      when = "!terminalFocus";
     }
-    # Toggle record screen cast
     {
-      key = "ctrl+k shift+r";
-      command = "workbench.action.toggleScreencastMode";
+      key = "ctrl+k t";
+      command = "workbench.action.focusActiveEditorGroup";
+      when = "terminalFocus";
     }
-    # Toggle error lens - warning
     {
-      key = "ctrl+k shift+w";
-      command = "errorLens.toggleWarning";
+      key = "ctrl+k e";
+      command = "workbench.action.focusActiveEditorGroup";
     }
-    # TODO: Wait for this to resolve https://github.com/usernamehw/vscode-error-lens/issues/208
-    # Setup which-key
-    # {
-    #   key = "ctrl+space"; # Disable Spotlight and use Raycast with Alt+space, refer https://manual.raycast.com/hotkey
-    #   command = "whichkey.show";
-    #   when = "editorTextFocus";
-    # }
-    # Toggle full screen
     {
       key = "ctrl+k f";
       command = "workbench.action.toggleMaximizedPanel";
     }
-    # Open Github Pull Request
+    # Ctrl+K A — Toggle Agent Chat (composer pane)
+    #
+    # State machine (agentChatMaximized × auxiliaryBarFocus):
+    #
+    #  Focused + maximized  → un-maximize (toggle), stay in chat
+    #  Focused + normal     → return focus to terminal
+    #  Unfocused + maximized → un-maximize, then focus chat
+    #  Unfocused + normal   → open/focus chat pane
     {
-      key = "ctrl+k g";
-      command = "workbench.view.extension.github-pull-requests";
+      key = "ctrl+k a";
+      command = "workbench.action.maximizeChatSize";
+      when = "auxiliaryBarFocus && agentChatMaximized";
     }
-    # Toggle version lens
     {
-      key = "ctrl+k shift+v";
-      command = "versionlens.icons.showVersionLenses";
+      key = "ctrl+k a";
+      command = "workbench.action.terminal.focus";
+      when = "auxiliaryBarFocus && !agentChatMaximized";
+    }
+    {
+      key = "ctrl+k a";
+      command = "runCommands";
+      when = "!auxiliaryBarFocus && agentChatMaximized";
+      args.commands = [
+        "workbench.action.maximizeChatSize"
+        "composer.openAsPane"
+      ];
+    }
+    {
+      key = "ctrl+k a";
+      command = "composer.openAsPane";
+      when = "!auxiliaryBarFocus && !agentChatMaximized";
     }
 
-    #
-    # Ctrl+G Universal Escape Implementation
-    #
+    # Ctrl+K R — Open Recent Project / Workspace
+    {
+      key = "ctrl+k r";
+      command = "workbench.action.openRecent";
+    }
 
-    # Example: Remove the default "Go to Line..." binding for Ctrl+G
+    # ──────────────────────────────────────────────────────────────────────────
+    # Universal Escape — Ctrl+G
+    #
+    # Emacs-inspired escape hatch: dismiss whatever UI element has focus and
+    # return to the editor. Replaces the default "Go to Line..." binding.
+    # Each when clause targets a specific surface; VS Code matches the first
+    # rule that applies (evaluated bottom-to-top in the full ruleset).
+    # ──────────────────────────────────────────────────────────────────────────
+
     {
       key = "ctrl+g";
       command = "-workbench.action.gotoLine";
-      # Optional: Add a 'when' clause if you only want to unbind it
-      # in specific contexts (e.g., only when editing text)
-      # when = "editorTextFocus";
     }
-    # Use ctrl+g to escape in Neovim normal mode
-    {
-      key = "ctrl+g";
-      command = "vscode-neovim.escape";
-      when = "editorTextFocus && neovim.mode == normal";
-    }
-    # Close Quick Open
     {
       key = "ctrl+g";
       command = "workbench.action.closeQuickOpen";
       when = "inQuickOpen";
     }
-    # Close sidebar when Explorer is visible
-    {
-      key = "ctrl+g";
-      command = "workbench.action.toggleSidebarVisibility";
-      # only active when the Explorer is visible and focused
-      when = "sideBarVisible";
-    }
-    # Close sidebar when visible but not focused (universal sidebar closer)
-    {
-      key = "ctrl+g";
-      command = "workbench.action.toggleSidebarVisibility";
-      when = "editorTextFocus && sideBarVisible && !sideBarFocus";
-    }
-    # Close AI chat when in chat context
-    {
-      key = "ctrl+g";
-      command = "aichat.close-sidebar";
-      when = "chatIsEnabled && inChat";
-    }
-    # Close any focused panel (terminal, output, problems, etc.) and return to editor
-    {
-      key = "ctrl+g";
-      command = "workbench.action.closePanel";
-      when = "panelFocus";
-    }
-    # Close panel when visible but not focused (e.g., test panel visible while editing)
-    {
-      key = "ctrl+g";
-      command = "workbench.action.closePanel";
-      when = "editorTextFocus && panelVisible && !panelFocus";
-    }
-    # Close terminal and return focus to editor
-    {
-      key = "ctrl+g";
-      command = "workbench.action.closePanel";
-      when = "terminalFocus";
-    }
-    # Close search view and return to editor
-    {
-      key = "ctrl+g";
-      command = "workbench.action.focusActiveEditorGroup";
-      when = "searchViewletVisible && searchViewletFocus";
-    }
-    # Close any sidebar view and return to editor
-    {
-      key = "ctrl+g";
-      command = "workbench.action.focusActiveEditorGroup";
-      when = "sideBarFocus";
-    }
-    # Close command palette
-    {
-      key = "ctrl+g";
-      command = "workbench.action.closeQuickOpen";
-      when = "commandPaletteFocus";
-    }
-    # Close any notification and return to editor
-    {
-      key = "ctrl+g";
-      command = "notifications.hideToasts";
-      when = "notificationFocus";
-    }
-    # Close find widget in editor
     {
       key = "ctrl+g";
       command = "closeFindWidget";
       when = "editorFocus && findWidgetVisible";
     }
-    # Close peek view (references, definitions, etc.)
     {
       key = "ctrl+g";
       command = "closeReferenceSearch";
       when = "referenceSearchVisible";
     }
-    # Close problems view and return to editor
     {
       key = "ctrl+g";
-      command = "workbench.action.closePanel";
-      when = "problemsViewFocus";
+      command = "notifications.hideToasts";
+      when = "notificationFocus";
     }
-    # Close output view and return to editor
     {
       key = "ctrl+g";
       command = "workbench.action.closePanel";
-      when = "outputViewFocus";
+      when = "panelFocus";
     }
-    # Close test results view and return to editor
     {
       key = "ctrl+g";
-      command = "workbench.action.closePanel";
-      when = "testResultsViewFocus";
+      command = "workbench.action.focusActiveEditorGroup";
+      when = "sideBarFocus";
+    }
+    {
+      key = "ctrl+g";
+      command = "workbench.action.focusActiveEditorGroup";
+      when = "auxiliaryBarFocus";
     }
 
+    # ──────────────────────────────────────────────────────────────────────────
+    # Fuzzy Finders — Code Telescope
     #
-    # Enhanced Focus Management
-    #
+    # Global pickers accessible from any focus context. Mirrors leader-key
+    # bindings in vscode.lua but available without entering normal mode.
+    # ──────────────────────────────────────────────────────────────────────────
 
-    # Universal "return to editor" binding
+    {
+      key = "ctrl+alt+f";
+      command = "code-telescope.fuzzy.file";
+    }
+    {
+      key = "ctrl+alt+g";
+      command = "code-telescope.fuzzy.wsText";
+    }
+    {
+      key = "ctrl+alt+r";
+      command = "code-telescope.fuzzy.recentFiles";
+    }
+    {
+      key = "ctrl+alt+s";
+      command = "code-telescope.fuzzy.wsSymbols";
+    }
+    {
+      key = "ctrl+alt+u";
+      command = "code-telescope.fuzzy.documentSymbols";
+      when = "editorTextFocus";
+    }
+    {
+      key = "ctrl+alt+d";
+      command = "code-telescope.fuzzy.diagnostics";
+    }
+    {
+      key = "ctrl+alt+b";
+      command = "code-telescope.fuzzy.branch";
+    }
+    {
+      key = "ctrl+alt+l";
+      command = "code-telescope.fuzzy.fileText";
+      when = "editorTextFocus";
+    }
+
+    # ──────────────────────────────────────────────────────────────────────────
+    # Focus Management
+    # ──────────────────────────────────────────────────────────────────────────
+
+    # Return to editor from anywhere
     {
       key = "ctrl+0";
       command = "workbench.action.focusActiveEditorGroup";
     }
-    # Quick sidebar toggle that maintains editor focus
+
+    # Ctrl+K H/J/K/L — Directional focus navigation
+    #
+    # Chords bypass sendKeybindingsToShell, so these work from the terminal.
+    # H/L navigate horizontally; J/K navigate vertically between editor
+    # and terminal when the panel is not maximized.
+    #
+    #  Ctrl+K H ←                    → Ctrl+K L
+    # ┌──────────────────┐    ┌─────────────────────┐
+    # │    Terminal /     │    │      AI Chat        │
+    # │    Editor         │    │     (Ctrl+K A)      │
+    # │   (Ctrl+K T)     │    │                     │
+    # └──────────────────┘    └─────────────────────┘
+    #
+    # When panel is not maximized (editor + terminal both visible):
+    #
+    #              Ctrl+K K ↑
+    #         ┌──────────────────┐
+    #         │     Editor       │
+    #         ├──────────────────┤
+    #         │    Terminal      │
+    #         └──────────────────┘
+    #              Ctrl+K J ↓
     {
-      key = "ctrl+k e";
-      command = "workbench.action.toggleSidebarVisibility";
-    }
-    # Focus terminal without toggling
-    {
-      key = "ctrl+k t";
+      key = "ctrl+k h";
       command = "workbench.action.terminal.focus";
+      when = "panelMaximized";
     }
-    # Focus explorer without toggling
     {
-      key = "ctrl+k shift+e";
-      command = "workbench.view.explorer";
+      key = "ctrl+k h";
+      command = "workbench.action.focusActiveEditorGroup";
+      when = "!panelMaximized";
     }
-
-    #
-    # Cursor-Specific AI Feature Bindings
-    #
-
-    # Cursor Chat - New chat
     {
-      key = "ctrl+k c";
-      command = "aichat.newchataction";
+      key = "ctrl+k ctrl+h";
+      command = "workbench.action.terminal.focus";
+      when = "panelMaximized";
     }
-    # Cursor Composer - Start composer prompt
     {
-      key = "ctrl+k i";
-      command = "composer.startComposerPrompt";
-      when = "editorTextFocus";
+      key = "ctrl+k ctrl+h";
+      command = "workbench.action.focusActiveEditorGroup";
+      when = "!panelMaximized";
     }
-    # Cursor Chat - Toggle sidebar
     {
-      key = "ctrl+k shift+c";
-      command = "aichat.toggle-sidebar";
+      key = "ctrl+k l";
+      command = "composer.openAsPane";
     }
-    # Cursor - Apply AI suggestion (if available)
     {
-      key = "ctrl+k a";
-      command = "aichat.apply-suggestion";
-      when = "editorTextFocus";
+      key = "ctrl+k ctrl+l";
+      command = "composer.openAsPane";
     }
-    # Cursor - Explain code selection
     {
-      key = "ctrl+k x";
-      command = "aichat.explain-selection";
-      when = "editorHasSelection";
+      key = "ctrl+k k";
+      command = "workbench.action.focusActiveEditorGroup";
+      when = "!panelMaximized && terminalFocus";
     }
-    # Cursor - Generate code from comment
     {
-      key = "ctrl+k shift+g";
-      command = "aichat.generate-from-comment";
-      when = "editorTextFocus";
+      key = "ctrl+k ctrl+k";
+      command = "workbench.action.focusActiveEditorGroup";
+      when = "!panelMaximized && terminalFocus";
     }
-
-    # # --- 2. Toggle Cursor Chat Window (<leader> + a + a) ---
-    # {
-    #   key = "space a a";
-    #   command = "workbench.action.cursor.chat.toggle";
-    #   when = "editorTextFocus && neovim.mode == normal";
-    # }
-    #
-    # # --- 3. Workbench Navigation (<leader> + w + <key>) ---
-    # {
-    #   key = "space w l";
-    #   command = "workbench.action.navigateRight";
-    #   when = "editorTextFocus && neovim.mode == normal";
-    # }
-    # {
-    #   key = "space w h";
-    #   command = "workbench.action.navigateLeft";
-    #   when = "editorTextFocus && neovim.mode == normal";
-    # }
-    # {
-    #   key = "space w j";
-    #   command = "workbench.action.navigateDown";
-    #   when = "editorTextFocus && neovim.mode == normal";
-    # }
-    # {
-    #   key = "space w k";
-    #   command = "workbench.action.navigateUp";
-    #   when = "editorTextFocus && neovim.mode == normal";
-    # }
+    {
+      key = "ctrl+k j";
+      command = "workbench.action.terminal.focus";
+      when = "!panelMaximized && editorFocus";
+    }
+    {
+      key = "ctrl+k ctrl+j";
+      command = "workbench.action.terminal.focus";
+      when = "!panelMaximized && editorFocus";
+    }
   ];
 }

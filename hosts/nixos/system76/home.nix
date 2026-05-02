@@ -1,0 +1,58 @@
+{
+  pkgs,
+  inputs,
+  config,
+  lib,
+  home-manager,
+  osConfig,
+  system,
+  ...
+}:
+with lib;
+with lib.my; let
+  username = "jordan";
+  homeDirectory = "/home/${username}";
+in {
+  imports =
+    # Space to include configuraton that must run first
+    [
+      inputs.catppuccin.homeModules.catppuccin
+    ]
+    # # All my personal modules
+    ++ (mapModulesRec'
+      (toString ../../../modules/user)
+      (path: import path {inherit pkgs inputs config lib username osConfig system;}));
+
+  modules = {
+    # Enable all standardized components for a full development workstation.
+    workstation.enable = true;
+
+    shell = {
+      direnv.enable = true;
+      git.enable = true;
+      gnupg.enable = true;
+      tmux.enable = true;
+      zsh.enable = true;
+    };
+
+    #
+    # Desktop and Window Manager Configuration
+    #
+    desktop = {
+      hyprland.enable = true;
+    };
+
+    #
+    # Desktop Theme Configuration
+    #
+    themes = {
+      gtk.enable = true;
+      catppuccin.enable = true;
+    };
+
+    # Applications
+    applications = {
+      streaming.enable = true;
+    };
+  };
+}

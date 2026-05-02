@@ -1,163 +1,230 @@
-{ ... }: {
+_: {
   programs.vscode.profiles.default.userSettings = {
     #
     # General Settings
     #
 
-    workbench.settings.editor = "json"; # Show setting in json as default
-    # Comment below to show status bar
-    workbench.statusBar.visible = false;
-    # Cursor resolution for activity bar navigation
-    # workbench.activityBar.orientation = "veritical";
-    # workbench.activityBar.location = "default";
+    workbench = {
+      settings.editor = "json";
+      statusBar.visible = false;
+      colorTheme = "Catppuccin Mocha";
+      iconTheme = "catppuccin-macchiato";
+      sideBar.location = "left";
+      fontAliasing = "antialiased";
+      view.showQuietly = {
+        workbench.panel.output = true;
+      };
+    };
 
     #
     # Window Settings
     #
 
-    window.titleBarStyle = "native";
-    window.customTitleBarVisibility = "never";
-    # Increase size of explorer, headers, menus, etc.
-    window.zoomLevel = 1.7;
-
-    #
-    # Theme
-    #
-    workbench.colorTheme = "Catppuccin Mocha";
-    workbench.iconTheme = "catppuccin-macchiato";
-
-    # we try to make semantic highlighting look good
-    editor.semanticHighlighting.enabled = true;
-    # make the window's titlebar use the workbench colors
-    # window.titleBarStyle = "custom";
-
-    # Set sidebar to the right
-    workbench.sideBar.location = "left";
+    window = {
+      titleBarStyle = "custom";
+      customTitleBarVisibility = "never";
+      zoomLevel = 1.8;
+    };
 
     #
     # Terminal
     #
-    terminal.integrated.fontSize = 14;
-    terminal.integrated.sendKeybindingsToShell = true;
-    # terminal.integrated.minimumContrastRatio = 1;
+
+    terminal.integrated = {
+      fontSize = 15;
+      fontWeight = "500";
+      fontWeightBold = "700";
+      fontFamily = "MonoLisa Variable, Symbols Nerd Font Mono";
+      lineHeight = 1.5;
+      sendKeybindingsToShell = true;
+      profiles.osx.tmux = {
+        path = "tsm";
+        args = [
+          "connect"
+          "\${workspaceFolder}"
+        ];
+      };
+      defaultProfile.osx = "tmux";
+      automationProfile.osx = {
+        path = "/bin/zsh";
+      };
+    };
 
     #
     # Editor
     #
 
-    # Font
-    editor.fontFamily = "MonoLisa Variable";
-    editor.inlayHints.fontFamily = "MonoLisa Variable";
-    editor.codeLensFontFamily = "MonoLisa Variable";
-    editor.inlineSuggest.fontFamily = "MonoLisa Variable";
-    terminal.integrated.fontFamily = "MonoLisa Variable";
+    editor = {
+      # Font
+      fontFamily = "MonoLisa Variable, Symbols Nerd Font Mono";
+      codeLensFontFamily = "MonoLisa Variable";
+      codeLensFontSize = 12;
+
+      # Inlay hints — smaller than editor text to stay subordinate
+      inlayHints = {
+        fontFamily = "MonoLisa Variable";
+        fontSize = 12;
+        enabled = "on";
+        padding = true;
+      };
+
+      # Inline suggest
+      inlineSuggest = {
+        fontFamily = "MonoLisa Variable";
+        enabled = true;
+      };
+
+      minimap.enabled = false;
+      semanticHighlighting.enabled = true;
+      semanticTokenColorCustomizations.enabled = true;
+
+      # General
+      autoIndent = "full";
+      cursorBlinking = "solid";
+      cursorStyle = "line";
+      cursorWidth = 5;
+      fontLigatures = true;
+      fontSize = 15;
+      fontWeight = "500";
+      formatOnSave = true;
+      insertSpaces = false;
+      largeFileOptimizations = false;
+      letterSpacing = 0.5;
+      lineHeight = 23;
+      renderWhitespace = "all";
+      suggestSelection = "first";
+      tabCompletion = "on";
+      wordSeparators = "/\\()\"':,.;<>~!@#$%^&*|+=[]{}`?-";
+    };
+
+    # Other font overrides
     scm.inputFontFamily = "MonoLisa Variable";
     chat.editor.fontFamily = "MonoLisa Variable";
-    debug.console.fontFamily = "MonoLisa Variable";
+    chat.editor.fontSize = 15;
+    debug.console.fontFamily = "MonoLisa Variable, Symbols Nerd Font Mono";
+    debug.console.fontSize = 15;
     notebook.output.fontFamily = "MonoLisa Variable";
     markdown.preview.fontFamily = "MonoLisa Variable";
-    workbench.fontAliasing = "antialiased";
-
-    # Inlay hints
-    editor.inlayHints.enabled = "on";
-    # editor.inlayHints.fontSize = 1;
-    editor.inlayHints.padding = true;
-    editor.minimap.enabled = false;
-
-    # General editor settings
-    editor.autoIndent = "full";
-    editor.cursorBlinking = "solid";
-    editor.cursorStyle = "line";
-    editor.cursorWidth = 5;
-    editor.fontLigatures = true;
-    editor.fontSize = 14;
-    editor.fontWeight = "bold";
-    editor.formatOnSave = true;
-    editor.inlineSuggest.enabled = true;
-    editor.insertSpaces = false;
-    editor.largeFileOptimizations = false;
-    editor.letterSpacing = 0.5;
-    editor.lineHeight = 25;
-    editor.renderWhitespace = "all";
-    editor.suggestSelection = "first";
-    editor.tabCompletion = "on";
-    editor.wordSeparators = "/\\()\"':,.;<>~!@#$%^&*|+=[]{}`?-";
-    editor.semanticTokenColorCustomizations = {
-      enabled = true;
-    };
-    workbench.view.showQuietly = {
-      workbench.panel.output = true;
-    };
 
     # Zen Mode
-    zenMode.fullScreen = false;
-    zenMode.hideLineNumbers = false;
-    zenMode.centerLayout = false;
-    zenMode.silentNotifications = false;
+    zenMode = {
+      fullScreen = false;
+      hideLineNumbers = false;
+      centerLayout = false;
+      silentNotifications = false;
+    };
 
     #
     # Explorer Settings
     #
 
-    explorer.confirmDelete = false;
-    explorer.compactFolders = false;
-    explorer.confirmDragAndDrop = false;
-    errorLens.enabledDiagnosticLevels = ["error"];
-    errorLens.excludeBySource = ["cSpell"];
+    explorer = {
+      confirmDelete = false;
+      compactFolders = false;
+      confirmDragAndDrop = false;
+    };
+    errorLens = {
+      enabledDiagnosticLevels = ["error"];
+      excludeBySource = ["cSpell"];
+    };
 
     #
     # Languages
     #
 
-    # Go
-    # gopls = {
-    #   ui.semanticTokens = true;
-    # };
+    javascript = {
+      validate.enable = false;
+      inlayHints = {
+        enumMemberValues.enabled = true;
+        functionLikeReturnTypes.enabled = true;
+        parameterNames.enabled = "literals";
+        variableTypes.enabled = false;
+      };
+      updateImportsOnFileMove.enabled = "always";
+    };
 
-    # Javascript
-    javascript.validate.enable = false;
-    javascript.inlayHints.enumMemberValues.enabled = true;
-    javascript.inlayHints.functionLikeReturnTypes.enabled = true;
-    javascript.inlayHints.parameterNames.enabled = "literals";
-    javascript.inlayHints.variableTypes.enabled = false;
-    javascript.updateImportsOnFileMove.enabled = "always";
-    typescript.enablePromptUseWorkspaceTsdk = true;
-    typescript.inlayHints.enumMemberValues.enabled = true;
-    typescript.inlayHints.functionLikeReturnTypes.enabled = true;
-    typescript.inlayHints.parameterNames.enabled = "literals";
-    typescript.inlayHints.variableTypes.enabled = false;
-    typescript.referencesCodeLens.enabled = true;
-    typescript.updateImportsOnFileMove.enabled = "always";
-    typescript.preferences.preferTypeOnlyAutoImports = true;
-    # make sure you're using the local typescript
-    typescript.tsdk = "node_modules/typescript/lib";
+    typescript = {
+      enablePromptUseWorkspaceTsdk = true;
+      inlayHints = {
+        enumMemberValues.enabled = true;
+        functionLikeReturnTypes.enabled = true;
+        parameterNames.enabled = "literals";
+        variableTypes.enabled = false;
+      };
+      referencesCodeLens.enabled = true;
+      updateImportsOnFileMove.enabled = "always";
+      preferences.preferTypeOnlyAutoImports = true;
+      tsdk = "node_modules/typescript/lib";
+    };
+
+    #
+    # Code Telescope (Telescope-style fuzzy finder)
+    #
+
+    codeTelescope = {
+      layout.mode = "classic";
+      matching.algorithm = "subsequence";
+      preview.showLineNumbers = true;
+      keybindings.close = "ctrl+g";
+      wsFileFinder.textDisplay = "relative";
+    };
 
     # Diff
-    diffEditor.codeLens = true;
-    diffEditor.hideUnchangedRegions.enabled = true;
+    diffEditor = {
+      codeLens = true;
+      hideUnchangedRegions.enabled = true;
+    };
+
+    # Git
+    git.confirmSync = false;
+
+    #
+    # Nix — language server + formatter (alejandra, matching neovim)
+    #
+
+    nix = {
+      enableLanguageServer = true;
+      serverPath = "nil";
+      serverSettings.nil.formatting.command = ["alejandra"];
+    };
 
     #
     # Neovim Settings
     #
 
-    # Neovim setting, refer https://open-vsx.org/extension/asvetliakov/vscode-neovim
     extensions.experimental.affinity = {
       "asvetliakov.vscode-neovim" = 1;
     };
 
-    # Point the extension to the wrapper script
-    # vscode-neovim.neovimExecutablePaths.linux = "${nvimWrapperScript}";
-    vscode-neovim.compositeKeys = {
-      jj = {
-        command = "vscode-neovim.escape";
+    # Exclude Ctrl+E (explorer toggle), Ctrl+A (agent toggle), Ctrl+H/L
+    # (directional focus nav) from neovim so VS Code keybindings handle them.
+    # Default list: ["a", "b", "d", "e", "f", "h", "i", "j", "o", "r", "t", "u", "w"]
+    "vscode-neovim" = {
+      compositeKeys = {
+        jj.command = "vscode-neovim.escape";
+        jk.command = "vscode-neovim.escape";
       };
-      jk = {
-        command = "vscode-neovim.escape";
-      };
+      ctrlKeysForNormalMode = [
+        "b"
+        "d"
+        "f"
+        "i"
+        "j"
+        "o"
+        "r"
+        "t"
+        "u"
+        "w"
+      ];
+      ctrlKeysForInsertMode = [
+        "d"
+        "j"
+        "o"
+        "r"
+        "t"
+        "u"
+        "w"
+      ];
     };
-
-    #
-    # Which Key
-    #
   };
 }

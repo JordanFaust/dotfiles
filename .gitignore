@@ -20,3 +20,4 @@ http_cache.sqlite
 
 # Git worktrees
 .worktrees/
+docs/plans/

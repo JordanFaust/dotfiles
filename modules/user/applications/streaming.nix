@@ -69,21 +69,12 @@ in {
   };
 
   config = lib.mkIf (!minimal && cfg.enable) {
-    # Force Zoom to open in the browser until issues are resolved
-    home = {
-      packages = [
-        # zoom-us
-        # zoomDesktop
-        # pinnedZoomPkgs.zoom-us
-      ];
-    };
-
-    # Add zoom as a startup application
-    xdg.configFile = {
+    # Zoom autostart and OBS Wayland plugins are Linux-only
+    xdg.configFile = lib.mkIf pkgs.stdenv.isLinux {
       "autostart/zoom.desktop".source = "${zoomDesktop}/share/applications/Zoom.desktop";
     };
 
-    programs.obs-studio = {
+    programs.obs-studio = lib.mkIf pkgs.stdenv.isLinux {
       inherit (cfg.obs) enable;
       plugins = with pkgs.obs-studio-plugins; [
         wlrobs

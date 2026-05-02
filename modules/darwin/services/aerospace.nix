@@ -1,0 +1,194 @@
+# modules/darwin/services/aerospace.nix
+#
+# AeroSpace tiling window manager — managed as a nix-darwin system service so
+# that a proper launch agent is registered. Putting `pkgs.aerospace` in
+# home.packages only installs the CLI; the server (AeroSpace.app) never starts
+# and CLI commands fail to connect.
+{...}: {
+  # Enable SKHD for coverage of keybinds not supported by AeroSpace
+  services.skhd.enable = true;
+  services.aerospace = {
+    enable = true;
+
+    settings = {
+      # start-at-login must NOT be set here — nix-darwin manages AeroSpace
+      # startup via launchd and asserts that this option is absent.
+      automatically-unhide-macos-hidden-apps = true;
+
+      default-root-container-layout = "tiles";
+      default-root-container-orientation = "auto";
+
+      # Reset every workspace tree on startup so stale accordion state from a
+      # previous session never carries over.  Visits each workspace, flattens
+      # it back to a single-level tiles container, then returns to workspace 1.
+      after-startup-command = [
+        "workspace 1"
+        "flatten-workspace-tree"
+        "workspace 2"
+        "flatten-workspace-tree"
+        "workspace 3"
+        "flatten-workspace-tree"
+        "workspace 4"
+        "flatten-workspace-tree"
+        "workspace 5"
+        "flatten-workspace-tree"
+        "workspace 1"
+      ];
+
+      enable-normalization-flatten-containers = true;
+      enable-normalization-opposite-orientation-for-nested-containers = true;
+
+      # Mouse follows focus when the active monitor changes
+      on-focused-monitor-changed = ["move-mouse monitor-lazy-center"];
+
+      # Notify sketchybar on every workspace switch.
+      # AeroSpace runs as a launchd service with a minimal PATH that excludes
+      # nix binary directories. We prepend the nix-darwin per-user profile so
+      # the bare `sketchybar` resolves reliably.
+      exec-on-workspace-change = [
+        "/bin/bash"
+        "-c"
+        "export PATH=\"/etc/profiles/per-user/jordan.faust/bin:$PATH\"; sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE PREV_WORKSPACE=$AEROSPACE_PREV_WORKSPACE"
+      ];
+
+      # Gap configuration — mirrors Hyprland's gaps_in = 14 / gaps_out = 28
+      gaps = {
+        inner.horizontal = 28;
+        inner.vertical = 28;
+        outer = {
+          left = 28;
+          right = 28;
+          top = 80;
+          bottom = 28;
+        };
+      };
+
+      mode.main.binding = {
+        # Disable macOS "Hide Others" so cmd-alt-h is fully available
+        # See: https://nikitabobko.github.io/AeroSpace/goodies#disable-hide-app
+        "cmd-alt-h" = [];
+
+        # Focus movement (vim-style) — matches SUPER+h/j/k/l on Hyprland
+        "cmd-h" = "focus left";
+        "cmd-j" = "focus down";
+        "cmd-k" = "focus up";
+        "cmd-l" = "focus right";
+
+        # Focus back-and-forth — matches ALT+Tab in Hyprland
+        "cmd-backtick" = "focus-back-and-forth";
+
+        # Move windows — matches SUPER+SHIFT+h/j/k/l
+        "cmd-shift-h" = "move left";
+        "cmd-shift-j" = "move down";
+        "cmd-shift-k" = "move up";
+        "cmd-shift-l" = "move right";
+
+        # Resize — matches SUPER+ALT+h/j/k/l
+        "cmd-ctrl-h" = "resize width -50";
+        "cmd-ctrl-l" = "resize width +50";
+        "cmd-ctrl-k" = "resize height -50";
+        "cmd-ctrl-j" = "resize height +50";
+
+        # Layouts
+        "cmd-slash" = "layout tiles horizontal vertical";
+        "cmd-comma" = "layout accordion horizontal vertical";
+        "cmd-p" = "layout horizontal vertical";
+
+        # Maximize within AeroSpace (no macOS Space) — matches SUPER+F in Hyprland
+        "cmd-ctrl-f" = "fullscreen";
+        # macOS native fullscreen (creates its own Space) — matches SUPER+SHIFT+F
+        "cmd-shift-f" = "macos-native-fullscreen";
+
+        # Close window — matches SUPER+Q
+        "cmd-q" = "close";
+
+        # Launch terminal (kitty) with tmux — matches SUPER+Return on Hyprland.
+        # Attaches to an existing unattached session or creates a new one.
+        "cmd-enter" = "exec-and-forget open -na kitty --args -e sh -c 'tmux new-session -A -s main'";
+
+        # Clipboard history via Raycast
+        "cmd-shift-v" = "exec-and-forget open \"raycast://extensions/raycast/clipboard-history/clipboard-history\"";
+
+        # Workspace switching — matches SUPER+1-5
+        "cmd-1" = "workspace 1";
+        "cmd-2" = "workspace 2";
+        "cmd-3" = "workspace 3";
+        "cmd-4" = "workspace 4";
+        "cmd-5" = "workspace 5";
+
+        # Move window to workspace — matches SUPER+CTRL+1-5
+        "cmd-ctrl-1" = "move-node-to-workspace 1";
+        "cmd-ctrl-2" = "move-node-to-workspace 2";
+        "cmd-ctrl-3" = "move-node-to-workspace 3";
+        "cmd-ctrl-4" = "move-node-to-workspace 4";
+        "cmd-ctrl-5" = "move-node-to-workspace 5";
+
+        # Workspace cycling — matches SUPER+left/right
+        "cmd-left" = "workspace prev";
+        "cmd-right" = "workspace next";
+
+        # Move window to adjacent workspace
+        "cmd-shift-left" = "move-node-to-workspace prev";
+        "cmd-shift-right" = "move-node-to-workspace next";
+
+        # Enter service mode
+        "cmd-shift-semicolon" = "mode service";
+      };
+
+      mode.service.binding = {
+        esc = [
+          "reload-config"
+          "mode main"
+        ];
+        r = [
+          "flatten-workspace-tree"
+          "mode main"
+        ];
+        f = [
+          "layout floating tiling"
+          "mode main"
+        ];
+        backspace = [
+          "close-all-windows-but-current"
+          "mode main"
+        ];
+      };
+
+      # Window auto-assignment — mirrors Hyprland windowrule workspace assignments
+      on-window-detected = [
+        {
+          check-further-callbacks = true;
+          run = "layout tiling";
+        }
+        {
+          "if"."app-id" = "net.kovidgoyal.kitty";
+          run = "move-node-to-workspace 2";
+        }
+        {
+          "if"."app-id" = "org.mozilla.firefox";
+          run = "move-node-to-workspace 2";
+        }
+        {
+          "if"."app-id" = "com.tinyspeck.slackmacgap";
+          run = "move-node-to-workspace 3";
+        }
+        {
+          "if"."app-id" = "com.spotify.client";
+          run = "move-node-to-workspace 3";
+        }
+        {
+          "if"."app-id" = "us.zoom.xos";
+          run = "move-node-to-workspace 4";
+        }
+        {
+          "if"."app-id" = "com.google.Chrome";
+          run = "move-node-to-workspace 4";
+        }
+        {
+          "if"."app-id" = "com.okta.mobile";
+          run = "layout floating";
+        }
+      ];
+    };
+  };
+}

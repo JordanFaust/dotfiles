@@ -74,13 +74,14 @@
   padding-right: 0 !important;
   padding-bottom: 0 !important;
   :root[lwt-sidebar="dark"] & {
-    color-scheme: var(--dark-base) !important;
+    color-scheme: dark !important;
     background: var(--dark-base) !important;
   }
 }
 
 #all-tabs{
    margin: 10px var(--distance-from-edge);
+   border: none !important;
 }
 
 tab-item:not(.collapsed) {
@@ -116,6 +117,7 @@ tab-item tab-favicon{
 
 tab-item .label {
     color: var(--light-2) !important;
+    font-size: 14px !important;
     padding-bottom: 2px;
 }
 
@@ -143,16 +145,11 @@ tab-item:not(.active).highlighted{
     background: var(--red) !important;
 }
 
-tab-item:not(active):hover {
+tab-item:not(.active):hover {
     background: var(--red);
 }
 
-tab-item:hover tab-closebox {
-    right: 10px;
-    opacity: 1;
-}
-
-tab-item:not(pinned) tab-closebox {
+tab-item:not(.pinned) tab-closebox {
     position: absolute;
     margin-top: 2px;
     height: 20px;
@@ -163,6 +160,11 @@ tab-item:not(pinned) tab-closebox {
     padding-left: 2px;
     background: var(--light-4);
     transition   : all var(--animation-duration) var(--ease-out);
+}
+
+tab-item:hover tab-closebox {
+    right: 10px;
+    opacity: 1;
 }
 
 .sound-button:after {
@@ -308,10 +310,3 @@ tab-item.active.contextual-identity-firefox-container-3 {
 tab-item.active.contextual-identity-firefox-container-4 {
    background: linear-gradient(to right, #ED8796 , #D53F8C) !important;
 }
-
-/***********************************/
-
-#all-tabs {
-    border: none !important;
-}
-

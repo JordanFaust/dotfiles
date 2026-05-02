@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 with lib;
@@ -28,11 +29,11 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    # Enable DConf for configuration of systems
-    modules.desktop.dconf.enable = true;
+    # Enable DConf for configuration of systems (Linux only)
+    modules.desktop.dconf.enable = lib.mkIf pkgs.stdenv.isLinux true;
 
-    # Enable GTK
-    modules.desktop.gtk.enable = config.modules.themes.gtk.enable;
+    # Enable GTK (Linux only)
+    modules.desktop.gtk.enable = lib.mkIf pkgs.stdenv.isLinux config.modules.themes.gtk.enable;
     # home.stateVersion = "21.11";
   };
 }

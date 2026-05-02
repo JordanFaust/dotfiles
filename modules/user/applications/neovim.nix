@@ -13,7 +13,10 @@ with lib.my; let
     genericName = "Text Editor";
     icon = "nvim";
     exec = "uwsm app -- ${pkgs.kitty}/bin/kitty --title Neovim --class neovim --hold -e bash -c \"(tmux ls | grep -qEv 'attached|scratch' && tmux at) || tmux\"";
-    categories = ["Utility" "TextEditor"];
+    categories = [
+      "Utility"
+      "TextEditor"
+    ];
   };
 in {
   options.modules.applications.neovim = mkOption {
@@ -46,41 +49,35 @@ in {
         MANPAGER = "nvim -c Man!";
       };
 
-      packages = with pkgs; [
-        editorconfig-core-c
-        # deno-webkit
-        # neovim-nightly
-        neovim
-        # Disabled until https://github.com/neovide/neovide/issues/2491
-        # neovide
+      packages = with pkgs;
+        [
+          editorconfig-core-c
+          neovim
 
-        # Neovim Addon Dependencies
-        ranger
-        tree-sitter
-        markdownlint-cli2
-        marksman
-        # prettier
+          # Neovim Addon Dependencies
+          ranger
+          tree-sitter
+          markdownlint-cli2
+          # marksman
 
-        # Image preview
-        chafa
+          # Image preview
+          chafa
 
-        # Peek.nvim pre-built
-        # my.peek-nvim
-
-        # Code Snippet Image Generator
-        codesnap
-
-        # desktop
-        desktop
-
-        # AI Intergrations
-        claude-code
-      ];
+          # AI Integrations
+          # claude-code installed via homebrew (native binary, kept current)
+        ]
+        ++ lib.optionals pkgs.stdenv.isLinux [
+          # Desktop item and code snapshot tool are Linux-only
+          desktop
+          codesnap
+        ];
     };
 
     xdg.configFile = {
-      # Add Neovim as a startup application
-      "autostart/neovim.desktop".source = "${desktop}/share/applications/Neovim.desktop";
+      # Autostart is Linux/XDG only
+      "autostart/neovim.desktop" = lib.mkIf pkgs.stdenv.isLinux {
+        source = "${desktop}/share/applications/Neovim.desktop";
+      };
 
       "neovide/config.toml".source = (pkgs.formats.toml {}).generate "config.toml" {
         #

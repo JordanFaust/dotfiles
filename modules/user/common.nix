@@ -1,13 +1,16 @@
 {
   username,
+  pkgs,
   ...
-}:
-let
-  homeDirectory = "/home/${username}";
+}: let
+  homeDirectory =
+    if pkgs.stdenv.isDarwin
+    then "/Users/${username}"
+    else "/home/${username}";
 in {
   news.display = "show";
 
-  targets.genericLinux.enable = true;
+  targets.genericLinux.enable = pkgs.stdenv.isLinux;
 
   home = {
     inherit username homeDirectory;
@@ -21,9 +24,13 @@ in {
       GOMODCACHE = "${homeDirectory}/.cache/go/pkg/mod";
     };
 
-    sessionPath = [
-      "$HOME/.local/bin"
-    ];
+    sessionPath =
+      [
+        "$HOME/.local/bin"
+      ]
+      ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [
+        "/opt/homebrew/bin"
+      ];
   };
 
   programs.home-manager.enable = true;

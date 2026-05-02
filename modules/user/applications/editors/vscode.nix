@@ -8,10 +8,10 @@ with lib;
 with lib.my; let
   cfg = config.modules.applications.vscode;
 in {
-  imports = [
-    ./vscode/settings.nix
-    ./vscode/keybindings.nix
-  ];
+  # imports = [
+  #   ./vscode/settings.nix
+  #   ./vscode/keybindings.nix
+  # ];
   options.modules.applications.vscode = mkOption {
     description = ''
       The (forced) one and only text editor.
@@ -34,24 +34,18 @@ in {
     };
   };
 
-  # Always enable neovim, no matter the installation
   config = mkIf cfg.enable {
     home = {
       packages = with pkgs; [
-        # fzf-picker dependnecies
         fzf
         ripgrep
         bat
-
-        # CursoR AI
-        code-cursor
+        alejandra
       ];
-
     };
 
     catppuccin = {
       enable = true;
-      # optionally configure the extension settings, defaults are shown below:
       vscode = {
         profiles = {
           default = {
@@ -71,36 +65,19 @@ in {
       };
     };
 
+    # Extensions are managed manually via Cursor's marketplace.
+    # Nix-managed extensions cause registration issues with Cursor's
+    # headless scanner (it skips symlinks without version suffixes).
+    # See: modules/user/applications/editors/vscode/EXTENSIONS.md
     programs.vscode = {
       enable = true;
-      # Set the package to the FHS-wrapped version of VS Code
-      package = pkgs.vscode;
+      package = pkgs.code-cursor;
       mutableExtensionsDir = true;
 
       profiles = {
         default = {
-          # enableUpdateCheck = false;
-          # enableExtensionUpdateCheck = false;
-
-          extensions = with pkgs.vscode-extensions;
-            [
-              # Theme
-              # catppuccin.catppuccin-vsc
-              # catppuccin.catppuccin-vsc-icons
-              # Neovim
-              asvetliakov.vscode-neovim
-              # Search Extensions
-              # Extensions
-              # vspacecode.whichkey
-              # Development
-              ms-azuretools.vscode-docker # Docker
-              bbenoist.nix # Nix
-              golang.go # Go
-              sumneko.lua # lua
-            ]
-            ++ (with pkgs.vscode-marketplace; [
-              # jellydn.fzf-picker
-            ]);
+          enableUpdateCheck = false;
+          enableExtensionUpdateCheck = false;
         };
       };
     };
