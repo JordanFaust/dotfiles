@@ -36,7 +36,7 @@ in {
         [
           bun
           deno
-          nodejs_22
+          nodejs
           yarn
           inputs.wrangler.packages.${pkgs.stdenv.hostPlatform.system}.wrangler
           biome
