@@ -26,7 +26,6 @@ in {
           kubectx
           kubectl
           kustomize
-          kind
           krew
           kubectl-view-allocations
           k9s
@@ -59,8 +58,6 @@ in {
           cfssl
           istioctl
           egctl
-          linkerd
-          consul
           deck
           socat
 
