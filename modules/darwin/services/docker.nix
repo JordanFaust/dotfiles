@@ -14,8 +14,11 @@ with lib.my; let
   # Generate colima config as JSON (a valid YAML superset) so the provision
   # scripts and all VM parameters are captured declaratively.
   colimaConfig = pkgs.writeText "colima-config.yaml" (builtins.toJSON ({
-      inherit (cfg) cpu memory disk vmType mountType;
+      inherit (cfg) cpu memory disk vmType mountType mountInotify;
       runtime = "docker";
+    }
+    // optionalAttrs (cfg.mounts != []) {
+      mounts = map (m: {inherit (m) location writable;}) cfg.mounts;
     }
     // optionalAttrs (cfg.provision != []) {
       provision = map (p: {inherit (p) mode script;}) cfg.provision;
@@ -62,6 +65,30 @@ in {
       type = types.enum ["virtiofs" "sshfs" "9p"];
       default = "virtiofs";
       description = "Mount type for host volume sharing.";
+    };
+
+    mountInotify = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Propagate inotify file events to the VM. Experimental.";
+    };
+
+    mounts = mkOption {
+      type = types.listOf (types.submodule {
+        options = {
+          location = mkOption {
+            type = types.str;
+            description = "Host path to mount into the VM. Supports ~ expansion.";
+          };
+          writable = mkOption {
+            type = types.bool;
+            default = true;
+            description = "Whether the mount is writable.";
+          };
+        };
+      });
+      default = [];
+      description = "Additional host paths to mount into the Colima VM.";
     };
 
     provision = mkOption {

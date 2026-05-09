@@ -22,6 +22,13 @@
       memory = 40;
       disk = 100;
       # vmType and mountType default to vz + virtiofs — best on Apple Silicon.
+      mountInotify = true;
+      mounts = [
+        {
+          location = "~/";
+          writable = true;
+        }
+      ];
       provision = [
         {
           mode = "system";

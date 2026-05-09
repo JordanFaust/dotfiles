@@ -33,6 +33,7 @@ in {
           argocd
 
           # Local Dev
+          devcontainer
           kubernetes-helm
           helm-ls
           tilt
