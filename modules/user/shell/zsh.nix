@@ -99,8 +99,6 @@ in {
         _source $ZDOTDIR/local.zshenv
 
         # Sensitive API keys (read from /etc/sensitive at runtime — NOT Nix interpolation)
-        export ANTHROPIC_AUTH_TOKEN="$(cat /etc/sensitive/anthropic 2>/dev/null)"
-        export ANTHROPIC_BASE_URL="$(cat /etc/sensitive/anthropic-base-url 2>/dev/null)"
         export OPENAI_API_KEY="$(cat /etc/sensitive/openai 2>/dev/null)"
         export GEMINI_API_KEY="$(cat /etc/sensitive/gemini 2>/dev/null)"
         export TAVILY_API_KEY="$(cat /etc/sensitive/tavily 2>/dev/null)"
@@ -109,6 +107,10 @@ in {
         export JIRA_API_TOKEN="$(cat /etc/sensitive/jira 2>/dev/null)"
         export SONARQUBE_TOKEN="$(cat /etc/sensitive/sonarqube 2>/dev/null)"
         export GITHUB_TOKEN="$(gh auth token 2>/dev/null)"
+        export CONTEXT7_API_KEY="$(cat /etc/sensitive/context7 2>/dev/null)"
+
+        # Export additional configuration options
+        export OPENCODE_EXPERIMENTAL_LSP_TOOL=true
       '';
 
       profileExtra = ''
@@ -327,6 +329,12 @@ in {
         fi
 
         autoload -U zmv
+
+        function claude-gw {
+          ANTHROPIC_AUTH_TOKEN="$(cat /etc/sensitive/anthropic 2>/dev/null)" \
+          ANTHROPIC_BASE_URL="$(cat /etc/sensitive/anthropic-base-url 2>/dev/null)" \
+          command claude "$@"
+        }
 
         function take {
           mkdir "$1" && cd "$1"

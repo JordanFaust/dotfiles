@@ -29,6 +29,8 @@ in {
   config = lib.mkIf (!minimal && cfg != null && cfg.enable) {
     home = {
       packages = with pkgs; [
+        # Opencode
+        opencode
         # Ollama - local LLM runner (Go implementation)
         ollama
         # llm - call various language models from the terminal

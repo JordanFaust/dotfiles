@@ -178,7 +178,7 @@
         }
         {
           "if"."app-id" = "us.zoom.xos";
-          run = "move-node-to-workspace 4";
+          run = ["move-node-to-workspace 4" "layout tiling"];
         }
         {
           "if"."app-id" = "com.google.Chrome";

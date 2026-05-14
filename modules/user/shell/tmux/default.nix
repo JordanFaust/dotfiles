@@ -19,15 +19,29 @@ in {
               sessionManager = {
                 searchPaths = mkOption {
                   description = "Search paths for git repository discovery";
-                  type = with lib.types; listOf (submoduleWith {
-                    modules = [{
-                      options = {
-                        path  = mkOption { type = str; description = "Absolute path to search"; };
-                        name  = mkOption { type = str; default = ""; description = "Fixed session name override (optional)"; };
-                        depth = mkOption { type = int; default = 0; description = "0 = directory is itself a repo; 1 = scan one level deep"; };
-                      };
-                    }];
-                  });
+                  type = with lib.types;
+                    listOf (submoduleWith {
+                      modules = [
+                        {
+                          options = {
+                            path = mkOption {
+                              type = str;
+                              description = "Absolute path to search";
+                            };
+                            name = mkOption {
+                              type = str;
+                              default = "";
+                              description = "Fixed session name override (optional)";
+                            };
+                            depth = mkOption {
+                              type = int;
+                              default = 0;
+                              description = "0 = directory is itself a repo; 1 = scan one level deep";
+                            };
+                          };
+                        }
+                      ];
+                    });
                   default = [];
                 };
               };
@@ -41,13 +55,15 @@ in {
   config = mkIf cfg.enable (let
     tsmPkg = pkgs.callPackage ../../../../packages/tsm {};
 
-    tomlSearchPaths = lib.concatMapStrings (sp: ''
-      [[search_paths]]
-      path  = "${sp.path}"
-      name  = "${sp.name}"
-      depth = ${toString sp.depth}
+    tomlSearchPaths =
+      lib.concatMapStrings (sp: ''
+        [[search_paths]]
+        path  = "${sp.path}"
+        name  = "${sp.name}"
+        depth = ${toString sp.depth}
 
-    '') cfg.sessionManager.searchPaths;
+      '')
+      cfg.sessionManager.searchPaths;
   in {
     home.packages = with pkgs; [
       tmate
@@ -124,6 +140,7 @@ in {
         set -g extended-keys on
         set -ga terminal-features '*:extkeys'
         set -ag terminal-overrides ",xterm-256color:RGB"
+        set -g allow-passthrough on
 
         # Window management
         setw -g allow-rename off
