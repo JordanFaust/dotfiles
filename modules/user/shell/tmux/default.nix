@@ -54,6 +54,7 @@ in {
 
   config = mkIf cfg.enable (let
     tsmPkg = pkgs.callPackage ../../../../packages/tsm {};
+    tmuxPalettePkg = pkgs.callPackage ../../../../packages/tmux-palette {};
 
     tomlSearchPaths =
       lib.concatMapStrings (sp: ''
@@ -68,6 +69,7 @@ in {
     home.packages = with pkgs; [
       tmate
       tsmPkg
+      tmuxPalettePkg
     ];
 
     home.sessionVariables = {
@@ -87,9 +89,40 @@ in {
       executable = true;
     };
 
-    xdg.configFile."tmux/scripts/tsm-fzf.sh" = {
-      source = ./scripts/tsm-fzf.sh;
-      executable = true;
+    # tmux-palette custom palette: session picker powered by tsm finder json.
+    # Groups repos by Current / Active / Recent / All with status-dot icons.
+    xdg.configFile."tmux-palette/palettes/sessions.json".text = builtins.toJSON {
+      title = "Sessions";
+      icon = "";
+      grouped = true;
+      command = "tsm finder json";
+    };
+
+    # Add a "Switch Session" entry to the main tmux-palette commands palette so
+    # it is reachable from the global C-Space binding as well as bind p.
+    xdg.configFile."tmux-palette/commands.json".text = builtins.toJSON [
+      {
+        icon = "";
+        title = "Switch Session";
+        category = "Tmux";
+        action = {palette = "sessions";};
+      }
+    ];
+
+    # Catppuccin Macchiato theme for tmux-palette.
+    # Colours match the rest of the desktop theme (same values used in ansi.go).
+    xdg.configFile."tmux-palette/themes/catppuccin-macchiato.json".text = builtins.toJSON {
+      bg = "#24273a"; # Base
+      panel = "#1e2030"; # Mantle
+      selected = "#363a4f"; # Surface0
+      fg = "#cad3f5"; # Text
+      muted = "#6e738d"; # Overlay0
+      accent = "#8aadf4"; # Blue
+    };
+
+    # Activate the Macchiato theme.
+    xdg.configFile."tmux-palette/theme.json".text = builtins.toJSON {
+      name = "catppuccin-macchiato";
     };
 
     programs.zsh.initContent = ''
@@ -179,7 +212,8 @@ in {
         bind M run '$TMUX_HOME/scripts/swap-pane.sh master'
 
         bind f resize-pane -Z
-        bind p display-popup -w "120" -h "25" -y 30 -E '$TMUX_HOME/scripts/tsm-fzf.sh'
+        bind p run-shell '${tmuxPalettePkg}/bin/tmux-palette.sh sessions'
+        bind P run-shell '${tmuxPalettePkg}/bin/tmux-palette.sh'
         bind w choose-window
         bind / choose-session
         bind . choose-window

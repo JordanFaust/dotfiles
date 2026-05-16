@@ -1,12 +1,65 @@
 package main
 
 import (
+	"fmt"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"sort"
 	"strings"
 )
+
+// ── tmux-palette JSON types ──────────────────────────────────────────────────
+
+type paletteAction struct {
+	Shell string `json:"shell"`
+}
+
+type paletteItem struct {
+	Icon        string        `json:"icon"`
+	IconColor   string        `json:"iconColor"`
+	Title       string        `json:"title"`
+	Description string        `json:"description,omitempty"`
+	Category    string        `json:"category,omitempty"`
+	Action      paletteAction `json:"action"`
+}
+
+// shellQuote wraps s in single quotes with proper escaping so it is safe to
+// embed in a POSIX shell command string. Single quotes inside s are handled
+// via the '\'  idiom.
+func shellQuote(s string) string {
+	return "'" + strings.ReplaceAll(s, "'", `'\''`) + "'"
+}
+
+// FormatForPalette returns a slice of paletteItem values for use as a
+// tmux-palette JSON-mode plugin response. Each item carries status-based
+// icon/colour, the repo path as a searchable description, a category for
+// the grouped palette header, and a shell action that invokes tsm.
+func FormatForPalette(repos []Repo, current string, active, recent []string) []paletteItem {
+	items := make([]paletteItem, 0, len(repos))
+	for _, r := range repos {
+		var icon, color, category string
+		switch {
+		case r.Name == current:
+			icon, color, category = "●", HexGreen, "Current"
+		case contains(active, r.Name):
+			icon, color, category = "○", HexPeach, "Active"
+		case contains(recent, r.Name):
+			icon, color, category = "◦", HexDim, "Recent"
+		default:
+			icon, color, category = "◦", HexDim, "All"
+		}
+		items = append(items, paletteItem{
+			Icon:        icon,
+			IconColor:   color,
+			Title:       r.Name,
+			Description: r.Path,
+			Category:    category,
+			Action:      paletteAction{Shell: fmt.Sprintf("tsm session %s", shellQuote(r.Name))},
+		})
+	}
+	return items
+}
 
 // Repo represents a discovered git repository or worktree.
 type Repo struct {

@@ -185,15 +185,23 @@ func runFinder(mode string) {
 	recent := RecentSessions()
 	sorted := SortedRepos(repos, current, active, recent)
 
-	if mode == "simple" {
+	switch mode {
+	case "simple":
 		for _, r := range sorted {
 			fmt.Println(r.Name)
 		}
-		return
-	}
-
-	for _, line := range FormatForFZF(sorted, current, active) {
-		fmt.Println(line)
+	case "json":
+		items := FormatForPalette(sorted, current, active, recent)
+		data, err := json.Marshal(items)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "tsm finder json: %v\n", err)
+			os.Exit(1)
+		}
+		fmt.Println(string(data))
+	default:
+		for _, line := range FormatForFZF(sorted, current, active) {
+			fmt.Println(line)
+		}
 	}
 }
 
@@ -243,7 +251,7 @@ Usage: tsm <command> [args]
 Commands:
   fzf [name]         Interactive FZF session picker (default)
   connect <path>     Create or attach; derives session name via repo discovery
-  finder [mode]      Print repo list (modes: simple, detailed)
+  finder [mode]      Print repo list (modes: simple, detailed, json)
   preview <path>     Render directory preview for FZF
   tracker <cmd>      Session history (record|list|cleanup|show)
   session <name>     Create or attach to a named session
@@ -253,7 +261,8 @@ Examples:
   tsm fzf
   tsm connect ~/github.com/procore/api-gateway
   tsm connect /etc/dotfiles
-  tsm finder detailed
+  tsm finder simple
+  tsm finder json
   tsm tracker list
 `)
 }
