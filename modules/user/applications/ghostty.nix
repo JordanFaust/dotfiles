@@ -46,10 +46,16 @@ in {
         else [pkgs.ghostty];
 
       sessionVariables = {
-        TERMINAL = "ghostty";
-        # TERM is intentionally not set here — Ghostty sets it when it spawns a
-        # shell. Ghostty bundles its own terminfo (xterm-ghostty); no
-        # TERMINFO_DIRS export needed unlike kitty.
+        # TERMINAL is intentionally omitted here. During the kitty→ghostty
+        # transition, both modules are enabled simultaneously. kitty.nix owns
+        # TERMINAL = "kitty" (via lib.mkDefault). Once kitty is fully removed,
+        # uncomment the line below and remove it from kitty.nix.
+        #
+        # TERMINAL = "ghostty";
+        #
+        # TERM is not set globally — Ghostty sets it when it spawns a shell.
+        # Ghostty bundles its own terminfo (xterm-ghostty); no TERMINFO_DIRS
+        # export needed unlike kitty.
       };
     };
 
