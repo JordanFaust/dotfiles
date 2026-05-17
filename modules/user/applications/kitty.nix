@@ -46,7 +46,9 @@ in {
         else [pkgs.kitty];
 
       sessionVariables = {
-        TERMINAL = "kitty";
+        # mkDefault so ghostty.nix (plain assignment, higher priority) wins when
+        # both modules are enabled simultaneously during the kitty→ghostty transition.
+        TERMINAL = lib.mkDefault "kitty";
         # TERM is intentionally not set here — the terminal emulator sets it when
         # it spawns a shell. Setting it globally breaks tools (like hm-session-vars.sh)
         # that run outside of an actual kitty window and can't find the terminfo entry.
