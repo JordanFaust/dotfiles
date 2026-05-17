@@ -75,6 +75,7 @@ in {
         settings =
           {
             font-family = "MonoLisa Variable";
+            font-style = "Medium";
             font-size = 18;
             # kitty adjust_line_height 150% → Ghostty counts the delta above 100%
             adjust-cell-height = "50%";
