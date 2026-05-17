@@ -65,8 +65,13 @@ in {
         "autostart/ghostty.desktop".source = "${desktop}/share/applications/Ghostty.desktop";
       };
 
-      programs.ghostty = {
-        enable = true;
+    programs.ghostty = {
+      enable = true;
+      # pkgs.ghostty is Linux-only in nixpkgs. On macOS the binary is installed
+      # via homebrew.casks = ["ghostty"] in modules/darwin/homebrew.nix.
+      # Setting package = null suppresses HM's internal pkgs.ghostty references
+      # (package install, onChange validator, bat/vim syntax helpers).
+      package = if pkgs.stdenv.isLinux then pkgs.ghostty else null;
         settings =
           {
             font-family = "MonoLisa Variable";

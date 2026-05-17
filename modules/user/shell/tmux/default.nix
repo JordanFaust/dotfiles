@@ -66,63 +66,67 @@ in {
       '')
       cfg.sessionManager.searchPaths;
   in {
-    home.packages = with pkgs; [
-      tmate
-      tsmPkg
-      tmuxPalettePkg
-    ];
+    home = {
+      packages = with pkgs; [
+        tmate
+        tsmPkg
+        tmuxPalettePkg
+      ];
 
-    home.sessionVariables = {
-      TMUX_HOME = "${config.xdg.configHome}/tmux";
-      TMUXIFIER = "${config.xdg.dataHome}/tmuxifier";
-      TMUXIFIER_LAYOUT_PATH = "${config.xdg.dataHome}/tmuxifier";
+      sessionVariables = {
+        TMUX_HOME = "${config.xdg.configHome}/tmux";
+        TMUXIFIER = "${config.xdg.dataHome}/tmuxifier";
+        TMUXIFIER_LAYOUT_PATH = "${config.xdg.dataHome}/tmuxifier";
+      };
+
+      sessionPath = ["${config.xdg.dataHome}/tmuxifier/bin"];
     };
 
-    home.sessionPath = ["${config.xdg.dataHome}/tmuxifier/bin"];
+    xdg.configFile = {
+      "tmux/tsm.toml" = lib.mkIf (cfg.sessionManager.searchPaths != []) {
+        text = tomlSearchPaths;
+      };
 
-    xdg.configFile."tmux/tsm.toml" = lib.mkIf (cfg.sessionManager.searchPaths != []) {
-      text = tomlSearchPaths;
-    };
+      "tmux/scripts/swap-pane.sh" = {
+        source = ./scripts/swap-pane.sh;
+        executable = true;
+      };
 
-    xdg.configFile."tmux/scripts/swap-pane.sh" = {
-      source = ./scripts/swap-pane.sh;
-      executable = true;
-    };
-
-    # tmux-palette custom palette: session picker powered by tsm finder json.
-    # Groups repos by Current / Active / Recent / All with status-dot icons.
-    xdg.configFile."tmux-palette/palettes/sessions.json".text = builtins.toJSON {
-      title = "Sessions";
-      icon = "";
-      grouped = true;
-      command = "tsm finder json";
-    };
-
-    # Add a "Switch Session" entry to the main tmux-palette commands palette so
-    # it is reachable from the global C-Space binding as well as bind p.
-    xdg.configFile."tmux-palette/commands.json".text = builtins.toJSON [
-      {
+      # tmux-palette custom palette: session picker powered by tsm finder json.
+      # Groups repos by Current / Active / Recent / All with status-dot icons.
+      "tmux-palette/palettes/sessions.json".text = builtins.toJSON {
+        title = "Sessions";
         icon = "";
-        title = "Switch Session";
-        category = "Tmux";
-        action = {palette = "sessions";};
-      }
-    ];
+        grouped = true;
+        command = "tsm finder json";
+      };
 
-    # Catppuccin Macchiato theme for tmux-palette.
-    # Colours match the rest of the desktop theme (same values used in ansi.go).
-    xdg.configFile."tmux-palette/themes/catppuccin-macchiato.json".text = builtins.toJSON {
-      bg = "#24273a"; # Base
-      panel = "#1e2030"; # Mantle
-      selected = "#363a4f"; # Surface0
-      fg = "#cad3f5"; # Text
-      muted = "#6e738d"; # Overlay0
-      accent = "#8aadf4"; # Blue
-    };
+      # Add a "Switch Session" entry to the main tmux-palette commands palette so
+      # it is reachable from the global C-Space binding as well as bind p.
+      "tmux-palette/commands.json".text = builtins.toJSON [
+        {
+          icon = "";
+          title = "Switch Session";
+          category = "Tmux";
+          action = {palette = "sessions";};
+        }
+      ];
 
-    # Activate the Macchiato theme.
-    xdg.configFile."tmux-palette/theme.json".text = builtins.toJSON {
-      name = "catppuccin-macchiato";
+      # Catppuccin Macchiato theme for tmux-palette. These are UI roles, so
+      # panel/selected/muted are contrast-tuned instead of raw bg/text slots.
+      "tmux-palette/themes/catppuccin-macchiato.json".text = builtins.toJSON {
+        bg = "#24273a"; # Base
+        panel = "#363a4f"; # Surface0
+        selected = "#5b6078"; # Surface2
+        fg = "#cad3f5"; # Text
+        muted = "#a5adcb"; # Subtext0
+        accent = "#8aadf4"; # Blue
+      };
+
+      # Activate the Macchiato theme.
+      "tmux-palette/theme.json".text = builtins.toJSON {
+        name = "catppuccin-macchiato";
+      };
     };
 
     programs.zsh.initContent = ''
