@@ -15,6 +15,7 @@ _: {
       cleanup = "zap";
     };
     casks = [
+      "ghostty"
       "claude-code@latest"
       # Add work-required GUI apps here, e.g.:
       # "zoom"

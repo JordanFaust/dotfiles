@@ -39,11 +39,10 @@ in {
   config = mkIf cfg.enable {
     home = {
       packages =
-        if pkgs.stdenv.isLinux
-        # Linux: custom .desktop wrapper only — avoids duplicate entry in rofi
-        then [desktop pkgs.ghostty]
-        # macOS: install directly (no rofi, no duplicate concern)
-        else [pkgs.ghostty];
+        # Linux: custom .desktop wrapper + package.
+        # macOS: binary is installed via homebrew.casks = ["ghostty"] in
+        # modules/darwin/homebrew.nix — pkgs.ghostty is Linux-only in nixpkgs.
+        lib.optionals pkgs.stdenv.isLinux [desktop pkgs.ghostty];
 
       sessionVariables = {
         # TERMINAL is intentionally omitted here. During the kitty→ghostty
