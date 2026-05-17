@@ -41,7 +41,7 @@ in {
       packages =
         if pkgs.stdenv.isLinux
         # Linux: custom .desktop wrapper only — avoids duplicate entry in rofi
-        then [desktop pkgs.ghostty]
+        then [desktop]
         # macOS: install directly (no rofi, no duplicate concern)
         else [pkgs.kitty];
 
