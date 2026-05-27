@@ -34,14 +34,15 @@ in {
       # On macOS the binary arrives via homebrew.casks = ["ghostty"].
       desktop =
         if pkgs.stdenv.isLinux
-        then pkgs.makeDesktopItem {
-          name = "Ghostty";
-          desktopName = "Ghostty";
-          genericName = "Terminal emulator";
-          icon = "utilities-terminal";
-          exec = "uwsm app -- ${pkgs.ghostty}/bin/ghostty";
-          categories = ["Development" "System" "Utility"];
-        }
+        then
+          pkgs.makeDesktopItem {
+            name = "Ghostty";
+            desktopName = "Ghostty";
+            genericName = "Terminal emulator";
+            icon = "utilities-terminal";
+            exec = "uwsm app -- ${pkgs.ghostty}/bin/ghostty";
+            categories = ["Development" "System" "Utility"];
+          }
         else null;
     in {
       home = {
@@ -65,17 +66,22 @@ in {
         "autostart/ghostty.desktop".source = "${desktop}/share/applications/Ghostty.desktop";
       };
 
-    programs.ghostty = {
-      enable = true;
-      # pkgs.ghostty is Linux-only in nixpkgs. On macOS the binary is installed
-      # via homebrew.casks = ["ghostty"] in modules/darwin/homebrew.nix.
-      # Setting package = null suppresses HM's internal pkgs.ghostty references
-      # (package install, onChange validator, bat/vim syntax helpers).
-      package = if pkgs.stdenv.isLinux then pkgs.ghostty else null;
+      programs.ghostty = {
+        enable = true;
+        enableZshIntegration = false;
+        # pkgs.ghostty is Linux-only in nixpkgs. On macOS the binary is installed
+        # via homebrew.casks = ["ghostty"] in modules/darwin/homebrew.nix.
+        # Setting package = null suppresses HM's internal pkgs.ghostty references
+        # (package install, onChange validator, bat/vim syntax helpers).
+        package =
+          if pkgs.stdenv.isLinux
+          then pkgs.ghostty
+          else null;
         settings =
           {
             font-family = "MonoLisa Variable";
             font-style = "SemiBold";
+            font-style-italic = "SemiBold Italic";
             font-size = 18;
             # kitty adjust_line_height 150% → Ghostty counts the delta above 100%
             adjust-cell-height = "50%";
