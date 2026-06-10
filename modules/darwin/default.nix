@@ -27,6 +27,14 @@ in {
   # nix.package, nix.settings, and nix.enable must not be set here.
   nix.enable = false;
 
+  # Determinate Nix writes /etc/nix/nix.conf and includes nix.custom.conf at the
+  # bottom. Use that extension point for extra substituters since nix.settings
+  # is unavailable when nix.enable = false.
+  environment.etc."nix/nix.custom.conf".text = ''
+    extra-substituters = https://wrangler.cachix.org https://nix-community.cachix.org https://hyprland.cachix.org
+    extra-trusted-public-keys = wrangler.cachix.org-1:N/FIcG2qBQcolSpklb2IMDbsfjZKWg+ctxx0mSMXdSs= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc=
+  '';
+
   # Touch ID for sudo (nix-darwin >= 2024 uses pam.services.sudo_local)
   # Only usable when the lid is open — falls back to password otherwise.
   security.pam.services.sudo_local.touchIdAuth = true;
