@@ -29,10 +29,8 @@ in {
   config = lib.mkIf (!minimal && cfg != null && cfg.enable) {
     home = {
       packages = with pkgs; [
-        # Opencode
-        opencode
         # Ollama - local LLM runner (Go implementation)
-        ollama
+        # ollama
         # llm - call various language models from the terminal
         llm
         # files-to-prompt - concatenate files/dirs into LLM-ready context

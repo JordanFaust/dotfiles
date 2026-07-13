@@ -113,6 +113,7 @@ in {
 
       catppuccin = {
         enable = true;
+        autoEnable = true;
         accent = "rosewater";
         flavor = "macchiato";
 

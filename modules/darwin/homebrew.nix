@@ -13,6 +13,8 @@ _: {
       # "zap" removes unlisted casks on activation.
       # Set to "none" temporarily if you want to test without removing apps.
       cleanup = "zap";
+      # newer brew bundle requires --force when --cleanup is passed
+      extraFlags = ["--force"];
     };
     casks = [
       "ghostty"
@@ -24,7 +26,7 @@ _: {
     ];
     brews = [
       # CLI tools not available in nixpkgs, e.g.:
-      # "awscli"
+      "opencode"
     ];
   };
 }
