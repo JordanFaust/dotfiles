@@ -61,6 +61,7 @@ in {
           egctl
           deck
           socat
+          websocat
 
           # Devbox
           devbox

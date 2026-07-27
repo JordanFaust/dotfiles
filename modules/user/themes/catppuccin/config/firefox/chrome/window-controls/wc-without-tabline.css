@@ -3,9 +3,8 @@
 :root:not([inFullscreen]) toolbar#nav-bar {
     z-index: 1 !important;
     position: relative !important;
-    /* margin-left: calc( */
-    /*     var(--wc-right-space) * 2 + 60px */
-    /* ) !important; /* shift toolbar to the right based on initial width */ */
+    /* Keep the absolute titlebar controls left of navigation-bar items. */
+    padding-left: calc(var(--wc-right-space) * 2 + 60px) !important;
 }
 
 #TabsToolbar .toolbar-items {
@@ -18,7 +17,8 @@
 
 #TabsToolbar.browser-toolbar {
     display: inline-block !important;
+    /* Overlay the titlebar controls at the navigation-bar icon position. */
     position: absolute;
-    top: var(--wc-vertical-shift) !important;
-    left: var(--wc-left-space) !important;
+    top: 16px !important;
+    left: 10px !important;
 }

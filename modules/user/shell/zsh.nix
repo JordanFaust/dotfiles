@@ -356,15 +356,13 @@ in {
         alias rcpdu='rcpd --chmod=go='
 
         function awsp {
-          selected_profile=$(grep profile ''${HOME}/.aws/config \
-            | awk '{print $2}' | sed 's,],,g' \
+          local selected_profile
+          selected_profile=$(grep '^\[profile ' ''${HOME}/.aws/config \
+            | sed 's/^\[profile //; s/\]$//' \
             | fzf --layout reverse --height 10% --border)
+          [[ -z ''${selected_profile} ]] && return 1
           export AWS_PROFILE=''${selected_profile}
-          aws sts get-caller-identity --query "Account" &> /dev/null
-          if [[ "$?" -ne 0 ]]; then
-            echo "Logging in via AWS SSO"
-            aws sso login --profile ''${selected_profile}
-          fi
+          echo "Switched to AWS profile: ''${selected_profile}"
         }
 
         ${linuxOnlyInit}
