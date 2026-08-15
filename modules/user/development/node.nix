@@ -42,7 +42,7 @@ in {
           biome
           turbo
         ]
-        ++ lib.optionals pkgs.stdenv.isLinux [
+        ++ lib.optionals pkgs.stdenv.hostPlatform.isLinux [
           # cypress and playwright browsers are not available on aarch64-darwin
           cypress
           playwright.browsers
@@ -54,7 +54,7 @@ in {
         ya = "yarn";
       };
 
-      # sessionPath = ["$(${pkgs.yarn}/bin/yarn global bin)"];
+      sessionPath = ["${config.xdg.cacheHome}/npm/bin"];
 
       sessionVariables =
         {
@@ -65,7 +65,7 @@ in {
           NPM_CONFIG_PREFIX = "${config.xdg.cacheHome}/npm";
           NODE_REPL_HISTORY = "${config.xdg.cacheHome}/node/repl_history";
         }
-        // lib.optionalAttrs pkgs.stdenv.isLinux {
+        // lib.optionalAttrs pkgs.stdenv.hostPlatform.isLinux {
           # XDG_RUNTIME_DIR is set by systemd on Linux only
           NPM_CONFIG_TMP = "$XDG_RUNTIME_DIR/npm";
           # playwright.browsers is Linux-only; referencing the store path on Darwin

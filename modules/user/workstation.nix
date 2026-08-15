@@ -30,10 +30,10 @@ in {
 
   config = lib.mkIf cfg.enable {
     # Enable DConf for configuration of systems (Linux only)
-    modules.desktop.dconf.enable = lib.mkIf pkgs.stdenv.isLinux true;
+    modules.desktop.dconf.enable = lib.mkIf pkgs.stdenv.hostPlatform.isLinux true;
 
     # Enable GTK (Linux only)
-    modules.desktop.gtk.enable = lib.mkIf pkgs.stdenv.isLinux config.modules.themes.gtk.enable;
+    modules.desktop.gtk.enable = lib.mkIf pkgs.stdenv.hostPlatform.isLinux config.modules.themes.gtk.enable;
     # home.stateVersion = "21.11";
   };
 }

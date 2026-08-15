@@ -29,14 +29,14 @@ in {
   };
 
   config = mkIf cfg.enable {
-    home.packages = lib.optionals pkgs.stdenv.isLinux [pkgs.tomb];
+    home.packages = lib.optionals pkgs.stdenv.hostPlatform.isLinux [pkgs.tomb];
 
     programs.gpg = {
       enable = true;
       homedir = "${config.xdg.configHome}/gnupg";
     };
 
-    services.gpg-agent = lib.mkIf pkgs.stdenv.isLinux {
+    services.gpg-agent = lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
       enable = true;
       defaultCacheTtl = cfg.cacheTTL;
     };

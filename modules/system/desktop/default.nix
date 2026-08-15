@@ -54,11 +54,11 @@ in {
     fonts = {
       fontDir.enable = true;
       enableGhostscriptFonts = true;
-      packages = with pkgs; [
-        nerd-fonts.jetbrains-mono
-        nerd-fonts.fira-code
-        nerd-fonts.droid-sans-mono
-      ];
+      # packages = with pkgs; [
+      #  # nerd-fonts.jetbrains-mono
+      #  # nerd-fonts.fira-code
+      #  # nerd-fonts.droid-sans-mono
+      # ];
     };
   };
 }

@@ -150,7 +150,7 @@ in {
     default = {};
   };
 
-  config = lib.mkIf (cfg.enable && pkgs.stdenv.isLinux) {
+  config = lib.mkIf (cfg.enable && pkgs.stdenv.hostPlatform.isLinux) {
     home = {
       packages = with pkgs; [
         dconf-editor

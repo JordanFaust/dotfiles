@@ -4,13 +4,13 @@
   ...
 }: let
   homeDirectory =
-    if pkgs.stdenv.isDarwin
+    if pkgs.stdenv.hostPlatform.isDarwin
     then "/Users/${username}"
     else "/home/${username}";
 in {
   news.display = "show";
 
-  targets.genericLinux.enable = pkgs.stdenv.isLinux;
+  targets.genericLinux.enable = pkgs.stdenv.hostPlatform.isLinux;
 
   home = {
     inherit username homeDirectory;
@@ -28,7 +28,7 @@ in {
       [
         "$HOME/.local/bin"
       ]
-      ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [
+      ++ pkgs.lib.optionals pkgs.stdenv.hostPlatform.isDarwin [
         "/opt/homebrew/bin"
       ];
   };

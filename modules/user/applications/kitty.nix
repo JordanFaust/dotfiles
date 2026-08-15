@@ -39,7 +39,7 @@ in {
   config = mkIf cfg.enable {
     home = {
       packages =
-        if pkgs.stdenv.isLinux
+        if pkgs.stdenv.hostPlatform.isLinux
         # Linux: custom .desktop wrapper only — avoids duplicate entry in rofi
         then [desktop]
         # macOS: install directly (no rofi, no duplicate concern)
@@ -56,7 +56,7 @@ in {
     };
 
     # Desktop item and autostart are Linux/XDG only
-    xdg.configFile = lib.mkIf pkgs.stdenv.isLinux {
+    xdg.configFile = lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
       "autostart/kitty.desktop".source = "${desktop}/share/applications/Kitty.desktop";
     };
   };

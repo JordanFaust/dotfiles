@@ -45,14 +45,14 @@ in {
 
   config = mkIf (!minimal && cfg.enable) {
     home.packages =
-      if pkgs.stdenv.isLinux
+      if pkgs.stdenv.hostPlatform.isLinux
       # Linux: custom .desktop wrapper only — avoids duplicate entry in rofi
       then [desktop]
       # macOS: install directly (no rofi, no duplicate concern)
       else [pkgs.spotify];
 
     # Autostart is Linux/XDG only
-    xdg.configFile = lib.mkIf pkgs.stdenv.isLinux {
+    xdg.configFile = lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
       "autostart/spotify.desktop".source = "${desktop}/share/applications/Spotify.desktop";
     };
   };

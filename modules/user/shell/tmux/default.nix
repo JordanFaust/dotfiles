@@ -195,7 +195,7 @@ in {
         set -g detach-on-destroy off
         set-option -g set-clipboard external
 
-        ${lib.optionalString pkgs.stdenv.isLinux "set -s copy-command 'wl-copy'"}
+        ${lib.optionalString pkgs.stdenv.hostPlatform.isLinux "set -s copy-command 'wl-copy'"}
 
         ########################################
         # Keybinds
@@ -263,7 +263,7 @@ in {
         bind -T copy-mode-vi H send-keys -X start-of-line
         bind -T copy-mode-vi L send-keys -X end-of-line
 
-        ${lib.optionalString pkgs.stdenv.isLinux ''
+        ${lib.optionalString pkgs.stdenv.hostPlatform.isLinux ''
           bind v run-shell "wl-paste --no-newline | tmux load-buffer - ; tmux paste-buffer"
           bind -T copy-mode-vi y send-keys -X copy-pipe-and-cancel "wl-copy"
           bind -T copy-mode-vi Enter send-keys -X copy-pipe-and-cancel "wl-copy"

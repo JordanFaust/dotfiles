@@ -33,7 +33,7 @@ in {
       # Only constructed on Linux — pkgs.ghostty is Linux-only in nixpkgs.
       # On macOS the binary arrives via homebrew.casks = ["ghostty"].
       desktop =
-        if pkgs.stdenv.isLinux
+        if pkgs.stdenv.hostPlatform.isLinux
         then
           pkgs.makeDesktopItem {
             name = "Ghostty";
@@ -49,7 +49,7 @@ in {
         packages =
           # Linux: custom .desktop wrapper + package.
           # macOS: managed by homebrew — see modules/darwin/homebrew.nix.
-          lib.optionals pkgs.stdenv.isLinux [desktop pkgs.ghostty];
+          lib.optionals pkgs.stdenv.hostPlatform.isLinux [desktop pkgs.ghostty];
 
         sessionVariables = {
           # TERMINAL is intentionally omitted during the kitty→ghostty transition.
@@ -62,7 +62,7 @@ in {
       };
 
       # Desktop item autostart — Linux/XDG only
-      xdg.configFile = lib.mkIf pkgs.stdenv.isLinux {
+      xdg.configFile = lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
         "autostart/ghostty.desktop".source = "${desktop}/share/applications/Ghostty.desktop";
       };
 
@@ -74,7 +74,7 @@ in {
         # Setting package = null suppresses HM's internal pkgs.ghostty references
         # (package install, onChange validator, bat/vim syntax helpers).
         package =
-          if pkgs.stdenv.isLinux
+          if pkgs.stdenv.hostPlatform.isLinux
           then pkgs.ghostty
           else null;
         settings =
@@ -91,7 +91,7 @@ in {
             copy-on-select = false;
             term = "xterm-ghostty";
           }
-          // lib.optionalAttrs pkgs.stdenv.isDarwin {
+          // lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin {
             # macOS-specific settings
             macos-option-as-alt = true;
             macos-titlebar-style = "hidden";

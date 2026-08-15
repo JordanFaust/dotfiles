@@ -59,7 +59,7 @@ in {
     home = {
       packages = with pkgs;
         (
-          if (cfg.tools.enable && pkgs.stdenv.isLinux)
+          if (cfg.tools.enable && pkgs.stdenv.hostPlatform.isLinux)
           then [
             font-manager # GTK app — pulls in webkitgtk, Linux only
             # imagemagick # for image manipulation from the shell
@@ -88,7 +88,7 @@ in {
         );
     };
 
-    xdg.configFile = mkIf (cfg.raster.enable && pkgs.stdenv.isLinux) {
+    xdg.configFile = mkIf (cfg.raster.enable && pkgs.stdenv.hostPlatform.isLinux) {
       "GIMP/2.10" = {
         source = "${osConfig.dotfiles.configDir}/gimp";
         recursive = true;

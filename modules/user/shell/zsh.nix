@@ -7,7 +7,7 @@
 with lib;
 with lib.my; let
   cfg = config.modules.shell.zsh;
-  linuxOnlyInit = optionalString pkgs.stdenv.isLinux ''
+  linuxOnlyInit = optionalString pkgs.stdenv.hostPlatform.isLinux ''
     alias y='xclip -selection clipboard -in'
     alias p='xclip -selection clipboard -out'
     function r {

@@ -8,7 +8,7 @@
 in {
   options = {};
 
-  config = lib.mkIf (cfg.enable && pkgs.stdenv.isLinux) {
+  config = lib.mkIf (cfg.enable && pkgs.stdenv.hostPlatform.isLinux) {
     # We are manually apply this theme
     catppuccin.hyprlock.enable = false;
     programs.hyprlock = {

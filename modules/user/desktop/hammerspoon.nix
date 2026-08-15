@@ -21,7 +21,7 @@ in {
     default = {};
   };
 
-  config = mkIf (cfg.enable && pkgs.stdenv.isDarwin) {
+  config = mkIf (cfg.enable && pkgs.stdenv.hostPlatform.isDarwin) {
     # Hammerspoon reads ~/.hammerspoon/init.lua on startup and on reload.
     home.file.".hammerspoon/init.lua".text = ''
       -- Focus follows mouse — equivalent to Hyprland's follow_mouse = 1

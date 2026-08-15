@@ -66,7 +66,7 @@ in {
           # AI Integrations
           # claude-code installed via homebrew (native binary, kept current)
         ]
-        ++ lib.optionals pkgs.stdenv.isLinux [
+        ++ lib.optionals pkgs.stdenv.hostPlatform.isLinux [
           # Desktop item and code snapshot tool are Linux-only
           desktop
           codesnap
@@ -75,7 +75,7 @@ in {
 
     xdg.configFile = {
       # Autostart is Linux/XDG only
-      "autostart/neovim.desktop" = lib.mkIf pkgs.stdenv.isLinux {
+      "autostart/neovim.desktop" = lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
         source = "${desktop}/share/applications/Neovim.desktop";
       };
 

@@ -37,10 +37,17 @@ set -euo pipefail
 SHARE="@out@/share/tmux-palette"
 VERSION="@version@"
 BUN="@bun@/bin/bun"
-CACHE="''${XDG_CACHE_HOME:-$HOME/.cache}/tmux-palette/$VERSION"
+# Key the cache dir on the store output's hash rather than just the semver
+# version. The output hash changes whenever any build input changes -
+# including the bash used to patch shebangs in $SHARE - so a `nix-collect-
+# garbage` that removes an old bash derivation can never leave us pointing
+# at a stale, now-missing interpreter path.
+STORE_HASH="$(basename "@out@")"
+CACHE="''${XDG_CACHE_HOME:-$HOME/.cache}/tmux-palette/$STORE_HASH"
 SENTINEL="$CACHE/.installed"
 
-# On first invocation (or after a version bump), copy source to the writable
+# On first invocation (or after the store output changes, e.g. a version
+# bump or a rebuild of an input like bash), copy source to the writable
 # cache directory and install node_modules with bun.
 if [[ ! -f "$SENTINEL" ]]; then
   echo "tmux-palette: first-run setup v$VERSION..." >&2

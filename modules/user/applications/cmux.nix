@@ -83,7 +83,7 @@ in {
     default = {};
   };
 
-  config = mkIf (cfg.enable && pkgs.stdenv.isDarwin) {
+  config = mkIf (cfg.enable && pkgs.stdenv.hostPlatform.isDarwin) {
     # cmux reads settings from ~/.config/cmux/settings.json (takes precedence
     # over ~/Library/Application Support/com.cmuxterm.app/settings.json).
     xdg.configFile."cmux/settings.json".text = builtins.toJSON settings;

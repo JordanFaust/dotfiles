@@ -75,7 +75,7 @@ in {
           # Nix Development
           nil
         ]
-        ++ lib.optionals pkgs.stdenv.isLinux [
+        ++ lib.optionals pkgs.stdenv.hostPlatform.isLinux [
           # Linux-only: SSM agent daemon, Steam FHS wrapper, Linux network monitor
           amazon-ssm-agent
           steam-run

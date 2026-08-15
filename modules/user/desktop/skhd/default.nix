@@ -21,7 +21,7 @@ in {
     default = {};
   };
 
-  config = mkIf (cfg.enable && pkgs.stdenv.isDarwin) {
+  config = mkIf (cfg.enable && pkgs.stdenv.hostPlatform.isDarwin) {
     home.packages = [pkgs.skhd];
 
     xdg.configFile."skhd/skhdrc".source = ./skhdrc;

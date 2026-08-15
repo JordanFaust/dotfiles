@@ -105,8 +105,18 @@ in {
         };
         github.user = "JordanFaust";
         gitlab.user = "JordanFaust";
+        # Rewrite pushes only (fetch/clone use the URL as configured).
+        # Rewriting fetches too (insteadOf) forces every https clone over
+        # SSH, and corporate network SSH (22) traffic is heavily rate
+        # limited on work laptops; HTTPS (443) is not.
         "url \"git@github.com:\"" = {
-          insteadOf = "https://github.com/";
+          pushInsteadOf = "https://github.com/";
+        };
+        # Use `gh`'s cached auth token for HTTPS operations against GitHub
+        # (equivalent to `gh auth setup-git`, but declarative so it survives
+        # home-manager regenerating this file).
+        "credential \"https://github.com\"" = {
+          helper = "!gh auth git-credential";
         };
         "filter \"lfs\"" = {
           required = true;

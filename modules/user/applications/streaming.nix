@@ -70,11 +70,11 @@ in {
 
   config = lib.mkIf (!minimal && cfg.enable) {
     # Zoom autostart and OBS Wayland plugins are Linux-only
-    xdg.configFile = lib.mkIf pkgs.stdenv.isLinux {
+    xdg.configFile = lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
       "autostart/zoom.desktop".source = "${zoomDesktop}/share/applications/Zoom.desktop";
     };
 
-    programs.obs-studio = lib.mkIf pkgs.stdenv.isLinux {
+    programs.obs-studio = lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
       inherit (cfg.obs) enable;
       plugins = with pkgs.obs-studio-plugins; [
         wlrobs

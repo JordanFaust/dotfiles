@@ -90,16 +90,16 @@ in {
     {
       fonts = {
         packages = with pkgs; [
-          jetbrains-mono
-          fira-code
+          # jetbrains-mono
+          # fira-code
           fira-code-symbols
-          cascadia-code
-          victor-mono
+          # cascadia-code
+          # victor-mono
           # General Sans Fonts
           open-sans
           siji
           # Icon Fonts
-          nerd-fonts.caskaydia-cove
+          # nerd-fonts.caskaydia-cove
           my.nonicons
         ];
         fontconfig.defaultFonts = {

@@ -9,7 +9,7 @@
 in {
   options = {};
 
-  config = lib.mkIf (cfg.enable && pkgs.stdenv.isLinux) {
+  config = lib.mkIf (cfg.enable && pkgs.stdenv.hostPlatform.isLinux) {
     services.hypridle = {
       enable = true;
 

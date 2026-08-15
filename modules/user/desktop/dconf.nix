@@ -26,7 +26,7 @@ in {
     };
   };
 
-  config = lib.mkIf (cfg.enable && pkgs.stdenv.isLinux) {
+  config = lib.mkIf (cfg.enable && pkgs.stdenv.hostPlatform.isLinux) {
     dconf.settings = {
       "org/gnome/desktop/interface" = {
         show-battery-percentage = true;

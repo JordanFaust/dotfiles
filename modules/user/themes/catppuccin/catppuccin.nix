@@ -53,16 +53,16 @@ in {
             recode
             moreutils
             font-awesome
-            jetbrains-mono
+            # jetbrains-mono
             fira-code
             fira-code-symbols
-            cascadia-code
-            victor-mono
-            nerd-fonts.caskaydia-cove
+            # cascadia-code
+            # victor-mono
+            # nerd-fonts.caskaydia-cove
             nerd-fonts.symbols-only
           ]
           ++ monolisa
-          ++ lib.optionals pkgs.stdenv.isLinux [
+          ++ lib.optionals pkgs.stdenv.hostPlatform.isLinux [
             my.nonicons
             # Linux-only: KDE, GTK fonts, font tools, status bar icons
             nerdfix
@@ -85,21 +85,21 @@ in {
               recursive = true;
             };
           }
-          // lib.optionalAttrs pkgs.stdenv.isLinux {
+          // lib.optionalAttrs pkgs.stdenv.hostPlatform.isLinux {
             # Avatar/Face jpg (used by Linux lockscreen/GTK)
             ".face" = {
               source = ./assets/dalle-nixos-profile.jpg;
             };
           };
 
-        sessionVariables = lib.mkIf pkgs.stdenv.isLinux {
+        sessionVariables = lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
           QT_SCALE_FACTOR = "2.6";
           ELM_SCALE = "2.6";
           GDK_SCALE = "0.5";
         };
       };
 
-      home.activation = lib.mkIf pkgs.stdenv.isDarwin {
+      home.activation = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin {
         setWallpaper = lib.hm.dag.entryAfter ["writeBoundary"] ''
           run /usr/bin/osascript -e '
             tell application "System Events"
@@ -117,8 +117,8 @@ in {
         accent = "rosewater";
         flavor = "macchiato";
 
-        gtk.icon.enable = pkgs.stdenv.isLinux;
-        cursors.enable = pkgs.stdenv.isLinux;
+        gtk.icon.enable = pkgs.stdenv.hostPlatform.isLinux;
+        cursors.enable = pkgs.stdenv.hostPlatform.isLinux;
       };
 
       # Enable fontconfig to discover fonts added as home.packages above.
@@ -155,7 +155,7 @@ in {
             </fontconfig>
           '';
         }
-        // lib.optionalAttrs pkgs.stdenv.isLinux {
+        // lib.optionalAttrs pkgs.stdenv.hostPlatform.isLinux {
           # Background Image
           "background" = {
             source = "${osConfig.dotfiles.configDir}/themes/catppuccin/background.jpg";
@@ -192,7 +192,7 @@ in {
       # JankyBorders — active/inactive window border highlighting.
       # Colors mirror Hyprland's col.active_border / col.inactive_border from the
       # Catppuccin Macchiato palette. Home-manager owns the launchd agent lifecycle.
-      services.jankyborders = lib.mkIf pkgs.stdenv.isDarwin {
+      services.jankyborders = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin {
         enable = true;
         settings = {
           active_color = "0xffEED49F"; # Catppuccin Macchiato Yellow — matches col.active_border
@@ -203,7 +203,7 @@ in {
         };
       };
 
-      modules.desktop.gtk = lib.mkIf pkgs.stdenv.isLinux {
+      modules.desktop.gtk = lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
         enable = true;
         name = "Catppuccin-GTK-Red-Dark-Compact-Macchiato";
         package = pkgs.magnetic-catppuccin-gtk.override {

@@ -136,18 +136,18 @@ in {
 
   config = mkIf (!minimal && cfg.enable) {
     home = {
-      packages = lib.optionals pkgs.stdenv.isLinux [
+      packages = lib.optionals pkgs.stdenv.hostPlatform.isLinux [
         firefoxDesktop
         firefoxPrivateDesktop
         chromiumDesktop
       ];
 
-      sessionVariables = lib.mkIf pkgs.stdenv.isLinux {
+      sessionVariables = lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
         DEFAULT_BROWSER = "${pkgs.firefox-bin}/bin/firefox";
       };
     };
 
-    xdg.mimeApps = lib.mkIf pkgs.stdenv.isLinux {
+    xdg.mimeApps = lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
       enable = true;
 
       defaultApplications = {
@@ -161,7 +161,7 @@ in {
     };
 
     # Add firefox as a startup application (Linux only — autostart is an XDG/Linux concept)
-    xdg.configFile = lib.mkIf pkgs.stdenv.isLinux {
+    xdg.configFile = lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
       "autostart/firefox.desktop".source = "${firefoxDesktop}/share/applications/firefox.desktop";
       "autostart/chromium.desktop".source = "${chromiumDesktop}/share/applications/chromium.desktop";
     };
@@ -328,12 +328,12 @@ in {
       # works identically on Linux and macOS via home.file symlinks.
       profileRoot = ".mozilla/firefox/${cfg.firefox.profileName}.default";
     in
-      lib.optionalAttrs pkgs.stdenv.isLinux {
+      lib.optionalAttrs pkgs.stdenv.hostPlatform.isLinux {
         # Make sure the desktop files are in the right place for dbus
         ".local/share/applications/firefox.desktop".source = "${firefoxDesktop}/share/applications/firefox.desktop";
       }
       # Linux: profiles.ini lives alongside the profile; a symlink works fine there.
-      // lib.optionalAttrs pkgs.stdenv.isLinux {
+      // lib.optionalAttrs pkgs.stdenv.hostPlatform.isLinux {
         ".mozilla/firefox/profiles.ini".text = ''
           [Profile0]
           Name=default
@@ -371,7 +371,7 @@ in {
     # at activation time to find the live profile and symlink our managed chrome/ and
     # user.js into it. Source files live at ~/.mozilla/firefox/<name>.default/ (no
     # spaces in path) deployed by home.file above and catppuccin.nix.
-    home.activation.firefoxChrome = lib.mkIf pkgs.stdenv.isDarwin (
+    home.activation.firefoxChrome = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin (
       lib.hm.dag.entryAfter ["writeBoundary"] ''
         ffDir="$HOME/Library/Application Support/Firefox"
         managedProfile="$HOME/.mozilla/firefox/${cfg.firefox.profileName}.default"

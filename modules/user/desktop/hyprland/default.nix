@@ -47,7 +47,7 @@ in {
     };
   };
 
-  config = lib.mkIf (cfg.enable && pkgs.stdenv.isLinux) {
+  config = lib.mkIf (cfg.enable && pkgs.stdenv.hostPlatform.isLinux) {
     # Disabled, along with most gnome dependencies to reduce install size and CVEs
     # xdg.desktopEntries."org.gnome.Settings" = {
     #   name = "Settings";

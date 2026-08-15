@@ -48,7 +48,7 @@ in {
     # On Darwin, Colima puts its socket at ~/.colima/default/docker.sock rather
     # than /var/run/docker.sock. Export DOCKER_HOST so every tool finds it without
     # needing a manual `docker context use colima`.
-    (mkIf (cfg.enable && pkgs.stdenv.isDarwin) {
+    (mkIf (cfg.enable && pkgs.stdenv.hostPlatform.isDarwin) {
       home.sessionVariables.DOCKER_HOST = "unix://${config.home.homeDirectory}/.colima/default/docker.sock";
     })
   ];

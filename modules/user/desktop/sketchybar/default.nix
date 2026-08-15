@@ -29,7 +29,7 @@ in {
     default = {};
   };
 
-  config = mkIf (cfg.enable && pkgs.stdenv.isDarwin) {
+  config = mkIf (cfg.enable && pkgs.stdenv.hostPlatform.isDarwin) {
     programs.sketchybar = {
       enable = true;
 
