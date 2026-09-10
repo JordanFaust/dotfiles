@@ -34,7 +34,6 @@ in {
       nix-zsh-completions
       bat
       eza
-      fasd
       fd
       fzf
       jq
@@ -67,21 +66,6 @@ in {
       };
 
       envExtra = ''
-        function _cache {
-          (( $+commands[$1] )) || return 1
-          local cache_dir="''${XDG_CACHE_HOME:-$HOME/.cache}/''${SHELL##*/}"
-          local cache="$cache_dir/$1"
-          if [[ ! -f $cache || ! -s $cache ]]; then
-              echo "Caching $1"
-              mkdir -p $cache_dir
-              "$@" >$cache
-              chmod 600 $cache
-          fi
-          if [[ -o interactive ]]; then
-              source $cache || rm -f $cache
-          fi
-        }
-
         function _source {
           for file in "$@"; do
             [ -r $file ] && source $file
@@ -122,8 +106,6 @@ in {
         export ZGEN_AUTOLOAD_COMPINIT=0
         export ZVM_INIT_MODE=sourcing
         export ZVM_VI_INSERT_ESCAPE_BINDKEY=jk
-        export _FASD_DATA="$XDG_CACHE_HOME/fasd"
-        export _FASD_VIMINFO="$XDG_CACHE_HOME/viminfo"
 
         if (( $+commands[fd] )); then
           export FZF_DEFAULT_OPTS='
@@ -210,10 +192,6 @@ in {
         bindkey '^Z' fancy-ctrl-z
         if (( $+commands[fzf] )); then
           bindkey '^R' fzf-history-widget
-        fi
-        if (( $+commands[fasd] )); then
-          bindkey -M viins '^x^f' fasd-complete-f
-          bindkey -M viins '^x^d' fasd-complete-d
         fi
         if [ -n "$TMUX" ]; then
           _tmux_pane_words() {
@@ -305,7 +283,6 @@ in {
         ## Bootstrap interactive sessions
         if [[ $TERM != dumb ]]; then
           autoload -Uz compinit && compinit -u -d $ZSH_CACHE/zcompdump
-          _cache fasd --init posix-alias zsh-{hook,{c,w}comp{,-install}}
           _source $ZDOTDIR/local.zshrc
           autopair-init
         fi
@@ -318,14 +295,6 @@ in {
           alias llm='ll --sort=modified'
           alias la="LC_COLLATE=C eza -ablF"
           alias tree='eza --tree'
-        fi
-
-        if (( $+commands[fasd] )); then
-          unalias z 2>/dev/null
-          function z {
-            [ $# -gt 0 ] && _z "$*" && return
-            cd "$(_z -l 2>&1 | fzf --height 40% --nth 2.. --reverse --inline-info +s --tac --query "''${*##-* }" | sed 's/^[0-9,.]* *//')"
-          }
         fi
 
         autoload -U zmv
