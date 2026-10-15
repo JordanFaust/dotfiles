@@ -1,0 +1,6 @@
+{
+  "name": "catppuccin-boxes",
+  "version": "0.1.0",
+  "description": "Padded Catppuccin Macchiato boxes for prompts and replies, with reply markdown in Macchiato colours.",
+  "author": { "name": "Jordan Faust" }
+}
