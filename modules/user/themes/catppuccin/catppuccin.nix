@@ -50,7 +50,7 @@ in {
           [
             # Cross-platform packages
             fastfetch
-            recode
+            # recode
             moreutils
             font-awesome
             # jetbrains-mono

@@ -38,17 +38,10 @@ in {
           helm-ls
           tilt
           k3d
-          lens
-          postman
-          httpie
-          insomnia
-          regclient
           circleci-cli
           jira-cli-go
-          yajsv
           cloc
           statix
-          graphviz
           mise
 
           # Terraform
@@ -65,9 +58,6 @@ in {
 
           # Devbox
           devbox
-
-          # Load Testing
-          k6
 
           # Security
           jfrog-cli

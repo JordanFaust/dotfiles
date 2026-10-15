@@ -65,6 +65,10 @@ in {
     gnumake
     unzip
     vim
+    # opencode 2.x — built from upstream's own flake (see overlay in
+    # flake.nix / inputs.opencode). homebrew-core/nixpkgs are still on
+    # 1.18.x as of this writing.
+    opencode
   ];
 
   programs.zsh.enable = true;

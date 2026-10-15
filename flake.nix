@@ -51,6 +51,11 @@
     # Private fonts
     private-fonts.url = "git+ssh://git@github.com/JordanFaust/private-fonts.git?ref=main";
     private-fonts.inputs.nixpkgs.follows = "nixpkgs";
+
+    # opencode 2.x — homebrew-core/nixpkgs are still on 1.18.x, so build
+    # straight from upstream's own flake, pinned to a known-good tag.
+    # See overlays/opencode.nix for the packaging workaround this needs.
+    opencode.url = "github:anomalyco/opencode/v2.0.15";
   };
 
   outputs = inputs @ {
@@ -97,6 +102,18 @@
       # swapping pack to stable
       unstable = pkgs';
       stable = pkgs-stable';
+      # opencode 2.x, built straight from upstream's flake (see inputs.opencode).
+      # homebrew-core/nixpkgs are still on 1.18.x as of this writing.
+      #
+      # Workaround: upstream's nix/opencode.nix postInstall runs
+      # `opencode completion`, but v2's CLI (packages/cli, effect/unstable/cli)
+      # dropped the `completion` subcommand. The unrecognized arg is treated as
+      # the positional `directory` arg, so it tries to chdir("completion") and
+      # fails the build. Drop postInstall until upstream fixes this — see
+      # https://github.com/anomalyco/opencode/blob/v2.0.15/nix/opencode.nix
+      opencode = inputs.opencode.packages.${final.stdenv.hostPlatform.system}.opencode.overrideAttrs (_: {
+        postInstall = "";
+      });
       my =
         if final.stdenv.hostPlatform.system == linuxSystem
         then self.packages."${linuxSystem}"

@@ -38,17 +38,37 @@ in {
   modules = {
     workstation.enable = true;
 
+    applications = {
+      kitty.enable = false;
+    };
+
     shell = {
-      direnv.enable = true;
+      direnv.enable = false;
       git.enable = true;
-      gnupg.enable = true;
+      gnupg.enable = false;
       tmux = {
         enable = true;
         sessionManager.searchPaths = [
-          { path = "/etc/dotfiles";                                     name = "dotfiles"; depth = 0; }
-          { path = "${config.home.homeDirectory}/.config/nvim";         name = "nvim";     depth = 0; }
-          { path = "/media/procore";                                    name = "";         depth = 1; }
-          { path = "${config.home.homeDirectory}/github.com";           name = "";         depth = 1; }
+          {
+            path = "/etc/dotfiles";
+            name = "dotfiles";
+            depth = 0;
+          }
+          {
+            path = "${config.home.homeDirectory}/.config/nvim";
+            name = "nvim";
+            depth = 0;
+          }
+          {
+            path = "/media/procore";
+            name = "";
+            depth = 1;
+          }
+          {
+            path = "${config.home.homeDirectory}/github.com";
+            name = "";
+            depth = 1;
+          }
         ];
       };
       zsh.enable = true;

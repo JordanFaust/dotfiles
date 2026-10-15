@@ -6,13 +6,17 @@
 {...}: {
   system.defaults = {
     NSGlobalDomain = {
-      # Key repeat — dialed back from max (1) to avoid overshooting.
-      # Scale: 1 (fastest) → 15 (slowest). macOS default is 6/25.
+      # Key repeat — units of ~15ms. Requires logout to take effect.
+      # KeyRepeat: interval between repeats; GUI range 2 (fastest) → 120. Default 6.
+      # InitialKeyRepeat: delay before repeat starts; GUI range 15 (shortest) → 120.
+      # Default 25. Too low causes accidental repeats when a key is held slightly long.
       KeyRepeat = 3;
-      InitialKeyRepeat = 15;
+      InitialKeyRepeat = 20;
       # macOS defaults to showing a character picker on long-press (press-and-hold),
       # which completely suppresses key repeat. Must be false for KeyRepeat to work.
       ApplePressAndHoldEnabled = false;
+      # Disable double-space → ". " substitution, which inserts stray periods.
+      NSAutomaticPeriodSubstitutionEnabled = false;
       # Disable "natural" scroll direction — matches Linux trackpad/wheel behavior
       # (scroll up = content moves up). macOS default is true (reversed).
       "com.apple.swipescrolldirection" = false;

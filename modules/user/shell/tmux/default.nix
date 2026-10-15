@@ -67,8 +67,7 @@ in {
       cfg.sessionManager.searchPaths;
   in {
     home = {
-      packages = with pkgs; [
-        tmate
+      packages = [
         tsmPkg
         tmuxPalettePkg
       ];

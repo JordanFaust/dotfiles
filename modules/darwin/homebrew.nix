@@ -26,7 +26,6 @@ _: {
     ];
     brews = [
       # CLI tools not available in nixpkgs, e.g.:
-      "opencode"
     ];
   };
 }
