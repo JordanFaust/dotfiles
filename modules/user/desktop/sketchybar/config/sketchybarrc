@@ -60,11 +60,6 @@ sketchybar --default \
   background.padding_right=4
 
 ############################################################
-# AeroSpace event
-############################################################
-sketchybar --add event aerospace_workspace_change
-
-############################################################
 # LEFT — Dashboard icon
 ############################################################
 sketchybar --add item dashboard left \
@@ -120,8 +115,10 @@ for i in 1 2 3 4 5; do
   COLOR="${WS_COLORS[$IDX]}"
   BG="${WS_BG[$IDX]}"
 
-  sketchybar --add item "space.$i" center \
+  # Native `space` component tracks Mission Control desktop $i directly.
+  sketchybar --add space "space.$i" center \
     --set "space.$i" \
+      space="$i" \
       icon="$ICON" \
       icon.font="Symbols Nerd Font Mono:Regular:24.0" \
       icon.color=$OVERLAY0 \
@@ -135,9 +132,8 @@ for i in 1 2 3 4 5; do
       background.border_width=0 \
       background.padding_left=6 \
       background.padding_right=6 \
-      script="$PLUGIN_DIR/aerospace.sh $i" \
-      click_script="aerospace workspace $i" \
-    --subscribe "space.$i" aerospace_workspace_change
+      script="$PLUGIN_DIR/space.sh $i" \
+    --subscribe "space.$i" space_change space_windows_change mouse.clicked
 done
 
 ############################################################
@@ -203,9 +199,3 @@ sketchybar --add item network right \
 # Initial state
 ############################################################
 sketchybar --update
-
-# Bootstrap workspace highlighting + client list for the current workspace
-FOCUSED_WS=$(aerospace list-workspaces --focused 2>/dev/null || echo "1")
-sketchybar --trigger aerospace_workspace_change \
-  FOCUSED_WORKSPACE="$FOCUSED_WS" \
-  PREV_WORKSPACE=""

@@ -5,7 +5,8 @@
 # binary, writes config to ~/.config/sketchybar/, and registers a LaunchAgent.
 #
 # Requires: native menu bar hidden via system.defaults.NSGlobalDomain._HIHideMenuBar
-# Requires: AeroSpace exec.on-workspace-change wired (modules/darwin/services/aerospace.nix)
+# Workspaces are native macOS desktops (sketchybar `space` items); see
+# modules/user/desktop/spaces.nix for the desktop hotkeys/app pinning.
 {
   config,
   lib,
@@ -38,7 +39,7 @@ in {
       extraPackages = with pkgs; [jq];
 
       # includeSystemPath = true (default) adds /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/homebrew/bin
-      # This ensures networksetup, pmset, aerospace CLI are all reachable from plugin scripts.
+      # This ensures networksetup, pmset, osascript are all reachable from plugin scripts.
 
       config = {
         source = ./config;
