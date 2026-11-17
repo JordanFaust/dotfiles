@@ -75,8 +75,23 @@ in {
     };
 
     desktop = {
-      skhd.enable = true;
-      hammerspoon.enable = true;
+      skhd = {
+        enable = true;
+        windowManagement = true;
+      };
+      # Hammerspoon.app gets deleted on this machine (same policy as AeroSpace).
+      hammerspoon.enable = false;
+      spaces = {
+        enable = true;
+        count = 5;
+        apps = {
+          "org.mozilla.firefox" = 2;
+          "com.mitchellh.ghostty" = 2;
+          "com.tinyspeck.slackmacgap" = 3;
+          "us.zoom.xos" = 4;
+          "com.google.Chrome" = 4;
+        };
+      };
       sketchybar.enable = true;
     };
 

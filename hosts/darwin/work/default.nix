@@ -12,7 +12,7 @@
   # Host-specific Homebrew additions (supplements modules/darwin/homebrew.nix).
   homebrew.casks = [
     "raycast"
-    "hammerspoon"
+    # "hammerspoon" — removed: deleted on launch by device management
   ];
 
   modules = {

@@ -8,7 +8,11 @@
   # Enable SKHD for coverage of keybinds not supported by AeroSpace
   services.skhd.enable = true;
   services.aerospace = {
-    enable = true;
+    # Disabled 2026-11-17: AeroSpace.app is deleted on launch on the work Mac
+    # (likely a Jamf restricted-software policy — Hammerspoon was removed the
+    # same day). Native replacement: modules/user/desktop/spaces.nix +
+    # skhd windowManagement (wm.js). Re-enable if IT grants an exception.
+    enable = false;
 
     settings = {
       # start-at-login must NOT be set here — nix-darwin manages AeroSpace
